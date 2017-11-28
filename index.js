@@ -22,7 +22,6 @@ FunctionalRiver.prototype.serial = function() {
   return this.concurrency(1)
 }
 
-
 FunctionalRiver.prototype.catch = function(fn) {
   if (this._error) {
     const result = fn(this._error)
@@ -30,7 +29,7 @@ FunctionalRiver.prototype.catch = function(fn) {
     return result
   }
   // bypass error handling
-  return this._value
+  return FunctionalRiver.resolve(this._value)
 }
 
 FunctionalRiver.prototype.then = function(fn) {
