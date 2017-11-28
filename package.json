@@ -1,6 +1,6 @@
 {
   "name": "functional-river",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -12,11 +12,7 @@
   "author": "Dan@DanLevy.net",
   "license": "MIT",
   "dependencies": {
-    "ava": "^0.22.0",
-    "lodash": "^4.17.4",
-    "p-catch-if": "^1.0.2",
-    "p-filter": "^1.0.0",
-    "p-map": "^1.2.0",
-    "p-timeout": "^1.2.0"
+    "ava": "^0.24.0",
+    "lodash": "^4.17.4"
   }
 }
