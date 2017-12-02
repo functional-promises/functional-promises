@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "ava tests"
+    "test": "ava --serial --verbose"
   },
   "author": "Dan@DanLevy.net",
   "license": "MIT",

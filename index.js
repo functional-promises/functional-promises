@@ -1,5 +1,6 @@
-const {assign, functions,
+const {assign, functionsIn,
   isFunction}             = require('lodash')
+const getFunctions = functionsIn
 const promiseBase         = require('./src/promise')
 const conditionalMixin    = require('./src/conditional')
 
@@ -67,14 +68,21 @@ function promisify(cb) {
   })
 }
 
-const promisifyAll = function(obj) {
-  if (!obj || !Object.getPrototypeOf(obj)) { throw new Error('Invalid Argument') }
-  functions(obj)
-  .forEach(fn => {
-    if (isFunction(obj[`${fn}`]) && !obj[`${fn}Async`]) {
-      obj[`${fn}Async`] = promisify(obj[`${fn}`])
-    }
-  })
+const promisifyAll = function(obj, force = false) {
+  if (!obj) { throw new Error('Invalid Argument') }
+  const extendAsync = o => getFunctions(o)
+    .forEach(fn => {
+      if (isFunction(o[`${fn}`]) && !o[`${fn}Async`]) {
+        o[`${fn}Async`] = promisify(o[`${fn}`])
+      }
+    })
+
+  if (typeof obj === 'object' && Object.getPrototypeOf(obj)) {
+    extendAsync(Object.getPrototypeOf(obj))
+  }
+  if (force) extendAsync(obj)
+
+
   return obj
 }
 

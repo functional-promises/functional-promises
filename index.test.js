@@ -1,6 +1,6 @@
 const path = require('path')
 const test = require('ava')
-const FR = require('../')
+const FR = require('./')
 const {once, functions} = require('lodash')
 
 test('Functional River: .resolve(true)', t => {
@@ -29,7 +29,7 @@ test('Functional River: .promisify', t => {
 })
 
 test('Functional River: .promisifyAll', t => {
-  const fs = FR.promisifyAll(require('fs'));
+  const fs = FR.promisifyAll(require('fs'), true);
   // now `readFile` will return a promise rather than a cb
   return fs.readFileAsync(path.resolve(__dirname, '../package.json'), 'utf8')
     .then(data => {
