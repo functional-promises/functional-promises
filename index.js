@@ -11,7 +11,7 @@ function FunctionalRiver(resolveRejectCB) {
 }
 
 FunctionalRiver.prototype.all = promiseBase.all
-FunctionalRiver.prototype.race = promiseBase.race
+// FunctionalRiver.prototype.race = promiseBase.race
 
 FunctionalRiver.prototype.concurrency = function(limit = Infinity) {
   this._concurrencyLimit = limit
@@ -56,7 +56,9 @@ FunctionalRiver.resolve = function(value) {
   })
 }
 
-const promisify = FunctionalRiver.denodeify = FunctionalRiver.promisify = function(cb) {
+FunctionalRiver.denodeify = FunctionalRiver.promisify = promisify
+
+function promisify(cb) {
   return (...args) => new FunctionalRiver((yah, nah) => {
     return cb(...args, (err, res) => {
       if (err) return nah(err)
@@ -67,10 +69,10 @@ const promisify = FunctionalRiver.denodeify = FunctionalRiver.promisify = functi
 
 const promisifyAll = function(obj) {
   if (!obj || !Object.getPrototypeOf(obj)) { throw new Error('Invalid Argument') }
-  functions(obj.prototype)
+  functions(obj)
   .forEach(fn => {
-    if (isFunction(obj[`${fn.name}`]) && !obj[`${fn.name}Async`]) {
-      obj[`${fn.name}Async`] = promisify(obj[`${fn.name}`])
+    if (isFunction(obj[`${fn}`]) && !obj[`${fn}Async`]) {
+      obj[`${fn}Async`] = promisify(obj[`${fn}`])
     }
   })
   return obj
