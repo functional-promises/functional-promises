@@ -1,5 +1,0 @@
-// {
-//   isPromiseLike,
-//   syncPromise,
-//   trampoline,
-// }

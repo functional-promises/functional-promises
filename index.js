@@ -61,10 +61,14 @@ FunctionalRiver.denodeify = FunctionalRiver.promisify = promisify
 
 function promisify(cb) {
   return (...args) => new FunctionalRiver((yah, nah) => {
-    return cb(...args, (err, res) => {
-      if (err) return nah(err)
-      return yah(res)
-    })
+    try {
+      cb(...args, (err, res) => {
+        if (err) return nah(err)
+        return yah(res)
+      })
+    } catch(err) {
+      nah(err)
+    }
   })
 }
 
