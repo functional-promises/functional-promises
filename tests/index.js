@@ -1,7 +1,7 @@
 const path = require('path')
 const test = require('ava')
 const FR = require('../')
-const {once, functions} = require('lodash')
+const {once, functionsIn} = require('lodash')
 
 test('Functional River: .resolve(true)', t => {
   return FR.resolve(true)
@@ -10,8 +10,8 @@ test('Functional River: .resolve(true)', t => {
 
 test('Functional River: .resolve(false)', t => {
   const p = FR.resolve(false)
-  console.log('FR:', functions(p))
-  console.log('FR:', functions(FR))
+  // console.log('FR:', functions(p))
+  // console.log('FR:', functions(FR))
   return FR.resolve(false)
     .then(x => t.falsy(x))
 })
@@ -30,6 +30,7 @@ test('Functional River: .promisify', t => {
 
 test('Functional River: .promisifyAll', t => {
   const fs = FR.promisifyAll(require('fs'));
+  console.error('promisifyAll: ', fs)
   // now `readFile` will return a promise rather than a cb
   return fs.readFileAsync(path.resolve(__dirname, '../package.json'), 'utf8')
     .then(data => {

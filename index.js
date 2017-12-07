@@ -1,4 +1,4 @@
-const {assign, functions,
+const {assign, functionsIn,
   isFunction}             = require('lodash')
 const promiseBase         = require('./src/promise')
 const conditionalMixin    = require('./src/conditional')
@@ -67,12 +67,13 @@ const promisify = FunctionalRiver.denodeify = FunctionalRiver.promisify = functi
 
 const promisifyAll = function(obj) {
   if (!obj || !Object.getPrototypeOf(obj)) { throw new Error('Invalid Argument') }
-  functions(obj.prototype)
-  .forEach(fn => {
-    if (isFunction(obj[`${fn.name}`]) && !obj[`${fn.name}Async`]) {
-      obj[`${fn.name}Async`] = promisify(obj[`${fn.name}`])
+  return functionsIn(obj)
+  .reduce((obj, fn) => {
+    if (!/Sync/.test(fn) && !obj[`${fn}Async`]) {
+      obj[`${fn}Async`] = promisify(obj[`${fn}`])
     }
-  })
+    return obj
+  }, obj)
   return obj
 }
 
