@@ -30,7 +30,7 @@ test('Functional River: .promisify', t => {
 
 test('Functional River: .promisifyAll', t => {
   const fs = FR.promisifyAll(require('fs'));
-  console.error('promisifyAll: ', fs)
+  // console.error('promisifyAll: ', fs)
   // now `readFile` will return a promise rather than a cb
   return fs.readFileAsync(path.resolve(__dirname, '../package.json'), 'utf8')
     .then(data => {
@@ -39,4 +39,19 @@ test('Functional River: .promisifyAll', t => {
       t.truthy(data.version)
       t.truthy(data.license === 'MIT')
     })
+})
+
+
+test('Functional River: .map(x * 2)', t => {
+  return FR.resolve([1, 2, 3, 4, 5])
+    .map(x => x * 2)
+    .then(results => {
+      console.warn('results', results)
+      t.deepEqual(results, [2, 4, 6, 8, 10])
+    })
+})
+
+test('Functional River: .resolve(true)', t => {
+  return FR.resolve(true)
+    .then(x => t.truthy(x))
 })

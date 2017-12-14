@@ -42,7 +42,7 @@ FunctionalRiver.prototype.then = function then(fn) {
   // if (!this._FR.error) {
   //   setImmediate(() => this.resolveRejectCB(_resolve, _reject))
   // }
-  console.warn('.then:', fn, this)
+  // console.warn('.then:', fn, this)
   this._FR.promise.then(fn)
   // .then
   return this
@@ -73,7 +73,7 @@ function promisifyAll(obj) {
   return functionsIn(obj)
   .reduce((obj, fn) => {
     if (!/Sync/.test(fn) && !obj[`${fn}Async`]) {
-      console.error('promisifyAll: ', fn)
+      // console.error('promisifyAll: ', fn)
       obj[`${fn}Async`] = promisify(obj[`${fn}`])
     }
     return obj

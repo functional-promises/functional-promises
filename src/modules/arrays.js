@@ -17,9 +17,17 @@ async function map2(args, fn) {
     fn = args
     args = this && this._FR && this._FR.promise
   }
+  var count = 0
   const threadPool  = new Set()
-  const setResult   = index => value => results[index] = value
-  const nextItem    = () => ([fn(args.pop()), args.length])
+  const setResult   = index => value => {
+    results[index] = value
+    return value
+  }
+  const nextItem    = () => {
+    const item = [fn(args[count], count, args), count]
+    count++
+    return item
+  }
   const threadLimit = this && this._FR && this._FR.concurrencyLimit || Infinity
   const results     = []
   const innerValues = this && this._FR && this._FR.promise ? this._FR.promise : Promise.resolve(args)
@@ -30,9 +38,12 @@ async function map2(args, fn) {
 
   args = [...args]
 
-  while (args.length >= 0) {
-    while (threadPool.size < threadLimit) {
+  while (count < args.length) {
+    console.warn('count=', count, 'threadPool=', threadPool.size, 'args.length=', args.length)
+    while (count < args.length && threadPool.size < threadLimit) {
       let [next, nextIndex] = nextItem()
+      console.warn('    count=', count, 'nextIndex=', nextIndex, 'args.length=', args.length)
+
       if (isPromiseLike(next)) {
         threadPool.add(next)
         next
@@ -44,6 +55,7 @@ async function map2(args, fn) {
         setResult(nextIndex)(next)
       }
     }
+    // if (count === )
   }
   return results
 }
