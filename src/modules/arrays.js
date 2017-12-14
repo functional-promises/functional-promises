@@ -55,7 +55,6 @@ async function map2(args, fn) {
         setResult(nextIndex)(next)
       }
     }
-    // if (count === )
   }
   return results
 }
