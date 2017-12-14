@@ -1,6 +1,9 @@
 const {isFunction, isArrayLike} = require('lodash')
+const {isPromiseLike} = require('./utils')
 
+module.exports = {map: map2, series, }
 function series(array, fn, thisArg) {
+  thisArg = thisArg || this
   return [...array]
   .reduce((promise, ...args) => promise
     .then(results => fn.apply(thisArg, args)
@@ -8,6 +11,42 @@ function series(array, fn, thisArg) {
   ), Promise.resolve([]))
 }
 
+// eslint max-statements 29
+async function map2(args, fn) {
+  if (arguments.length === 1 && this && this._FR) {
+    fn = args
+    args = this && this._FR && this._FR.promise
+  }
+  const threadPool  = new Set()
+  const setResult   = index => value => results[index] = value
+  const nextItem    = () => ([fn(args.pop()), args.length])
+  const threadLimit = this && this._FR && this._FR.concurrencyLimit || Infinity
+  const results     = []
+  const innerValues = this && this._FR && this._FR.promise ? this._FR.promise : Promise.resolve(args)
+
+  args = await innerValues
+
+  console.warn('args', args)
+
+  args = [...args]
+
+  while (args.length >= 0) {
+    while (threadPool.size < threadLimit) {
+      let [next, nextIndex] = nextItem()
+      if (isPromiseLike(next)) {
+        threadPool.add(next)
+        next
+          .then(setResult(nextIndex))
+          .then(() => {
+            threadPool.delete(next)
+          })
+      } else {
+        setResult(nextIndex)(next)
+      }
+    }
+  }
+  return results
+}
 
 function map(args, fn) {
   if (!isArrayLike(args)) {

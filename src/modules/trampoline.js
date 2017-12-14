@@ -1,11 +1,9 @@
 
 module.exports = {
-  isPromiseLike,
   syncPromise,
   trampoline,
 }
 
-function isPromiseLike(p) { return p && typeof p.then === 'function' }
 
 function syncPromise(p, throwError = true) {
   var promiseValue = null, promiseError = null;
