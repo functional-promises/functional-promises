@@ -30,6 +30,7 @@ test('Functional River: .promisify', t => {
 
 test('Functional River: .promisifyAll', t => {
   const fs = FR.promisifyAll(require('fs'));
+  // console.log('fs.readFileAsync', fs.readFileAsync)
   // console.error('promisifyAll: ', fs)
   // now `readFile` will return a promise rather than a cb
   return fs.readFileAsync(path.resolve(__dirname, '../package.json'), 'utf8')

@@ -2,7 +2,9 @@ const {assign, functionsIn,
   isFunction}             = require('lodash')
 const promiseBase         = require('./src/promise')
 const conditionalMixin    = require('./src/conditional')
-const {map}    = require('./src/modules/arrays')
+
+
+require('./src/modules/arrays')(FunctionalRiver)
 
 function FunctionalRiver(resolveRejectCB, ...unknownArgs) {
   if (!(this instanceof FunctionalRiver)) {return new FunctionalRiver(resolveRejectCB)}
@@ -13,7 +15,6 @@ function FunctionalRiver(resolveRejectCB, ...unknownArgs) {
   assign(this, promiseBase, conditionalMixin)
 }
 
-FunctionalRiver.prototype.map = map
 FunctionalRiver.prototype.all = promiseBase.all
 FunctionalRiver.prototype.race = promiseBase.race
 
@@ -61,7 +62,7 @@ FunctionalRiver.denodeify = FunctionalRiver.promisify = promisify
 
 function promisify(cb) {
   return (...args) => new FunctionalRiver((yah, nah) => {
-    return cb.bind(this, ...args, (err, res) => {
+    return cb.call(this, ...args, (err, res) => {
       if (err) return nah(err)
       return yah(res)
     })
