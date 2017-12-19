@@ -1,4 +1,4 @@
-const {isFunction, isArrayLike} = require('lodash')
+const isArrayLike = require('lodash/isArrayLike')
 const {isPromiseLike} = require('./utils')
 const {FunctionalError, FRUnexpectedError,
   FRInputError, FunctionalUserError} = require('./errors')

@@ -1,7 +1,6 @@
 const path = require('path')
 const test = require('ava')
 const FR = require('../')
-const {once, functionsIn} = require('lodash')
 
 test('Functional River: .resolve(true)', t => {
   return FR.resolve(true)
@@ -47,7 +46,7 @@ test('Functional River: .map(x * 2)', t => {
   return FR.resolve([1, 2, 3, 4, 5])
     .map(x => x * 2)
     .then(results => {
-      console.warn('results', results)
+      // console.warn('results', results)
       t.deepEqual(results, [2, 4, 6, 8, 10])
     })
 })

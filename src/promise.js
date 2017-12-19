@@ -7,11 +7,11 @@
 //   // FR.reject        = x => FR.reject(x);
 // }
 
-module.exports = {
-  all,
-  cast,
-  tap,
-  reject,
+module.exports = function _init(FR) {
+  FR.prototype.all = FR.all = all;
+  FR.prototype.cast = cast;
+  FR.prototype.tap = tap;
+  FR.prototype.reject = reject;
 }
 
 function all(promises) {

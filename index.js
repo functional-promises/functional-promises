@@ -1,10 +1,12 @@
-const {assign, functionsIn,
-  isFunction}             = require('lodash')
-const promiseBase         = require('./src/promise')
-const conditionalMixin    = require('./src/conditional')
+const functionsIn       = require('lodash/functionsIn')
+const isFunction        = require('lodash/isFunction')
+const promiseMixin      = require('./src/promise')
+const conditionalMixin  = require('./src/conditional')
+const arraysMixin       = require('./src/modules/arrays')
 
-
-require('./src/modules/arrays')(FunctionalRiver)
+promiseMixin(FunctionalRiver)
+conditionalMixin(FunctionalRiver)
+arraysMixin(FunctionalRiver)
 
 function FunctionalRiver(resolveRejectCB, ...unknownArgs) {
   if (!(this instanceof FunctionalRiver)) {return new FunctionalRiver(resolveRejectCB)}
@@ -12,11 +14,11 @@ function FunctionalRiver(resolveRejectCB, ...unknownArgs) {
   this._FR = {}
   this._FR.concurrencyLimit = Infinity
   this._FR.promise = new Promise(resolveRejectCB)
-  assign(this, promiseBase, conditionalMixin)
+  // Object.assign(this, promiseBase, conditionalMixin)
 }
 
-FunctionalRiver.prototype.all = promiseBase.all
-FunctionalRiver.prototype.race = promiseBase.race
+// FunctionalRiver.prototype.all = promiseBase.all
+// FunctionalRiver.prototype.race = promiseBase.race
 
 FunctionalRiver.prototype.concurrency = function(limit = Infinity) {
   this._FR.concurrencyLimit = limit
@@ -52,7 +54,7 @@ FunctionalRiver.prototype.then = function then(fn) {
 FunctionalRiver.resolve = function(value) {
   return new FunctionalRiver((resolve, reject) => {
     if (value && isFunction(value.then)) {
-      return value.then(resolve)
+      return value.then(resolve).catch(reject)
     }
     resolve(value)
   })
