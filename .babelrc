@@ -1,4 +1,4 @@
 {
-  "presets": [["env", {"debug": true}]],
+  "presets": [["env", {"debug": false}]],
   "plugins": ["transform-es2015-modules-commonjs"]
 }

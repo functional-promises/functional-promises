@@ -1,8 +1,8 @@
 const functionsIn       = require('lodash/functionsIn')
 const isFunction        = require('lodash/isFunction')
-const promiseMixin      = require('./src/promise')
-const conditionalMixin  = require('./src/conditional')
-const arraysMixin       = require('./src/modules/arrays')
+const promiseMixin      = require('./promise')
+const conditionalMixin  = require('./conditional')
+const arraysMixin       = require('./modules/arrays')
 
 promiseMixin(FunctionalRiver)
 conditionalMixin(FunctionalRiver)

@@ -1,28 +1,52 @@
 const webpack = require('webpack')
 const path = require('path')
 const dev = process.env.NODE_ENV === 'development'
+// const rollupCommonjsPlugin = require('rollup-plugin-commonjs')
 
-module.exports = {
-  devtool: 'cheap-module-source-map',
-  entry: './index.js',
+const config = module.exports = {
+  devtool: dev ? 'cheap-inline-source-map' : undefined,
+  entry: './src/index.js',
   output: {
     pathinfo: true,
     // filename: path.join(__dirname, 'build', 'index.js'),
     path: path.resolve(__dirname, './dist'),
     filename: './bundle.js',
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        // warnings: false,
-        drop_console: false,
-      }
-    }),
-  ],
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        loader: 'rollup-loader',
+        // options: [/* custom rollup plugins */]
+        // or directly pass rollup options
+        // options: { plugins: [] }
+      },
+      // {
+      //   test: /src\/index.js$/,
+      //   use: [{
+      //     loader: 'webpack-rollup-loader',
+      //     options: {
+      //       // OPTIONAL: any rollup options (except `entry`)
+      //       // e.g.
+      //       plugins: [rollupCommonjsPlugin()],
+      //       // external: ['moment']
+      //     },
+      //   }]
+      // },
       {test: /\.js$/, use: 'babel-loader'},
       {test: /\.css$/, use: 'css-loader'},
     ],
   },
+}
+
+
+
+if (!dev) {
+  config.plugins = config.plugins || []
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    compress: {
+      warnings: false,
+      drop_console: false,
+    },
+  }))
 }
