@@ -4,6 +4,8 @@
       "env",
       {
         "debug": false,
+        "modules": false,
+        "useBuiltIns": true,
         "targets": {
           "browsers": ["last 2 versions", "safari >= 10"]
         }

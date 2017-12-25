@@ -1,7 +1,6 @@
 const isArrayLike = require('lodash/isArrayLike')
-const {isPromiseLike} = require('./utils')
-const {FunctionalError, FRUnexpectedError, FRInputError, FunctionalUserError} = require('./errors')
-const {red, green, white, grey, yellow, magenta} = require('chalk')
+// const {isPromiseLike} = require('./utils')
+const {FunctionalError, FRInputError} = require('./errors')
 module.exports = function _init(FR) {
   Object.assign(FR.prototype, {map, series})
 
@@ -10,8 +9,8 @@ module.exports = function _init(FR) {
     return [...array].reduce((promise, ...args) => promise.then(results => fn.apply(thisArg, args).then(result => results.concat(result))), Promise.resolve([]))
   }
 
-  // eslint max-statements 29
-  function map(args, fn, options) {
+/*eslint max-statements: ["error", 60]*/
+function map(args, fn, options) {
     if (arguments.length === 1 && this && this._FR) {
       fn = args
       args = this && this._FR && this._FR.promise
