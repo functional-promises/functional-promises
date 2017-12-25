@@ -8,18 +8,18 @@
 // }
 
 module.exports = function _init(FR) {
-  FR.prototype.all = FR.all = all;
-  FR.prototype.cast = cast;
-  FR.prototype.tap = tap;
-  FR.prototype.reject = reject;
+  FR.prototype.all = FR.all = all
+  FR.prototype.cast = cast
+  FR.prototype.tap = tap
+  FR.prototype.reject = reject
 }
 
 function all(promises) {
-  return Promise.all(promises);
+  return Promise.all(promises)
 }
 
 function cast(obj) {
-  return Promise.resolve(obj);
+  return Promise.resolve(obj)
 }
 
 function reject(err) {
@@ -29,13 +29,11 @@ function reject(err) {
     this._error = err
   }
   throw new Error(`Reject only accepts a new instance of Error!`)
-};
-
+}
 
 function tap(handler) {
-  const pHandler = p => Promise
-    .resolve(p)
-    .then(value => {
+  const pHandler = p =>
+    Promise.resolve(p).then(value => {
       handler(value)
       return value
     })

@@ -28,24 +28,30 @@ module.exports = function _init(FR) {
       results[index]  = value
       return value
     }
-    const nextItem    = () => {
-      const item = [fn(args[count], count, args), count]
+    const nextItem    = (c) => {
+      const result = [args[c], c];
+      if (result[0] && typeof result[0].then === 'function') {
+        result[0] = result[0].then(val => fn(val, c, args))
+      } else {
+        result[0] = fn(result[0], c, args)
+      }
       count++
-      return item
+      return result
     }
     const threadLimit = this && this._FR && this._FR.concurrencyLimit || Infinity
     const innerValues = this && this._FR && this._FR.promise ? this._FR.promise : Promise.resolve(args)
 
-    return innerValues.then(items => {
+    return FR.resolve(innerValues.then(items => {
       if (!isArrayLike(items)) throw new FRInputError('Invalid input data passed into FR.map()')
       args = [...items]
 
       while (count < args.length) {
-        // console.warn('count=', count, 'threadPool=', threadPool.size, 'args.length=', args.length)
-        while (count < args.length && threadPool.size < threadLimit) {
-          let [next, nextIndex] = nextItem()
-          // console.warn('    count=', count, 'nextIndex=', nextIndex, 'args.length=', args.length)
+        console.warn('count=', count, 'threadPool=', threadPool.size, 'args.length=', args.length)
+        while (count < args.length && threadPool.size <= threadLimit) {
+          let [next, nextIndex] = nextItem(count)
+          console.log('  next', nextIndex, next)
           if (isPromiseLike(next)) {
+            console.warn('    count=', count, 'nextIndex=', nextIndex, 'args.length=', args.length)
             threadPool.add(next)
             next
               .then(setResult(nextIndex))
@@ -59,7 +65,7 @@ module.exports = function _init(FR) {
         }
       }
       return results
-    })
+    }))
   }
 }
 
