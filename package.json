@@ -1,16 +1,7 @@
 {
   "name": "functional-river",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
-  "babelrc": false,
-  "babel": {
-    "presets": [
-      "env",
-      {
-        "debug": true
-      }
-    ]
-  },
   "ava": {
     "require": [
       "babel-register"
@@ -19,7 +10,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "ava tests",
+    "test": "ava --serial --verbose tests",
     "build": "webpack"
   },
   "author": "Dan@DanLevy.net",
@@ -27,8 +18,10 @@
   "dependencies": {
     "ava": "^0.24.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "chalk": "^2.3.0",
     "lodash": "^4.17.4",
     "lodash-es": "^4.17.4",
     "webpack": "^3.10.0"

@@ -2,7 +2,7 @@ module.exports = function _init(FR) {
   FR.prototype.tapIf = tapIf
   FR.prototype.thenIf = thenIf
   FR.prototype._thenIf = _thenIf
-  FR._thenIf = _thenIf
+  FR.thenIf = _thenIf
 }
 
 function thenIf(cond, ifTrue, ifFalse) {
