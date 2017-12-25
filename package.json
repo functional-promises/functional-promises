@@ -11,7 +11,10 @@
   "main": "index.js",
   "scripts": {
     "test": "ava --serial --verbose tests",
-    "build": "webpack"
+    "build": "webpack",
+    "build-live": "NODE_ENV=production webpack",
+    "build-dev": "NODE_ENV=development webpack"
+
   },
   "author": "Dan@DanLevy.net",
   "license": "MIT",

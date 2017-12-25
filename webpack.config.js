@@ -10,17 +10,17 @@ const config = module.exports = {
     pathinfo: true,
     // filename: path.join(__dirname, 'build', 'index.js'),
     path: path.resolve(__dirname, './dist'),
-    filename: './bundle.js',
+    filename: `./bundle${dev ? '' : '.min'}.js`,
   },
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        loader: 'rollup-loader',
-        // options: [/* custom rollup plugins */]
-        // or directly pass rollup options
-        // options: { plugins: [] }
-      },
+      // {
+      //   test: /\.js$/,
+      //   loader: 'rollup-loader',
+      //   // options: [/* custom rollup plugins */]
+      //   // or directly pass rollup options
+      //   // options: { plugins: [] }
+      // },
       // {
       //   test: /src\/index.js$/,
       //   use: [{
