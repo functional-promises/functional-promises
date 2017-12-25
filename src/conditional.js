@@ -1,26 +1,37 @@
+const {isPromiseLike} = require('./modules/utils')
+
 module.exports = function _init(FR) {
   FR.prototype.tapIf = tapIf
   FR.prototype.thenIf = thenIf
   FR.prototype._thenIf = _thenIf
   FR.thenIf = _thenIf
-}
 
-function thenIf(cond, ifTrue, ifFalse) {
-  if (this instanceof FR) {
-    return this.then(value => _thenIf(cond, ifTrue, ifFalse)(value))
+  function thenIf(cond, ifTrue, ifFalse) {
+    if (arguments.length === 1) {
+      ifTrue = cond
+      cond = x => x
+    }
+    if (isPromiseLike(this)) {
+      return this.then(value => _thenIf(cond, ifTrue, ifFalse)(value))
+    }
+    return _thenIf(cond, ifTrue, ifFalse)
   }
-  return _thenIf(cond, ifTrue, ifFalse)
-}
 
-function tapIf(cond, ifTrue, ifFalse) {
-  if (this instanceof FR) {
-    return this.then(value => _thenIf(cond, ifTrue, ifFalse, true)(value))
+  function tapIf(cond, ifTrue, ifFalse) {
+    if (arguments.length === 1) {
+      ifTrue = cond
+      cond = x => x
+    }
+    if (isPromiseLike(this)) {
+      return this.then(value => _thenIf(cond, ifTrue, ifFalse, true)(value))
+    }
+    return _thenIf(cond, ifTrue, ifFalse, true)
   }
-  return _thenIf(cond, ifTrue, ifFalse, true)
-}
 
-function _thenIf(cond = (x) => x, ifTrue = (x) => x, ifFalse = () => null, returnValue = false) {
-  return value => FR.resolve(cond(value))
-    .then(ans => ans ? ifTrue(value) : ifFalse(value))
-    .then(v => returnValue ? value : v)
+  function _thenIf(cond = x => x, ifTrue = x => x, ifFalse = () => null, returnValue = false) {
+    return value =>
+      FR.resolve(cond(value))
+        .then(ans => (ans ? ifTrue(value) : ifFalse(value)))
+        .then(v => (returnValue ? value : v))
+  }
 }
