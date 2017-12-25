@@ -57,12 +57,9 @@ test('Functional River: .map(x * 2).map(x * 2)', t => {
 })
 
 test('Functional River: [...Promise].map(x * 4)', t => {
-  console.log('pre-p-array')
   return FR.resolve([FR.resolve(1), Promise.resolve(2), Promise.resolve(3), Promise.resolve(4), Promise.resolve(5)])
     .map(x => x * 4)
     .then(results => {
-      console.log('post-p-array')
-
       // console.warn('results', results)
       t.deepEqual(results, [4, 8, 12, 16, 20])
     })

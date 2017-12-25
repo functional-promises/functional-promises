@@ -12,7 +12,7 @@ function FunctionalRiver(resolveRejectCB, ...unknownArgs) {
   if (!(this instanceof FunctionalRiver)) {return new FunctionalRiver(resolveRejectCB)}
   if (unknownArgs.length > 0) throw new Error('FunctionalRiver only accepts 1 argument')
   this._FR = {}
-  this._FR.concurrencyLimit = Infinity
+  this._FR.concurrencyLimit = 4
   this._FR.promise = new Promise(resolveRejectCB)
   // Object.assign(this, promiseBase, conditionalMixin)
 }
