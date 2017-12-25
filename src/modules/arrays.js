@@ -1,7 +1,6 @@
 const isArrayLike = require('lodash/isArrayLike')
 const {isPromiseLike} = require('./utils')
 const {FunctionalError, FRUnexpectedError, FRInputError, FunctionalUserError} = require('./errors')
-const {red, green, white, grey, yellow, magenta} = require('chalk')
 module.exports = function _init(FR) {
   Object.assign(FR.prototype, {map, series})
 
