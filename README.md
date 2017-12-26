@@ -114,7 +114,6 @@ FP.on('click', button)
 
 Turn anything into an FP Promise.
 
-##### `FP.thenIf()`
 
 Use with existing Promise supporting libraries.
 
@@ -123,6 +122,8 @@ Use with existing Promise supporting libraries.
 Promise.resolve()
 
 ```
+
+##### `FP.thenIf()`
 
 ##### `FP.all()`
 

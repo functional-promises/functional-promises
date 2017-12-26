@@ -36,7 +36,6 @@ test('Functional River: .promisifyAll', t => {
     })
 })
 
-
 test('Functional River: .map(x * 2)', t => {
   return FR.resolve([1, 2, 3, 4, 5])
     .map(x => x * 2)
