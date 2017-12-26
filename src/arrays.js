@@ -1,5 +1,5 @@
 const isArrayLike = require('lodash/isArrayLike')
-const {FRInputError} = require('./errors')
+const {FRInputError} = require('./modules/errors')
 module.exports = function _init(FR) {
   Object.assign(FR.prototype, {map, series})
 
