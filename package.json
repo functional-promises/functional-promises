@@ -1,5 +1,5 @@
 {
-  "name": "functional-river",
+  "name": "functional-promises",
   "version": "1.0.4",
   "description": "",
   "ava": {
@@ -9,6 +9,10 @@
     "babel": "inherit"
   },
   "main": "index.js",
+  "repository": {
+    "url": "https://github.com/justsml/functional-promises.git"
+  },
+  "homepage": "https://github.com/justsml/functional-promises",
   "scripts": {
     "test": "ava --serial --verbose tests",
     "build": "webpack",
@@ -25,7 +29,6 @@
     "babel-preset-env": "^1.6.1",
     "chalk": "^2.3.0",
     "lodash": "^4.17.4",
-    "lodash-es": "^4.17.4",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
