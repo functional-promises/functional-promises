@@ -27,11 +27,16 @@ function reject(err) {
   // ret._rejectCallback(reason, true);
   if (err instanceof Error) {
     this._error = err
+    throw err
   }
   throw new Error(`Reject only accepts a new instance of Error!`)
 }
 
 function tap(handler) {
+  if (this.steps) {
+    this.steps.push(['tap', this, [...arguments]])
+    return this
+  }
   const pHandler = p =>
     Promise.resolve(p).then(value => {
       handler(value)

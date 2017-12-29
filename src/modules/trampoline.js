@@ -10,7 +10,7 @@ function syncPromise(p, throwError = true) {
   p.then(val => {
     promiseValue = val
   })
-  .catch(err = {
+  .catch(err => {
     promiseError = err
   })
   while (true) {

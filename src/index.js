@@ -21,15 +21,27 @@ function FunctionalRiver(resolveRejectCB, ...unknownArgs) {
 // FunctionalRiver.prototype.race = promiseBase.race
 
 FunctionalRiver.prototype.concurrency = function(limit = Infinity) {
+  if (this.steps) {
+    this.steps.push(['concurrency', this, [...arguments]])
+    return this
+  }
   this._FR.concurrencyLimit = limit
   return this
 }
 
 FunctionalRiver.prototype.serial = function() {
+  if (this.steps) {
+    this.steps.push(['serial', this, [...arguments]])
+    return this
+  }
   return this.concurrency(1)
 }
 
 FunctionalRiver.prototype.catch = function(fn) {
+  if (this.steps) {
+    this.steps.push(['catch', this, [...arguments]])
+    return this
+  }
   if (this._FR.error) {
     const result = fn(this._FR.error)
     this._FR.error = undefined // no dbl-catch
@@ -40,6 +52,10 @@ FunctionalRiver.prototype.catch = function(fn) {
 }
 
 FunctionalRiver.prototype.then = function then(fn) {
+  if (this.steps) {
+    this.steps.push(['then', this, [...arguments]])
+    return this
+  }
   // if (this._FR.value)  { return fn(this._FR.value); }
 
   // if (!this._FR.error) {
