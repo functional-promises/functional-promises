@@ -1,12 +1,14 @@
 const functionsIn       = require('lodash/functionsIn')
 const isFunction        = require('lodash/isFunction')
+const arraysMixin       = require('./arrays')
+const eventsMixin       = require('./events')
 const promiseMixin      = require('./promise')
 const conditionalMixin  = require('./conditional')
-const arraysMixin       = require('./arrays')
 
+arraysMixin(FunctionalRiver)
+eventsMixin(FunctionalRiver)
 promiseMixin(FunctionalRiver)
 conditionalMixin(FunctionalRiver)
-arraysMixin(FunctionalRiver)
 
 function FunctionalRiver(resolveRejectCB, ...unknownArgs) {
   if (!(this instanceof FunctionalRiver)) {return new FunctionalRiver(resolveRejectCB)}

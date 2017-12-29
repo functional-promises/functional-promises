@@ -29,7 +29,9 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "chalk": "^2.3.0",
+    "jsdom": "^11.5.1",
     "lodash": "^4.17.4",
+    "simulant": "^0.2.2",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
