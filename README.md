@@ -17,8 +17,8 @@ npm install functional-promises
 
 This library is aimed at supporting a specific **Function Chaining technique** (using composition).
 
-There are many names for this code, Composition Pipeline,
-The pattern is called a `Functional River` - it makes your code easier to follow.
+There are many names for this pattern. Including Composition Pipeline and Promise Chain.
+The emphasis here is a seamless async/sync Developer Experience. I call this pattern a `Functional River` - essentially your data is processed in a deterministic sequence of steps (functions).
 
 ### Advantages
 
@@ -95,9 +95,56 @@ FP.on('click', button)
 #### Collection Methods
 
 ##### `FP.map()`
+
+```js
+FP.resolve([1, 2, 3, 4, 5])
+  .map(x => x * 2)
+  .then(results => {
+    assert.deepEqual(results, [2, 4, 6, 8, 10])
+  })
+```
+
 ##### `FP.filter()`
-##### `FP.find()`
+
+```js
+const isEven = x => x % 2 === 0
+FP.resolve([1, 2, 3, 4, 5])
+  .filter(isEven)
+  .then(results => {
+    t.deepEqual(results, [2, 4])
+  })
+```
+
+##### `FP.find(fn)`
+
+Returns first item to return truthy for `fn(item)`
+
+If no match is found it will return `undefined`.
+
+```js
+const isEven = x => x % 2 === 0
+FP.resolve([1, 2, 3, 4, 5])
+  .find(isEven)
+  .then(results => {
+    t.deepEqual(results, 2)
+  })
+```
+
 ##### `FP.findIndex()`
+
+Returns first **item's index** to return truthy for `fn(item)`
+
+If no match is found it will return `-1`.
+
+```js
+const isEven = x => x % 2 === 0
+FP.resolve([1, 2, 3, 4, 5])
+  .findIndex(isEven)
+  .then(results => {
+    t.deepEqual(results, 1)
+  })
+```
+
 ##### `FP.some()`
 ##### `FP.none()`
 ##### `FP.series()`
