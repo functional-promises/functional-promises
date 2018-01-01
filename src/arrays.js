@@ -1,15 +1,62 @@
 const isArrayLike = require('lodash/isArrayLike')
 const {FRInputError} = require('./modules/errors')
-module.exports = function _init(FR) {
-  Object.assign(FR.prototype, {map, series})
 
-  function series(array, fn, thisArg) {
-    thisArg = thisArg || this
-    return [...array].reduce((promise, ...args) => promise.then(results => fn.apply(thisArg, args).then(result => results.concat(result))), Promise.resolve([]))
+module.exports = function _init(FR) {
+  Object.assign(FR.prototype, {map, series: reduce, reduce, filter})
+
+  function filter(iterable, filterFn) {
+    if (this.steps) {
+      this.steps.push(['filter', this, [...arguments]])
+      return this
+    }
+    if (typeof iterable === 'function') {
+      filterFn = iterable
+      iterable = this._FR.promise
+    } else {
+      iterable = FR.resolve(iterable, this)
+    }
+    return reduce(iterable, (aggregate, item) => {
+        return Promise.resolve(filterFn(item)).then(value => (value ? aggregate.concat([value]) : aggregate))
+      }, [])
   }
 
-/*eslint max-statements: ["error", 60]*/
-function map(args, fn, options) {
+  function reduce(iterable, reducer, initVal) {
+    if (this.steps) {
+      this.steps.push(['reduce', this, [...arguments]])
+      return this
+    }
+    if (typeof iterable === 'function') {
+      initVal = reducer
+      reducer = iterable
+      iterable = this._FR.promise
+    } else {
+      iterable = FR.resolve(iterable, this)
+    }
+    return new FR((resolve, reject) => {
+      return iterable.then(iterable => {
+        const iterator = iterable[Symbol.iterator]()
+        let i = 0
+
+        const next = total => {
+          const current = iterator.next()
+          if (current.done) return resolve(total)
+
+          Promise.all([total, current.value])
+            .then(([total, item]) => next(reducer(total, item, i++)))
+            .catch(reject)
+        }
+
+        next(initVal)
+      })
+    })
+  }
+
+  /*eslint max-statements: ["error", 60]*/
+  function map(args, fn, options) {
+    if (this.steps) {
+      this.steps.push(['map', this, [...arguments]])
+      return this
+    }
     if (arguments.length === 1 && this && this._FR) {
       fn = args
       args = this && this._FR && this._FR.promise
@@ -17,20 +64,18 @@ function map(args, fn, options) {
 
     let errors = []
     let count = 0
-    let resultCount = 0
     const results = []
     const threadPool = new Set()
     const threadPoolFull = () => threadPool.size >= threadLimit
     const isDone = () => {
       if (errors.length >= 0) return true
-      return resultCount >= args.length
+      return count >= args.length
     }
     const setResult = index => value => {
-      resultCount ++
       results[index] = value
       return value
     }
-    const threadLimit = Math.max(4, Math.min(this && this._FR && this._FR.concurrencyLimit || 1, 4))
+    const threadLimit = Math.max(1, Math.min((this && this._FR && this._FR.concurrencyLimit) || 1, 4))
     const innerValues = this && this._FR && this._FR.promise ? this._FR.promise : Promise.resolve(args)
     let initialThread = 0
 
@@ -48,8 +93,7 @@ function map(args, fn, options) {
           return false
         }
         const runItem = c => {
-          // console.log(' runItem', c, results)
-          // console.log(magenta`   value`, args[c])
+          // console.log(' runItem', c, results, magenta`   value`, args[c])
           if (threadPoolFull()) return setTimeout(() => runItem(c), 1)
           if (count >= args.length) return Promise.all(results).then(resolve)
           const result = [args[c], c]
@@ -70,31 +114,11 @@ function map(args, fn, options) {
           return result
         }
 
-        while(initialThread <= threadLimit && initialThread <= args.length) {
-          // console.log(red`Running thread #`, initialThread, args.length)
+        // Kick off x number of initial threads
+        while (initialThread <= threadLimit && initialThread <= args.length) {
           runItem(initialThread)
           initialThread++
         }
-
-
-        // while (initialThreads <= args.length) {
-        //   console.warn('count=', count, 'threadPool=', threadPool.size, 'args.length=', args.length)
-        //   while (count < args.length && threadPool.size <= threadLimit) {
-        //     let [next, nextIndex] = nextItem(count)
-        //     console.log('  next', nextIndex, next)
-        //     if (isPromiseLike(next)) {
-        //       console.warn('    count=', count, 'nextIndex=', nextIndex, 'args.length=', args.length)
-        //       threadPool.add(next)
-        //       next.then(setResult(nextIndex)).then(() => {
-        //         threadPool.delete(next)
-        //       })
-        //     } else {
-        //       // console.warn('    not p-like:', nextIndex, next)
-        //       setResult(nextIndex)(next)
-        //     }
-        //   }
-        // }
-        // return results
       })
     })
   }
