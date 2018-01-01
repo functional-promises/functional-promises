@@ -37,3 +37,25 @@ test('Functional River: sum with .reduce()', t => {
       t.is(results, 15)
     })
 })
+
+test('Functional River: [].filter()', t => {
+  const isEven = x => x % 2 === 0
+
+  return FR.resolve([1, 2, 3, 4, 5])
+    .filter(isEven)
+    .then(results => {
+      t.deepEqual(results, [2, 4])
+    })
+})
+
+test('Functional River: [].find()', t => {
+  const isEven = x => x % 2 === 0
+
+  return FR.resolve([1, 2, 3, 4, 5])
+    .find(isEven)
+    .then(results => {
+      t.deepEqual(results, 2)
+    })
+})
+
+

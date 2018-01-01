@@ -2,22 +2,57 @@ const isArrayLike = require('lodash/isArrayLike')
 const {FRInputError} = require('./modules/errors')
 
 module.exports = function _init(FR) {
-  Object.assign(FR.prototype, {map, series: reduce, reduce, filter})
+  FR.prototype.map = map
+  FR.prototype.find = find
+  FR.prototype.filter = filter
+  FR.prototype.reduce = reduce
+  FR.prototype.findIndex = findIndex
 
-  function filter(iterable, filterFn) {
+  function find(callback) {
+    return _find.call(this, callback)
+    .then(({item}) => item)
+  }
+  function findIndex(callback) {
+    return _find.call(this, callback)
+    .then(({index}) => index)
+  }
+  function _find(iterable, callback) {
+    if (this.steps) {
+      this.steps.push(['_find', this, [...arguments]])
+      return this
+    }
+
+    if (typeof iterable === 'function') {
+      callback = iterable
+      iterable = this._FR.promise
+    // } else {
+    //   iterable = iterable
+    }
+
+    console.warn('_find.arguments', arguments)
+    console.warn('_find.iterable', iterable)
+    console.warn('_find.callback', callback)
+
+    return FR.resolve(iterable).filter(callback)
+      .then(results => results && results[0]
+         ? {item: results[0], index: results.indexOf(results[0])}
+         : {item: undefined,  index: -1})
+    }
+
+  function filter(iterable, callback) {
     if (this.steps) {
       this.steps.push(['filter', this, [...arguments]])
       return this
     }
     if (typeof iterable === 'function') {
-      filterFn = iterable
+      callback = iterable
       iterable = this._FR.promise
     } else {
       iterable = FR.resolve(iterable, this)
     }
     return reduce(iterable, (aggregate, item) => {
-        return Promise.resolve(filterFn(item)).then(value => (value ? aggregate.concat([value]) : aggregate))
-      }, [])
+      return Promise.resolve(callback(item)).then(value => (value ? aggregate.concat([item]) : aggregate))
+    }, [])
   }
 
   function reduce(iterable, reducer, initVal) {
@@ -26,9 +61,10 @@ module.exports = function _init(FR) {
       return this
     }
     if (typeof iterable === 'function') {
+      console.log('\nfunction reduce(iterable, reducer): ITERABLE is A FUNCTION\n')
       initVal = reducer
       reducer = iterable
-      iterable = this._FR.promise
+      iterable = this._FR ? this._FR.promise : this
     } else {
       iterable = FR.resolve(iterable, this)
     }
