@@ -10,9 +10,6 @@
 npm install functional-promises
 ```
 
-> Thanks to several influencial projects: RxJS, Bluebird, FantasyLand, Gulp, HighlandJS, et al.
-> Special thanks to [Kyle Simpson](#), [Eric Elliot](#), [MPJ](#).
-
 ## Summary
 
 This library is aimed at supporting a specific **Function Chaining technique** (using composition).
@@ -29,8 +26,7 @@ The emphasis here is a seamless async/sync Developer Experience. I call this pat
 * Higher code test coverage w/ less repetitive code in tests.
 * Use the best features from multiple programming styles: a little imperative, plenty functional, a pinch of OOP, yet still resembling declarative methods!!!
 
-How? Let's look at some examples:
-
+How? Let's look at some examples...
 
 ## Examples
 
@@ -67,8 +63,9 @@ For example streams & event handlers must (usually) support multiple calls over 
 Here's how `FP.on()` and `FP.listen()` help you (roughly) handle this like so:
 
 ```js
-FP.on('click', button)
-  .then(({target}) => {
+const button = document.getElementById('submitBtn')
+FP.on(button, 'click') // start a chain
+  .then(({target}) => { // destructure 'target' from the `event`
     target.textContent = 'Clicked!'
   })
   .listen() // end the repeatable chain, started at `.on`
@@ -77,7 +74,8 @@ FP.on('click', button)
 Here's the same code using some sugary extras:
 
 ```js
-FP.on('click', button)
+const button = document.getElementById('submitBtn')
+FP.on(button, 'click')
   .get('target')
   .set('textContent', 'Clicked!')
   .listen()
@@ -85,10 +83,11 @@ FP.on('click', button)
 
 It may be unfamiliar at first, but I bet you can guess what that does.
 
-Here's basically the same code, a little less fancy:
+Here's basically the same code:
 
 ```js
-FP.on('click', button)
+const button = document.getElementById('submitBtn')
+FP.on(button, 'click')
   .get('target')
   .then(element => element.textContent = 'Clicked!')
   .listen()
@@ -203,3 +202,7 @@ FP.all([
 )
 ```
 
+
+> Thanks to several influencial projects: RxJS, Bluebird, asynquence, FantasyLand, Gulp, HighlandJS, et al.
+>
+> Special thanks to [Kyle Simpson](https://github.com/getify), [Eric Elliot](https://medium.com/@_ericelliott), [MPJ](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q).
