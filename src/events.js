@@ -1,7 +1,6 @@
 const {FRInputError} = require('./modules/errors')
 
 module.exports = function _init(FR) {
-
   FR.on = on
   FR.prototype.listen = listen
   FR.prototype.runSteps = runSteps

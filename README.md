@@ -58,8 +58,23 @@ FP.resolve([1, 2, 3, 4, 5])
 #### Event Examples
 
 > STATUS: COMPLETED w/ TESTS
+> **Subject to change**
 
-**Events Proposal**
+Create function chains to handle the case where memoized promises don't fit very naturally.
+
+For example streams & event handlers must (usually) support multiple calls over time.
+
+Here's how `FP.on()` and `FP.listen()` help you (roughly) handle this like so:
+
+```js
+FP.on('click', button)
+  .then(({target}) => {
+    target.textContent = 'Clicked!'
+  })
+  .listen() // end the repeatable chain, started at `.on`
+```
+
+Here's the same code using some sugary extras:
 
 ```js
 FP.on('click', button)
@@ -79,32 +94,22 @@ FP.on('click', button)
   .listen()
 ```
 
-And again, using a more pure ES2015 + native-promise solution:
-
-```js
-FP.on('click', button)
-  .then(({target}) => {
-    target.textContent = 'Clicked!'
-  })
-  .listen()
-```
-
 
 ## API
 
 #### Collection Methods
 
-##### `FP.map()`
+##### `FP.map(iterable, transformFn)`
 
 ```js
-FP.resolve([1, 2, 3, 4, 5])
+FP.resolve([1, 2, 3, 4, Promise.resolve(5)])
   .map(x => x * 2)
   .then(results => {
     assert.deepEqual(results, [2, 4, 6, 8, 10])
   })
 ```
 
-##### `FP.filter()`
+##### `FP.filter(iterable, filterFn)`
 
 ```js
 const isEven = x => x % 2 === 0
