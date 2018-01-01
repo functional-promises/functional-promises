@@ -4,6 +4,7 @@ const arraysMixin       = require('./arrays')
 const eventsMixin       = require('./events')
 const promiseMixin      = require('./promise')
 const conditionalMixin  = require('./conditional')
+const {FunctionalError} = require('./modules/errors')
 
 arraysMixin(FunctionalRiver)
 eventsMixin(FunctionalRiver)
@@ -58,15 +59,9 @@ FunctionalRiver.prototype.then = function then(fn) {
     this.steps.push(['then', this, [...arguments]])
     return this
   }
-  // if (this._FR.value)  { return fn(this._FR.value); }
 
-  // if (!this._FR.error) {
-  //   setImmediate(() => this.resolveRejectCB(_resolve, _reject))
-  // }
-  // console.warn('.then:', fn, this)
-  this._FR.promise.then(fn)
-  // .then
-  return this
+  if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn)
+  return this._FR.promise.then(fn)
 }
 
 FunctionalRiver.resolve = function(value) {
@@ -94,7 +89,6 @@ function promisifyAll(obj) {
   return functionsIn(obj)
   .reduce((obj, fn) => {
     if (!/Sync/.test(fn) && !obj[`${fn}Async`]) {
-      // console.error('promisifyAll: ', fn)
       obj[`${fn}Async`] = promisify(obj[`${fn}`])
     }
     return obj

@@ -1,15 +1,85 @@
 const isArrayLike = require('lodash/isArrayLike')
 const {FRInputError} = require('./modules/errors')
-module.exports = function _init(FR) {
-  Object.assign(FR.prototype, { map, series })
 
-  function series(array, fn, thisArg) {
+module.exports = function _init(FR) {
+  FR.prototype.map = map
+  FR.prototype.find = find
+  FR.prototype.filter = filter
+  FR.prototype.reduce = reduce
+  FR.prototype.findIndex = findIndex
+
+  function find(callback) {
+    return _find.call(this, callback)
+    .then(({item}) => item)
+  }
+  function findIndex(callback) {
+    return _find.call(this, callback)
+    .then(({index}) => index)
+  }
+
+  function _find(iterable, callback) {
     if (this.steps) {
-      this.steps.push(['series', this, [...arguments]])
+      this.steps.push(['_find', this, [...arguments]])
       return this
     }
-    thisArg = thisArg || this
-    return [...array].reduce((promise, ...args) => promise.then(results => fn.apply(thisArg, args).then(result => results.concat(result))), Promise.resolve([]))
+
+    if (typeof iterable === 'function') {
+      callback = iterable
+      iterable = this._FR.promise
+    }
+
+    return FR.resolve(iterable)
+      .filter(callback)
+      .then(results => results && results[0]
+         ? {item: results[0], index: results.indexOf(results[0])}
+         : {item: undefined,  index: -1})
+  }
+
+  function filter(iterable, callback) {
+    if (this.steps) {
+      this.steps.push(['filter', this, [...arguments]])
+      return this
+    }
+    if (typeof iterable === 'function') {
+      callback = iterable
+      iterable = this._FR.promise
+    } else {
+      iterable = FR.resolve(iterable, this)
+    }
+    return reduce(iterable, (aggregate, item) => {
+      return Promise.resolve(callback(item)).then(value => (value ? aggregate.concat([item]) : aggregate))
+    }, [])
+  }
+
+  function reduce(iterable, reducer, initVal) {
+    if (this.steps) {
+      this.steps.push(['reduce', this, [...arguments]])
+      return this
+    }
+    if (typeof iterable === 'function') {
+      initVal = reducer
+      reducer = iterable
+      iterable = this._FR ? this._FR.promise : this
+    } else {
+      iterable = FR.resolve(iterable, this)
+    }
+    return new FR((resolve, reject) => {
+      return iterable.then(iterable => {
+        const iterator = iterable[Symbol.iterator]()
+        let i = 0
+
+        const next = total => {
+          const current = iterator.next()
+          if (current.done) return resolve(total)
+
+          Promise.all([total, current.value])
+            .then(([total, item]) => next(reducer(total, item, i++)))
+            .catch(reject)
+        }
+
+        next(initVal)
+      })
+    })
   }
 
   /*eslint max-statements: ["error", 60]*/
@@ -25,20 +95,18 @@ module.exports = function _init(FR) {
 
     let errors = []
     let count = 0
-    let resultCount = 0
     const results = []
     const threadPool = new Set()
     const threadPoolFull = () => threadPool.size >= threadLimit
     const isDone = () => {
       if (errors.length >= 0) return true
-      return resultCount >= args.length
+      return count >= args.length
     }
     const setResult = index => value => {
-      resultCount++
       results[index] = value
       return value
     }
-    const threadLimit = Math.max(1, Math.min(this && this._FR && this._FR.concurrencyLimit || 1, 4))
+    const threadLimit = Math.max(1, Math.min((this && this._FR && this._FR.concurrencyLimit) || 1, 4))
     const innerValues = this && this._FR && this._FR.promise ? this._FR.promise : Promise.resolve(args)
     let initialThread = 0
 
@@ -56,8 +124,7 @@ module.exports = function _init(FR) {
           return false
         }
         const runItem = c => {
-          // console.log(' runItem', c, results)
-          // console.log(magenta`   value`, args[c])
+          // console.log(' runItem', c, results, magenta`   value`, args[c])
           if (threadPoolFull()) return setTimeout(() => runItem(c), 1)
           if (count >= args.length) return Promise.all(results).then(resolve)
           const result = [args[c], c]
@@ -83,7 +150,6 @@ module.exports = function _init(FR) {
           runItem(initialThread)
           initialThread++
         }
-
       })
     })
   }

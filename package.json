@@ -1,6 +1,6 @@
 {
   "name": "functional-promises",
-  "version": "1.0.5",
+  "version": "1.1.1",
   "description": "",
   "ava": {
     "require": [
@@ -15,8 +15,8 @@
   },
   "homepage": "https://github.com/justsml/functional-promises",
   "scripts": {
-    "test": "ava --serial --verbose tests",
-    "build": "webpack",
+    "test": "ava --serial --fail-fast=1 --verbose tests",
+    "build": "npm run build-dev && npm run build-live",
     "build-live": "NODE_ENV=production webpack",
     "build-dev": "NODE_ENV=development webpack"
   },

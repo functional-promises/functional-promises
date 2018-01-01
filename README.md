@@ -11,7 +11,7 @@ npm install functional-promises
 ```
 
 > Thanks to several influencial projects: RxJS, Bluebird, FantasyLand, Gulp, HighlandJS, et al.
-> Special thanks to Eric Elliot & Kyle Simpson, even if you don't support the goals behind my crazy little library. :)
+> Special thanks to Eric Elliot, Kyle Simpson, MPJ, et al.
 
 ## Summary
 
