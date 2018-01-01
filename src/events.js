@@ -18,12 +18,12 @@ module.exports = function _init(FR) {
     return startingPromise
   }
 
-  function listen() {
+  function listen(callback) {
     // TODO: finish listen()
-    console.warn('TODO: listen', this)
+    // console.warn('TODO: listen', this)
     const obj = this.events.ctx
     const {eventNames} = this.events
-    console.log('\nSetting up events for', obj, eventNames)
+    // console.log('\nSetting up events', eventNames)
     if (!obj[obj.addEventListener ? 'addEventListener' : 'on']) {
       throw new FRInputError('Input object isn\'t a valid EventEmitter or similar.')
     }
@@ -31,10 +31,10 @@ module.exports = function _init(FR) {
     // Sets up the handlers
     this.cleanupHandles = eventNames.map(eventName => {
       const handler = (e) => {
-        console.log(`   > Firing ${eventName} handler`)
+        // console.log(`   > Firing ${eventName} handler`)
         this.runSteps(e)
       }
-      console.log(`   > Attaching ${eventName} handler`)
+      // console.log(`   > Attaching ${eventName} handler`)
       obj[obj.addEventListener ? 'addEventListener' : 'on'](eventName, handler)
       return () => obj[obj.removeEventListener ? 'removeEventListener' : 'off'](eventName, handler)
     })
@@ -43,14 +43,24 @@ module.exports = function _init(FR) {
   }
 
   function runSteps(event) {
-    console.log('runSteps', this.steps && this.steps.length)
-    const steps = [...this.steps]
-    const finalP =  steps.reduce((p, fnCallArgs) => {
-      const [fnName, ctx, args] = fnCallArgs
-      return ctx[fnName].call(ctx, ...args)
-    }, FR.resolve(event))
-    console.log(`\n    > Steps promise:`, finalP)
-    return FR.all([finalP])
+    // console.log('runSteps', this.steps && this.steps.length)
+
+    return new FR((resolve, reject) => {
+      const iterator = this.steps[Symbol.iterator]()
+
+      const next = promise => {
+        const current = iterator.next()
+        if (current.done) return resolve(promise)
+        const [fnName, , args] = current.value
+        // console.log('promise.next')
+        return next(promise[fnName](...args))
+        // Promise.resolve(value)
+        //   .then(([total, item]) => next(reducer(total, item, i++)))
+        //   .catch(reject)
+      }
+
+      next(FR.resolve(event))
+    })
   }
 
 }

@@ -1,6 +1,7 @@
 const test = require('ava')
 const FR = require('../src')
 const jsdom = require('jsdom')
+const EventEmitter = require('events')
 
 const getFakeWindow = (html) => {
   const { JSDOM } = jsdom
@@ -15,21 +16,37 @@ const trigger = (el, name, data) => {
 
 }
 
-test.cb('Functional River: .resolve(true)', t => {
+test.cb('FP.on().listen() EventEmitter', t => {
+  const cleanupHandlers = []
+  const eventBus = new EventEmitter()
+
+  FR.on(eventBus, 'hit')
+    .then(event => {
+      // console.log('FP EVENT HANDLED:', event)
+      t.truthy(event)
+      t.truthy(event.worked)
+      t.end()
+    })
+    .listen({cleanupHandlers})
+  eventBus.emit('hit', {worked: true})
+})
+
+
+test.cb('FP.on().listen() DOM', t => {
   const buttonUi = getFakeWindow(`<button id='btn'>Click me!</button>`)
   const {document, window} = buttonUi
   global.window = window
   global.document = document
-  const simulant = require('simulant')
+  // const simulant = require('simulant')
   const btn = document.querySelector('#btn')
 
   const listenChain = () => {
     const cleanupHandlers = []
     FR.on(btn, 'click')
     .then(el => {
-      console.log('FR CLICK HANDLED:', el)
+      // console.log('FR CLICK HANDLED:', el)
       t.truthy(el)
-      t.truthy(el.textContent)
+      // t.truthy(el.textContent)
       t.end()
     })
     .listen({cleanupHandlers})
@@ -40,10 +57,3 @@ test.cb('Functional River: .resolve(true)', t => {
       btn.click()
     })
 })
-
-test('Functional River: .resolve(false)', t => {
-  return FR.resolve(false)
-    .then(x => t.falsy(x))
-})
-
-
