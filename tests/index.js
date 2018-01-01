@@ -1,19 +1,19 @@
 const path = require('path')
 const test = require('ava')
-const FR = require('../src')
+const FP = require('../src')
 
-test('Functional River: .resolve(true)', t => {
-  return FR.resolve(true)
+test('FP.resolve(true)', t => {
+  return FP.resolve(true)
     .then(x => t.truthy(x))
 })
 
-test('Functional River: .resolve(false)', t => {
-  return FR.resolve(false)
+test('FP.resolve(false)', t => {
+  return FP.resolve(false)
     .then(x => t.falsy(x))
 })
 
-test('Functional River: .promisify', t => {
-  const readFile = FR.promisify(require('fs').readFile);
+test('FP.promisify', t => {
+  const readFile = FP.promisify(require('fs').readFile);
   // now `readFile` will return a promise rather than a cb
   return readFile(path.resolve(__dirname, '../package.json'), 'utf8')
     .then(data => {
@@ -24,8 +24,8 @@ test('Functional River: .promisify', t => {
     })
 })
 
-test('Functional River: .promisifyAll', t => {
-  const fs = FR.promisifyAll(require('fs'));
+test('FP.promisifyAll', t => {
+  const fs = FP.promisifyAll(require('fs'));
   // now `readFile` will return a promise rather than a cb
   return fs.readFileAsync(path.resolve(__dirname, '../package.json'), 'utf8')
     .then(data => {

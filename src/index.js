@@ -20,9 +20,6 @@ function FunctionalRiver(resolveRejectCB, ...unknownArgs) {
   // Object.assign(this, promiseBase, conditionalMixin)
 }
 
-// FunctionalRiver.prototype.all = promiseBase.all
-// FunctionalRiver.prototype.race = promiseBase.race
-
 FunctionalRiver.prototype.concurrency = function(limit = Infinity) {
   if (this.steps) {
     this.steps.push(['concurrency', this, [...arguments]])
@@ -38,6 +35,27 @@ FunctionalRiver.prototype.serial = function() {
     return this
   }
   return this.concurrency(1)
+}
+
+FunctionalRiver.prototype.get = function(keyName) {
+  if (this.steps) {
+    this.steps.push(['get', this, [...arguments]])
+    return this
+  }
+  return this.then((obj) => typeof obj === 'object' ? obj[keyName] : obj)
+}
+
+FunctionalRiver.prototype.set = function(keyName, value) {
+  if (this.steps) {
+    this.steps.push(['set', this, [...arguments]])
+    return this
+  }
+  return this.then(obj => {
+    if (typeof obj === 'object') {
+      obj[keyName] = value
+    }
+    return obj
+  })
 }
 
 FunctionalRiver.prototype.catch = function(fn) {
