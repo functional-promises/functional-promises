@@ -16,6 +16,7 @@ module.exports = function _init(FR) {
     return _find.call(this, callback)
     .then(({index}) => index)
   }
+
   function _find(iterable, callback) {
     if (this.steps) {
       this.steps.push(['_find', this, [...arguments]])
@@ -33,11 +34,23 @@ module.exports = function _init(FR) {
     console.warn('_find.iterable', iterable)
     console.warn('_find.callback', callback)
 
-    return FR.resolve(iterable).filter(callback)
-      .then(results => results && results[0]
-         ? {item: results[0], index: results.indexOf(results[0])}
-         : {item: undefined,  index: -1})
-    }
+    return new FR((resolve, reject) => {
+      let isDone = false;
+      return FR
+        .resolve(iterable)
+        .filter(callback)
+        .then(results => {
+          const result = results && results[0]
+            ? {item: results[0], index: results.indexOf(results[0])}
+            : {item: undefined,  index: -1}
+          console.log('_FIND RESULT 1:', result)
+          if (isDone) return
+          isDone = true
+          resolve(result)
+        })
+        .catch(reject)
+    })
+  }
 
   function filter(iterable, callback) {
     if (this.steps) {

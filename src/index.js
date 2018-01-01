@@ -46,9 +46,9 @@ FunctionalRiver.prototype.then = function then(fn) {
   //   setImmediate(() => this.resolveRejectCB(_resolve, _reject))
   // }
   // console.warn('.then:', fn, this)
-  this._FR.promise.then(fn)
+  return this._FR.promise.then(fn)
   // .then
-  return this
+
 }
 
 FunctionalRiver.resolve = function(value) {
