@@ -3,6 +3,7 @@ const isFunction        = require('lodash/isFunction')
 const promiseMixin      = require('./promise')
 const conditionalMixin  = require('./conditional')
 const arraysMixin       = require('./arrays')
+const {FunctionalError} = require('./modules/errors')
 
 promiseMixin(FunctionalRiver)
 conditionalMixin(FunctionalRiver)
@@ -40,15 +41,13 @@ FunctionalRiver.prototype.catch = function(fn) {
 }
 
 FunctionalRiver.prototype.then = function then(fn) {
-  // if (this._FR.value)  { return fn(this._FR.value); }
+  if (this.steps) {
+    this.steps.push(['then', this, [...arguments]])
+    return this
+  }
 
-  // if (!this._FR.error) {
-  //   setImmediate(() => this.resolveRejectCB(_resolve, _reject))
-  // }
-  // console.warn('.then:', fn, this)
+  if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn)
   return this._FR.promise.then(fn)
-  // .then
-
 }
 
 FunctionalRiver.resolve = function(value) {
@@ -76,7 +75,6 @@ function promisifyAll(obj) {
   return functionsIn(obj)
   .reduce((obj, fn) => {
     if (!/Sync/.test(fn) && !obj[`${fn}Async`]) {
-      // console.error('promisifyAll: ', fn)
       obj[`${fn}Async`] = promisify(obj[`${fn}`])
     }
     return obj

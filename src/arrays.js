@@ -26,30 +26,13 @@ module.exports = function _init(FR) {
     if (typeof iterable === 'function') {
       callback = iterable
       iterable = this._FR.promise
-    // } else {
-    //   iterable = iterable
     }
 
-    console.warn('_find.arguments', arguments)
-    console.warn('_find.iterable', iterable)
-    console.warn('_find.callback', callback)
-
-    return new FR((resolve, reject) => {
-      let isDone = false;
-      return FR
-        .resolve(iterable)
-        .filter(callback)
-        .then(results => {
-          const result = results && results[0]
-            ? {item: results[0], index: results.indexOf(results[0])}
-            : {item: undefined,  index: -1}
-          console.log('_FIND RESULT 1:', result)
-          if (isDone) return
-          isDone = true
-          resolve(result)
-        })
-        .catch(reject)
-    })
+    return FR.resolve(iterable)
+      .filter(callback)
+      .then(results => results && results[0]
+         ? {item: results[0], index: results.indexOf(results[0])}
+         : {item: undefined,  index: -1})
   }
 
   function filter(iterable, callback) {
@@ -74,7 +57,6 @@ module.exports = function _init(FR) {
       return this
     }
     if (typeof iterable === 'function') {
-      console.log('\nfunction reduce(iterable, reducer): ITERABLE is A FUNCTION\n')
       initVal = reducer
       reducer = iterable
       iterable = this._FR ? this._FR.promise : this
