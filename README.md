@@ -11,7 +11,7 @@ npm install functional-promises
 ```
 
 > Thanks to several influencial projects: RxJS, Bluebird, FantasyLand, Gulp, HighlandJS, et al.
-> Special thanks to Eric Elliot, Kyle Simpson, MPJ, et al.
+> Special thanks to [Kyle Simpson](#), [Eric Elliot](#), [MPJ](#).
 
 ## Summary
 
@@ -29,7 +29,7 @@ The pattern is called a `Functional River` - it makes your code easier to follow
 * Higher code test coverage w/ less repetitive code in tests.
 * Use the best features from multiple programming styles: a little imperative, plenty functional, a pinch of OOP, yet still resembling declarative methods!!!
 
-How? Let's look at some examples...
+How? Let's look at some examples:
 
 
 ## Examples
@@ -57,7 +57,7 @@ FP.resolve([1, 2, 3, 4, 5])
 
 #### Event Examples
 
-> STATUS: Work in Progress
+> STATUS: COMPLETED w/ TESTS
 
 **Events Proposal**
 
