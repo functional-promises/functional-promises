@@ -1,6 +1,5 @@
 const {FRInputError} = require('./modules/errors')
 
-
 module.exports = function _init(FR) {
 
   FR.on = on
@@ -20,10 +19,8 @@ module.exports = function _init(FR) {
 
   function listen(callback) {
     // TODO: finish listen()
-    // console.warn('TODO: listen', this)
     const obj = this.events.ctx
     const {eventNames} = this.events
-    // console.log('\nSetting up events', eventNames)
     if (!obj[obj.addEventListener ? 'addEventListener' : 'on']) {
       throw new FRInputError('Input object isn\'t a valid EventEmitter or similar.')
     }
@@ -31,7 +28,6 @@ module.exports = function _init(FR) {
     // Sets up the handlers
     this.cleanupHandles = eventNames.map(eventName => {
       const handler = (e) => {
-        // console.log(`   > Firing ${eventName} handler`)
         this.runSteps(e)
       }
       // console.log(`   > Attaching ${eventName} handler`)
@@ -43,7 +39,6 @@ module.exports = function _init(FR) {
   }
 
   function runSteps(event) {
-    // console.log('runSteps', this.steps && this.steps.length)
 
     return new FR((resolve, reject) => {
       const iterator = this.steps[Symbol.iterator]()
@@ -54,9 +49,6 @@ module.exports = function _init(FR) {
         const [fnName, , args] = current.value
         // console.log('promise.next')
         return next(promise[fnName](...args))
-        // Promise.resolve(value)
-        //   .then(([total, item]) => next(reducer(total, item, i++)))
-        //   .catch(reject)
       }
 
       next(FR.resolve(event))

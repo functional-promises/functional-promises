@@ -111,7 +111,7 @@ const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 3, 4, 5])
   .filter(isEven)
   .then(results => {
-    t.deepEqual(results, [2, 4])
+    assert.deepEqual(results, [2, 4])
   })
 ```
 
@@ -126,7 +126,7 @@ const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 3, 4, 5])
   .find(isEven)
   .then(results => {
-    t.deepEqual(results, 2)
+    assert.deepEqual(results, 2)
   })
 ```
 
@@ -141,7 +141,7 @@ const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 3, 4, 5])
   .findIndex(isEven)
   .then(results => {
-    t.deepEqual(results, 1)
+    assert.equal(results, 1)
   })
 ```
 
@@ -176,27 +176,25 @@ Promise.resolve()
 
 FP.all provides an extended utility above the native `Promise.all()`, supporting Objects and Arrays.
 
-```
+```js
 FP.all({
-  one: <promise>,
-  two: <promise>
+  one: promise,
+  two: promise
 })
 .then(results =>
   // results === {
-    one: 1,
-    two: 2
-  })
+  //   one: 1,
+  //   two: 2}
+)
 ```
 
-```
+```js
 FP.all([
   Promise.resolve(1),
   Promise.resolve(2)
 ])
 .then(results =>
-  // results === [
-    1,
-    2
-  ])
+  // results === [1, 2])
+)
 ```
 
