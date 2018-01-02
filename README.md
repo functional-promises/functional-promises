@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.org/justsml/functional-promises.svg?branch=master)](https://travis-ci.org/justsml/functional-promises)
 
 
-
 ## Installation
 
 ```sh
@@ -34,13 +33,13 @@ Assuming the following import:
 
 ```js
 const FP = require('functional-promises')
+// or:
+import FP from 'functional-promises'
 ```
 
 #### Array Examples
 
-> STATUS: COMPLETED w/ TESTS
-
-##### map Example
+##### .map
 
 ```js
 FP.resolve([1, 2, 3, 4, 5])
@@ -53,7 +52,6 @@ FP.resolve([1, 2, 3, 4, 5])
 
 #### Event Examples
 
-> STATUS: COMPLETED w/ TESTS
 > **Subject to change**
 
 Create function chains to handle the case where memoized promises don't fit very naturally.
@@ -176,6 +174,26 @@ Promise.resolve()
 
 ##### `FP.thenIf()`
 
+```js
+// Use like so:
+const checkEmail = email => FP.resolve(email)
+  .thenIf(
+    e => e.length > 5,              // Conditional
+    e => console.log('Valid: ', e), // ifTrue
+    e => console.error(e))          // ifFalse
+// Or like so:
+const checkEmail = email => FP.resolve(email)
+  .thenIf(e => e.length > 5)
+
+// Or:
+const authUser = (email, pass) =>
+  FP.resolve({email, pass})
+  .then(({email, pass}) => svc.loginAndGetUser(email, pass))
+  .thenIf(
+    user => user.token,
+    user => user,
+    () => {throw new Error('Login Failed!')}))
+```
 ##### `FP.all()`
 
 FP.all provides an extended utility above the native `Promise.all()`, supporting Objects and Arrays.
