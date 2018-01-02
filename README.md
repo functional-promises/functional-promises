@@ -72,7 +72,6 @@ FP.on(button, 'click') // start a chain
 Here's the same code using some sugary extras:
 
 ```js
-const button = document.getElementById('submitBtn')
 FP.on(button, 'click')
   .get('target')
   .set('textContent', 'Clicked!')
@@ -167,33 +166,32 @@ Turn anything into an FP Promise.
 Use with existing Promise supporting libraries.
 
 ```js
-
-Promise.resolve()
-
+FP.resolve(Promise.resolve(anything))
 ```
 
 ##### `FP.thenIf()`
 
 ```js
 // Use like so:
-const checkEmail = email => FP.resolve(email)
+FP.resolve(email)
   .thenIf(
-    e => e.length > 5,              // Conditional
+    e => e.length > 5, // Conditional
     e => console.log('Valid: ', e), // ifTrue
-    e => console.error(e))          // ifFalse
+    e => console.error('Bad Email: ', e)) // ifFalse
 // Or like so:
 const checkEmail = email => FP.resolve(email)
   .thenIf(e => e.length > 5)
 
-// Or:
+// Or to check if a user login successfully returned a token:
 const authUser = (email, pass) =>
   FP.resolve({email, pass})
   .then(({email, pass}) => svc.loginAndGetUser(email, pass))
   .thenIf(
-    user => user.token,
-    user => user,
-    () => {throw new Error('Login Failed!')}))
+    user => user.token, // is valid login
+    user => user, // return user to next .then function
+    () => {throw new Error('Login Failed!')})) // failed token test
 ```
+
 ##### `FP.all()`
 
 FP.all provides an extended utility above the native `Promise.all()`, supporting Objects and Arrays.
