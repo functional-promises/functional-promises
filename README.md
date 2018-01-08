@@ -32,9 +32,9 @@ How? Let's look at some examples...
 Assuming the following import:
 
 ```js
-const FP = require('functional-promises')
+const FP = require('functional-promise')
 // or:
-import FP from 'functional-promises'
+import FP from 'functional-promise'
 ```
 
 ### Array Examples
