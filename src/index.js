@@ -6,50 +6,48 @@ const promiseMixin      = require('./promise')
 const conditionalMixin  = require('./conditional')
 const {FunctionalError} = require('./modules/errors')
 
-arraysMixin(FunctionalRiver)
-eventsMixin(FunctionalRiver)
-promiseMixin(FunctionalRiver)
-conditionalMixin(FunctionalRiver)
+arraysMixin(FunctionalPromise)
+eventsMixin(FunctionalPromise)
+monadsMixin(FunctionalPromise)
+promiseMixin(FunctionalPromise)
+conditionalMixin(FunctionalPromise)
 
-function FunctionalRiver(resolveRejectCB, ...unknownArgs) {
-  if (!(this instanceof FunctionalRiver)) {return new FunctionalRiver(resolveRejectCB)}
-  if (unknownArgs.length > 0) throw new Error('FunctionalRiver only accepts 1 argument')
-  this._FR = {}
-  this._FR.concurrencyLimit = 4
-  this._FR.promise = new Promise(resolveRejectCB)
-  // Object.assign(this, promiseBase, conditionalMixin)
+function FunctionalPromise(resolveRejectCB, ...unknownArgs) {
+  if (!(this instanceof FunctionalPromise)) {return new FunctionalPromise(resolveRejectCB)}
+  if (unknownArgs.length > 0) throw new Error('FunctionalPromise only accepts 1 argument')
+  this._FR = {
+    concurrencyLimit: 4,
+    hardErrorLimit: -1,
+    promise: new Promise(resolveRejectCB),
+  }
 }
 
-FunctionalRiver.prototype.concurrency = function(limit = Infinity) {
+FunctionalPromise.prototype.addStep = function(name, args) {
   if (this.steps) {
     this.steps.push(['concurrency', this, [...arguments]])
     return this
   }
+  return this
+}
+
+FunctionalPromise.prototype.concurrency = function(limit = Infinity) {
+  if (this.steps) return this.addStep('concurrency', [...arguments])
   this._FR.concurrencyLimit = limit
   return this
 }
 
-FunctionalRiver.prototype.serial = function() {
-  if (this.steps) {
-    this.steps.push(['serial', this, [...arguments]])
-    return this
-  }
+FunctionalPromise.prototype.serial = function() {
+  if (this.steps) return this.addStep('serial', [...arguments])
   return this.concurrency(1)
 }
 
-FunctionalRiver.prototype.get = function(keyName) {
-  if (this.steps) {
-    this.steps.push(['get', this, [...arguments]])
-    return this
-  }
+FunctionalPromise.prototype.get = function(keyName) {
+  if (this.steps) return this.addStep('get', [...arguments])
   return this.then((obj) => typeof obj === 'object' ? obj[keyName] : obj)
 }
 
-FunctionalRiver.prototype.set = function(keyName, value) {
-  if (this.steps) {
-    this.steps.push(['set', this, [...arguments]])
-    return this
-  }
+FunctionalPromise.prototype.set = function(keyName, value) {
+  if (this.steps) return this.addStep('set', [...arguments])
   return this.then(obj => {
     if (typeof obj === 'object') {
       obj[keyName] = value
@@ -58,32 +56,48 @@ FunctionalRiver.prototype.set = function(keyName, value) {
   })
 }
 
-FunctionalRiver.prototype.catch = function(fn) {
-  if (this.steps) {
-    this.steps.push(['catch', this, [...arguments]])
-    return this
-  }
+FunctionalPromise.prototype.catch = function(fn) {
+  if (this.steps) return this.addStep('catch', [...arguments])
   if (this._FR.error) {
     const result = fn(this._FR.error)
     this._FR.error = undefined // no dbl-catch
     return result
   }
   // bypass error handling
-  return FunctionalRiver.resolve(this._FR.value)
+  return FunctionalPromise.resolve(this._FR.value)
 }
 
-FunctionalRiver.prototype.then = function then(fn) {
-  if (this.steps) {
-    this.steps.push(['then', this, [...arguments]])
-    return this
-  }
-
+FunctionalPromise.prototype.then = function then(fn) {
+  if (this.steps) return this.addStep('then', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn)
   return this._FR.promise.then(fn)
 }
 
-FunctionalRiver.resolve = function(value) {
-  return new FunctionalRiver((resolve, reject) => {
+
+/**
+ * `.tap(fn)` works almost exactly like `.then()`
+ *
+ * Except the return value is not changed by the `fn`'s return value.
+ *
+ * @example
+ * Extremely common use case:
+ * `FP.resolve(42).tap(console.log).then(x => x === 42)`
+ *
+ * @param {function} fn
+ * @returns FunctionalPromise
+ */
+FunctionalPromise.prototype.tap = function tap(fn) {
+  if (this.steps) return this.addStep('tap', [...arguments])
+  if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.tap(fn)`. Must be a function. Currently: ' + typeof fn)
+  return this._FR
+  .promise.then(value => {
+    fn(value) // fires in the node callback queue (aka background task)
+    return value
+  })
+}
+
+FunctionalPromise.resolve = function(value) {
+  return new FunctionalPromise((resolve, reject) => {
     if (value && isFunction(value.then)) {
       return value.then(resolve).catch(reject)
     }
@@ -91,10 +105,10 @@ FunctionalRiver.resolve = function(value) {
   })
 }
 
-FunctionalRiver.denodeify = FunctionalRiver.promisify = promisify
+FunctionalPromise.denodeify = FunctionalPromise.promisify = promisify
 
 function promisify(cb) {
-  return (...args) => new FunctionalRiver((yah, nah) => {
+  return (...args) => new FunctionalPromise((yah, nah) => {
     return cb.call(this, ...args, (err, res) => {
       if (err) return nah(err)
       return yah(res)
@@ -113,6 +127,6 @@ function promisifyAll(obj) {
   }, obj)
 }
 
-FunctionalRiver.promisifyAll = promisifyAll
+FunctionalPromise.promisifyAll = promisifyAll
 
-module.exports = FunctionalRiver
+module.exports = FunctionalPromise
