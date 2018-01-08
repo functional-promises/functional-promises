@@ -7,6 +7,7 @@ module.exports = function _init(FR) {
   FR.thenIf = _thenIf
 
   function thenIf(cond, ifTrue, ifFalse) {
+    if (this.steps) return this.addStep('thenIf', [...arguments])
     if (arguments.length === 1) {
       ifTrue = cond
       cond = x => x
@@ -18,6 +19,7 @@ module.exports = function _init(FR) {
   }
 
   function tapIf(cond, ifTrue, ifFalse) {
+    if (this.steps) return this.addStep('tapIf', [...arguments])
     if (arguments.length === 1) {
       ifTrue = cond
       cond = x => x

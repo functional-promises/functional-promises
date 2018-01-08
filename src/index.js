@@ -2,12 +2,14 @@ const functionsIn       = require('lodash/functionsIn')
 const isFunction        = require('lodash/isFunction')
 const arraysMixin       = require('./arrays')
 const eventsMixin       = require('./events')
+const monadsMixin       = require('./monads')
 const promiseMixin      = require('./promise')
 const conditionalMixin  = require('./conditional')
 const {FunctionalError} = require('./modules/errors')
 
 arraysMixin(FunctionalRiver)
 eventsMixin(FunctionalRiver)
+monadsMixin(FunctionalRiver)
 promiseMixin(FunctionalRiver)
 conditionalMixin(FunctionalRiver)
 
@@ -20,36 +22,31 @@ function FunctionalRiver(resolveRejectCB, ...unknownArgs) {
   // Object.assign(this, promiseBase, conditionalMixin)
 }
 
-FunctionalRiver.prototype.concurrency = function(limit = Infinity) {
+FunctionalRiver.prototype.addStep = function addStep(name, args) {
   if (this.steps) {
-    this.steps.push(['concurrency', this, [...arguments]])
-    return this
+    this.steps.push([name, this, args])
   }
+  return this
+}
+
+FunctionalRiver.prototype.concurrency = function(limit = Infinity) {
+  if (this.steps) return this.addStep('concurrency', [...arguments])
   this._FR.concurrencyLimit = limit
   return this
 }
 
 FunctionalRiver.prototype.serial = function() {
-  if (this.steps) {
-    this.steps.push(['serial', this, [...arguments]])
-    return this
-  }
+  if (this.steps) return this.addStep('serial', [...arguments])
   return this.concurrency(1)
 }
 
 FunctionalRiver.prototype.get = function(keyName) {
-  if (this.steps) {
-    this.steps.push(['get', this, [...arguments]])
-    return this
-  }
+  if (this.steps) return this.addStep('get', [...arguments])
   return this.then((obj) => typeof obj === 'object' ? obj[keyName] : obj)
 }
 
 FunctionalRiver.prototype.set = function(keyName, value) {
-  if (this.steps) {
-    this.steps.push(['set', this, [...arguments]])
-    return this
-  }
+  if (this.steps) return this.addStep('set', [...arguments])
   return this.then(obj => {
     if (typeof obj === 'object') {
       obj[keyName] = value
@@ -59,10 +56,7 @@ FunctionalRiver.prototype.set = function(keyName, value) {
 }
 
 FunctionalRiver.prototype.catch = function(fn) {
-  if (this.steps) {
-    this.steps.push(['catch', this, [...arguments]])
-    return this
-  }
+  if (this.steps) return this.addStep('catch', [...arguments])
   if (this._FR.error) {
     const result = fn(this._FR.error)
     this._FR.error = undefined // no dbl-catch
@@ -73,10 +67,7 @@ FunctionalRiver.prototype.catch = function(fn) {
 }
 
 FunctionalRiver.prototype.then = function then(fn) {
-  if (this.steps) {
-    this.steps.push(['then', this, [...arguments]])
-    return this
-  }
+  if (this.steps) return this.addStep('then', [...arguments])
 
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn)
   return this._FR.promise.then(fn)
