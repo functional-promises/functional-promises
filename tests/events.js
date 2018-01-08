@@ -1,5 +1,5 @@
 const test = require('ava')
-const FR = require('../src')
+const FP = require('../src')
 const jsdom = require('jsdom')
 const EventEmitter = require('events')
 
@@ -14,7 +14,7 @@ test.cb('FP.chain().listen() EventEmitter', t => {
   // const cleanupHandlers = []
   const eventBus = new EventEmitter()
 
-  FR.chain()
+  FP.chain()
     .then(event => {
       t.truthy(event)
       t.truthy(event.worked)
@@ -34,7 +34,7 @@ test.cb('FP.chain().listen() DOM', t => {
 
   const listenChain = () => {
     const cleanupHandlers = []
-    FR.chain()
+    FP.chain()
     .then(el => {
       t.truthy(el)
       t.end()

@@ -1,17 +1,17 @@
-// module.exports = function FR() {
-//   FR.resolve = FR.fulfilled = FR.cast = cast
-//   FR.reject = FR.rejected = reject
-//   FR.prototype.tap = tap
+// module.exports = function FP() {
+//   FP.resolve = FP.fulfilled = FP.cast = cast
+//   FP.reject = FP.rejected = reject
+//   FP.prototype.tap = tap
 
-//   // FR.resolve       = x => FR.resolve(x);
-//   // FR.reject        = x => FR.reject(x);
+//   // FP.resolve       = x => FP.resolve(x);
+//   // FP.reject        = x => FP.reject(x);
 // }
 
-module.exports = function _init(FR) {
-  FR.prototype.all = FR.all = all
-  FR.prototype.cast = cast
-  FR.prototype.tap = tap
-  FR.prototype.reject = reject
+module.exports = function _init(FP) {
+  FP.prototype.all = FP.all = all
+  FP.prototype.cast = cast
+  FP.prototype.tap = tap
+  FP.prototype.reject = reject
 }
 
 function all(promises) {

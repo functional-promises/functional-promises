@@ -1,12 +1,12 @@
 const isArrayLike = require('lodash/isArrayLike')
-const {FRInputError} = require('./modules/errors')
+const {FPInputError} = require('./modules/errors')
 
-module.exports = function _init(FR) {
-  FR.prototype.map = map
-  FR.prototype.find = find
-  FR.prototype.filter = filter
-  FR.prototype.reduce = reduce
-  FR.prototype.findIndex = findIndex
+module.exports = function _init(FP) {
+  FP.prototype.map = map
+  FP.prototype.find = find
+  FP.prototype.filter = filter
+  FP.prototype.reduce = reduce
+  FP.prototype.findIndex = findIndex
 
   function find(callback) {
     return _find.call(this, callback)
@@ -22,10 +22,10 @@ module.exports = function _init(FR) {
 
     if (typeof iterable === 'function') {
       callback = iterable
-      iterable = this._FR.promise
+      iterable = this._FP.promise
     }
 
-    return FR.resolve(iterable)
+    return FP.resolve(iterable)
       .filter(callback)
       .then(results => results && results[0]
          ? {item: results[0], index: results.indexOf(results[0])}
@@ -36,9 +36,9 @@ module.exports = function _init(FR) {
     if (this.steps) return this.addStep('filter', [...arguments])
     if (typeof iterable === 'function') {
       callback = iterable
-      iterable = this._FR.promise
+      iterable = this._FP.promise
     } else {
-      iterable = FR.resolve(iterable, this)
+      iterable = FP.resolve(iterable, this)
     }
     return reduce(iterable, (aggregate, item) => {
       return Promise.resolve(callback(item)).then(value => (value ? aggregate.concat([item]) : aggregate))
@@ -50,11 +50,11 @@ module.exports = function _init(FR) {
     if (typeof iterable === 'function') {
       initVal = reducer
       reducer = iterable
-      iterable = this._FR ? this._FR.promise : this
+      iterable = this._FP ? this._FP.promise : this
     } else {
-      iterable = FR.resolve(iterable, this)
+      iterable = FP.resolve(iterable, this)
     }
-    return new FR((resolve, reject) => {
+    return new FP((resolve, reject) => {
       return iterable.then(iterable => {
         const iterator = iterable[Symbol.iterator]()
         let i = 0
@@ -76,9 +76,9 @@ module.exports = function _init(FR) {
   /*eslint max-statements: ["error", 60]*/
   function map(args, fn, options) {
     if (this.steps) return this.addStep('map', [...arguments])
-    if (arguments.length === 1 && this && this._FR) {
+    if (arguments.length === 1 && this && this._FP) {
       fn = args
-      args = this && this._FR && this._FR.promise
+      args = this && this._FP && this._FP.promise
     }
 
     let errors = []
@@ -94,14 +94,14 @@ module.exports = function _init(FR) {
       results[index] = value
       return value
     }
-    const threadLimit = Math.max(1, Math.min((this && this._FR && this._FR.concurrencyLimit) || 1, 4))
-    const innerValues = this && this._FR && this._FR.promise ? this._FR.promise : Promise.resolve(args)
+    const threadLimit = Math.max(1, Math.min((this && this._FP && this._FP.concurrencyLimit) || 1, 4))
+    const innerValues = this && this._FP && this._FP.promise ? this._FP.promise : Promise.resolve(args)
     let initialThread = 0
 
-    return new FR((resolve, reject) => {
+    return new FP((resolve, reject) => {
       innerValues.then(items => {
         args = [...items]
-        if (!isArrayLike(items)) return reject(new FRInputError('Invalid input data passed into FR.map()'))
+        if (!isArrayLike(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'))
         const complete = () => {
           if (errors.length >= 1) {
             reject(errors[0])

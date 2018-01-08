@@ -11,16 +11,16 @@ class FunctionalError extends Error {
   }
 }
 class FunctionalUserError extends FunctionalError {}
-class FRUnexpectedError extends FunctionalError {}
-class FRInputError extends FunctionalError {}
-class FRSoftError extends FunctionalError {}
-class FRTimeout extends FunctionalError {}
+class FPUnexpectedError extends FunctionalError {}
+class FPInputError extends FunctionalError {}
+class FPSoftError extends FunctionalError {}
+class FPTimeout extends FunctionalError {}
 
 module.exports = {
   FunctionalError,
   FunctionalUserError,
-  FRUnexpectedError,
-  FRInputError,
-  FRSoftError,
-  FRTimeout,
+  FPUnexpectedError,
+  FPInputError,
+  FPSoftError,
+  FPTimeout,
 }

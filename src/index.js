@@ -16,7 +16,7 @@ conditionalMixin(FunctionalPromise)
 function FunctionalPromise(resolveRejectCB, ...unknownArgs) {
   if (!(this instanceof FunctionalPromise)) {return new FunctionalPromise(resolveRejectCB)}
   if (unknownArgs.length > 0) throw new Error('FunctionalPromise only accepts 1 argument')
-  this._FR = {
+  this._FP = {
     concurrencyLimit: 4,
     hardErrorLimit: -1,
     promise: new Promise(resolveRejectCB),
@@ -32,7 +32,7 @@ FunctionalPromise.prototype.addStep = function(name, args) {
 
 FunctionalPromise.prototype.concurrency = function(limit = Infinity) {
   if (this.steps) return this.addStep('concurrency', [...arguments])
-  this._FR.concurrencyLimit = limit
+  this._FP.concurrencyLimit = limit
   return this
 }
 
@@ -58,19 +58,19 @@ FunctionalPromise.prototype.set = function(keyName, value) {
 
 FunctionalPromise.prototype.catch = function(fn) {
   if (this.steps) return this.addStep('catch', [...arguments])
-  if (this._FR.error) {
-    const result = fn(this._FR.error)
-    this._FR.error = undefined // no dbl-catch
+  if (this._FP.error) {
+    const result = fn(this._FP.error)
+    this._FP.error = undefined // no dbl-catch
     return result
   }
   // bypass error handling
-  return FunctionalPromise.resolve(this._FR.value)
+  return FunctionalPromise.resolve(this._FP.value)
 }
 
 FunctionalPromise.prototype.then = function then(fn) {
   if (this.steps) return this.addStep('then', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn)
-  return this._FR.promise.then(fn)
+  return this._FP.promise.then(fn)
 }
 
 
@@ -89,7 +89,7 @@ FunctionalPromise.prototype.then = function then(fn) {
 FunctionalPromise.prototype.tap = function tap(fn) {
   if (this.steps) return this.addStep('tap', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.tap(fn)`. Must be a function. Currently: ' + typeof fn)
-  return this._FR
+  return this._FP
   .promise.then(value => {
     fn(value) // fires in the node callback queue (aka background task)
     return value

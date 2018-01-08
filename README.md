@@ -6,7 +6,7 @@
 ## Installation
 
 ```sh
-npm install functional-promises
+npm install functional-promise
 ```
 
 ## Summary
@@ -153,7 +153,7 @@ FP.resolve([1, 2, 3, 4, 5])
 
 #### Chains
 
-> (Haskell people forgive me, but I'm calling this a monad)
+> (Forgive me Haskell people, but I'm calling this a monad)
 
 `const pChain = FP.chain()...[chain].chainEnd()`
 
@@ -167,7 +167,6 @@ const squareAndFormatDecimal = FP
   .map(x => x * x)
   .map(x => parseFloat(x).toFixed(2))
   .chainEnd()
-
 // typeof squareAndFormatDecimal === 'function'
 squareAndFormatDecimal([5])
 .then(num => {
@@ -181,7 +180,7 @@ squareAndFormatDecimal([5])
 Create a re-usable event handler - all with simple functions.
 
 ```js
-function addTodoHandler()
+function addTodoHandler() {
   const statusLbl = document.querySelector('label.status')
   const setStatus = s => statusLbl.textContent = s
   const setError  = err => setStatus(`ERROR: ${err}`)
@@ -195,6 +194,53 @@ function addTodoHandler()
     .then(createResult => setStatus(createResult.message))
     .catch(setError)
     .chainEnd()
+}
+
+const form = document.querySelector('form')
+const submitHandler = addTodoHandler()
+form.addEventListener('submit', submitHandler)
+
+```
+
+##### Realistic .chain() Example
+
+A more realistic 'class' like object.
+
+Again, still all with simple functions:
+
+
+```js
+// implement a simple controller/component interface:
+const todoCtrl = TodoController()
+
+todoCtrl
+  .add('new item')
+  .then(result => {
+    todoCtrl.update({id: 1, text: 'updated item', complete: true})
+  })
+
+/**
+ * Here's a more realistic, 'tighter' example:
+ * TodoController will return an object with `add` and `update` methods
+ *  - based on FP.chain()
+ */
+function TodoController() {
+  const statusLbl = document.querySelector('label.status')
+  const setStatus = s => statusLbl.textContent = s
+
+  return {
+    add: FP.chain()
+      .then(input => ({id: null, complete: false, text: input}))
+      .then(todoAPI.create)
+      .tap(createResult => setStatus(createResult.message))
+      .chainEnd(),
+    update: FP.chain()
+      .then(input => ({id: input.id, complete: input.complete, text: input.text}))
+      .then(todoAPI.update)
+      .tap(updateResult => setStatus(updateResult.message))
+      .chainEnd(),
+  }
+
 }
 
 const form = document.querySelector('form')

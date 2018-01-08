@@ -1,10 +1,10 @@
 const {isPromiseLike} = require('./modules/utils')
 
-module.exports = function _init(FR) {
-  FR.prototype.tapIf = tapIf
-  FR.prototype.thenIf = thenIf
-  FR.prototype._thenIf = _thenIf
-  FR.thenIf = _thenIf
+module.exports = function _init(FP) {
+  FP.prototype.tapIf = tapIf
+  FP.prototype.thenIf = thenIf
+  FP.prototype._thenIf = _thenIf
+  FP.thenIf = _thenIf
 
   function thenIf(cond, ifTrue, ifFalse) {
     if (this.steps) return this.addStep('thenIf', [...arguments])
@@ -32,7 +32,7 @@ module.exports = function _init(FR) {
 
   function _thenIf(cond = x => x, ifTrue = x => x, ifFalse = () => null, returnValue = false) {
     return value =>
-      FR.resolve(cond(value))
+      FP.resolve(cond(value))
         .then(ans => (ans ? ifTrue(value) : ifFalse(value)))
         .then(v => (returnValue ? value : v))
   }

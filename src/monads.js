@@ -1,8 +1,8 @@
-const {FRInputError} = require('./modules/errors')
+const {FPInputError} = require('./modules/errors')
 
-module.exports = function _init(FR) {
-  FR.chain = chain
-  FR.prototype.chainEnd = chainEnd
+module.exports = function _init(FP) {
+  FP.chain = chain
+  FP.prototype.chainEnd = chainEnd
 
   /**
    * Start 'recording' a chain of commands, after steps defined call `.chainEnd()`
@@ -10,7 +10,7 @@ module.exports = function _init(FR) {
    */
   function chain() {
     // create a placeholder/initial promise to hold the steps/chain data
-    const promise = FR.resolve()
+    const promise = FP.resolve()
     promise.steps = []
     return promise
   }
@@ -24,7 +24,7 @@ module.exports = function _init(FR) {
   function chainEnd() {
 
     return input => {
-      return new FR((resolve, reject) => {
+      return new FP((resolve, reject) => {
         const iterator = this.steps[Symbol.iterator]()
 
         const next = promise => {
@@ -33,7 +33,7 @@ module.exports = function _init(FR) {
           const [fnName, , args] = current.value
           return next(promise[fnName](...args))
         }
-        next(FR.resolve(input))
+        next(FP.resolve(input))
       })
     }
   }

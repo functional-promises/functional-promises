@@ -1,7 +1,7 @@
-const {FRInputError} = require('./modules/errors')
+const {FPInputError} = require('./modules/errors')
 
-module.exports = function _init(FR) {
-  FR.prototype.listen = listen
+module.exports = function _init(FP) {
+  FP.prototype.listen = listen
 
   /**
    *
@@ -14,7 +14,7 @@ module.exports = function _init(FR) {
   function listen(obj, ...eventNames) {
     if (typeof eventNames === 'string') eventNames = [eventNames]
     if (!obj[obj.addEventListener ? 'addEventListener' : 'on']) {
-      throw new FRInputError('Input object isn\'t a valid EventEmitter or similar.')
+      throw new FPInputError('Input object isn\'t a valid EventEmitter or similar.')
     }
 
     // Sets up the handlers
