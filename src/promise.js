@@ -33,10 +33,7 @@ function reject(err) {
 }
 
 function tap(handler) {
-  if (this.steps) {
-    this.steps.push(['tap', this, [...arguments]])
-    return this
-  }
+  if (this.steps) return this.addStep('tap', [...arguments])
   const pHandler = p =>
     Promise.resolve(p).then(value => {
       handler(value)

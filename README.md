@@ -37,7 +37,7 @@ const FP = require('functional-promises')
 import FP from 'functional-promises'
 ```
 
-#### Array Examples
+### Array Examples
 
 ##### .map
 
@@ -50,32 +50,31 @@ FP.resolve([1, 2, 3, 4, 5])
   })
 ```
 
-#### Event Examples
-
-> **Subject to change**
+### Event Examples
 
 Create function chains to handle the case where memoized promises don't fit very naturally.
 
 For example streams & event handlers must (usually) support multiple calls over time.
 
-Here's how `FP.on()` and `FP.listen()` help you (roughly) handle this like so:
+Here's how `FP.chain()` and `FP.chainEnd()`/`FP.listen(obj, event)` help you handle this like a pro:
 
 ```js
 const button = document.getElementById('submitBtn')
-FP.on(button, 'click') // start a chain
+FP.chain() // start a chain
   .then(({target}) => { // destructure 'target' from the `event`
     target.textContent = 'Clicked!'
   })
-  .listen() // end the repeatable chain, started at `.on`
+  .listen(button, 'click') // end the repeatable chain, started at `.chain()`
 ```
 
 Here's the same code using some sugary extras:
 
 ```js
-FP.on(button, 'click')
+// create a chain to handle events:
+FP.chain()
   .get('target')
   .set('textContent', 'Clicked!')
-  .listen()
+  .listen(button, 'click')
 ```
 
 It may be unfamiliar at first, but I bet you can guess what that does.
@@ -84,10 +83,10 @@ Here's basically the same code:
 
 ```js
 const button = document.getElementById('submitBtn')
-FP.on(button, 'click')
+FP.chain()
   .get('target')
   .then(element => element.textContent = 'Clicked!')
-  .listen()
+  .listen(button, 'click')
 ```
 
 
@@ -152,9 +151,66 @@ FP.resolve([1, 2, 3, 4, 5])
 ##### `FP.forEach()` alias of `.map()`
 
 
+#### Chains
+
+> (Haskell people forgive me, but I'm calling this a monad)
+
+`const pChain = FP.chain()...[chain].chainEnd()`
+
+##### Usage:
+
+Create a re-usable sequence of steps:
+
+```js
+const squareAndFormatDecimal = FP
+  .chain()
+  .map(x => x * x)
+  .map(x => parseFloat(x).toFixed(2))
+  .chainEnd()
+
+// typeof squareAndFormatDecimal === 'function'
+squareAndFormatDecimal([5])
+.then(num => {
+  console.log('squareAndFormatDecimal() Results: ', num)
+  // num === ['25.00']
+})
+
+```
+
+
+Create a re-usable event handler - all with simple functions.
+
+```js
+function addTodoHandler()
+  const statusLbl = document.querySelector('label.status')
+  const setStatus = s => statusLbl.textContent = s
+  const setError  = err => setStatus(`ERROR: ${err}`)
+
+  return FP
+    .chain()
+    .then(event => event.target)
+    .then(form => form.querySelector('input.todo-text').value)
+    .then(todoText => ({id: null, complete: false, text: todoText}))
+    .then(todoAPI.create)
+    .then(createResult => setStatus(createResult.message))
+    .catch(setError)
+    .chainEnd()
+}
+
+const form = document.querySelector('form')
+const submitHandler = addTodoHandler()
+form.addEventListener('submit', submitHandler)
+
+```
+
+
+
 #### Events
 
-`FP.on(eventName, element)...[chain].listen()`
+`FP.chain()...[chain].listen(element, ...eventNames)`
+
+`.listen()` calls the function returned by `.chainEnd()`
+
 
 #### Utilities
 

@@ -18,10 +18,7 @@ module.exports = function _init(FR) {
   }
 
   function _find(iterable, callback) {
-    if (this.steps) {
-      this.steps.push(['_find', this, [...arguments]])
-      return this
-    }
+    if (this.steps) return this.addStep('_find', [...arguments])
 
     if (typeof iterable === 'function') {
       callback = iterable
@@ -36,10 +33,7 @@ module.exports = function _init(FR) {
   }
 
   function filter(iterable, callback) {
-    if (this.steps) {
-      this.steps.push(['filter', this, [...arguments]])
-      return this
-    }
+    if (this.steps) return this.addStep('filter', [...arguments])
     if (typeof iterable === 'function') {
       callback = iterable
       iterable = this._FR.promise
@@ -52,10 +46,7 @@ module.exports = function _init(FR) {
   }
 
   function reduce(iterable, reducer, initVal) {
-    if (this.steps) {
-      this.steps.push(['reduce', this, [...arguments]])
-      return this
-    }
+    if (this.steps) return this.addStep('reduce', [...arguments])
     if (typeof iterable === 'function') {
       initVal = reducer
       reducer = iterable
@@ -84,10 +75,7 @@ module.exports = function _init(FR) {
 
   /*eslint max-statements: ["error", 60]*/
   function map(args, fn, options) {
-    if (this.steps) {
-      this.steps.push(['map', this, [...arguments]])
-      return this
-    }
+    if (this.steps) return this.addStep('map', [...arguments])
     if (arguments.length === 1 && this && this._FR) {
       fn = args
       args = this && this._FR && this._FR.promise

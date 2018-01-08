@@ -1,6 +1,6 @@
 {
-  "name": "functional-promises",
-  "version": "1.1.2",
+  "name": "functional-promise",
+  "version": "1.2.0",
   "description": "",
   "ava": {
     "require": [

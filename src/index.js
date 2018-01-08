@@ -2,6 +2,7 @@ const functionsIn       = require('lodash/functionsIn')
 const isFunction        = require('lodash/isFunction')
 const arraysMixin       = require('./arrays')
 const eventsMixin       = require('./events')
+const monadsMixin       = require('./monads')
 const promiseMixin      = require('./promise')
 const conditionalMixin  = require('./conditional')
 const {FunctionalError} = require('./modules/errors')
@@ -24,8 +25,7 @@ function FunctionalPromise(resolveRejectCB, ...unknownArgs) {
 
 FunctionalPromise.prototype.addStep = function(name, args) {
   if (this.steps) {
-    this.steps.push(['concurrency', this, [...arguments]])
-    return this
+    this.steps.push([name, this, args])
   }
   return this
 }
