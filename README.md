@@ -27,9 +27,9 @@ The emphasis here is a seamless async/sync Developer Experience. I call this pat
 
 How? Let's look at some examples...
 
-## Examples
+## Getting Started
 
-Assuming the following import:
+Use one of the following:
 
 ```js
 const FP = require('functional-promise')
@@ -37,9 +37,9 @@ const FP = require('functional-promise')
 import FP from 'functional-promise'
 ```
 
-### Array Examples
+### Quick Examples
 
-##### .map
+**Using `.map()`**
 
 ```js
 FP.resolve([1, 2, 3, 4, 5])
@@ -50,7 +50,7 @@ FP.resolve([1, 2, 3, 4, 5])
   })
 ```
 
-### Event Examples
+**Handling Events**
 
 Create function chains to handle the case where memoized promises don't fit very naturally.
 
@@ -67,32 +67,37 @@ FP.chain() // start a chain
   .listen(button, 'click') // end the repeatable chain, started at `.chain()`
 ```
 
-Here's the same code using some sugary extras:
-
-```js
-// create a chain to handle events:
-FP.chain()
-  .get('target')
-  .set('textContent', 'Clicked!')
-  .listen(button, 'click')
-```
-
-It may be unfamiliar at first, but I bet you can guess what that does.
-
-Here's basically the same code:
-
-```js
-const button = document.getElementById('submitBtn')
-FP.chain()
-  .get('target')
-  .then(element => element.textContent = 'Clicked!')
-  .listen(button, 'click')
-```
-
-
 ## API
 
-#### Collection Methods
+* Then-based extensions
+  * Arrays
+    * `.map(fn)`
+    * `.filter(fn)`
+    * `.find(fn)`
+    * `.findIndex(fn)`
+    * `.some(fn)`
+    * `.none(fn)`
+    * `.series(fn)`
+    * `.forEach(fn)` - use `.map()` - write _proper_ `functions`
+  * Errors _(WIP)_
+    * `.catch(fn)`
+    * `.catch(filter, fn)`
+  * Conditional
+    * `.thenIf()`
+  * Utilities
+    * `FP.all(Object/Array)`
+    * `.tap(fn)`
+  * Chaining and Composition
+    * `.chain()`
+    * `.chainEnd()`
+  * Properties
+    * `.get(keyName)`
+    * `.set(keyName, value)`
+* Modifier extensions
+  * `.quiet()` - prevents errors from stopping array methods mid-loop
+  * `.concurrency(threadLimit)` - limits parallel workers for array methods
+
+#### Array Methods
 
 ##### `FP.map(iterable, transformFn)`
 
@@ -150,6 +155,30 @@ FP.resolve([1, 2, 3, 4, 5])
 ##### `FP.series()`
 ##### `FP.forEach()` alias of `.map()`
 
+#### Properties
+
+##### `FP.get(keyName)`
+##### `FP.set(keyName, value)`
+
+```js
+// create a chain to handle events:
+FP.chain()
+  .get('target')
+  .set('textContent', 'Clicked!')
+  .listen(button, 'click')
+```
+
+It may be unfamiliar at first, but I bet you can guess what that does.
+
+Here's basically the same code:
+
+```js
+const button = document.getElementById('submitBtn')
+FP.chain()
+  .get('target')
+  .then(element => element.textContent = 'Clicked!')
+  .listen(button, 'click')
+```
 
 #### Chains
 
@@ -242,11 +271,6 @@ function TodoController() {
   }
 
 }
-
-const form = document.querySelector('form')
-const submitHandler = addTodoHandler()
-form.addEventListener('submit', submitHandler)
-
 ```
 
 

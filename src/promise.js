@@ -10,14 +10,20 @@
 module.exports = function _init(FP) {
   FP.prototype.all = FP.all = all
   FP.prototype.cast = cast
-  FP.prototype.tap = tap
+  // FP.prototype.tap = tap
   FP.prototype.reject = reject
 }
 
 function all(promises) {
-  return Promise.all(promises)
+  return Array.isArray(promises) ? Promise.all(promises) : allObjectKeys(promises)
 }
 
+function allObjectKeys(object) {
+  return FP.resolve(Object.keys(object))
+  .reduce((obj, key) => {
+    obj[key]
+  }, {})
+}
 function cast(obj) {
   return Promise.resolve(obj)
 }
@@ -32,15 +38,15 @@ function reject(err) {
   throw new Error(`Reject only accepts a new instance of Error!`)
 }
 
-function tap(handler) {
-  if (this.steps) return this.addStep('tap', [...arguments])
-  const pHandler = p =>
-    Promise.resolve(p).then(value => {
-      handler(value)
-      return value
-    })
-  if (this instanceof Promise) {
-    return pHandler(this)
-  }
-  return pHandler
-}
+// function tap(handler) {
+//   if (this.steps) return this.addStep('tap', [...arguments])
+//   const pHandler = p =>
+//     Promise.resolve(p).then(value => {
+//       handler(value)
+//       return value
+//     })
+//   if (this instanceof Promise) {
+//     return pHandler(this)
+//   }
+//   return pHandler
+// }

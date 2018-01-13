@@ -15,6 +15,7 @@
   },
   "homepage": "https://github.com/justsml/functional-promises",
   "scripts": {
+    "start": "npm run build && webpack --watch",
     "test": "ava --serial --fail-fast=1 --verbose tests",
     "build": "npm run build-dev && npm run build-live",
     "build-live": "NODE_ENV=production webpack",

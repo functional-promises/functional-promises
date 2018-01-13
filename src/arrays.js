@@ -37,9 +37,8 @@ module.exports = function _init(FP) {
     if (typeof iterable === 'function') {
       callback = iterable
       iterable = this._FP.promise
-    } else {
-      iterable = FP.resolve(iterable, this)
     }
+
     return reduce(iterable, (aggregate, item) => {
       return Promise.resolve(callback(item)).then(value => (value ? aggregate.concat([item]) : aggregate))
     }, [])
