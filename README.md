@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/justsml/functional-promises.svg?branch=master)](https://travis-ci.org/justsml/functional-promises)
 
+[![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat-square)](https://github.com/justsml/functional-promises)
+[![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat-square)](https://github.com/justsml/functional-promises)
 
 ## Installation
 
