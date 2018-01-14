@@ -297,6 +297,19 @@ FP.resolve(Promise.resolve(anything))
 
 ##### `FP.thenIf()`
 
+> Use `fetch` with `FP.thenIf()` to handle 4xx or 5xx responses as proper exceptions.
+
+```js
+FP.resolve(fetch('/profile', {method: 'GET'}))
+  .thenIf(
+    res => res.ok, // Check for 2xx status code using `fetch`'s behavior
+    res => res.json(), // Success, so pass along the JSON-parsed body
+    res => Promise.reject(new Error('Profile GET Failed'))) // Fails here if response not `ok`
+  .get('avatar') // Get the response JSON object's `avatar` key value
+  .then(avatarUrl => imageElem.src = avatarUrl)
+```
+
+> Email validation
 ```js
 // Use like so:
 FP.resolve(email)
@@ -304,7 +317,8 @@ FP.resolve(email)
     e => e.length > 5, // Conditional
     e => console.log('Valid: ', e), // ifTrue
     e => console.error('Bad Email: ', e)) // ifFalse
-// Or like so:
+
+// Or use small helper methods like so:
 const checkEmail = email => FP.resolve(email)
   .thenIf(e => e.length > 5)
 
