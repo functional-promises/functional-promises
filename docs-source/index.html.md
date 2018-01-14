@@ -1,27 +1,67 @@
 ---
-title: API Reference
+title: Functional Promises - API Documentation
 
-language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - javascript
+# language_tabs: # must be one of https://git.io/vQNgJ
+#   - javascript
 
 toc_footers:
   - <a href='https://github.com/justsml/functional-promises'>Star on GitHub</a>
   - <a class='x-small center' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a>
 
-includes:
-  - errors
+# includes:
+#   - errors
 
 search: true
 ---
 
+# Functional Promises
 
-# API Outline
+Functional Promises are an extension of the native Promises API (`.then()`/`.catch()`).
+
+**Core features:** Array Methods, Events, Object & Array `FP.all()` Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
+
+**Why not simply use [library X]?**
+
+* RxJS: `FP` is 1/6th the size. Observable support still being evaluated.
+* Bluebird: `FP` adds some key features: _events_, _conditionals_, _chains_, _quiet errors_. (Disclaimer: I'm a contributor, with a low PR acceptance ratio. 😿)
+
+`FP` is currently **only a few 100 lines of code.**
+The **browser bundle** still only clocks in at **~20Kb** (using Webpack+Babel+Rollup+UglifyJS).
+
+## API Outline
 
 All `.then()`-derived methods are listed first. It's the bulk of the API.
 
+> **Example Awesome Shit:**
+>
+> `.chain()` is a powerful way to create re-usable sequences of functions.
 
-* Then-based Methods
+```javascript
+// #1: Use .chain to create re-usable function pipelines
+const squareAndFormatDecimal = FP
+  .chain()
+  .map(x => x * x)
+  .map(x => parseFloat(x).toFixed(2))
+  .chainEnd() // returns re-usable function
+
+squareAndFormatDecimal([5, 10, 20])
+  .then(num => assert.deepEqual(num, ['25.00', '100.00', '400.00']))
+```
+
+
+> Familiar Array-methods are built-in. This example uses `.map()`:
+
+```javascript
+// #2: Use .map to double an array of numbers
+FP.resolve([1, 2, 3, 4, 5])
+  .map(x => x * 2)
+  .then(results => {
+    assert.deepEqual(results, [2, 4, 6, 8, 10])
+  })
+
+```
+
+* Thenable Methods
     * Arrays
         * `.map(fn)`
         * `.filter(fn)`
@@ -30,21 +70,23 @@ All `.then()`-derived methods are listed first. It's the bulk of the API.
         * `.some(fn)`
         * `.none(fn)`
         * `.series(fn)`
-        * `.forEach(fn)` - use `.map()` - write _proper_ `functions`
+        * `.forEach(fn)` - use `.map()` instead (write _proper_ `functions`)
     * Errors _(WIP)_
         * `.catch(fn)`
         * `.catch(filter, fn)`
     * Conditional
         * `.thenIf()`
     * Utilities
-        * `FP.all(Object/Array)`
         * `.tap(fn)`
     * Properties
         * `.get(keyName)`
         * `.set(keyName, value)`
-* Non `.then()`-based Methods
+* Not Thenable-based Methods
+    * Helpers
+        * `FP.resolve()`
+        * `FP.all(Object/Array)`
     * Chaining and Composition
-        * `.chain()`
+        * `FP.chain()`
         * `.chainEnd()`
     * Modifiers
         * `.quiet()` - prevents errors from stopping array methods mid-loop
@@ -52,7 +94,13 @@ All `.then()`-derived methods are listed first. It's the bulk of the API.
 
 # Array Methods
 
-## `FP.map(iterable, transformFn)`
+Any `.then()` which would handle an array, may instead use one of the `FP` array methods.
+
+## `FP.map(iterable, fn)`
+
+Similar to `Array.prototype.map()`.
+
+Use to transform each item in an array by passing through a given function.
 
 ```javascript
 FP.resolve([1, 2, 3, 4, Promise.resolve(5)])
@@ -62,7 +110,9 @@ FP.resolve([1, 2, 3, 4, Promise.resolve(5)])
   })
 ```
 
-## `FP.filter(iterable, filterFn)`
+## `FP.filter(iterable, fn)`
+
+Use `.filter()` to omit items from the input array by passing through a given function. Items will be omitted if the function returns a falsey value.
 
 ```javascript
 const isEven = x => x % 2 === 0
@@ -73,7 +123,7 @@ FP.resolve([1, 2, 3, 4, 5])
   })
 ```
 
-## `FP.find(fn)`
+## `FP.find(iterable, fn)`
 
 Returns first item to return truthy for `fn(item)`
 
@@ -88,7 +138,7 @@ FP.resolve([1, 2, 3, 4, 5])
   })
 ```
 
-## `FP.findIndex()`
+## `FP.findIndex(iterable, fn)`
 
 Returns first **item's index** to return truthy for `fn(item)`
 
@@ -103,7 +153,7 @@ FP.resolve([1, 2, 3, 4, 5])
   })
 ```
 
-## `FP.some()`
+## `FP.some(iterable, fn)`
 
 Returns `Promise<true>` on the first **item** to return truthy for `fn(item)`
 
@@ -125,7 +175,7 @@ FP.resolve([1, 3, 5])
   })
 ```
 
-## `FP.none()`
+## `FP.none(iterable, fn)`
 
 Returns `Promise<false>` on the first **item** to return falsey for `fn(item)`
 
@@ -148,9 +198,36 @@ FP.resolve([1, 3, 5])
   })
 ```
 
+# Utilities
+
+## `.tap(fn)`
+
+The `.tap()` method is `FP`'s counterpart to `console.log()` - know it well.
+
+It works just like `.then()` except it's return value is ignored. The next `thenable` will get the same input.
+
+Perfect for logging or other background tasks (where results don't matter).
+
+```javascript
+FP.resolve(fetch('/user/42/photos'))
+  .tap(res => console.log(`user photos req ok? ${res.ok}`))
+  .then(res => res.json())
+  .then(data => {
+    console.log(data)
+  })
+```
+
+
+
 # Properties
 
+These methods are particularly helpful for dealing with data extraction/transformation.
+
 ## `FP.get(keyName)`
+
+Use to get a single key's value from an object.
+
+Returns the key value.
 
 ```javascript
 FP.resolve({foo: 42})
@@ -162,34 +239,103 @@ FP.resolve({foo: 42})
 
 ## `FP.set(keyName, value)`
 
+Use to set a single key's value on an object.
+
+Returns the **modified object.**
+
+> A common use-case includes dropping passwords or tokens.
+
 ```javascript
-FP.resolve({foo: 42})
-  .set('foo', 'bar')
+FP.resolve({username: 'dan', password: 'sekret'})
+  .set('password', undefined)
   .then(obj => {
-    console.log(obj.foo) // obj.foo === 'bar'
+    console.log(obj.password) // obj.password === undefined
   })
 ```
 
 
 # Events
 
-`FP.chain()...[chain].listen(element, ...eventNames)`
+Promises can be awkward when dealing with events.
 
-`.listen()` calls the function returned by `.chainEnd()`
+#### `Functional Promise` library aims to find a harmonious pattern.
+
+```javascript
+const button = document.getElementById('submitBtn')
+FP.chain()
+  .get('target')
+  .then(element => element.textContent = 'Clicked!')
+  .listen(button, 'click')
+```
+
+Key considerations:
+
+Let's start with their **similarities**, both are (essentially) async...
+
+And now for some **differences**:
+
+* Promises are single-execution cached values. Events can run many times per second with different arguments or data.
+* Events have control flow to think about (`e.preventDefault()`). Promises flow in one direction.
+* Promises depend on `return`'s everywhere. Event handlers which `return` may cause unexpected control-flow issues.
 
 
-# Utilities
+_Yikes._
+
+Let's look at some code &amp; see how `FP` solves this...
+
+## `.listen()` event helper
+
+The `.listen()` method must be called after an `FP.chain()` sequence of `FP` methods.
+
+**Note:** The `.chainEnd()` method is automatically called.
+
+```javascript
+FP.chain()
+  .get('target')
+  .set('textContent', 'Clicked!')
+  .listen(button, 'click')
+```
+
+# Helpers
 
 ## `FP.resolve(<anything>)`
 
-Turn anything into an FP Promise.
-
-
-Use with existing Promise supporting libraries.
+Turn anything into an FP Promise. Also can upgrade any Promise-supporting library.
 
 ```javascript
+FP.resolve()
+FP.resolve(42)
+FP.resolve(fetch(url))
 FP.resolve(Promise.resolve(anything))
 ```
+
+## `FP.all()`
+
+`FP.all()` provides an extended utility above the native `Promise.all()`, **supporting both Objects and Arrays.**
+
+_Note:_ Non-recursive.
+
+```javascript
+FP.all([
+  Promise.resolve(1),
+  Promise.resolve(2)
+])
+.then(results => assert.deepEqual(results, [1, 2]))
+```
+
+> Also works with keyed Objects:
+
+```javascript
+FP.all({
+  one: Promise.resolve(1),
+  two: Promise.resolve(2)
+})
+.then(results => assert.deepEqual(results, {one: 1, two: 2}))
+```
+
+
+
+# Conditional
 
 ## `FP.thenIf()`
 
@@ -229,12 +375,11 @@ const authUser = (email, pass) =>
     () => {throw new Error('Login Failed!')})) // failed token test
 ```
 
-# Non `.then()`-based Methods
 # Chaining and Composition
 
-#### <i>(Forgive me Haskell people, but I'm calling this a monad)</i>
+> *Non `.then()`-based Methods*
 
-`const pChain = FP.chain()...[chain].chainEnd()`
+#### <i>(Forgive me Haskell people, but I'm calling this a monad)</i>
 
 Chained Functional Promises enable a powerful technique: **Reusable Async Composition Pipelines.**
 
@@ -242,10 +387,9 @@ Chained Functional Promises enable a powerful technique: **Reusable Async Compos
 
 **Examples and usage patterns below:**
 
-## `.chain()`
-## `.chainEnd()`
+## `.chain()` / `.chainEnd()`
 
-> Both `.chain()` and `.chainEnd()` are used together.
+> Both `.chain()` and `.chainEnd()` must be used together.
 
 ```javascript
 const getTarget = FP.chain()
@@ -255,30 +399,6 @@ const getTarget = FP.chain()
 getTarget(event)
   .then(element => {console.log('Event Targeted Element: ', element)})
 ```
-
-
-## `.listen()` event helper
-
-```javascript
-// create a chain to handle events:
-FP.chain()
-  .get('target')
-  .set('textContent', 'Clicked!')
-  .listen(button, 'click')
-```
-
-It may be unfamiliar at first, but I bet you can guess what that does.
-
-Here's basically the same code:
-
-```javascript
-const button = document.getElementById('submitBtn')
-FP.chain()
-  .get('target')
-  .then(element => element.textContent = 'Clicked!')
-  .listen(button, 'click')
-```
-
 
 
 ## Re-usable Promise Chains
@@ -291,7 +411,7 @@ const squareAndFormatDecimal = FP
   .map(x => x * x)
   .map(x => parseFloat(x).toFixed(2))
   .chainEnd()
-// typeof squareAndFormatDecimal === 'function'
+
 squareAndFormatDecimal([5])
 .then(num => {
   console.log('squareAndFormatDecimal() Results: ', num)
@@ -301,7 +421,7 @@ squareAndFormatDecimal([5])
 ```
 
 
-## Complete Promise Chain
+## Events + Promise Chain
 
 ```javascript
 function addTodoHandler() {
@@ -321,12 +441,10 @@ function addTodoHandler() {
 }
 
 const form = document.querySelector('form')
-const submitHandler = addTodoHandler()
-form.addEventListener('submit', submitHandler)
-
+form.addEventListener('submit', addTodoHandler())
 ```
 
-## Chaining Promises for DOM Events
+## Controller + Events + Promise Chain
 
 A more realistic 'class' like object.
 
@@ -368,33 +486,6 @@ function TodoController() {
 }
 ```
 
-
-
-## `FP.all()`
-
-FP.all provides an extended utility above the native `Promise.all()`, supporting Objects and Arrays.
-
-```javascript
-FP.all({
-  one: promise,
-  two: promise
-})
-.then(results =>
-  // results === {
-  //   one: 1,
-  //   two: 2}
-)
-```
-
-```javascript
-FP.all([
-  Promise.resolve(1),
-  Promise.resolve(2)
-])
-.then(results =>
-  // results === [1, 2])
-)
-```
 
 
 > Thanks to several influencial projects: RxJS, Bluebird, asynquence, FantasyLand, Gulp, HighlandJS, et al.
