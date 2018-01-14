@@ -1,0 +1,683 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;javascript&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/logo.png" class="logo" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+              <a href="#" data-language-name="javascript">javascript</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc" class="toc-list-h1">
+          <li>
+            <a href="#api-outline" class="toc-h1 toc-link" data-title="API Outline">API Outline</a>
+          </li>
+          <li>
+            <a href="#array-methods" class="toc-h1 toc-link" data-title="Array Methods">Array Methods</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#code-fp-map-iterable-transformfn-code" class="toc-h2 toc-link" data-title="<code>FP.map(iterable, transformFn)</code>"><code>FP.map(iterable, transformFn)</code></a>
+                  </li>
+                  <li>
+                    <a href="#code-fp-filter-iterable-filterfn-code" class="toc-h2 toc-link" data-title="<code>FP.filter(iterable, filterFn)</code>"><code>FP.filter(iterable, filterFn)</code></a>
+                  </li>
+                  <li>
+                    <a href="#code-fp-find-fn-code" class="toc-h2 toc-link" data-title="<code>FP.find(fn)</code>"><code>FP.find(fn)</code></a>
+                  </li>
+                  <li>
+                    <a href="#code-fp-findindex-code" class="toc-h2 toc-link" data-title="<code>FP.findIndex()</code>"><code>FP.findIndex()</code></a>
+                  </li>
+                  <li>
+                    <a href="#code-fp-some-code" class="toc-h2 toc-link" data-title="<code>FP.some()</code>"><code>FP.some()</code></a>
+                  </li>
+                  <li>
+                    <a href="#code-fp-none-code" class="toc-h2 toc-link" data-title="<code>FP.none()</code>"><code>FP.none()</code></a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#properties" class="toc-h1 toc-link" data-title="Properties">Properties</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#code-fp-get-keyname-code" class="toc-h2 toc-link" data-title="<code>FP.get(keyName)</code>"><code>FP.get(keyName)</code></a>
+                  </li>
+                  <li>
+                    <a href="#code-fp-set-keyname-value-code" class="toc-h2 toc-link" data-title="<code>FP.set(keyName, value)</code>"><code>FP.set(keyName, value)</code></a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#events" class="toc-h1 toc-link" data-title="Events">Events</a>
+          </li>
+          <li>
+            <a href="#utilities" class="toc-h1 toc-link" data-title="Utilities">Utilities</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#code-fp-resolve-lt-anything-gt-code" class="toc-h2 toc-link" data-title="<code>FP.resolve(&lt;anything&gt;)</code>"><code>FP.resolve(&lt;anything&gt;)</code></a>
+                  </li>
+                  <li>
+                    <a href="#code-fp-thenif-code" class="toc-h2 toc-link" data-title="<code>FP.thenIf()</code>"><code>FP.thenIf()</code></a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#non-code-then-code-based-methods" class="toc-h1 toc-link" data-title="Non <code>.then()</code>-based Methods">Non <code>.then()</code>-based Methods</a>
+          </li>
+          <li>
+            <a href="#chaining-and-composition" class="toc-h1 toc-link" data-title="Chaining and Composition">Chaining and Composition</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#code-chain-code" class="toc-h2 toc-link" data-title="<code>.chain()</code>"><code>.chain()</code></a>
+                  </li>
+                  <li>
+                    <a href="#code-chainend-code" class="toc-h2 toc-link" data-title="<code>.chainEnd()</code>"><code>.chainEnd()</code></a>
+                  </li>
+                  <li>
+                    <a href="#code-listen-code-event-helper" class="toc-h2 toc-link" data-title="<code>.listen()</code> event helper"><code>.listen()</code> event helper</a>
+                  </li>
+                  <li>
+                    <a href="#re-usable-promise-chains" class="toc-h2 toc-link" data-title="Re-usable Promise Chains">Re-usable Promise Chains</a>
+                  </li>
+                  <li>
+                    <a href="#complete-promise-chain" class="toc-h2 toc-link" data-title="Complete Promise Chain">Complete Promise Chain</a>
+                  </li>
+                  <li>
+                    <a href="#chaining-promises-for-dom-events" class="toc-h2 toc-link" data-title="Chaining Promises for DOM Events">Chaining Promises for DOM Events</a>
+                  </li>
+                  <li>
+                    <a href="#code-fp-all-code" class="toc-h2 toc-link" data-title="<code>FP.all()</code>"><code>FP.all()</code></a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
+          </li>
+      </div>
+        <ul class="toc-footer">
+            <li><a href='https://github.com/justsml/functional-promises'>Star on GitHub</a></li>
+            <li><a class='x-small center' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id='api-outline'>API Outline</h1>
+<p>All <code>.then()</code>-derived methods are listed first. It&#39;s the bulk of the API.</p>
+
+<ul>
+<li>Then-based Methods
+
+<ul>
+<li>Arrays
+
+<ul>
+<li><code>.map(fn)</code></li>
+<li><code>.filter(fn)</code></li>
+<li><code>.find(fn)</code></li>
+<li><code>.findIndex(fn)</code></li>
+<li><code>.some(fn)</code></li>
+<li><code>.none(fn)</code></li>
+<li><code>.series(fn)</code></li>
+<li><code>.forEach(fn)</code> - use <code>.map()</code> - write <em>proper</em> <code>functions</code></li>
+</ul></li>
+<li>Errors <em>(WIP)</em>
+
+<ul>
+<li><code>.catch(fn)</code></li>
+<li><code>.catch(filter, fn)</code></li>
+</ul></li>
+<li>Conditional
+
+<ul>
+<li><code>.thenIf()</code></li>
+</ul></li>
+<li>Utilities
+
+<ul>
+<li><code>FP.all(Object/Array)</code></li>
+<li><code>.tap(fn)</code></li>
+</ul></li>
+<li>Properties
+
+<ul>
+<li><code>.get(keyName)</code></li>
+<li><code>.set(keyName, value)</code></li>
+</ul></li>
+</ul></li>
+<li>Non <code>.then()</code>-based Methods
+
+<ul>
+<li>Chaining and Composition
+
+<ul>
+<li><code>.chain()</code></li>
+<li><code>.chainEnd()</code></li>
+</ul></li>
+<li>Modifiers
+
+<ul>
+<li><code>.quiet()</code> - prevents errors from stopping array methods mid-loop</li>
+<li><code>.concurrency(threadLimit)</code> - limits parallel workers for array methods</li>
+</ul></li>
+</ul></li>
+</ul>
+<h1 id='array-methods'>Array Methods</h1><h2 id='code-fp-map-iterable-transformfn-code'><code>FP.map(iterable, transformFn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">5</span><span class="p">)])</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+  <span class="p">})</span>
+</code></pre><h2 id='code-fp-filter-iterable-filterfn-code'><code>FP.filter(iterable, filterFn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+  <span class="p">})</span>
+</code></pre><h2 id='code-fp-find-fn-code'><code>FP.find(fn)</code></h2>
+<p>Returns first item to return truthy for <code>fn(item)</code></p>
+
+<p>If no match is found it will return <code>undefined</code>.</p>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="p">})</span>
+</code></pre><h2 id='code-fp-findindex-code'><code>FP.findIndex()</code></h2>
+<p>Returns first <strong>item&#39;s index</strong> to return truthy for <code>fn(item)</code></p>
+
+<p>If no match is found it will return <code>-1</code>.</p>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="p">})</span>
+</code></pre><h2 id='code-fp-some-code'><code>FP.some()</code></h2>
+<p>Returns <code>Promise&lt;true&gt;</code> on the first <strong>item</strong> to return truthy for <code>fn(item)</code></p>
+
+<p>If no match is found it will return <code>Promise&lt;false&gt;</code>.</p>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+  <span class="p">})</span>
+
+<span class="c1">// Will return false:</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+  <span class="p">})</span>
+</code></pre><h2 id='code-fp-none-code'><code>FP.none()</code></h2>
+<p>Returns <code>Promise&lt;false&gt;</code> on the first <strong>item</strong> to return falsey for <code>fn(item)</code></p>
+
+<p>If no match is found it will return <code>Promise&lt;true&gt;</code>.</p>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Will return true:</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+  <span class="p">})</span>
+
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Will return false:</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+  <span class="p">})</span>
+</code></pre><h1 id='properties'>Properties</h1><h2 id='code-fp-get-keyname-code'><code>FP.get(keyName)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="na">foo</span><span class="p">:</span> <span class="mi">42</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'foo'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="c1">// x === 42</span>
+  <span class="p">})</span>
+</code></pre><h2 id='code-fp-set-keyname-value-code'><code>FP.set(keyName, value)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="na">foo</span><span class="p">:</span> <span class="mi">42</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'foo'</span><span class="p">,</span> <span class="s1">'bar'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">obj</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">foo</span><span class="p">)</span> <span class="c1">// obj.foo === 'bar'</span>
+  <span class="p">})</span>
+</code></pre><h1 id='events'>Events</h1>
+<p><code>FP.chain()...[chain].listen(element, ...eventNames)</code></p>
+
+<p><code>.listen()</code> calls the function returned by <code>.chainEnd()</code></p>
+<h1 id='utilities'>Utilities</h1><h2 id='code-fp-resolve-lt-anything-gt-code'><code>FP.resolve(&lt;anything&gt;)</code></h2>
+<p>Turn anything into an FP Promise.</p>
+
+<p>Use with existing Promise supporting libraries.</p>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">anything</span><span class="p">))</span>
+</code></pre><h2 id='code-fp-thenif-code'><code>FP.thenIf()</code></h2>
+<blockquote>
+<p>Use <code>fetch</code> with <code>FP.thenIf()</code> to handle 4xx or 5xx responses as proper exceptions.</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">}))</span>
+  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check for 2xx status code using `fetch`'s behavior</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(),</span> <span class="c1">// Success, so pass along the JSON-parsed body</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Profile GET Failed'</span><span class="p">)))</span> <span class="c1">// Fails here if response not `ok`</span>
+  <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span> <span class="c1">// Get the response JSON object's `avatar` key value</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imageElem</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p>Email &#39;validator&#39;</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">// Use like so:</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">email</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span>
+    <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="c1">// Conditional</span>
+    <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Valid: '</span><span class="p">,</span> <span class="nx">e</span><span class="p">),</span> <span class="c1">// ifTrue</span>
+    <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'Bad Email: '</span><span class="p">,</span> <span class="nx">e</span><span class="p">))</span> <span class="c1">// ifFalse</span>
+
+<span class="c1">// Or use small helper methods like so:</span>
+<span class="kr">const</span> <span class="nx">checkEmail</span> <span class="o">=</span> <span class="nx">email</span> <span class="o">=&gt;</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">email</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span><span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c1">// Or to check if a user login successfully returned a token:</span>
+<span class="kr">const</span> <span class="nx">authUser</span> <span class="o">=</span> <span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">)</span> <span class="o">=&gt;</span>
+  <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="nx">svc</span><span class="p">.</span><span class="nx">loginAndGetUser</span><span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span>
+    <span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">.</span><span class="nx">token</span><span class="p">,</span> <span class="c1">// is valid login</span>
+    <span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">,</span> <span class="c1">// return user to next .then function</span>
+    <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Login Failed!'</span><span class="p">)}))</span> <span class="c1">// failed token test</span>
+</code></pre><h1 id='non-code-then-code-based-methods'>Non <code>.then()</code>-based Methods</h1><h1 id='chaining-and-composition'>Chaining and Composition</h1><h4 id='i-forgive-me-haskell-people-but-i-39-m-calling-this-a-monad-i'><i>(Forgive me Haskell people, but I&#39;m calling this a monad)</i></h4>
+<p><code>const pChain = FP.chain()...[chain].chainEnd()</code></p>
+
+<p>Chained Functional Promises enable a powerful technique: <strong>Reusable Async Composition Pipelines.</strong></p>
+
+<p>... enough gibberish...</p>
+
+<p><strong>Examples and usage patterns below:</strong></p>
+<h2 id='code-chain-code'><code>.chain()</code></h2><h2 id='code-chainend-code'><code>.chainEnd()</code></h2>
+<blockquote>
+<p>Both <code>.chain()</code> and <code>.chainEnd()</code> are used together.</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">getTarget</span> <span class="o">=</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">chainEnd</span><span class="p">()</span>
+
+<span class="nx">getTarget</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">element</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Event Targeted Element: '</span><span class="p">,</span> <span class="nx">element</span><span class="p">)})</span>
+</code></pre><h2 id='code-listen-code-event-helper'><code>.listen()</code> event helper</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// create a chain to handle events:</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'textContent'</span><span class="p">,</span> <span class="s1">'Clicked!'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="s1">'click'</span><span class="p">)</span>
+</code></pre>
+<p>It may be unfamiliar at first, but I bet you can guess what that does.</p>
+
+<p>Here&#39;s basically the same code:</p>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'submitBtn'</span><span class="p">)</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">element</span> <span class="o">=&gt;</span> <span class="nx">element</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s1">'Clicked!'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="s1">'click'</span><span class="p">)</span>
+</code></pre><h2 id='re-usable-promise-chains'>Re-usable Promise Chains</h2>
+<p>Create a re-usable sequence of steps:</p>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">squareAndFormatDecimal</span> <span class="o">=</span> <span class="nx">FP</span>
+  <span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">x</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">chainEnd</span><span class="p">()</span>
+<span class="c1">// typeof squareAndFormatDecimal === 'function'</span>
+<span class="nx">squareAndFormatDecimal</span><span class="p">([</span><span class="mi">5</span><span class="p">])</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'squareAndFormatDecimal() Results: '</span><span class="p">,</span> <span class="nx">num</span><span class="p">)</span>
+  <span class="c1">// num === ['25.00']</span>
+<span class="p">})</span>
+
+</code></pre><h2 id='complete-promise-chain'>Complete Promise Chain</h2><pre class="highlight javascript tab-javascript"><code><span class="kd">function</span> <span class="nx">addTodoHandler</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">statusLbl</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'label.status'</span><span class="p">)</span>
+  <span class="kr">const</span> <span class="nx">setStatus</span> <span class="o">=</span> <span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">statusLbl</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">s</span>
+  <span class="kr">const</span> <span class="nx">setError</span>  <span class="o">=</span> <span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">setStatus</span><span class="p">(</span><span class="s2">`ERROR: </span><span class="p">${</span><span class="nx">err</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="nx">FP</span>
+    <span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">event</span> <span class="o">=&gt;</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">form</span> <span class="o">=&gt;</span> <span class="nx">form</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'input.todo-text'</span><span class="p">).</span><span class="nx">value</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">todoText</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span> <span class="na">complete</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="na">text</span><span class="p">:</span> <span class="nx">todoText</span><span class="p">}))</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">todoAPI</span><span class="p">.</span><span class="nx">create</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">createResult</span> <span class="o">=&gt;</span> <span class="nx">setStatus</span><span class="p">(</span><span class="nx">createResult</span><span class="p">.</span><span class="nx">message</span><span class="p">))</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">setError</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">chainEnd</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'form'</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">submitHandler</span> <span class="o">=</span> <span class="nx">addTodoHandler</span><span class="p">()</span>
+<span class="nx">form</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'submit'</span><span class="p">,</span> <span class="nx">submitHandler</span><span class="p">)</span>
+
+</code></pre><h2 id='chaining-promises-for-dom-events'>Chaining Promises for DOM Events</h2>
+<p>A more realistic &#39;class&#39; like object.</p>
+
+<p>Again, still all with simple functions:</p>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">// using a more complete controller/component interface:</span>
+<span class="kr">const</span> <span class="nx">todoCtrl</span> <span class="o">=</span> <span class="nx">TodoController</span><span class="p">()</span>
+
+<span class="nx">todoCtrl</span>
+  <span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">'new item'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">todoCtrl</span><span class="p">.</span><span class="nx">update</span><span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">text</span><span class="p">:</span> <span class="s1">'updated item'</span><span class="p">,</span> <span class="na">complete</span><span class="p">:</span> <span class="kc">true</span><span class="p">})</span>
+  <span class="p">})</span>
+
+<span class="cm">/**
+ * Here's a more realistic, 'tighter' example:
+ * TodoController will return an object with `add` and `update` methods
+ *  - based on FP.chain()
+ */</span>
+<span class="kd">function</span> <span class="nx">TodoController</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">statusLbl</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'label.status'</span><span class="p">)</span>
+  <span class="kr">const</span> <span class="nx">setStatus</span> <span class="o">=</span> <span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">statusLbl</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">s</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">add</span><span class="p">:</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">input</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span> <span class="na">complete</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="na">text</span><span class="p">:</span> <span class="nx">input</span><span class="p">}))</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">todoAPI</span><span class="p">.</span><span class="nx">create</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">createResult</span> <span class="o">=&gt;</span> <span class="nx">setStatus</span><span class="p">(</span><span class="nx">createResult</span><span class="p">.</span><span class="nx">message</span><span class="p">))</span>
+      <span class="p">.</span><span class="nx">chainEnd</span><span class="p">(),</span>
+    <span class="na">update</span><span class="p">:</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">input</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="nx">input</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="na">complete</span><span class="p">:</span> <span class="nx">input</span><span class="p">.</span><span class="nx">complete</span><span class="p">,</span> <span class="na">text</span><span class="p">:</span> <span class="nx">input</span><span class="p">.</span><span class="nx">text</span><span class="p">}))</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">todoAPI</span><span class="p">.</span><span class="nx">update</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">updateResult</span> <span class="o">=&gt;</span> <span class="nx">setStatus</span><span class="p">(</span><span class="nx">updateResult</span><span class="p">.</span><span class="nx">message</span><span class="p">))</span>
+      <span class="p">.</span><span class="nx">chainEnd</span><span class="p">(),</span>
+  <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre><h2 id='code-fp-all-code'><code>FP.all()</code></h2>
+<p>FP.all provides an extended utility above the native <code>Promise.all()</code>, supporting Objects and Arrays.</p>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">all</span><span class="p">({</span>
+  <span class="na">one</span><span class="p">:</span> <span class="nx">promise</span><span class="p">,</span>
+  <span class="na">two</span><span class="p">:</span> <span class="nx">promise</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span>
+  <span class="c1">// results === {</span>
+  <span class="c1">//   one: 1,</span>
+  <span class="c1">//   two: 2}</span>
+<span class="p">)</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span>
+  <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+  <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">])</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span>
+  <span class="c1">// results === [1, 2])</span>
+<span class="p">)</span>
+</code></pre>
+<blockquote>
+<p>Thanks to several influencial projects: RxJS, Bluebird, asynquence, FantasyLand, Gulp, HighlandJS, et al.</p>
+</blockquote>
+<h1 id='errors'>Errors</h1>
+<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files...just save them to the `includes` folder and add them to the top of your `index.md`'s frontmatter. Files are included in the order listed.</aside>
+
+<p>The Kittn API uses the following error codes:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request -- Your request sucks.</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized -- Your API key is wrong.</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden -- The kitten requested is hidden for administrators only.</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found -- The specified kitten could not be found.</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed -- You tried to access a kitten with an invalid method.</td>
+</tr>
+<tr>
+<td>406</td>
+<td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
+</tr>
+<tr>
+<td>410</td>
+<td>Gone -- The kitten requested has been removed from our servers.</td>
+</tr>
+<tr>
+<td>418</td>
+<td>I&#39;m a teapot.</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests -- You&#39;re requesting too many kittens! Slow down!</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error -- We had a problem with our server. Try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+                <a href="#" data-language-name="javascript">javascript</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
