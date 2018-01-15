@@ -1,14 +1,20 @@
 FROM ruby:2.4.3-alpine
+
+MAINTAINER Dan Levy <Dan@DanLevy.net>
+
 ENV LANG=en_US.UTF-8
-COPY . /slate/
-VOLUME [ "/slate" ]
+RUN apk -Uuv add nodejs \
+      abuild build-base \
+      findutils \
+      grep coreutils \
+      cmake gcc  \
+      binutils
+
+COPY Gemfile* /slate/
+# VOLUME [ "/slate" ]
 WORKDIR /slate
 
-# alpine-sdk is too fat
-RUN apk -Uuv add nodejs build-base findutils grep \
-      coreutils cmake gcc abuild binutils binutils && \
-  bundle install
+RUN bundle install
 
-
-ENTRYPOINT [ "bundle exec middleman build --clean" ]
+ENTRYPOINT /usr/local/bin/bundler exec middleman build
 

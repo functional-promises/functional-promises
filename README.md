@@ -1,8 +1,8 @@
 # Functional Promises
 
 [![Build Status](https://travis-ci.org/justsml/functional-promises.svg?branch=master)](https://travis-ci.org/justsml/functional-promises)
-[![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat-square)](https://github.com/justsml/functional-promises)
-[![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat-square)](https://github.com/justsml/functional-promises)
+[![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat)](https://github.com/justsml/functional-promises)
+[![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat)](https://github.com/justsml/functional-promises)
 
 ## Installation
 
@@ -19,9 +19,9 @@ The emphasis here is a seamless async/sync Developer Experience. I call this pat
 
 ### Advantages
 
-* Easily handle Sync, Async, Streams, Events, Promises, and Callbacks.
+* Easily handle Sync, Async, Events, Promises, and Callbacks.
 * Familiar methods, including `Array.prototype.map`, `[].filter()`, `[].find()`, `[].some()`, etc.
-* Create Monads in JavaScript (as far as they contain side-effects to a sequence of instructions).
+* Create Monads in JavaScript (so far as they contain side-effects to a sequence of instructions).
 * Point-free code is easily achieved.
 * Higher code test coverage w/ less repetitive code in tests.
 * Use the best features from multiple programming styles: a little imperative, plenty functional, a pinch of OOP, yet still resembling declarative methods!!!
@@ -98,7 +98,7 @@ FP.chain() // start a chain
   * `.quiet()` - prevents errors from stopping array methods mid-loop
   * `.concurrency(threadLimit)` - limits parallel workers for array methods
 
-#### Array Methods
+#### Arrays
 
 ##### `FP.map(iterable, transformFn)`
 
