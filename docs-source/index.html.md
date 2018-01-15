@@ -16,6 +16,40 @@ search: true
 
 # Functional Promises
 
+[View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
+
+> <strong style='font-size: 16px;'>Summary of Awesome Shit</strong>
+>
+
+> Use familiar Array-style methods are built-in.
+
+```javascript
+FP.resolve(['1', '2', '3', '4', '5'])
+  .map(Number)
+  .filter(x => x % 2 === 0)
+  .then(results => {
+    assert.deepEqual(results, [2, 4])
+  })
+
+```
+
+> Create re-usable sequences of functions with `.chain()`.
+
+```javascript
+const squareAndFormatDecimal = FP
+  .chain()
+  .concurrency(4)
+  .map(x => x * x)
+  .concurrency(2)
+  .map(x => parseFloat(x).toFixed(2))
+  .chainEnd() // returns function
+
+squareAndFormatDecimal([5, 10, 20])
+  .then(num => assert.deepEqual(num, ['25.00', '100.00', '400.00']))
+```
+
+### Summary
+
 Functional Promises are an extension of the native Promises API (`.then()`/`.catch()`).
 
 **Core features:** Array Methods, Events, Object & Array `FP.all()` Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
@@ -25,41 +59,41 @@ Functional Promises are an extension of the native Promises API (`.then()`/`.cat
 * RxJS: `FP` is 1/6th the size. Observable support still being evaluated.
 * Bluebird: `FP` adds some key features: _events_, _conditionals_, _chains_, _quiet errors_. (Disclaimer: I'm a contributor, with a low PR acceptance ratio. 😿)
 
-`FP` is currently **only a few 100 lines of code.**
-The **browser bundle** still only clocks in at **~20Kb** (using Webpack+Babel+Rollup+UglifyJS).
+`FP` is currently **only a couple 100 lines of code.**
+The **browser bundle** only clocks in at **~20Kb** (using Webpack+Babel+Rollup+UglifyJS).
 
-## API Outline
+### API Outline
+
+> Use [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) with `FP.thenIf()` to handle `response.ok === false` with custom response.
+
+```javascript
+// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods
+FP.resolve(fetch('/profile', {method: 'GET'}))
+  .thenIf( // thenIf lets us handle branching logic
+    res => res.ok, // Check if response is ok
+    res => res.json(), // if true, return the parsed body
+    res => ({avatar: '/no-photo.svg', error: res})) // fail, use default object
+  .get('avatar') // Get the resulting objects `avatar` value
+  .then(avatarUrl => imgElement.src = avatarUrl)
+
+```
+
+> `FP.thenIf()` replaces the `if` branching code here:
+
+```javascript
+fetch('/profile', {method: 'GET'})
+  .then(res => {
+    if (res.ok) {
+      return res.json();
+     } else {
+      return {avatar: '/no-photo.svg', error: res}
+     }
+  })
+  .then(data => data.avatar)
+  .then(avatarUrl => imgElement.src = avatarUrl)
+```
 
 All `.then()`-derived methods are listed first. It's the bulk of the API.
-
-> **Example Awesome Shit:**
->
-> `.chain()` is a powerful way to create re-usable sequences of functions.
-
-```javascript
-// #1: Use .chain to create re-usable function pipelines
-const squareAndFormatDecimal = FP
-  .chain()
-  .map(x => x * x)
-  .map(x => parseFloat(x).toFixed(2))
-  .chainEnd() // returns re-usable function
-
-squareAndFormatDecimal([5, 10, 20])
-  .then(num => assert.deepEqual(num, ['25.00', '100.00', '400.00']))
-```
-
-
-> Familiar Array-methods are built-in. This example uses `.map()`:
-
-```javascript
-// #2: Use .map to double an array of numbers
-FP.resolve([1, 2, 3, 4, 5])
-  .map(x => x * 2)
-  .then(results => {
-    assert.deepEqual(results, [2, 4, 6, 8, 10])
-  })
-
-```
 
 * Thenable Methods
     * Arrays
@@ -81,26 +115,26 @@ FP.resolve([1, 2, 3, 4, 5])
     * Properties
         * `.get(keyName)`
         * `.set(keyName, value)`
-* Not Thenable-based Methods
+* Specialty Methods
+    * Events
+        * `.listen(obj, ...eventNames)`
     * Helpers
         * `FP.resolve()`
         * `FP.all(Object/Array)`
-    * Chaining and Composition
+    * Composition Pipelines
         * `FP.chain()`
         * `.chainEnd()`
     * Modifiers
         * `.quiet()` - prevents errors from stopping array methods mid-loop
         * `.concurrency(threadLimit)` - limits parallel workers for array methods
 
-# Array Methods
+# Thenable Methods
+
+# &#160;&#160; Array Methods
 
 Any `.then()` which would handle an array, may instead use one of the `FP` array methods.
 
 ## `FP.map(iterable, fn)`
-
-Similar to `Array.prototype.map()`.
-
-Use to transform each item in an array by passing through a given function.
 
 ```javascript
 FP.resolve([1, 2, 3, 4, Promise.resolve(5)])
@@ -110,9 +144,19 @@ FP.resolve([1, 2, 3, 4, Promise.resolve(5)])
   })
 ```
 
-## `FP.filter(iterable, fn)`
+Similar to `Array.prototype.map((item[, index, array]) => {})`.
 
-Use `.filter()` to omit items from the input array by passing through a given function. Items will be omitted if the function returns a falsey value.
+**Use to transforms an array of values, passing each through the given function.**
+
+The return value will be a new array containing the result for each call to `fn(item)`.
+
+
+For example, let's say you have to multiply a list of numbers by 2.
+
+Using `FP.map()` to do this lets you focus on the important logic: `x => x * 2`
+
+
+## `FP.filter(iterable, fn)`
 
 ```javascript
 const isEven = x => x % 2 === 0
@@ -123,11 +167,9 @@ FP.resolve([1, 2, 3, 4, 5])
   })
 ```
 
+Use `.filter()` to omit items from the input array by passing through a given function. Items will be omitted if the function returns a falsey value.
+
 ## `FP.find(iterable, fn)`
-
-Returns first item to return truthy for `fn(item)`
-
-If no match is found it will return `undefined`.
 
 ```javascript
 const isEven = x => x % 2 === 0
@@ -138,11 +180,11 @@ FP.resolve([1, 2, 3, 4, 5])
   })
 ```
 
+Returns first item to return truthy for `fn(item)`
+
+If no match is found it will return `undefined`.
+
 ## `FP.findIndex(iterable, fn)`
-
-Returns first **item's index** to return truthy for `fn(item)`
-
-If no match is found it will return `-1`.
 
 ```javascript
 const isEven = x => x % 2 === 0
@@ -153,52 +195,84 @@ FP.resolve([1, 2, 3, 4, 5])
   })
 ```
 
+Returns first **item's index** to return truthy for `fn(item)`
+
+If no match is found it will return `-1`.
+
 ## `FP.some(iterable, fn)`
 
-Returns `Promise<true>` on the first **item** to return truthy for `fn(item)`
-
-If no match is found it will return `Promise<false>`.
-
 ```javascript
-const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 4])
   .some(isEven)
   .then(results => {
     assert.equal(results, true)
   })
-
-// Will return false:
-FP.resolve([1, 3, 5])
-  .some(isEven)
-  .then(results => {
-    assert.equal(results, false)
-  })
 ```
+
+Returns `Promise<true>` on the first **item** to return truthy for `fn(item)`
+
+If no truthy result is found, `.some()` returns `Promise<false>`.
 
 ## `FP.none(iterable, fn)`
 
-Returns `Promise<false>` on the first **item** to return falsey for `fn(item)`
-
-If no match is found it will return `Promise<true>`.
-
 ```javascript
-const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 4])
   .some(isEven)
   .then(results => {
     // Will return true:
     assert.equal(results, true)
   })
-
-FP.resolve([1, 3, 5])
-  .some(isEven)
-  .then(results => {
-    // Will return false:
-    assert.equal(results, false)
-  })
 ```
 
-# Utilities
+Returns `Promise<false>` on the first **item** to return falsey for `fn(item)`
+
+If no match is found it will return `Promise<true>`.
+
+
+
+
+# &#160;&#160; Conditional
+
+## `FP.thenIf()`
+
+> Use [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) with `FP.thenIf()` to handle when `response.ok === false` as custom response.
+
+```javascript
+// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods
+FP.resolve(fetch('/profile', {method: 'GET'}))
+  .thenIf( // thenIf lets us handle branching logic
+    res => res.ok, // Check if response is ok
+    res => res.json(), // if true, return the parsed body
+    res => ({avatar: '/no-photo.svg', error: res})) // fail, use default object
+  .get('avatar') // Get the resulting objects `avatar` value
+  .then(avatarUrl => imgElement.src = avatarUrl)
+```
+
+> Email 'validator'
+
+```javascript
+// Use like so:
+FP.resolve(email)
+  .thenIf(
+    e => e.length > 5, // Conditional
+    e => console.log('Valid: ', e), // ifTrue
+    e => console.error('Bad Email: ', e)) // ifFalse
+
+// Or use small helper methods like so:
+const checkEmail = email => FP.resolve(email)
+  .thenIf(e => e.length > 5)
+
+// Or to check if a user login successfully returned a token:
+const authUser = (email, pass) =>
+  FP.resolve({email, pass})
+  .then(({email, pass}) => svc.loginAndGetUser(email, pass))
+  .thenIf(
+    user => user.token, // is valid login
+    user => user, // return user to next .then function
+    () => {throw new Error('Login Failed!')})) // failed token test
+```
+
+# &#160;&#160; Utilities
 
 ## `.tap(fn)`
 
@@ -218,8 +292,7 @@ FP.resolve(fetch('/user/42/photos'))
 ```
 
 
-
-# Properties
+# &#160;&#160; Properties
 
 These methods are particularly helpful for dealing with data extraction/transformation.
 
@@ -253,8 +326,9 @@ FP.resolve({username: 'dan', password: 'sekret'})
   })
 ```
 
+# Specialty Methods
 
-# Events
+# &#160;&#160; Events
 
 Promises can be awkward when dealing with events.
 
@@ -296,7 +370,7 @@ FP.chain()
   .listen(button, 'click')
 ```
 
-# Helpers
+# &#160;&#160; Helpers
 
 ## `FP.resolve(<anything>)`
 
@@ -334,48 +408,7 @@ FP.all({
 ```
 
 
-
-# Conditional
-
-## `FP.thenIf()`
-
-> Use `fetch` with `FP.thenIf()` to handle 4xx or 5xx responses as proper exceptions.
-
-```javascript
-FP.resolve(fetch('/profile', {method: 'GET'}))
-  .thenIf(
-    res => res.ok, // Check for 2xx status code using `fetch`'s behavior
-    res => res.json(), // Success, so pass along the JSON-parsed body
-    res => Promise.reject(new Error('Profile GET Failed'))) // Fails here if response not `ok`
-  .get('avatar') // Get the response JSON object's `avatar` key value
-  .then(avatarUrl => imageElem.src = avatarUrl)
-```
-
-> Email 'validator'
-
-```javascript
-// Use like so:
-FP.resolve(email)
-  .thenIf(
-    e => e.length > 5, // Conditional
-    e => console.log('Valid: ', e), // ifTrue
-    e => console.error('Bad Email: ', e)) // ifFalse
-
-// Or use small helper methods like so:
-const checkEmail = email => FP.resolve(email)
-  .thenIf(e => e.length > 5)
-
-// Or to check if a user login successfully returned a token:
-const authUser = (email, pass) =>
-  FP.resolve({email, pass})
-  .then(({email, pass}) => svc.loginAndGetUser(email, pass))
-  .thenIf(
-    user => user.token, // is valid login
-    user => user, // return user to next .then function
-    () => {throw new Error('Login Failed!')})) // failed token test
-```
-
-# Chaining and Composition
+# &#160;&#160; Composition Pipelines
 
 > *Non `.then()`-based Methods*
 
@@ -477,7 +510,10 @@ function TodoController() {
       .tap(createResult => setStatus(createResult.message))
       .chainEnd(),
     update: FP.chain()
-      .then(input => ({id: input.id, complete: input.complete, text: input.text}))
+      .then(input => {
+        const {id, complete, text} = input
+        return {id, complete, text}
+      })
       .then(todoAPI.update)
       .tap(updateResult => setStatus(updateResult.message))
       .chainEnd(),
@@ -486,6 +522,42 @@ function TodoController() {
 }
 ```
 
+
+# &#160;&#160; Modifiers
+
+## `.quiet()`
+
+```javascript
+FP.resolve([2, 1, 0])
+  .quiet()
+  .map(x => 2 / x)
+  .then(results => {
+    assert.deepEqual(results, [1, 2, Error])
+  })
+```
+
+Suppresses errors by converting them to return values.
+
+**Only applies to subsequent thenable.**
+
+Best used with Array methods.
+
+## `.concurrency(threadLimit)`
+
+```javascript
+FP.resolve([1, 2, 3, 4, 5])
+  .concurrency(2)
+  .map(x => x * 2)
+  .then(results => {
+    assert.deepEqual(results, [2, 4, 6, 8, 10])
+  })
+```
+
+Set `threadLimit` to constrain the amount of simultaneous tasks/promises can run.
+
+**Only applies to subsequent Array thenable.**
+
+_Best used with Array methods._
 
 
 > Thanks to several influencial projects: RxJS, Bluebird, asynquence, FantasyLand, Gulp, HighlandJS, et al.
