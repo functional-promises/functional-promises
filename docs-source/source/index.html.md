@@ -134,6 +134,14 @@ All `.then()`-derived methods are listed first. It's the bulk of the API.
 
 # Thenable Methods
 
+You can think of most `FP` methods as **wrappers derived from Native Promise's `.then()`.**
+
+For example, `.tap(fn)`'s function will receive the resolved value exactly like a `.then()`. Except the function's `return` value will be ignored - and the next `thenable` in the chain will get the original input.
+
+A `.catch()` is another type of `thenable`! It works because an Error in a Promise will cause it to skip or "surf" over `thenables` until it finds a special `thenable`: `.catch()`. It then takes that Error value and passes it into the function. `.catch(err=>{log(err.message)})`
+
+See all `thenable` methods in `FP`: Arrays, Errors, Conditional, Utilities, Properties, etc.
+
 # &#160;&#160; Array Methods
 
 Any `.then()` which would handle an array, may instead use one of the `FP` array methods.
@@ -250,7 +258,18 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
   .then(avatarUrl => imgElement.src = avatarUrl)
 ```
 
-#### Defaults
+> Email 'validator'
+
+```javascript
+// Use like so:
+FP.resolve(email)
+  .thenIf(
+    e => e.length > 5, // Conditional
+    e => console.log('Valid: ', e), // ifTrue
+    e => console.error('Bad Email: ', e)) // ifFalse
+```
+
+#### Arguments
 
 * `condition`, echo/truthy function: `(x) => x`
 * `ifTrue`, echo function: `(x) => x`
@@ -264,17 +283,6 @@ The return value of either `ifTrue`/`ifFalse` handler will be handed to the next
 
 Default values let you call `.thenIf` with no args - if you simply want to exclude falsey values down the chain.
 
-
-> Email 'validator'
-
-```javascript
-// Use like so:
-FP.resolve(email)
-  .thenIf(
-    e => e.length > 5, // Conditional
-    e => console.log('Valid: ', e), // ifTrue
-    e => console.error('Bad Email: ', e)) // ifFalse
-```
 
 > Functional Login Flow
 
@@ -303,9 +311,7 @@ Perfect for logging or other background tasks (where results don't need to block
 FP.resolve(fetch('/user/42/photos'))
   .tap(res => console.log(`user photos req ok? ${res.ok}`))
   .then(res => res.json())
-  .then(data => {
-    console.log(data)
-  })
+  .then(data => console.log(data))
 ```
 
 

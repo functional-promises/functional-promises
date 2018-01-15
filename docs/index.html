@@ -468,7 +468,7 @@ The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (us
 <ul>
 <li><code>.listen(obj, ...eventNames)</code></li>
 </ul></li>
-<li><a href="#160-160-composition%20pipelines">Composition Pipelines</a>
+<li><a href="#160-160-composition-pipelines">Composition Pipelines</a>
 
 <ul>
 <li><code>FP.chain()</code></li>
@@ -482,7 +482,15 @@ The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (us
 </ul></li>
 </ul></li>
 </ul>
-<h1 id='thenable-methods'>Thenable Methods</h1><h1 id='160-160-array-methods'>&#160;&#160; Array Methods</h1>
+<h1 id='thenable-methods'>Thenable Methods</h1>
+<p>You can think of most <code>FP</code> methods as <strong>wrappers derived from Native Promise&#39;s <code>.then()</code>.</strong></p>
+
+<p>For example, <code>.tap(fn)</code>&#39;s function will receive the resolved value exactly like a <code>.then()</code>. Except the function&#39;s <code>return</code> value will be ignored - and the next <code>thenable</code> in the chain will get the original input.</p>
+
+<p>A <code>.catch()</code> is another type of <code>thenable</code>! It works because an Error in a Promise will cause it to skip or &quot;surf&quot; over <code>thenables</code> until it finds a special <code>thenable</code>: <code>.catch()</code>. It then takes that Error value and passes it into the function. <code>.catch(err=&gt;{log(err.message)})</code></p>
+
+<p>See all <code>thenable</code> methods in <code>FP</code>: Arrays, Errors, Conditional, Utilities, Properties, etc.</p>
+<h1 id='160-160-array-methods'>&#160;&#160; Array Methods</h1>
 <p>Any <code>.then()</code> which would handle an array, may instead use one of the <code>FP</code> array methods.</p>
 <h2 id='code-fp-map-iterable-fn-code'><code>FP.map(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">5</span><span class="p">)])</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
@@ -556,7 +564,17 @@ The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (us
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">,</span> <span class="na">error</span><span class="p">:</span> <span class="nx">res</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span> <span class="c1">// Get the resulting objects `avatar` value</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
-</code></pre><h4 id='defaults'>Defaults</h4>
+</code></pre>
+<blockquote>
+<p>Email &#39;validator&#39;</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">// Use like so:</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">email</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span>
+    <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="c1">// Conditional</span>
+    <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Valid: '</span><span class="p">,</span> <span class="nx">e</span><span class="p">),</span> <span class="c1">// ifTrue</span>
+    <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'Bad Email: '</span><span class="p">,</span> <span class="nx">e</span><span class="p">))</span> <span class="c1">// ifFalse</span>
+</code></pre><h4 id='arguments'>Arguments</h4>
 <ul>
 <li><code>condition</code>, echo/truthy function: <code>(x) =&gt; x</code></li>
 <li><code>ifTrue</code>, echo function: <code>(x) =&gt; x</code></li>
@@ -571,16 +589,6 @@ The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (us
 
 <p>Default values let you call <code>.thenIf</code> with no args - if you simply want to exclude falsey values down the chain.</p>
 
-<blockquote>
-<p>Email &#39;validator&#39;</p>
-</blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Use like so:</span>
-<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">email</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span>
-    <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="c1">// Conditional</span>
-    <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Valid: '</span><span class="p">,</span> <span class="nx">e</span><span class="p">),</span> <span class="c1">// ifTrue</span>
-    <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'Bad Email: '</span><span class="p">,</span> <span class="nx">e</span><span class="p">))</span> <span class="c1">// ifFalse</span>
-</code></pre>
 <blockquote>
 <p>Functional Login Flow</p>
 </blockquote>
@@ -601,9 +609,7 @@ The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (us
 <pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/user/42/photos'</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`user photos req ok? </span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
 </code></pre><h1 id='160-160-properties'>&#160;&#160; Properties</h1>
 <p>These methods are particularly helpful for dealing with data extraction/transformation.</p>
 <h2 id='code-fp-get-keyname-code'><code>FP.get(keyName)</code></h2>
