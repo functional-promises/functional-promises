@@ -5,8 +5,8 @@ title: Functional Promises - API Documentation
 #   - javascript
 
 toc_footers:
-  - <a href='https://github.com/justsml/functional-promises'>Star on GitHub</a>
-  - <a class='x-small center' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a>
+  - <a class='social github' href='https://github.com/justsml/functional-promises'>Star on GitHub</a>
+  - <a class='bottom' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a>
 
 # includes:
 #   - errors
@@ -16,9 +16,9 @@ search: true
 
 # Functional Promises
 
-[View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
+> [View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
 
-> <strong style='font-size: 16px;'>Summary of Awesome Shit</strong>
+> <p style='text-align: center;'><strong style='font-size: 19px;'>Summary of Awesome Shit</strong></p>
 >
 
 > Use familiar Array-style methods are built-in.
@@ -47,6 +47,11 @@ const squareAndFormatDecimal = FP
 squareAndFormatDecimal([5, 10, 20])
   .then(num => assert.deepEqual(num, ['25.00', '100.00', '400.00']))
 ```
+
+
+[![Build Status](https://travis-ci.org/justsml/functional-promises.svg?branch=master)](https://travis-ci.org/justsml/functional-promises)
+[![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat)](https://github.com/justsml/functional-promises)
+[![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat)](https://github.com/justsml/functional-promises)
 
 ### Summary
 

@@ -72,7 +72,7 @@ html, body {
   }
 
   // This is the logo at the top of the ToC
-  &>img {
+  img {
     display: block;
     max-width: 100%;
   }
@@ -103,6 +103,7 @@ html, body {
   }
 
   .logo {
+    max-width: 100%;
     margin-bottom: $logo-margin;
   }
 
@@ -195,6 +196,15 @@ html, body {
       font-size: 0.8em;
       line-height: 1.7;
       text-decoration: none;
+    }
+
+    .bottom {
+      position: absolute;
+      bottom: 3px;
+      opacity: 0.5;
+      font-weight: 400;
+      text-align: right;
+      right: 6px;
     }
   }
 }
