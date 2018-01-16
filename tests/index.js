@@ -36,3 +36,26 @@ test('FP.promisifyAll', t => {
     })
 })
 
+test('FP.iPromise resolve', t => {
+  const asyncFunc = () => {
+    const { promise, resolve } = FP.iPromise()
+    Promise.resolve(true)
+      .then(x => resolve(x))
+    return promise
+  }
+  return asyncFunc()
+    .then(x => t.truthy(x))
+    .catch(err => t.fail())
+})
+
+test('FP.iPromise reject', t => {
+  const asyncFunc = () => {
+    const { promise, reject } = FP.iPromise()
+    Promise.resolve('Error!')
+      .then(x => reject(x))
+    return promise
+  }
+  return asyncFunc()
+    .then(x => t.fail())
+    .catch(err => t.truthy(err))
+})
