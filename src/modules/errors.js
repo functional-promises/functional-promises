@@ -8,6 +8,9 @@ class FunctionalError extends Error {
     if (typeof options === 'object') {
       Object.assign(this, options)
     }
+    this.name = this.constructor.name
+    // Capturing stack trace, excluding constructor call from it.
+    Error.captureStackTrace(this, this.constructor)
   }
 }
 class FunctionalUserError extends FunctionalError {}

@@ -16,11 +16,11 @@ search: true
 
 # Functional Promises
 
-> [View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
+> <small>[View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
 
 > <p style='text-align: center;'><strong style='font-size: 19px;'>Summary of Awesome Shit</strong></p>
 
-> Use familiar Array-style methods are built-in.
+> Array-style methods are built-in:
 
 ```javascript
 FP.resolve(['1', '2', '3', '4', '5'])
@@ -54,7 +54,7 @@ squareAndFormatDecimal([5, 10, 20])
 
 ### Summary
 
-Functional Promises are an extension of the native Promises API (`.then()`/`.catch()`).
+**Functional Promises** are an extension of the native Promises API (`.then()`/`.catch()`).
 
 **Core features:** Array Methods, Events, Object & Array `FP.all()` Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
 
@@ -63,8 +63,8 @@ Functional Promises are an extension of the native Promises API (`.then()`/`.cat
 * RxJS: `FP` is 1/6th the size. Observable support still being evaluated.
 * Bluebird: `FP` adds some key features: _events_, _conditionals_, _chains_, _quiet errors_. (Disclaimer: I'm a contributor, with a low PR acceptance ratio. 😿)
 
-`FP` is currently **only a couple 100 lines of code.**
-The **browser bundle** only clocks in at **~20Kb** (using Webpack+Babel+Rollup+UglifyJS).
+`FP`'s NodeJS source is **only a couple 100 lines of code.**
+The **browser bundle** weighs in at **~20Kb** (using Webpack+Babel+Rollup+UglifyJS).
 
 ### API Outline
 

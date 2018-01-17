@@ -1,10 +1,6 @@
 const FP = require('./')
 
-module.exports = function _init(FP) {
-  FP.prototype.all = FP.all = all
-  FP.prototype.cast = cast
-  FP.prototype.reject = reject
-}
+module.exports = {all, cast, reject, _allObjectKeys: allObjectKeys}
 
 function all(promises) {
   return Array.isArray(promises) ? Promise.all(promises) : allObjectKeys(promises)

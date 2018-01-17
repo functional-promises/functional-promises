@@ -1,4 +1,6 @@
 {
+  "sourceMaps": "inline",
+  "retainLines": true,
   "presets": [
     [
       "env",
@@ -7,10 +9,11 @@
         "modules": false,
         "useBuiltIns": true,
         "targets": {
-          "browsers": ["last 2 versions", "safari >= 10"]
+          "browsers": ["last 2 versions", "safari >= 10"],
+          "node": "current"
         }
       }
     ]
   ]
-  // "plugins": ["transform-es2015-modules-commonjs", "babel-plugin-transform-runtime"]
+  /* "plugins": ["transform-es2015-modules-commonjs", "babel-plugin-transform-runtime"] */
 }

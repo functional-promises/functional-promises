@@ -1,17 +1,16 @@
 const functionsIn       = require('lodash/functionsIn')
 const isFunction        = require('lodash/isFunction')
-const arraysMixin       = require('./arrays')
-const eventsMixin       = require('./events')
-const monadsMixin       = require('./monads')
-const promiseMixin      = require('./promise')
-const conditionalMixin  = require('./conditional')
 const {FunctionalError} = require('./modules/errors')
-
-arraysMixin(FunctionalPromise)
-eventsMixin(FunctionalPromise)
-monadsMixin(FunctionalPromise)
-promiseMixin(FunctionalPromise)
-conditionalMixin(FunctionalPromise)
+const {listen}          = require('./events')
+const {chain, chainEnd} = require('./monads')
+const {map, filter}     = require('./arrays')
+const {find, findIndex} = require('./arrays')
+const {reduce}          = require('./arrays')
+const {all, cast}       = require('./promise')
+const {reject}          = require('./promise')
+const {thenIf, _thenIf} = require('./conditional')
+const {tapIf}           = require('./conditional')
+const FP = FunctionalPromise
 
 function FunctionalPromise(resolveRejectCB, ...unknownArgs) {
   if (!(this instanceof FunctionalPromise)) {return new FunctionalPromise(resolveRejectCB)}
@@ -23,30 +22,58 @@ function FunctionalPromise(resolveRejectCB, ...unknownArgs) {
   }
 }
 
-FunctionalPromise.prototype.addStep = function(name, args) {
+FP.resolve = resolve
+
+// Promise Core Stuff
+FP.prototype.all = FP.all = all
+FP.prototype.cast = cast
+FP.prototype.reject = reject
+
+// Monadic Methods
+FP.chain = chain
+FP.prototype.chainEnd = chainEnd
+
+// Array Helpers
+FP.prototype.map = map
+FP.prototype.find = find
+FP.prototype.filter = filter
+FP.prototype.reduce = reduce
+FP.prototype.findIndex = findIndex
+
+// Conditional Methods
+FP.prototype.tapIf = tapIf
+FP.prototype.thenIf = thenIf
+FP.prototype._thenIf = _thenIf
+FP.thenIf = _thenIf
+
+// Events Methods
+FP.prototype.listen = listen
+
+
+FP.prototype.addStep = function(name, args) {
   if (this.steps) {
     this.steps.push([name, this, args])
   }
   return this
 }
 
-FunctionalPromise.prototype.concurrency = function(limit = Infinity) {
+FP.prototype.concurrency = function(limit = Infinity) {
   if (this.steps) return this.addStep('concurrency', [...arguments])
   this._FP.concurrencyLimit = limit
   return this
 }
 
-FunctionalPromise.prototype.serial = function() {
+FP.prototype.serial = function() {
   if (this.steps) return this.addStep('serial', [...arguments])
   return this.concurrency(1)
 }
 
-FunctionalPromise.prototype.get = function(keyName) {
+FP.prototype.get = function(keyName) {
   if (this.steps) return this.addStep('get', [...arguments])
   return this.then((obj) => typeof obj === 'object' ? obj[keyName] : obj)
 }
 
-FunctionalPromise.prototype.set = function(keyName, value) {
+FP.prototype.set = function(keyName, value) {
   if (this.steps) return this.addStep('set', [...arguments])
   return this.then(obj => {
     if (typeof obj === 'object') {
@@ -56,7 +83,7 @@ FunctionalPromise.prototype.set = function(keyName, value) {
   })
 }
 
-FunctionalPromise.prototype.catch = function(fn) {
+FP.prototype.catch = function(fn) {
   if (this.steps) return this.addStep('catch', [...arguments])
   if (this._FP.error) {
     const result = fn(this._FP.error)
@@ -64,15 +91,20 @@ FunctionalPromise.prototype.catch = function(fn) {
     return result
   }
   // bypass error handling
-  return FunctionalPromise.resolve(this._FP.value)
+  return FP.resolve(this._FP.value)
 }
 
-FunctionalPromise.prototype.then = function then(fn) {
+function then(fn) {
   if (this.steps) return this.addStep('then', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn)
   return this._FP.promise.then(fn)
 }
 
+
+FP.denodeify = FP.promisify = promisify
+FP.promisifyAll = promisifyAll
+FP.prototype.tap = tap
+FP.prototype.then = then
 
 /**
  * `.tap(fn)` works almost exactly like `.then()`
@@ -86,7 +118,7 @@ FunctionalPromise.prototype.then = function then(fn) {
  * @param {function} fn
  * @returns FunctionalPromise
  */
-FunctionalPromise.prototype.tap = function tap(fn) {
+function tap(fn) {
   if (this.steps) return this.addStep('tap', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.tap(fn)`. Must be a function. Currently: ' + typeof fn)
   return this._FP
@@ -96,8 +128,8 @@ FunctionalPromise.prototype.tap = function tap(fn) {
   })
 }
 
-FunctionalPromise.resolve = function(value) {
-  return new FunctionalPromise((resolve, reject) => {
+function resolve(value) {
+  return new FP((resolve, reject) => {
     if (value && isFunction(value.then)) {
       return value.then(resolve).catch(reject)
     }
@@ -105,10 +137,8 @@ FunctionalPromise.resolve = function(value) {
   })
 }
 
-FunctionalPromise.denodeify = FunctionalPromise.promisify = promisify
-
 function promisify(cb) {
-  return (...args) => new FunctionalPromise((yah, nah) => {
+  return (...args) => new FP((yah, nah) => {
     return cb.call(this, ...args, (err, res) => {
       if (err) return nah(err)
       return yah(res)
@@ -127,6 +157,14 @@ function promisifyAll(obj) {
   }, obj)
 }
 
-FunctionalPromise.promisifyAll = promisifyAll
-
 module.exports = FunctionalPromise
+
+
+if (process && process.on) {
+  process.on('uncaughtException', function (e) {
+    console.error('Process: FATAL EXCEPTION: uncaughtException', e, '\n\n')
+  })
+  process.on('unhandledRejection', function (e) {
+    console.error('Process: FATAL PROMISE ERROR: unhandledRejection', e, '\n\n')
+  })
+}
