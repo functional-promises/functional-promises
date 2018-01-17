@@ -36,9 +36,9 @@ test('FP.promisifyAll', t => {
     })
 })
 
-test('FP.iPromise resolve', t => {
+test('FP.unpack resolve', t => {
   const asyncFunc = () => {
-    const { promise, resolve } = FP.iPromise()
+    const { promise, resolve } = FP.unpack()
     Promise.resolve(true)
       .then(x => resolve(x))
     return promise
@@ -48,9 +48,9 @@ test('FP.iPromise resolve', t => {
     .catch(err => t.fail())
 })
 
-test('FP.iPromise reject', t => {
+test('FP.unpack reject', t => {
   const asyncFunc = () => {
-    const { promise, reject } = FP.iPromise()
+    const { promise, reject } = FP.unpack()
     Promise.resolve('Error!')
       .then(x => reject(x))
     return promise

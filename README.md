@@ -88,7 +88,7 @@ FP.chain() // start a chain
   * Utilities
     * `FP.all(Object/Array)`
     * `.tap(fn)`
-    * `FP.iPromise`
+    * `FP.unpack`
   * Chaining and Composition
     * `.chain()`
     * `.chainEnd()`
@@ -360,13 +360,13 @@ FP.all([
 )
 ```
 
-##### `FP.iPromise`
+##### `FP.unpack`
 
 Use sparingly, this is uses destructuring to (more cleanly) achieve what `deferred` attempts. `deferred` is an anti-pattern 90% of the time. Stream & event handling are exempt from this 'rule'.
 
 ```js
 function uncommonEventHandlingEdgeCase() {
-  const { promise, resolve, reject } = FP.iPromise()
+  const { promise, resolve, reject } = FP.unpack()
   setTimeout(() => { resolve('All done!') }, 1000)
   return promise
 }
