@@ -16,7 +16,7 @@ search: true
 
 # Functional Promises
 
-> <small>[View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
+> <small>[View `Functional Promises` on Github](https://github.com/justsml/functional-promises)</small>
 
 > <p style='text-align: center;'><strong style='font-size: 19px;'>Summary of Awesome Shit</strong></p>
 
@@ -79,7 +79,6 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
     res => ({avatar: '/no-photo.svg', error: res})) // fail, use default object
   .get('avatar') // Get the resulting objects `avatar` value
   .then(avatarUrl => imgElement.src = avatarUrl)
-
 ```
 
 > `FP.thenIf()` replaces the `if` branching code here:

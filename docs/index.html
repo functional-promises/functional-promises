@@ -342,11 +342,11 @@
       <div class="content">
         <h1 id='functional-promises'>Functional Promises</h1>
 <blockquote>
-<p><a href="https://github.com/justsml/functional-promises">View <code>Functional Promises</code> on Github</a></p>
+<p><small><a href="https://github.com/justsml/functional-promises">View <code>Functional Promises</code> on Github</a></small></p>
 
 <p style='text-align: center;'><strong style='font-size: 19px;'>Summary of Awesome Shit</strong></p>
 
-<p>Use familiar Array-style methods are built-in.</p>
+<p>Array-style methods are built-in:</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'5'</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>
@@ -374,7 +374,7 @@
 <a href="https://github.com/justsml/functional-promises"><img src="https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat" alt="GitHub package version" /></a>
 <a href="https://github.com/justsml/functional-promises"><img src="https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&amp;style=flat" alt="GitHub stars" /></a></p>
 <h3 id='summary'>Summary</h3>
-<p>Functional Promises are an extension of the native Promises API (<code>.then()</code>/<code>.catch()</code>).</p>
+<p><strong>Functional Promises</strong> are an extension of the native Promises API (<code>.then()</code>/<code>.catch()</code>).</p>
 
 <p><strong>Core features:</strong> Array Methods, Events, Object &amp; Array <code>FP.all()</code> Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.</p>
 
@@ -385,8 +385,8 @@
 <li>Bluebird: <code>FP</code> adds some key features: <em>events</em>, <em>conditionals</em>, <em>chains</em>, <em>quiet errors</em>. (Disclaimer: I&#39;m a contributor, with a low PR acceptance ratio. 😿)</li>
 </ul>
 
-<p><code>FP</code> is currently <strong>only a couple 100 lines of code.</strong>
-The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (using Webpack+Babel+Rollup+UglifyJS).</p>
+<p><code>FP</code>&#39;s NodeJS source is <strong>only a couple 100 lines of code.</strong>
+The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using Webpack+Babel+Rollup+UglifyJS).</p>
 <h3 id='api-outline'>API Outline</h3>
 <blockquote>
 <p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code></a> with <code>FP.thenIf()</code> to handle <code>response.ok === false</code> with custom response.</p>
@@ -399,7 +399,6 @@ The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (us
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">,</span> <span class="na">error</span><span class="p">:</span> <span class="nx">res</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span> <span class="c1">// Get the resulting objects `avatar` value</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
-
 </code></pre>
 <blockquote>
 <p><code>FP.thenIf()</code> replaces the <code>if</code> branching code here:</p>
