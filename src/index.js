@@ -129,4 +129,10 @@ function promisifyAll(obj) {
 
 FunctionalPromise.promisifyAll = promisifyAll
 
+FunctionalPromise.unpack = function() {
+  let resolve, reject, promise;
+  promise = new Promise((yah, nah) => { resolve = yah; reject = nah })
+  return { promise, resolve, reject }
+}
+
 module.exports = FunctionalPromise
