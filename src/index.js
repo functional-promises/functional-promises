@@ -22,12 +22,15 @@ function FunctionalPromise(resolveRejectCB, ...unknownArgs) {
   }
 }
 
+// FPromise Core Stuff
+FP.denodeify = FP.promisify = promisify
+FP.promisifyAll = promisifyAll
 FP.resolve = resolve
-
-// Promise Core Stuff
 FP.prototype.all = FP.all = all
 FP.prototype.cast = cast
 FP.prototype.reject = reject
+FP.prototype.tap = tap
+FP.prototype.then = then
 
 // Monadic Methods
 FP.chain = chain
@@ -48,6 +51,8 @@ FP.thenIf = _thenIf
 
 // Events Methods
 FP.prototype.listen = listen
+
+FP.unpack = unpack
 
 
 FP.prototype.addStep = function(name, args) {
@@ -100,12 +105,6 @@ function then(fn) {
   return this._FP.promise.then(fn)
 }
 
-
-FP.denodeify = FP.promisify = promisify
-FP.promisifyAll = promisifyAll
-FP.prototype.tap = tap
-FP.prototype.then = then
-
 /**
  * `.tap(fn)` works almost exactly like `.then()`
  *
@@ -155,6 +154,12 @@ function promisifyAll(obj) {
     }
     return obj
   }, obj)
+}
+
+function unpack() {
+  let resolve, reject, promise;
+  promise = new Promise((yah, nah) => { resolve = yah; reject = nah })
+  return { promise, resolve, reject }
 }
 
 module.exports = FunctionalPromise
