@@ -388,9 +388,7 @@ FP.all({
 .then(results => assert.deepEqual(results, {one: 1, two: 2}))
 ```
 
-## `FP.unpack`
-
-Use sparingly, this is uses destructuring to (more cleanly) achieve what `deferred` attempts. `deferred` is an anti-pattern 90% of the time. Stream & event handling are exempt from this 'rule'.
+## `FP.unpack()`
 
 ```javascript
 function edgeCase() {
@@ -403,6 +401,9 @@ edgeCase()
   .then(result => assert.equal(result, 'All done!'))
 ```
 
+Use sparingly. Stream &amp; event handling are exempt from this 'rule'. If using ES2015, destructuring helps to (more cleanly) achieve what `deferred` attempts.
+
+`deferred` is an anti-pattern because it works against simple composition chains.
 
 
 # &#160;&#160; Events
