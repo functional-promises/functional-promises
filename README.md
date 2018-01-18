@@ -6,7 +6,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat)](https://github.com/justsml/functional-promises)
 
 
-## [Updated Documentation Site](http://www.fpromises.io/)
+# [Updated Documentation: fpromises.io](http://www.fpromises.io/)
 
 ## Installation
 
@@ -72,7 +72,7 @@ FP.chain() // start a chain
   .listen(button, 'click') // end the repeatable chain, started at `.chain()`
 ```
 
-## [View API](http://fpromises.io/#api)
+# [View API](http://fpromises.io/#api)
 
 
 

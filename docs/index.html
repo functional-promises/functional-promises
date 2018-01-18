@@ -397,7 +397,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
   <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span> <span class="c1">// thenIf lets us handle branching logic</span>
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check if response is ok</span>
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(),</span> <span class="c1">// if true, return the parsed body</span>
-    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">,</span> <span class="na">error</span><span class="p">:</span> <span class="nx">res</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span> <span class="c1">// Get the resulting objects `avatar` value</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
 </code></pre>
@@ -409,7 +409,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
     <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="p">{</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">,</span> <span class="na">error</span><span class="p">:</span> <span class="nx">res</span><span class="p">}</span>
+      <span class="k">return</span> <span class="p">{</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}</span>
      <span class="p">}</span>
   <span class="p">})</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">avatar</span><span class="p">)</span>
