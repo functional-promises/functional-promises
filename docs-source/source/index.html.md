@@ -16,15 +16,15 @@ search: true
 
 # Functional Promises
 
-> <small>[View `Functional Promises` on Github](https://github.com/justsml/functional-promises)</small>
+#### [View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
 
-> <p style='text-align: center;'><strong style='font-size: 19px;'>Summary of Awesome Shit</strong></p>
+> <p style='text-align: center;'><strong style='font-size: 19px;'>Examples of Awesome Shit</strong></p>
 
 > Array-style methods are built-in:
 
 ```javascript
 FP.resolve(['1', '2', '3', '4', '5'])
-  .map(Number)
+  .map(n => parseInt(n, 10))
   .filter(x => x % 2 === 0)
   .then(results => {
     assert.deepEqual(results, [2, 4])
@@ -76,7 +76,7 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
   .thenIf( // thenIf lets us handle branching logic
     res => res.ok, // Check if response is ok
     res => res.json(), // if true, return the parsed body
-    res => ({avatar: '/no-photo.svg', error: res})) // fail, use default object
+    res => ({avatar: '/no-photo.svg'})) // fail, use default object
   .get('avatar') // Get the resulting objects `avatar` value
   .then(avatarUrl => imgElement.src = avatarUrl)
 ```
@@ -89,7 +89,7 @@ fetch('/profile', {method: 'GET'})
     if (res.ok) {
       return res.json();
      } else {
-      return {avatar: '/no-photo.svg', error: res}
+      return {avatar: '/no-photo.svg'}
      }
   })
   .then(data => data.avatar)
@@ -122,6 +122,7 @@ All `.then()`-derived methods are listed first. It's the bulk of the API.
     * [Helpers](#160-160-helpers)
         * `FP.resolve()`
         * `FP.all(Object/Array)`
+        * `FP.unpack()`
     * [Events](#160-160-events)
         * `.listen(obj, ...eventNames)`
     * [Composition Pipelines](#160-160-composition-pipelines)
@@ -283,7 +284,7 @@ The return value of either `ifTrue`/`ifFalse` handler will be handed to the next
 Default values let you call `.thenIf` with no args - if you simply want to exclude falsey values down the chain.
 
 
-> Functional Login Flow
+> Functional Promise Login Flow
 
 ```javascript
 // Check if login successfully returned a token:
@@ -386,6 +387,22 @@ FP.all({
 })
 .then(results => assert.deepEqual(results, {one: 1, two: 2}))
 ```
+
+## `FP.unpack`
+
+Use sparingly, this is uses destructuring to (more cleanly) achieve what `deferred` attempts. `deferred` is an anti-pattern 90% of the time. Stream & event handling are exempt from this 'rule'.
+
+```javascript
+function edgeCase() {
+  const { promise, resolve, reject } = FP.unpack()
+  setTimeout(() => resolve('All done!'), 1000)
+  return promise
+}
+
+edgeCase()
+  .then(result => assert.equal(result, 'All done!'))
+```
+
 
 
 # &#160;&#160; Events

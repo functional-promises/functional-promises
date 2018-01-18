@@ -293,6 +293,9 @@
                   <li>
                     <a href="#code-fp-all-code" class="toc-h2 toc-link" data-title="<code>FP.all()</code>"><code>FP.all()</code></a>
                   </li>
+                  <li>
+                    <a href="#code-fp-unpack-code" class="toc-h2 toc-link" data-title="<code>FP.unpack</code>"><code>FP.unpack</code></a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -340,16 +343,14 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='functional-promises'>Functional Promises</h1>
+        <h1 id='functional-promises'>Functional Promises</h1><h4 id='a-href-https-github-com-justsml-functional-promises-view-code-functional-promises-code-on-github-a'><a href="https://github.com/justsml/functional-promises">View <code>Functional Promises</code> on Github</a></h4>
 <blockquote>
-<p><small><a href="https://github.com/justsml/functional-promises">View <code>Functional Promises</code> on Github</a></small></p>
-
-<p style='text-align: center;'><strong style='font-size: 19px;'>Summary of Awesome Shit</strong></p>
+<p style='text-align: center;'><strong style='font-size: 19px;'>Examples of Awesome Shit</strong></p>
 
 <p>Array-style methods are built-in:</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'5'</span><span class="p">])</span>
-  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
@@ -463,6 +464,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
 <ul>
 <li><code>FP.resolve()</code></li>
 <li><code>FP.all(Object/Array)</code></li>
+<li><code>FP.unpack()</code></li>
 </ul></li>
 <li><a href="#160-160-events">Events</a>
 
@@ -591,7 +593,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
 <p>Default values let you call <code>.thenIf</code> with no args - if you simply want to exclude falsey values down the chain.</p>
 
 <blockquote>
-<p>Functional Login Flow</p>
+<p>Functional Promise Login Flow</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code><span class="c1">// Check if login successfully returned a token:</span>
 <span class="kr">const</span> <span class="nx">authUser</span> <span class="o">=</span> <span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">FP</span>
@@ -659,6 +661,16 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
   <span class="na">two</span><span class="p">:</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="p">})</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">{</span><span class="na">one</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">two</span><span class="p">:</span> <span class="mi">2</span><span class="p">}))</span>
+</code></pre><h2 id='code-fp-unpack-code'><code>FP.unpack</code></h2>
+<p>Use sparingly, this is uses destructuring to (more cleanly) achieve what <code>deferred</code> attempts. <code>deferred</code> is an anti-pattern 90% of the time. Stream &amp; event handling are exempt from this &#39;rule&#39;.</p>
+<pre class="highlight javascript tab-javascript"><code><span class="kd">function</span> <span class="nx">edgeCase</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="p">{</span> <span class="nx">promise</span><span class="p">,</span> <span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">unpack</span><span class="p">()</span>
+  <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="s1">'All done!'</span><span class="p">),</span> <span class="mi">1000</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nx">promise</span>
+<span class="p">}</span>
+
+<span class="nx">edgeCase</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="s1">'All done!'</span><span class="p">))</span>
 </code></pre><h1 id='160-160-events'>&#160;&#160; Events</h1>
 <p>Promises can be awkward when dealing with events.</p>
 <h4 id='code-functional-promise-code-library-aims-to-find-a-harmonious-pattern'><code>Functional Promise</code> library aims to find a harmonious pattern.</h4><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'submitBtn'</span><span class="p">)</span>
