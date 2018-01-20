@@ -4,8 +4,8 @@ const {FunctionalError} = require('./modules/errors')
 const {listen}          = require('./events')
 const {chain, chainEnd} = require('./monads')
 const {map, filter}     = require('./arrays')
-const {find, findIndex} = require('./arrays')
 const {reduce}          = require('./arrays')
+const {find, findIndex} = require('./arrays')
 const {all, cast}       = require('./promise')
 const {reject}          = require('./promise')
 const {thenIf, _thenIf} = require('./conditional')
@@ -105,18 +105,6 @@ function then(fn) {
   return this._FP.promise.then(fn)
 }
 
-/**
- * `.tap(fn)` works almost exactly like `.then()`
- *
- * Except the return value is not changed by the `fn`'s return value.
- *
- * @example
- * Extremely common use case:
- * `FP.resolve(42).tap(console.log).then(x => x === 42)`
- *
- * @param {function} fn
- * @returns FunctionalPromise
- */
 function tap(fn) {
   if (this.steps) return this.addStep('tap', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.tap(fn)`. Must be a function. Currently: ' + typeof fn)

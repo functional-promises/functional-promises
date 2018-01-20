@@ -60,11 +60,30 @@ squareAndFormatDecimal([5, 10, 20])
 
 **Why not simply use [library X]?**
 
-* RxJS: `FP` is 1/6th the size. Observable support still being evaluated.
+* RxJS: `FP` is 1/5th the size. _Observable support still being evaluated._
 * Bluebird: `FP` adds some key features: _events_, _conditionals_, _chains_, _quiet errors_. (Disclaimer: I'm a contributor, with a low PR acceptance ratio. 😿)
 
-`FP`'s NodeJS source is **only a couple 100 lines of code.**
-The **browser bundle** weighs in at **~20Kb** (using Webpack+Babel+Rollup+UglifyJS).
+`FP`'s NodeJS source is **only ~300 lines of code.**
+The **browser bundle** weighs in at **~30Kb** (using Webpack+Babel+Rollup+UglifyJS).
+
+<h4>Library Comparison</h4>
+
+| Library                     	| # Files 	| # Lines Code 	 | **Browser** Bundle Kb
+|------------------------------	|---------: |--------------: |-------------------:
+| **Functional Promise v1.4** 	|       8 	|          376 	 | 30 Kb
+| Bluebird v3.5.1             	|      38 	|         5188 	 | 80 Kb
+| RxJS v6.0.0-Alpha2          	|     456 	|        12084 	 | 150 Kb (v5.5.6)
+| IxJS v2.3.4                 	|     521 	|        12366 	 | 145 Kb
+
+
+So `FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is almost **1/5th** the size. `IxJS`/`RxJS` also feature a far more expansive API.
+
+BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has a fair bit more code to sort through.
+
+> **Let me be clear: Bluebird and RxJS/IxJS are amazing.**
+> Their patterns have clearly been influential on `FP`'s design.
+> IxJS's hyper-modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).
+
 
 ### API Outline
 
@@ -84,6 +103,7 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
 > `FP.thenIf()` replaces the `if` branching code here:
 
 ```javascript
+// Non-FP, Native Promises:
 fetch('/profile', {method: 'GET'})
   .then(res => {
     if (res.ok) {

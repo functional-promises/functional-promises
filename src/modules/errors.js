@@ -1,8 +1,8 @@
 class FunctionalError extends Error {
   constructor(msg, options) {
-    if (typeof msg === 'object' && msg.message) {
+    if (typeof msg === 'object') {
       options = msg
-      msg = msg.message
+      if ( msg.message ) msg = msg.message
     }
     super(msg)
     if (typeof options === 'object') {

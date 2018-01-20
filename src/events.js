@@ -1,15 +1,7 @@
-const FP = require('./')
 const {FPInputError} = require('./modules/errors')
 
 module.exports = {listen}
-/**
- *
- * Shortcut to run the function returned by `.chainEnd()`
- *
- * @param {any} obj element or event emitter
- * @param {any} eventNames list of event names
- * @returns FunctionalPromise
- */
+
 function listen(obj, ...eventNames) {
   if (typeof eventNames === 'string') eventNames = [eventNames]
   if (!obj[obj.addEventListener ? 'addEventListener' : 'on']) {
