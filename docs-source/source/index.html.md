@@ -47,6 +47,36 @@ squareAndFormatDecimal([5, 10, 20])
   .then(num => assert.deepEqual(num, ['25.00', '100.00', '400.00']))
 ```
 
+> Use [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) with `FP.thenIf()` to handle `response.ok === false` with custom response.
+
+```javascript
+// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods
+FP.resolve(fetch('/profile', {method: 'GET'}))
+  .thenIf( // thenIf lets us handle branching logic
+    res => res.ok, // Check if response is ok
+    res => res.json(), // if true, return the parsed body
+    res => ({avatar: '/no-photo.svg'})) // fail, use default object
+  .get('avatar') // Get the resulting objects `avatar` value
+  .then(avatarUrl => imgElement.src = avatarUrl)
+```
+
+> `FP.thenIf()` replaces the `if` branching code here:
+
+```javascript
+// Non-FP, Native Promises:
+fetch('/profile', {method: 'GET'})
+  .then(res => {
+    if (res.ok) {
+      return res.json();
+     } else {
+      return {avatar: '/no-photo.svg'}
+     }
+  })
+  .then(data => data.avatar)
+  .then(avatarUrl => imgElement.src = avatarUrl)
+```
+
+
 
 [![Build Status](https://travis-ci.org/justsml/functional-promises.svg?branch=master)](https://travis-ci.org/justsml/functional-promises)
 [![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat)](https://github.com/justsml/functional-promises)
@@ -80,44 +110,16 @@ So `FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size 
 
 BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has a fair bit more code to sort through.
 
-<blockquote class="left-block">
-  <p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing.</p>
+<p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing.</p>
 
-  <p>Their patterns have clearly been influential on `FP`'s design.</p>
+<p>Their patterns have clearly been influential on `FP`'s design.</p>
 
-  <p>IxJS's hyper-modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).</p>
-</blockquote>
+<p><code>IxJS</code>'s modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).</p>
+
+<div style="clear: both;"></div>
 
 ### API Outline
 
-> Use [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) with `FP.thenIf()` to handle `response.ok === false` with custom response.
-
-```javascript
-// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods
-FP.resolve(fetch('/profile', {method: 'GET'}))
-  .thenIf( // thenIf lets us handle branching logic
-    res => res.ok, // Check if response is ok
-    res => res.json(), // if true, return the parsed body
-    res => ({avatar: '/no-photo.svg'})) // fail, use default object
-  .get('avatar') // Get the resulting objects `avatar` value
-  .then(avatarUrl => imgElement.src = avatarUrl)
-```
-
-> `FP.thenIf()` replaces the `if` branching code here:
-
-```javascript
-// Non-FP, Native Promises:
-fetch('/profile', {method: 'GET'})
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-     } else {
-      return {avatar: '/no-photo.svg'}
-     }
-  })
-  .then(data => data.avatar)
-  .then(avatarUrl => imgElement.src = avatarUrl)
-```
 
 All `.then()`-derived methods are listed first. It's the bulk of the API.
 

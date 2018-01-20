@@ -374,6 +374,33 @@
 <span class="nx">squareAndFormatDecimal</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="p">[</span><span class="s1">'25.00'</span><span class="p">,</span> <span class="s1">'100.00'</span><span class="p">,</span> <span class="s1">'400.00'</span><span class="p">]))</span>
 </code></pre>
+<blockquote>
+<p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code></a> with <code>FP.thenIf()</code> to handle <code>response.ok === false</code> with custom response.</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">}))</span>
+  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span> <span class="c1">// thenIf lets us handle branching logic</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check if response is ok</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(),</span> <span class="c1">// if true, return the parsed body</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
+  <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span> <span class="c1">// Get the resulting objects `avatar` value</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p><code>FP.thenIf()</code> replaces the <code>if</code> branching code here:</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">// Non-FP, Native Promises:</span>
+<span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}</span>
+     <span class="p">}</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">avatar</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
+</code></pre>
 <p><a href="https://travis-ci.org/justsml/functional-promises"><img src="https://travis-ci.org/justsml/functional-promises.svg?branch=master" alt="Build Status" /></a>
 <a href="https://github.com/justsml/functional-promises"><img src="https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat" alt="GitHub package version" /></a>
 <a href="https://github.com/justsml/functional-promises"><img src="https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&amp;style=flat" alt="GitHub stars" /></a></p>
@@ -430,41 +457,14 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 
 <p>BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has a fair bit more code to sort through.</p>
 
-<blockquote class="left-block">
-  <p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing.</p>
+<p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing.</p>
 
-  <p>Their patterns have clearly been influential on `FP`'s design.</p>
+<p>Their patterns have clearly been influential on `FP`'s design.</p>
 
-  <p>IxJS's hyper-modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).</p>
-</blockquote>
+<p>IxJS's hyper-modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).</p>
+
+<div style="clear: both;"></div>
 <h3 id='api-outline'>API Outline</h3>
-<blockquote>
-<p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code></a> with <code>FP.thenIf()</code> to handle <code>response.ok === false</code> with custom response.</p>
-</blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods</span>
-<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">}))</span>
-  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span> <span class="c1">// thenIf lets us handle branching logic</span>
-    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check if response is ok</span>
-    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(),</span> <span class="c1">// if true, return the parsed body</span>
-    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
-  <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span> <span class="c1">// Get the resulting objects `avatar` value</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
-</code></pre>
-<blockquote>
-<p><code>FP.thenIf()</code> replaces the <code>if</code> branching code here:</p>
-</blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Non-FP, Native Promises:</span>
-<span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">})</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
-     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="p">{</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}</span>
-     <span class="p">}</span>
-  <span class="p">})</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">avatar</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
-</code></pre>
 <p>All <code>.then()</code>-derived methods are listed first. It&#39;s the bulk of the API.</p>
 
 <ul>

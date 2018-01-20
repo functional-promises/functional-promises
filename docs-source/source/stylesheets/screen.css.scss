@@ -570,13 +570,16 @@ html, body {
     }
   }
 
-  blockquote.left-block {
+  .left-block {
     &>p {
       background: #DFDFDF !important;
       color: #333;
       padding: 4px 2em !important;
     }
-    float: left;
+    display: block;
+    margin-right: 50%;
+    box-sizing: border-box;
+    // float: left;
     background: #DFDFDF !important;
     color: #333;
     margin: 4px 0px 12px 0px;
