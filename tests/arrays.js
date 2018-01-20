@@ -36,7 +36,7 @@ test('FP.reduce(sum)', t => {
     })
 })
 
-test('FP.filter()', t => {
+test('FP.filter(predicate)', t => {
   const isEven = x => x % 2 === 0
   return FP.resolve([1, 2, 3, 4, 5])
     .filter(isEven)
@@ -45,7 +45,7 @@ test('FP.filter()', t => {
     })
 })
 
-test('FP.find()', t => {
+test('FP.find(predicate)', t => {
   const isEven = x => x % 2 === 0
   return FP.resolve([1, 2, 3, 4, 5])
     .find(isEven)

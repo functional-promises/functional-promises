@@ -16,7 +16,7 @@ search: true
 
 # Functional Promises
 
-#### [View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
+###### [View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
 
 > <p style='text-align: center;'><strong style='font-size: 19px;'>Examples of Awesome Shit</strong></p>
 
@@ -24,7 +24,7 @@ search: true
 
 ```javascript
 FP.resolve(['1', '2', '3', '4', '5'])
-  .map(n => parseInt(n, 10))
+  .map(Number)
   .filter(x => x % 2 === 0)
   .then(results => {
     assert.deepEqual(results, [2, 4])
@@ -66,24 +66,27 @@ squareAndFormatDecimal([5, 10, 20])
 `FP`'s NodeJS source is **only ~300 lines of code.**
 The **browser bundle** weighs in at **~30Kb** (using Webpack+Babel+Rollup+UglifyJS).
 
-<h4>Library Comparison</h4>
+### Library Comparison
 
 | Library                     	| # Files 	| # Lines Code 	 | **Browser** Bundle Kb
 |------------------------------	|---------: |--------------: |-------------------:
 | **Functional Promise v1.4** 	|       8 	|          376 	 | 30 Kb
-| Bluebird v3.5.1             	|      38 	|         5188 	 | 80 Kb
-| RxJS v6.0.0-Alpha2          	|     456 	|        12084 	 | 150 Kb (v5.5.6)
-| IxJS v2.3.4                 	|     521 	|        12366 	 | 145 Kb
+| Bluebird v3.5.1             	|      38 	|         5,188 	 | 80 Kb
+| RxJS v6.0.0-Alpha2          	|     456 	|        12,084 	 | (v5.5.6) 150 Kb
+| IxJS v2.3.4                 	|     521 	|        12,366 	 | 145 Kb
 
 
 So `FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is almost **1/5th** the size. `IxJS`/`RxJS` also feature a far more expansive API.
 
 BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has a fair bit more code to sort through.
 
-> **Let me be clear: Bluebird and RxJS/IxJS are amazing.**
-> Their patterns have clearly been influential on `FP`'s design.
-> IxJS's hyper-modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).
+<blockquote class="left-block">
+  <p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing.</p>
 
+  <p>Their patterns have clearly been influential on `FP`'s design.</p>
+
+  <p>IxJS's hyper-modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).</p>
+</blockquote>
 
 ### API Outline
 
@@ -194,9 +197,18 @@ Using `FP.map()` to do this lets you focus on the important logic: `x => x * 2`
 FP.resolve([1, null, 3, null, 5])
   .filter(Boolean)
   .then(results => assert.deepEqual(results, [1, 3, 5]))
+
+// Or similarly:
+FP.resolve([1, null, 3, null, 5])
+  .filter(value => value ? true : false)
+  .then(results => assert.deepEqual(results, [1, 3, 5]))
 ```
 
 Use `.filter()` to omit items from the input array by passing through a given function. Items will be omitted if the function returns a falsey value.
+
+<aside class="notice">
+  The <code>Boolean</code> type can be used as a truthiness check. For example: <code>assert.equal(Boolean(1), true)</code>, <code>assert.equal(Boolean(false), false)</code>, <code>assert.equal(Boolean(null), false)</code>.
+</aside>
 
 ## `FP.find(iterable, fn)`
 
@@ -273,7 +285,7 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
   .thenIf( // thenIf lets us handle branching logic
     res => res.ok, // Check if response is ok
     res => res.json(), // if true, return the parsed body
-    res => ({avatar: '/no-photo.svg', error: res})) // fail, use default object
+    res => ({avatar: '/no-photo.svg'})) // fail, use default object
   .get('avatar') // Get the resulting objects `avatar` value
   .then(avatarUrl => imgElement.src = avatarUrl)
 ```

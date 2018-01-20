@@ -1,6 +1,6 @@
 {
   "name": "functional-promise",
-  "version": "1.4.8",
+  "version": "1.4.17",
   "description": "Composition Pipeline Promises Extension. See Complete Docs Here: http://fpromises.io/",
   "ava": {
     "require": [
@@ -46,6 +46,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.35",
     "@babel/preset-env": "^7.0.0-beta.35",
+    "babel-plugin-transform-es2015-computed-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "css-loader": "^0.28.7",
     "rollup": "^0.52.3",

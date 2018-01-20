@@ -1,18 +1,24 @@
-const FP = require('./')
-
-module.exports = {all, cast, reject, _allObjectKeys: allObjectKeys}
+module.exports = {all, cast, reject}
 
 function all(promises) {
-  return Array.isArray(promises) ? Promise.all(promises) : allObjectKeys(promises)
+  const FP = require('./')
+  // if (promises.length > 1) promises = flatten(promises)
+
+  return FP.resolve(Array.isArray(promises)
+   ? Promise.all(promises)
+   : promiseAllObject(promises))
 }
 
-function allObjectKeys(object) {
-  return FP.resolve(Object.keys(object))
-  .map(key => FP.all([key, object[key]]))
-  .reduce((obj, [key, val]) => {
-    obj[key] = val;
-    return obj;
-  }, {})
+function promiseAllObject(obj) {
+  const keys = Object.getOwnPropertyNames(obj)
+  const values = keys.map(key => obj[key])
+  return Promise.all(values)
+  .then(results => {
+    return results.reduce((obj, val, index) => {
+      const key = keys[index]
+      return Object.assign({[key]: val}, obj)
+    }, {})
+  })
 }
 
 function cast(obj) {

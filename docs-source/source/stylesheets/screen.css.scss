@@ -395,14 +395,21 @@ html, body {
 
   h3, h4, h5, h6 {
     @extend %header-font;
-    font-size: 15px;
+    // font-size: 15px;
     margin-top: 2.5em;
     margin-bottom: 0.8em;
   }
 
-  h4, h5, h6 {
-    font-size: 10px;
-  }
+  // h4, h5, h6 {
+  //   font-size: 10px;
+  // }
+
+  h1 { font-size: 2.2em; }
+  h2 { font-size: 1.9em; }
+  h3 { font-size: 1.7em; }
+  h4 { font-size: 1.3em; }
+  h5 { font-size: 1.0em; }
+  h6 { font-size: 0.7em; }
 
   hr {
     margin: 2em 0;
@@ -561,6 +568,19 @@ html, body {
       padding: $code-annotation-padding 2em;
       color: #eee;
     }
+  }
+
+  blockquote.left-block {
+    &>p {
+      background: #DFDFDF !important;
+      color: #333;
+      padding: 4px 2em !important;
+    }
+    float: left;
+    background: #DFDFDF !important;
+    color: #333;
+    margin: 4px 0px 12px 0px;
+    padding: 13px 0px;
   }
 }
 

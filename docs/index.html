@@ -224,6 +224,9 @@
                     <a href="#summary" class="toc-h2 toc-link" data-title="Summary">Summary</a>
                   </li>
                   <li>
+                    <a href="#library-comparison" class="toc-h2 toc-link" data-title="Library Comparison">Library Comparison</a>
+                  </li>
+                  <li>
                     <a href="#api-outline" class="toc-h2 toc-link" data-title="API Outline">API Outline</a>
                   </li>
               </ul>
@@ -343,14 +346,14 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='functional-promises'>Functional Promises</h1><h4 id='a-href-https-github-com-justsml-functional-promises-view-code-functional-promises-code-on-github-a'><a href="https://github.com/justsml/functional-promises">View <code>Functional Promises</code> on Github</a></h4>
+        <h1 id='functional-promises'>Functional Promises</h1><h6 id='a-href-https-github-com-justsml-functional-promises-view-code-functional-promises-code-on-github-a'><a href="https://github.com/justsml/functional-promises">View <code>Functional Promises</code> on Github</a></h6>
 <blockquote>
 <p style='text-align: center;'><strong style='font-size: 19px;'>Examples of Awesome Shit</strong></p>
 
 <p>Array-style methods are built-in:</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'5'</span><span class="p">])</span>
-  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
@@ -382,12 +385,58 @@
 <p><strong>Why not simply use [library X]?</strong></p>
 
 <ul>
-<li>RxJS: <code>FP</code> is 1/6th the size. Observable support still being evaluated.</li>
+<li>RxJS: <code>FP</code> is 1/5th the size. <em>Observable support still being evaluated.</em></li>
 <li>Bluebird: <code>FP</code> adds some key features: <em>events</em>, <em>conditionals</em>, <em>chains</em>, <em>quiet errors</em>. (Disclaimer: I&#39;m a contributor, with a low PR acceptance ratio. 😿)</li>
 </ul>
 
-<p><code>FP</code>&#39;s NodeJS source is <strong>only a couple 100 lines of code.</strong>
-The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using Webpack+Babel+Rollup+UglifyJS).</p>
+<p><code>FP</code>&#39;s NodeJS source is <strong>only ~300 lines of code.</strong>
+The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using Webpack+Babel+Rollup+UglifyJS).</p>
+<h3 id='library-comparison'>Library Comparison</h3>
+<table><thead>
+<tr>
+<th>Library</th>
+<th style="text-align: right"># Files</th>
+<th style="text-align: right"># Lines Code</th>
+<th style="text-align: right"><strong>Browser</strong> Bundle Kb</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>Functional Promise v1.4</strong></td>
+<td style="text-align: right">8</td>
+<td style="text-align: right">376</td>
+<td style="text-align: right">30 Kb</td>
+</tr>
+<tr>
+<td>Bluebird v3.5.1</td>
+<td style="text-align: right">38</td>
+<td style="text-align: right">5,188</td>
+<td style="text-align: right">80 Kb</td>
+</tr>
+<tr>
+<td>RxJS v6.0.0-Alpha2</td>
+<td style="text-align: right">456</td>
+<td style="text-align: right">12,084</td>
+<td style="text-align: right">(v5.5.6) 150 Kb</td>
+</tr>
+<tr>
+<td>IxJS v2.3.4</td>
+<td style="text-align: right">521</td>
+<td style="text-align: right">12,366</td>
+<td style="text-align: right">145 Kb</td>
+</tr>
+</tbody></table>
+
+<p>So <code>FP</code> is roughly <strong>1/30th</strong> the lines of code in <code>IxJs</code>. And it&#39;s bundle size is almost <strong>1/5th</strong> the size. <code>IxJS</code>/<code>RxJS</code> also feature a far more expansive API.</p>
+
+<p>BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has a fair bit more code to sort through.</p>
+
+<blockquote class="left-block">
+  <p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing.</p>
+
+  <p>Their patterns have clearly been influential on `FP`'s design.</p>
+
+  <p>IxJS's hyper-modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).</p>
+</blockquote>
 <h3 id='api-outline'>API Outline</h3>
 <blockquote>
 <p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code></a> with <code>FP.thenIf()</code> to handle <code>response.ok === false</code> with custom response.</p>
@@ -404,7 +453,8 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
 <blockquote>
 <p><code>FP.thenIf()</code> replaces the <code>if</code> branching code here:</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">})</span>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">// Non-FP, Native Promises:</span>
+<span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">})</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
@@ -513,8 +563,17 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
 <h2 id='code-fp-filter-iterable-fn-code'><code>FP.filter(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nb">Boolean</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span>
+
+<span class="c1">// Or similarly:</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">value</span> <span class="o">=&gt;</span> <span class="nx">value</span> <span class="p">?</span> <span class="kc">true</span> <span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span>
 </code></pre>
 <p>Use <code>.filter()</code> to omit items from the input array by passing through a given function. Items will be omitted if the function returns a falsey value.</p>
+
+<aside class="notice">
+  The <code>Boolean</code> type can be used as a truthiness check. For example: <code>assert.equal(Boolean(1), true)</code>, <code>assert.equal(Boolean(false), false)</code>, <code>assert.equal(Boolean(null), false)</code>.
+</aside>
 <h2 id='code-fp-find-iterable-fn-code'><code>FP.find(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
@@ -564,7 +623,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
   <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span> <span class="c1">// thenIf lets us handle branching logic</span>
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check if response is ok</span>
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(),</span> <span class="c1">// if true, return the parsed body</span>
-    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">,</span> <span class="na">error</span><span class="p">:</span> <span class="nx">res</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span> <span class="c1">// Get the resulting objects `avatar` value</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
 </code></pre>
