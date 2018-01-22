@@ -1,0 +1,227 @@
+<h1 id='functional'>FUNCTIONAL</h1><h1 id='promise'>PROMISE</h1>
+<hr>
+<h2 id='objectives'>OBJECTIVES</h2>
+<ol>
+<li>Understand Promises enable Composition</li>
+<li>Identify &#39;missing&#39; features</li>
+<li>Common patterns:
+
+<ol>
+<li>Function</li>
+<li>Express</li>
+</ol></li>
+</ol>
+
+<hr>
+<h2 id='overview'>Overview</h2><h3 id='promises-eh'>Promises, eh?</h3>
+<ol>
+<li>Key async pattern in JS.</li>
+<li>A bit like <code>Task</code>s or <code>Future</code>s in other languages</li>
+<li>Build up code by glueing small functions together</li>
+</ol>
+
+<p>+++</p>
+
+<hr>
+<h2 id='code-fp-all-code-works-with-arrays-amp-objects'><code>FP.all()</code> Works with Arrays &amp; Objects!</h2><pre class="highlight javascript"><code><span class="c1">// Extended Functionality</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">all</span><span class="p">({</span>
+    <span class="na">one</span><span class="p">:</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="na">two</span><span class="p">:</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">{</span><span class="na">one</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">two</span><span class="p">:</span> <span class="mi">2</span><span class="p">}))</span>
+
+<span class="c1">// Exactly like Promise.all()</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
+</code></pre>
+<hr>
+<h1 id='examples-feature-overview'>EXAMPLES / FEATURE OVERVIEW</h1>
+<hr>
+<h2 id='express-knex'>Express+Knex</h2>
+<blockquote>
+<p>Example login.</p>
+</blockquote>
+<pre class="highlight javascript"><code><span class="kd">function</span> <span class="nx">login</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="p">{</span><span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">}</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
+
+  <span class="nx">knex</span><span class="p">(</span><span class="s1">'user'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">where</span><span class="p">({</span><span class="nx">user</span><span class="p">,</span> <span class="na">pass</span><span class="p">:</span> <span class="nx">hashSync</span><span class="p">(</span><span class="nx">pass</span><span class="p">)})</span>
+    <span class="p">.</span><span class="nx">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">user</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Login failed'</span><span class="p">);</span>
+      <span class="k">delete</span> <span class="nx">user</span><span class="p">.</span><span class="nx">pass</span><span class="p">;</span> <span class="c1">// omit pass, even hashed</span>
+      <span class="k">return</span> <span class="nx">user</span><span class="p">;</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">200</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="nx">user</span><span class="p">))</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">500</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="na">error</span><span class="p">:</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span> <span class="na">stack</span><span class="p">:</span> <span class="nx">err</span><span class="p">.</span><span class="nx">stack</span><span class="p">}));</span>
+<span class="p">}</span>
+</code></pre>
+<hr>
+<h2 id='express-knex-2'>Express+Knex</h2><h3 id='fp-refactor'>FP Refactor</h3><pre class="highlight javascript"><code><span class="kd">function</span> <span class="nx">login</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="p">{</span><span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">}</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
+
+  <span class="nx">knex</span><span class="p">(</span><span class="s1">'user'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">where</span><span class="p">({</span><span class="nx">user</span><span class="p">,</span> <span class="na">pass</span><span class="p">:</span> <span class="nx">hashSync</span><span class="p">(</span><span class="nx">pass</span><span class="p">)})</span>
+    <span class="p">.</span><span class="nx">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">user</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Login failed'</span><span class="p">);</span>
+      <span class="k">delete</span> <span class="nx">user</span><span class="p">.</span><span class="nx">pass</span><span class="p">;</span> <span class="c1">// omit pass, even hashed</span>
+      <span class="k">return</span> <span class="nx">user</span><span class="p">;</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">200</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="nx">user</span><span class="p">))</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">500</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span><span class="na">error</span><span class="p">:</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span> <span class="na">stack</span><span class="p">:</span> <span class="nx">err</span><span class="p">.</span><span class="nx">stack</span><span class="p">}));</span>
+<span class="p">}</span>
+</code></pre>
+<hr>
+<pre class="highlight javascript"><code><span class="c1">// FP.resolve() wrap:</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">knex</span><span class="p">(</span><span class="s1">'user'</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">concurrency</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">api</span><span class="p">.</span><span class="nx">getFaceBookProfile</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">fb</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">concurrency</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">fbProfile</span> <span class="o">=&gt;</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">fbProfile</span> <span class="o">=&gt;</span> <span class="nx">elasticLogs</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">fbProfile</span><span class="p">)))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Done!\nProcessed %d Profiles'</span><span class="p">,</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">))</span>
+
+
+</code></pre>
+<hr>
+<h2 id='fetch-exmaple'>fetch Exmaple:</h2>
+<blockquote>
+<p>Uses <code>.thenIf()</code></p>
+</blockquote>
+<pre class="highlight javascript"><code><span class="c1">// ORIGINAL RECIPE</span>
+<span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}</span>
+     <span class="p">}</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">avatar</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatar</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatar</span><span class="p">)</span>
+</code></pre>
+<hr>
+<pre class="highlight javascript"><code><span class="c1">// Use `FP.resolve()` to wrap `fetch`'s return Promise.</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">}))</span>
+  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span> <span class="c1">// thenIf lets us handle branching logic</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check if response is ok</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(),</span> <span class="c1">// if true, return the parsed body</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}))</span> <span class="c1">// fail, default object</span>
+  <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span> <span class="c1">// Get the resulting objects `avatar` value</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatar</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatar</span><span class="p">)</span>
+</code></pre>
+<hr>
+<h2 id='use-case-fetch-api'>Use Case: fetch API</h2><pre class="highlight javascript"><code><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}</span>
+     <span class="p">}</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">avatar</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatar</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatar</span><span class="p">)</span>
+</code></pre><h1 id='code'>Code</h1><h1 id='presenting'>Presenting</h1>
+<hr>
+<h3 id='code-blocks'>Code-Blocks</h3><h4 id='the-basics'>The Basics</h4>
+<p><img src="/images/assets/down-arrow.png" alt="Press Down Key" /></p>
+
+<p>+++</p>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">localtime</span>
+
+<span class="n">activities</span> <span class="o">=</span> <span class="p">{</span><span class="mi">8</span><span class="p">:</span> <span class="s">'Sleeping'</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="s">'Commuting'</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span> <span class="s">'Working'</span><span class="p">,</span>
+              <span class="mi">18</span><span class="p">:</span> <span class="s">'Commuting'</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span> <span class="s">'Eating'</span><span class="p">,</span> <span class="mi">22</span><span class="p">:</span> <span class="s">'Resting'</span> <span class="p">}</span>
+
+<span class="n">time_now</span> <span class="o">=</span> <span class="n">localtime</span><span class="p">()</span>
+<span class="n">hour</span> <span class="o">=</span> <span class="n">time_now</span><span class="o">.</span><span class="n">tm_hour</span>
+
+<span class="k">for</span> <span class="n">activity_time</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">activities</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="k">if</span> <span class="n">hour</span> <span class="o">&lt;</span> <span class="n">activity_time</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">activities</span><span class="p">[</span><span class="n">activity_time</span><span class="p">]</span>
+        <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">'Unknown, AFK or sleeping!'</span>
+</code></pre><h6 id='code-blocks-let-you-present-any-p-strong-static-code-strong-with-auto-syntax-highlighting'>Code-blocks let you present any <p> <strong>static code</strong> with auto-syntax highlighting</h6>
+<hr>
+<h3 id='code-blocks-2'>Code-Blocks</h3><h5 id='using'>Using</h5><h4 id='strong-code-presenting-strong'><strong>Code-Presenting</strong></h4>
+<p><img src="/images/assets/down-arrow.png" alt="Press Down Key" /></p>
+
+<p>+++</p>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">localtime</span>
+
+<span class="n">activities</span> <span class="o">=</span> <span class="p">{</span><span class="mi">8</span><span class="p">:</span> <span class="s">'Sleeping'</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="s">'Commuting'</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span> <span class="s">'Working'</span><span class="p">,</span>
+              <span class="mi">18</span><span class="p">:</span> <span class="s">'Commuting'</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span> <span class="s">'Eating'</span><span class="p">,</span> <span class="mi">22</span><span class="p">:</span> <span class="s">'Resting'</span> <span class="p">}</span>
+
+<span class="n">time_now</span> <span class="o">=</span> <span class="n">localtime</span><span class="p">()</span>
+<span class="n">hour</span> <span class="o">=</span> <span class="n">time_now</span><span class="o">.</span><span class="n">tm_hour</span>
+
+<span class="k">for</span> <span class="n">activity_time</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">activities</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="k">if</span> <span class="n">hour</span> <span class="o">&lt;</span> <span class="n">activity_time</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">activities</span><span class="p">[</span><span class="n">activity_time</span><span class="p">]</span>
+        <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">'Unknown, AFK or sleeping!'</span>
+</code></pre>
+<p>@[1]
+@[3-4]
+@[6-7]
+@[9-14]</p>
+<h6 id='use-code-presenting-to-strong-step-thru-strong-code-p-from-directly-within-your-presentation'>Use code-presenting to <strong>step-thru</strong> code <p> from directly within your presentation</h6>
+<hr>
+<h3 id='code-blocks-3'>Code-Blocks</h3><h5 id='using-2'>Using</h5><h4 id='code-presenting'>Code-Presenting</h4><h4 id='strong-with-annotations-strong'><strong>With Annotations</strong></h4>
+<p><img src="/images/assets/down-arrow.png" alt="Press Down Key" /></p>
+
+<p>+++</p>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">localtime</span>
+
+<span class="n">activities</span> <span class="o">=</span> <span class="p">{</span><span class="mi">8</span><span class="p">:</span> <span class="s">'Sleeping'</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="s">'Commuting'</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span> <span class="s">'Working'</span><span class="p">,</span>
+              <span class="mi">18</span><span class="p">:</span> <span class="s">'Commuting'</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span> <span class="s">'Eating'</span><span class="p">,</span> <span class="mi">22</span><span class="p">:</span> <span class="s">'Resting'</span> <span class="p">}</span>
+
+<span class="n">time_now</span> <span class="o">=</span> <span class="n">localtime</span><span class="p">()</span>
+<span class="n">hour</span> <span class="o">=</span> <span class="n">time_now</span><span class="o">.</span><span class="n">tm_hour</span>
+
+<span class="k">for</span> <span class="n">activity_time</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">activities</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="k">if</span> <span class="n">hour</span> <span class="o">&lt;</span> <span class="n">activity_time</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">activities</span><span class="p">[</span><span class="n">activity_time</span><span class="p">]</span>
+        <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">'Unknown, AFK or sleeping!'</span>
+</code></pre>
+<p>@<a href="Python%20from..import%20statement">1</a>
+@<a href="Python%20dictionary%20initialization%20block">3-4</a>
+@<a href="Python%20working%20with%20time">6-7</a>
+@<a href="Python%20for..else%20statement">9-14</a></p>
+
+<hr>
+<h3 id='naturally'>Naturally</h3><h3 id='code-presenting-2'>Code-Presenting</h3><h3 id='works-in-exactly-the-same-way-on-a-href-https-github-com-gitpitch-gitpitch-wiki-code-delimiter-slides-code-delimiter-slides-a-as-it-does-on-a-href-https-github-com-gitpitch-gitpitch-wiki-code-slides-code-blocks-a'>works in exactly the same way on <a href="https://github.com/gitpitch/gitpitch/wiki/Code-Delimiter-Slides">Code-Delimiter Slides</a> as it does on <a href="https://github.com/gitpitch/gitpitch/wiki/Code-Slides">Code-Blocks</a>.</h3>
+<hr>
+<h3 id='code-delimiter-slides'>Code-Delimiter Slides</h3><pre class="highlight plaintext"><code>                  ---?code=path/to/source.file
+</code></pre><h4 id='the-basics-2'>The Basics</h4>
+<p><img src="/images/assets/down-arrow.png" alt="Press Down Key" /></p>
+
+<p>+++?code=src/python/time.py&amp;lang=python</p>
+<h6 id='code-delimiters-let-you-present-any-p-strong-code-file-strong-with-auto-syntax-highlighting'>Code delimiters let you present any <p> <strong>code file</strong> with auto-syntax highlighting</h6>
+<hr>
+<h3 id='code-delimiter-slides-2'>Code-Delimiter Slides</h3><h5 id='using-3'>Using</h5><h4 id='strong-code-presenting-strong-2'><strong>Code-Presenting</strong></h4>
+<p><img src="/images/assets/down-arrow.png" alt="Press Down Key" /></p>
+
+<p>+++?code=src/javascript/config.js&amp;lang=javascript</p>
+
+<p>@[1-3]
+@[5-8]
+@[10-16]
+@[18-24]</p>
+<h6 id='use-code-presenting-to-strong-step-thru-strong-code-p-from-directly-within-your-presentation-2'>Use code-presenting to <strong>step-thru</strong> code <p> from directly within your presentation</h6>
+<hr>
+<h3 id='code-delimiter-slides-3'>Code-Delimiter Slides</h3><h5 id='using-4'>Using</h5><h4 id='code-presenting-3'>Code-Presenting</h4><h4 id='strong-with-annotations-strong-2'><strong>With Annotations</strong></h4>
+<p><img src="/images/assets/down-arrow.png" alt="Press Down Key" /></p>
+
+<p>+++?code=src/elixir/monitor.ex&amp;lang=elixir</p>
+
+<p>@<a href="Elixir%20module-attributes%20as%20constants">11-14</a>
+@<a href="Elixir%20with-statement%20for%20conciseness">22-28</a>
+@<a href="Elixir%20case-statement%20pattern%20matching">171-177</a>
+@<a href="Elixir%20pipe-mechanism%20for%20composing%20functions">179-185</a></p>
+
+<hr>
+<h3 id='learn-by-example'>Learn By Example</h3><h4 id='view-the-a-href-https-github-com-gitpitch-code-presenting-blob-master-pitchme-md-presentation-markdown-a'>View The <a href="https://github.com/gitpitch/code-presenting/blob/master/PITCHME.md">Presentation Markdown</a></h4>

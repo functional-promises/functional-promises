@@ -98,12 +98,12 @@ The **browser bundle** weighs in at **~30Kb** (using Webpack+Babel+Rollup+Uglify
 
 ### Library Comparison
 
-| Library                     	| # Files 	| # Lines Code 	 | **Browser** Bundle Kb
-|------------------------------	|---------: |--------------: |-------------------:
-| **Functional Promise v1.4** 	|       8 	|          376 	 | 30 Kb
-| Bluebird v3.5.1             	|      38 	|         5,188 	 | 80 Kb
-| RxJS v6.0.0-Alpha2          	|     456 	|        12,084 	 | (v5.5.6) 150 Kb
-| IxJS v2.3.4                 	|     521 	|        12,366 	 | 145 Kb
+| Library                     	                                    | # Files 	| # Lines Code 	 | **Browser** Bundle Kb
+|------------------------------	                                    |---------: |--------------: |-------------------:
+| **Functional Promise v1.4** 	                                    |       8 	|          376 	 | 30 Kb
+| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       |      38 	|         5188 	 | 80 Kb
+| [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
+| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12366 	 | 145 Kb
 
 
 So `FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is almost **1/5th** the size. `IxJS`/`RxJS` also feature a far more expansive API.

@@ -30,7 +30,7 @@ The emphasis here is a seamless async/sync Developer Experience. I call this pat
 |------------------------------	|---------: |--------------: |-------------------:
 | **Functional Promise v1.4** 	|       8 	|          376 	 | 30 Kb
 | [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1             	|      38 	|         5188 	 | 80 Kb
-| [RxJS](https://github.com/ReactiveX/RxJS) v6.0.0-Alpha2          	|     456 	|        12084 	 | 150 Kb (v5.5.6)
+| [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12366 	 | 145 Kb
 
 
