@@ -1,0 +1,38 @@
+
+
+.runkit-placeholder {
+  max-height: 350px;
+  margin-left: 50%;
+  width: 50%;
+  // width: calc(50% - 36px);
+  right: 0px;
+  position: absolute;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: #fff;
+}
+
+.runkit-start {
+  right: 30px;
+  position: absolute;
+}
+
+.runkit-close {
+  color: #CC0000;
+  right: 20px;
+  font-size: 105%;
+  font-weight: 900;
+  position: fixed;
+}
+
+.runkit-close {
+  &:link {
+    color: #CC0000;
+  }
+  &:hover {
+    color: #330000;
+  }
+  &:visited {
+    color: #CC0000;
+  }
+}

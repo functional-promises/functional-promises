@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html>
   <head>
@@ -201,6 +200,10 @@
       <script src="javascripts/all.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112472862-1"></script>
+
+    <script src="https://embed.runkit.com"></script>
+    <script src="javascripts/autorunkit.js"></script>
+
   </head>
 
   <body class="index" data-languages="[]">
@@ -436,7 +439,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <tr>
 <td><a href="https://github.com/petkaantonov/bluebird">Bluebird</a> v3.5.1</td>
 <td style="text-align: right">38</td>
-<td style="text-align: right">5188</td>
+<td style="text-align: right">5,188</td>
 <td style="text-align: right">80 Kb</td>
 </tr>
 <tr>
@@ -448,7 +451,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <tr>
 <td><a href="https://github.com/ReactiveX/IxJS">IxJS</a> v2.3.4</td>
 <td style="text-align: right">521</td>
-<td style="text-align: right">12366</td>
+<td style="text-align: right">12,366</td>
 <td style="text-align: right">145 Kb</td>
 </tr>
 </tbody></table>
@@ -584,7 +587,8 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <p>Returns first item to return truthy for <code>fn(item)</code></p>
 
 <p>If no match is found it will return <code>undefined</code>.</p>
-<h2 id='code-fp-findindex-iterable-fn-code'><code>FP.findIndex(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<h2 id='code-fp-findindex-iterable-fn-code'><code>FP.findIndex(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -593,7 +597,8 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <p>Returns first <strong>item&#39;s index</strong> to return truthy for <code>fn(item)</code></p>
 
 <p>If no match is found it will return <code>-1</code>.</p>
-<h2 id='code-fp-some-iterable-fn-code'><code>FP.some(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<h2 id='code-fp-some-iterable-fn-code'><code>FP.some(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
@@ -602,7 +607,8 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <p>Returns <code>Promise&lt;true&gt;</code> on the first <strong>item</strong> to return truthy for <code>fn(item)</code></p>
 
 <p>If no truthy result is found, <code>.some()</code> returns <code>Promise&lt;false&gt;</code>.</p>
-<h2 id='code-fp-none-iterable-fn-code'><code>FP.none(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<h2 id='code-fp-none-iterable-fn-code'><code>FP.none(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="c1">// Will return true:</span>
@@ -618,7 +624,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <blockquote>
 <p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code></a> with <code>FP.thenIf()</code> to handle when <code>response.ok === false</code> using custom response.</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Wrap `fetch`'s returned Promise with `FP.resolve()` - enables `FP`'s methods</span>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">// Wrap `fetch` with `FP.resolve()` - enables `FP`'s methods</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">}))</span>
   <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span> <span class="c1">// thenIf lets us handle branching logic</span>
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check if response is ok</span>
@@ -630,7 +636,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <blockquote>
 <p>Email &#39;validator&#39;</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Use like so:</span>
+<pre class="highlight javascript tab-javascript"><code><span class="kd">let</span> <span class="nx">email</span> <span class="o">=</span> <span class="s1">'dan@danlevy.net'</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">email</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span>
     <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="c1">// Conditional</span>
@@ -654,7 +660,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <blockquote>
 <p>Functional Promise Login Flow</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Check if login successfully returned a token:</span>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">// Check if login successful, returning a token:</span>
 <span class="kr">const</span> <span class="nx">authUser</span> <span class="o">=</span> <span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">FP</span>
   <span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">})</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="nx">svc</span><span class="p">.</span><span class="nx">loginGetUser</span><span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">))</span>
@@ -668,8 +674,8 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <p>It works just like <code>.then()</code> except it&#39;s return value is ignored. The next <code>thenable</code> will get the same input.</p>
 
 <p>Perfect for logging or other background tasks (where results don&#39;t need to block).</p>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/user/42/photos'</span><span class="p">))</span>
-  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`user photos req ok? </span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'https://api.github.com/users/justsml'</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`github user req ok? </span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
 </code></pre><h1 id='160-160-properties'>&#160;&#160; Properties</h1>
@@ -698,7 +704,8 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
   <span class="p">})</span>
 </code></pre><h1 id='specialty-methods'>Specialty Methods</h1><h1 id='160-160-helpers'>&#160;&#160; Helpers</h1><h2 id='code-fp-resolve-lt-anything-gt-code'><code>FP.resolve(&lt;anything&gt;)</code></h2>
 <p>Turn anything into an FP Promise. Also can upgrade any Promise-supporting library.</p>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">()</span>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">// Promise like it's going out of style:</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">()</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">))</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">anything</span><span class="p">))</span>
@@ -734,7 +741,8 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <p><code>deferred</code> is an anti-pattern because it works against simple composition chains.</p>
 <h1 id='160-160-events'>&#160;&#160; Events</h1>
 <p>Promises can be awkward when dealing with events.</p>
-<h4 id='code-functional-promise-code-library-aims-to-find-a-harmonious-pattern'><code>Functional Promise</code> library aims to find a harmonious pattern.</h4><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'submitBtn'</span><span class="p">)</span>
+<h4 id='code-functional-promise-code-library-aims-to-find-a-harmonious-pattern'><code>Functional Promise</code> library aims to find a harmonious pattern.</h4><pre class="highlight javascript tab-javascript"><code><span class="c1">// Example DOM code:</span>
+<span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'submitBtn'</span><span class="p">)</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">element</span> <span class="o">=&gt;</span> <span class="nx">element</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s1">'Clicked!'</span><span class="p">)</span>
@@ -800,11 +808,11 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 
 <span class="nx">squareAndFormatDecimal</span><span class="p">([</span><span class="mi">5</span><span class="p">])</span>
 <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'squareAndFormatDecimal() Results: '</span><span class="p">,</span> <span class="nx">num</span><span class="p">)</span>
-  <span class="c1">// num === ['25.00']</span>
+  <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="p">[</span><span class="s1">'25.00'</span><span class="p">])</span>
 <span class="p">})</span>
 
-</code></pre><h2 id='events-promise-chain'>Events + Promise Chain</h2><pre class="highlight javascript tab-javascript"><code><span class="kd">function</span> <span class="nx">addTodoHandler</span><span class="p">()</span> <span class="p">{</span>
+</code></pre><h2 id='events-promise-chain'>Events + Promise Chain</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// Example DOM Code</span>
+<span class="kd">function</span> <span class="nx">addTodoHandler</span><span class="p">()</span> <span class="p">{</span>
   <span class="kr">const</span> <span class="nx">statusLbl</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'label.status'</span><span class="p">)</span>
   <span class="kr">const</span> <span class="nx">setStatus</span> <span class="o">=</span> <span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">statusLbl</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">s</span>
   <span class="kr">const</span> <span class="nx">setError</span>  <span class="o">=</span> <span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">setStatus</span><span class="p">(</span><span class="s2">`ERROR: </span><span class="p">${</span><span class="nx">err</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>

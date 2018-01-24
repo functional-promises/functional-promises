@@ -100,10 +100,10 @@ The **browser bundle** weighs in at **~30Kb** (using Webpack+Babel+Rollup+Uglify
 
 | Library                     	                                    | # Files 	| # Lines Code 	 | **Browser** Bundle Kb
 |------------------------------	                                    |---------: |--------------: |-------------------:
-| **Functional Promise v1.4** 	                                    |       8 	|          376 	 | 30 Kb
-| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       |      38 	|         5188 	 | 80 Kb
+| **Functional Promise v1.4** 	                                    |       8 	|           376	 | 30 Kb
+| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       |      38 	|         5,188	 | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
-| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12366 	 | 145 Kb
+| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12,366	 | 145 Kb
 
 
 So `FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is almost **1/5th** the size. `IxJS`/`RxJS` also feature a far more expansive API.
@@ -187,11 +187,9 @@ Similar to `Array.prototype.map((item[, index, array]) => {})`.
 
 The return value will be a new array containing the result for each call to `fn(item)`.
 
-
 For example, let's say you have to multiply a list of numbers by 2.
 
 Using `FP.map()` to do this lets you focus on the important logic: `x => x * 2`
-
 
 ## `FP.filter(iterable, fn)`
 
@@ -230,6 +228,7 @@ If no match is found it will return `undefined`.
 ## `FP.findIndex(iterable, fn)`
 
 ```javascript
+const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 3, 4, 5])
   .findIndex(isEven)
   .then(results => {
@@ -244,6 +243,7 @@ If no match is found it will return `-1`.
 ## `FP.some(iterable, fn)`
 
 ```javascript
+const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 4])
   .some(isEven)
   .then(results => {
@@ -258,6 +258,7 @@ If no truthy result is found, `.some()` returns `Promise<false>`.
 ## `FP.none(iterable, fn)`
 
 ```javascript
+const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 4])
   .some(isEven)
   .then(results => {
@@ -282,7 +283,7 @@ If no match is found it will return `Promise<true>`.
 > Use [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) with `FP.thenIf()` to handle when `response.ok === false` using custom response.
 
 ```javascript
-// Wrap `fetch`'s returned Promise with `FP.resolve()` - enables `FP`'s methods
+// Wrap `fetch` with `FP.resolve()` - enables `FP`'s methods
 FP.resolve(fetch('/profile', {method: 'GET'}))
   .thenIf( // thenIf lets us handle branching logic
     res => res.ok, // Check if response is ok
@@ -295,7 +296,7 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
 > Email 'validator'
 
 ```javascript
-// Use like so:
+let email = 'dan@danlevy.net'
 FP.resolve(email)
   .thenIf(
     e => e.length > 5, // Conditional
@@ -321,7 +322,7 @@ Default values let you call `.thenIf` with no args - if you simply want to exclu
 > Functional Promise Login Flow
 
 ```javascript
-// Check if login successfully returned a token:
+// Check if login successful, returning a token:
 const authUser = (email, pass) => FP
   .resolve({email, pass})
   .then(({email, pass}) => svc.loginGetUser(email, pass))
@@ -342,8 +343,8 @@ It works just like `.then()` except it's return value is ignored. The next `then
 Perfect for logging or other background tasks (where results don't need to block).
 
 ```javascript
-FP.resolve(fetch('/user/42/photos'))
-  .tap(res => console.log(`user photos req ok? ${res.ok}`))
+FP.resolve(fetch('https://api.github.com/users/justsml'))
+  .tap(res => console.log(`github user req ok? ${res.ok}`))
   .then(res => res.json())
   .then(data => console.log(data))
 ```
@@ -392,6 +393,7 @@ FP.resolve({username: 'dan', password: 'sekret'})
 Turn anything into an FP Promise. Also can upgrade any Promise-supporting library.
 
 ```javascript
+// Promise like it's going out of style:
 FP.resolve()
 FP.resolve(42)
 FP.resolve(fetch(url))
@@ -447,6 +449,7 @@ Promises can be awkward when dealing with events.
 #### `Functional Promise` library aims to find a harmonious pattern.
 
 ```javascript
+// Example DOM code:
 const button = document.getElementById('submitBtn')
 FP.chain()
   .get('target')
@@ -526,8 +529,7 @@ const squareAndFormatDecimal = FP
 
 squareAndFormatDecimal([5])
 .then(num => {
-  console.log('squareAndFormatDecimal() Results: ', num)
-  // num === ['25.00']
+  assert.deepEqual(num, ['25.00'])
 })
 
 ```
@@ -536,6 +538,7 @@ squareAndFormatDecimal([5])
 ## Events + Promise Chain
 
 ```javascript
+// Example DOM Code
 function addTodoHandler() {
   const statusLbl = document.querySelector('label.status')
   const setStatus = s => statusLbl.textContent = s
