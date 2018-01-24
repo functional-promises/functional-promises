@@ -8,6 +8,8 @@
 
 # [Updated Documentation: fpromises.io](http://www.fpromises.io/)
 
+[![New Docs](docs-source/source/images/FunctionalPromises-Docs-Upgraded.gif?raw=true)](http://www.fpromises.io/)
+
 ## Summary
 
 This library is aimed at supporting a specific **Function Chaining technique** (using composition).
