@@ -21,9 +21,9 @@
 1. A bit like `Task`s or `Future`s in other languages
 1. Build up code by glueing small functions together
 
-+++
+---
 
-
+# EXAMPLES / FEATURE OVERVIEW
 
 ---
 
@@ -41,10 +41,6 @@ FP.all({
 FP.all([1, 2])
   .then(results => t.deepEqual(results, [1, 2]))
 ```
-
----
-
-# EXAMPLES / FEATURE OVERVIEW
 
 ---
 
