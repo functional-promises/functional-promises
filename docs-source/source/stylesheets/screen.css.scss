@@ -343,6 +343,11 @@ html, body {
     clear: both;
   }
 
+
+  aside.warning {color: #fff;}
+
+
+
   &>h1, &>h2, &>h3, &>h4, &>h5, &>h6, &>p, &>table, &>ul, &>ol, &>aside, &>dl {
     margin-right: $examples-width;
     padding: 0 $main-padding;
@@ -388,7 +393,7 @@ html, body {
     padding-bottom: 1.2em;
     background-image: linear-gradient(to bottom, rgba(#fff, 0.2), rgba(#fff, 0));
 
-    code { font-size: 19px; }
+    code { font-size: 21px; }
   }
 
   // h2s right after h1s should bump right up
@@ -490,13 +495,14 @@ html, body {
   aside {
     padding-top: 1em;
     padding-bottom: 1em;
-    margin-top: 1.5em;
-    margin-bottom: 1.5em;
+    margin-top: 1.15em;
+    margin-bottom: 1.15em;
     background: $aside-notice-bg;
     line-height: 1.6;
-
+    font-weight: 700;
     &.warning {
       background-color: $aside-warning-bg;
+      color: #FFF;
     }
 
     &.success {

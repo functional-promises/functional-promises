@@ -60,24 +60,6 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
   .then(avatarUrl => imgElement.src = avatarUrl)
 ```
 
-> `FP.thenIf()` replaces the `if` branching code here:
-
-```javascript
-// Non-FP, Native Promises:
-fetch('/profile', {method: 'GET'})
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-     } else {
-      return {avatar: '/no-photo.svg'}
-     }
-  })
-  .then(data => data.avatar)
-  .then(avatarUrl => imgElement.src = avatarUrl)
-```
-
-
-
 [![Build Status](https://travis-ci.org/justsml/functional-promises.svg?branch=master)](https://travis-ci.org/justsml/functional-promises)
 [![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat)](https://github.com/justsml/functional-promises)
 [![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat)](https://github.com/justsml/functional-promises)
@@ -93,7 +75,7 @@ fetch('/profile', {method: 'GET'})
 * RxJS: `FP` is 1/5th the size. _Observable support still being evaluated._
 * Bluebird: `FP` adds some key features: _events_, _conditionals_, _chains_, _quiet errors_. (Disclaimer: I'm a contributor, with a low PR acceptance ratio. 😿)
 
-`FP`'s NodeJS source is **only ~300 lines of code.**
+`FP`'s NodeJS un-minified source is **only ~400 lines of code.**
 The **browser bundle** weighs in at **~30Kb** (using Webpack+Babel+Rollup+UglifyJS).
 
 ### Library Comparison
@@ -112,7 +94,7 @@ BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has 
 
 <p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing.</p>
 
-<p>Their patterns have clearly been influential on `FP`'s design.</p>
+<p>Their patterns have been quite influential on <code>FP</code>'s design.</p>
 
 <p><code>IxJS</code>'s modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).</p>
 
@@ -287,21 +269,6 @@ If no match is found it will return `Promise<true>`.
 
 ## `FP.thenIf()`
 
-> Use [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) with `FP.thenIf()` to handle when `response.ok === false` using custom response.
-
-```javascript
-// Wrap `fetch` with `FP.resolve()` - enables `FP`'s methods
-FP.resolve(fetch('/profile', {method: 'GET'}))
-  .thenIf( // thenIf lets us handle branching logic
-    res => res.ok, // Check if response is ok
-    res => res.json(), // if true, return the parsed body
-    res => ({avatar: '/no-photo.svg'})) // fail, use default object
-  .get('avatar') // Get the resulting objects `avatar` value
-  .then(avatarUrl => imgElement.src = avatarUrl)
-```
-
-`.thenIf(condition(value), ifTrue(value), ifFalse(value))`
-
 > Email 'validator'
 
 ```javascript
@@ -312,6 +279,8 @@ FP.resolve(email)
     e => console.log('Valid: ', e), // ifTrue
     e => console.error('Bad Email: ', e)) // ifFalse
 ```
+
+`.thenIf(condition(value), ifTrue(value), ifFalse(value))`
 
 #### Arguments
 
