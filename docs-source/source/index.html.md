@@ -124,7 +124,7 @@ BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has 
 All `.then()`-derived methods are listed first. It's the bulk of the API.
 
 * [Thenable Methods](#thenable-methods)
-    * [Arrays](#160-160-array-methods)
+    * [Arrays](#array-methods)
         * `.map(fn)`
         * `.filter(fn)`
         * `.find(fn)`
@@ -133,41 +133,54 @@ All `.then()`-derived methods are listed first. It's the bulk of the API.
         * `.none(fn)`
         * `.series(fn)`
         * `.forEach(fn)` - use `.map()` instead (write _proper_ `functions`)
-    * [Errors](#160-160-errors) _(WIP)_
+    * [Errors](#errors) _(WIP)_
         * `.catch(fn)`
         * `.catch(filter, fn)`
-    * [Conditional](#160-160-conditional)
+    * [Conditional](#conditional)
         * `.thenIf()`
-    * [Utilities](#160-160-utilities)
+    * [Utilities](#utilities)
         * `.tap(fn)`
-    * [Properties](#160-160-properties)
+    * [Properties](#properties)
         * `.get(keyName)`
         * `.set(keyName, value)`
 * [Specialty Methods](#specialty-methods)
-    * [Helpers](#160-160-helpers)
+    * [Helpers](#helpers)
         * `FP.resolve()`
         * `FP.all(Object/Array)`
         * `FP.unpack()`
-    * [Events](#160-160-events)
+    * [Events](#events)
         * `.listen(obj, ...eventNames)`
-    * [Composition Pipelines](#160-160-composition-pipelines)
+    * [Composition Pipelines](#composition-pipelines)
         * `FP.chain()`
         * `.chainEnd()`
-    * [Modifiers](#160-160-modifiers)
+    * [Modifiers](#modifiers)
         * `.quiet()` - prevents errors from stopping array methods mid-loop
         * `.concurrency(threadLimit)` - limits parallel workers for array methods
 
+
 # Thenable Methods
+
+> A `.catch()` is another type of `thenable`! It works because an Error in a Promise will cause it to skip or "surf" over `thenables` until it finds a special `thenable`: `.catch()`. It then takes that Error value and passes it into the function. `.catch(err=>{log(err.message)})`
+
+> `Thenable` methods in `FP` include: Arrays, Errors, Conditional, Utilities, Properties, etc.
 
 You can think of most `FP` methods as **wrappers derived from Native Promise's `.then()`.**
 
 For example, `.tap(fn)`'s function will receive the resolved value exactly like a `.then()`. Except the function's `return` value will be ignored - and the next `thenable` in the chain will get the original input.
 
-A `.catch()` is another type of `thenable`! It works because an Error in a Promise will cause it to skip or "surf" over `thenables` until it finds a special `thenable`: `.catch()`. It then takes that Error value and passes it into the function. `.catch(err=>{log(err.message)})`
-
-See all `thenable` methods in `FP`: Arrays, Errors, Conditional, Utilities, Properties, etc.
 
 # &#160;&#160; Array Methods
+
+```javascript
+const rawData = [null, undefined, NaN, 0, '99']
+FP.resolve(rawData)
+  .filter(Boolean)        // truthiness check = ["99"]
+  .map(Number)            // convert to numeric [99]
+  .findIndex(n => n >= 1) // is gte 1, idx = 0
+  .then(index => {
+    assert.equal(index, 0)
+  })
+```
 
 Any `.then()` which would handle an array, may instead use one of the `FP` array methods.
 
@@ -213,9 +226,8 @@ Use `.filter()` to omit items from the input array by passing through a given fu
 ## `FP.find(iterable, fn)`
 
 ```javascript
-const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 3, 4, 5])
-  .find(isEven)
+  .find(x => x % 2 === 0)
   .then(results => {
     assert.deepEqual(results, 2)
   })
@@ -228,9 +240,8 @@ If no match is found it will return `undefined`.
 ## `FP.findIndex(iterable, fn)`
 
 ```javascript
-const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 3, 4, 5])
-  .findIndex(isEven)
+  .findIndex(x => x % 2 === 0)
   .then(results => {
     assert.equal(results, 1)
   })
@@ -243,9 +254,8 @@ If no match is found it will return `-1`.
 ## `FP.some(iterable, fn)`
 
 ```javascript
-const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 4])
-  .some(isEven)
+  .some(x => x % 2 === 0)
   .then(results => {
     assert.equal(results, true)
   })
@@ -258,9 +268,8 @@ If no truthy result is found, `.some()` returns `Promise<false>`.
 ## `FP.none(iterable, fn)`
 
 ```javascript
-const isEven = x => x % 2 === 0
 FP.resolve([1, 2, 4])
-  .some(isEven)
+  .some(x => x % 2 === 0)
   .then(results => {
     // Will return true:
     assert.equal(results, true)
@@ -278,8 +287,6 @@ If no match is found it will return `Promise<true>`.
 
 ## `FP.thenIf()`
 
-`.thenIf(condition(value), ifTrue(value), ifFalse(value))`
-
 > Use [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) with `FP.thenIf()` to handle when `response.ok === false` using custom response.
 
 ```javascript
@@ -292,6 +299,8 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
   .get('avatar') // Get the resulting objects `avatar` value
   .then(avatarUrl => imgElement.src = avatarUrl)
 ```
+
+`.thenIf(condition(value), ifTrue(value), ifFalse(value))`
 
 > Email 'validator'
 
@@ -336,12 +345,6 @@ const authUser = (email, pass) => FP
 
 ## `.tap(fn)`
 
-The `.tap()` method is `FP`'s counterpart to `console.log()` - know it well.
-
-It works just like `.then()` except it's return value is ignored. The next `thenable` will get the same input.
-
-Perfect for logging or other background tasks (where results don't need to block).
-
 ```javascript
 FP.resolve(fetch('https://api.github.com/users/justsml'))
   .tap(res => console.log(`github user req ok? ${res.ok}`))
@@ -349,16 +352,18 @@ FP.resolve(fetch('https://api.github.com/users/justsml'))
   .then(data => console.log(data))
 ```
 
+The `.tap()` method is `FP`'s counterpart to `console.log()` - know it well.
+
+It works just like `.then()` except it's return value is ignored. The next `thenable` will get the same input.
+
+Perfect for logging or other background tasks (where results don't need to block).
+
 
 # &#160;&#160; Properties
 
 These methods are particularly helpful for dealing with data extraction/transformation.
 
 ## `FP.get(keyName)`
-
-Use to get a single key's value from an object.
-
-Returns the key value.
 
 ```javascript
 FP.resolve({foo: 42})
@@ -368,13 +373,11 @@ FP.resolve({foo: 42})
   })
 ```
 
+Use to get a single key's value from an object.
+
+Returns the key value.
+
 ## `FP.set(keyName, value)`
-
-Use to set a single key's value on an object.
-
-Returns the **modified object.**
-
-> A common use-case includes dropping passwords or tokens.
 
 ```javascript
 FP.resolve({username: 'dan', password: 'sekret'})
@@ -384,13 +387,17 @@ FP.resolve({username: 'dan', password: 'sekret'})
   })
 ```
 
+Use to set a single key's value on an object.
+
+Returns the **modified object.**
+
+> A common use-case includes dropping passwords or tokens.
+
 # Specialty Methods
 
 # &#160;&#160; Helpers
 
 ## `FP.resolve(<anything>)`
-
-Turn anything into an FP Promise. Also can upgrade any Promise-supporting library.
 
 ```javascript
 // Promise like it's going out of style:
@@ -400,11 +407,9 @@ FP.resolve(fetch(url))
 FP.resolve(Promise.resolve(anything))
 ```
 
+Turn anything into an FP Promise. Also can upgrade any Promise-supporting library.
+
 ## `FP.all()`
-
-`FP.all()` provides an extended utility above the native `Promise.all()`, **supporting both Objects and Arrays.**
-
-_Note:_ Non-recursive.
 
 ```javascript
 FP.all([
@@ -413,6 +418,10 @@ FP.all([
 ])
 .then(results => assert.deepEqual(results, [1, 2]))
 ```
+
+`FP.all()` provides an extended utility above the native `Promise.all()`, **supporting both Objects and Arrays.**
+
+_Note:_ Non-recursive.
 
 > Also works with keyed Objects:
 
@@ -444,9 +453,11 @@ Use sparingly. Stream &amp; event handling are exempt from this 'rule'. If using
 
 # &#160;&#160; Events
 
-Promises can be awkward when dealing with events.
+<aside class='warning'>
+  Promises can be awkward when dealing with events.
+</aside>
 
-#### `Functional Promise` library aims to find a harmonious pattern.
+#### The `Functional Promise` library finds a harmonious balance between events.
 
 ```javascript
 // Example DOM code:
@@ -467,16 +478,11 @@ And now for some **differences**:
 * Events have control flow to think about (`e.preventDefault()`). Promises flow in one direction.
 * Promises depend on `return`'s everywhere. Event handlers which `return` may cause unexpected control-flow issues.
 
-
 _Yikes._
 
 Let's look at some code &amp; see how `FP` solves this...
 
 ## `.listen()` event helper
-
-The `.listen()` method must be called after an `FP.chain()` sequence of `FP` methods.
-
-**Note:** The `.chainEnd()` method is automatically called.
 
 ```javascript
 FP.chain()
@@ -485,9 +491,13 @@ FP.chain()
   .listen(button, 'click')
 ```
 
+The `.listen()` method must be called after an `FP.chain()` sequence of `FP` methods.
+
+**Note:** The `.chainEnd()` method is automatically called.
+
 # &#160;&#160; Composition Pipelines
 
-> *Non `.then()`-based Methods*
+<!-- > *Non `.then()`-based Methods* -->
 
 <aside class="notice">
   <i>Forgive me Haskell people, but I'm calling this a monad.</i>
@@ -495,15 +505,13 @@ FP.chain()
 
 Chained Functional Promises unlock a powerful technique: **Reusable Async Composition Pipelines.**
 
-**Enough jargon!** _Let's rock some examples:_
+**Enough jargon!** _Let's make some monads in JavaScript:_
 
 <!-- **Examples and usage patterns below:** -->
 
-## `.chain()` / `.chainEnd()`
+## `FP.chain()` / `.chainEnd()`
 
-> Both `.chain()` and `.chainEnd()` must be used together.
-
-`FP.chain()` is a static method on `FP`. Any
+> Methods `FP.chain()` and `.chainEnd()` must be used together.
 
 ```javascript
 const getTarget = FP
@@ -515,10 +523,10 @@ getTarget(event)
   .then(target => {console.log('Event target: ', target)})
 ```
 
+`FP.chain()` is a static method on `FP`.
+
 
 ## Re-usable Promise Chains
-
-Create a re-usable sequence of steps:
 
 ```javascript
 const squareAndFormatDecimal = FP
@@ -533,6 +541,8 @@ squareAndFormatDecimal([5])
 })
 
 ```
+
+Create a re-usable sequence of steps:
 
 
 ## Events + Promise Chain
@@ -560,10 +570,6 @@ form.addEventListener('submit', addTodoHandler())
 ```
 
 ## Controller + Events + Promise Chain
-
-A more realistic 'class' like object.
-
-Again, still all with simple functions:
 
 
 ```javascript
@@ -604,6 +610,10 @@ function TodoController() {
 }
 ```
 
+A more realistic 'class' like object.
+
+Again, still all with simple functions:
+
 
 # &#160;&#160; Modifiers
 
@@ -620,9 +630,7 @@ FP.resolve([2, 1, 0])
 
 Suppresses errors by converting them to return values.
 
-**Only applies to subsequent thenable.**
-
-Best used with Array methods.
+**Only applies to subsequent Array thenables.**
 
 ## `.concurrency(threadLimit)`
 
@@ -642,6 +650,6 @@ Set `threadLimit` to constrain the amount of simultaneous tasks/promises can run
 _Best used with Array methods._
 
 
-> Thanks to several influencial projects: RxJS, Bluebird, asynquence, FantasyLand, Gulp, HighlandJS, et al.
+> Thanks to several influencial projects: RxJS, IxJS, Bluebird, asynquence, FantasyLand, Gulp, HighlandJS, et al.
 
 

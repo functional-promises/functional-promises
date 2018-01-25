@@ -60,8 +60,10 @@ html, body {
   bottom: 0;
   width: $nav-width;
   background-color: $nav-bg;
-  font-size: 13px;
+  font-size: 110%;
   font-weight: bold;
+
+  small { font-size: 75%; }
 
   // language selector for mobile devices
   .lang-selector {
@@ -379,12 +381,14 @@ html, body {
   h2 {
     @extend %header-font;
     font-size: 19px;
-    margin-top: 4em;
+    margin-top: 8px;
     margin-bottom: 0;
     border-top: 1px solid #ccc;
     padding-top: 1.2em;
     padding-bottom: 1.2em;
     background-image: linear-gradient(to bottom, rgba(#fff, 0.2), rgba(#fff, 0));
+
+    code { font-size: 19px; }
   }
 
   // h2s right after h1s should bump right up
