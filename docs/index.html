@@ -351,7 +351,7 @@
       <div class="content">
         <h1 id='functional-promises'>Functional Promises</h1><h6 id='view-functional-promises-on-github'><a href="https://github.com/justsml/functional-promises">View <code>Functional Promises</code> on Github</a></h6>
 <blockquote>
-<p style='text-align: center;'><strong style='font-size: 19px;'>Examples of Awesome Shit</strong></p>
+<p style='text-align: center;'><strong style='font-size: 24px;'>Examples &amp; Awesome Shit</strong></p>
 
 <p>Array-style methods are built-in:</p>
 </blockquote>
@@ -716,33 +716,37 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 </code></pre>
 <p>Use sparingly. Stream &amp; event handling are exempt from this &#39;rule&#39;. If using ES2015, destructuring helps to (more cleanly) achieve what <code>deferred</code> attempts.</p>
 
-<p><code>deferred</code> is an anti-pattern because it works against simple composition chains.</p>
-<h1 id='events'><small>&#160;&#160; Events</small></h1>
-<aside class='warning'>
-  Promises can be awkward when dealing with events.
-</aside>
-<h4 id='the-functional-promise-library-finds-a-harmonious-balance-between-events'>The <code>Functional Promise</code> library finds a harmonious balance between events.</h4><pre class="highlight javascript tab-javascript"><code><span class="c1">// Example DOM code:</span>
+<p><code>deferred</code> is an anti-pattern because it works against composition.</p>
+<h1 id='events'><small>&#160;&#160; Events</small></h1><pre class="highlight javascript tab-javascript"><code><span class="c1">// Example DOM code:</span>
 <span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'submitBtn'</span><span class="p">)</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">element</span> <span class="o">=&gt;</span> <span class="nx">element</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s1">'Clicked!'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="s1">'click'</span><span class="p">)</span>
 </code></pre>
+<aside class='warning'>
+  Promises can be awkward when dealing with events.
+</aside>
+
+<aside class='success'>
+  The <code>Functional Promise</code> library seeks a harmonious balance.
+</aside>
+
 <p>Key considerations:</p>
 
-<p>Let&#39;s start with their <strong>similarities</strong>, both are (essentially) async...</p>
+<p>Let&#39;s start with their <strong>similarity</strong>, both are (essentially) async...</p>
 
 <p>And now for some <strong>differences</strong>:</p>
 
 <ul>
-<li>Promises are single-execution cached values. Events can run many times per second with different arguments or data.</li>
+<li>Promises are single-execution cached values. Memoized. Events can run many times per second with different arguments or data.</li>
 <li>Events have control flow to think about (<code>e.preventDefault()</code>). Promises flow in one direction.</li>
 <li>Promises depend on <code>return</code>&#39;s everywhere. Event handlers which <code>return</code> may cause unexpected control-flow issues.</li>
 </ul>
 
 <p><em>Yikes.</em></p>
 
-<p>Let&#39;s look at some code &amp; see how <code>FP</code> solves this...</p>
+<p>Let&#39;s look at some code &amp; see how <code>FP</code> improves the situation:</p>
 <h2 id='listen-event-helper'><code>.listen()</code> event helper</h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'textContent'</span><span class="p">,</span> <span class="s1">'Clicked!'</span><span class="p">)</span>

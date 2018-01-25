@@ -18,7 +18,7 @@ search: true
 
 ###### [View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
 
-> <p style='text-align: center;'><strong style='font-size: 19px;'>Examples of Awesome Shit</strong></p>
+> <p style='text-align: center;'><strong style='font-size: 24px;'>Examples &amp; Awesome Shit</strong></p>
 
 > Array-style methods are built-in:
 
@@ -261,8 +261,6 @@ FP.resolve([1, 2, 4])
 If no match is found it will return `Promise<true>`.
 
 
-
-
 # &#160;&#160; Conditional
 
 ## `FP.thenIf()`
@@ -414,15 +412,9 @@ edgeCase()
 
 Use sparingly. Stream &amp; event handling are exempt from this 'rule'. If using ES2015, destructuring helps to (more cleanly) achieve what `deferred` attempts.
 
-`deferred` is an anti-pattern because it works against simple composition chains.
+`deferred` is an anti-pattern because it works against composition.
 
 # &#160;&#160; Events
-
-<aside class='warning'>
-  Promises can be awkward when dealing with events.
-</aside>
-
-#### The `Functional Promise` library finds a harmonious balance between events.
 
 ```javascript
 // Example DOM code:
@@ -433,19 +425,27 @@ FP.chain()
   .listen(button, 'click')
 ```
 
+<aside class='warning'>
+  Promises can be awkward when dealing with events.
+</aside>
+
+<aside class='success'>
+  The <code>Functional Promise</code> library seeks a harmonious balance.
+</aside>
+
 Key considerations:
 
-Let's start with their **similarities**, both are (essentially) async...
+Let's start with their **similarity**, both are (essentially) async...
 
 And now for some **differences**:
 
-* Promises are single-execution cached values. Events can run many times per second with different arguments or data.
+* Promises are single-execution cached values. Memoized. Events can run many times per second with different arguments or data.
 * Events have control flow to think about (`e.preventDefault()`). Promises flow in one direction.
 * Promises depend on `return`'s everywhere. Event handlers which `return` may cause unexpected control-flow issues.
 
 _Yikes._
 
-Let's look at some code &amp; see how `FP` solves this...
+Let's look at some code &amp; see how `FP` improves the situation:
 
 ## `.listen()` event helper
 
