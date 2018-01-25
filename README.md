@@ -31,9 +31,9 @@ The emphasis here is a seamless async/sync Developer Experience. I call this pat
 | Library                     	| # Files 	| # Lines Code 	 | **Browser** Bundle Kb
 |------------------------------	|---------: |--------------: |-------------------:
 | **Functional Promise v1.4** 	|       8 	|          376 	 | 30 Kb
-| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1             	|      38 	|         5188 	 | 80 Kb
+| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1             	|      38 	|         5,188 	 | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
-| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12366 	 | 145 Kb
+| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12,366 	 | 145 Kb
 
 
 This shows `FP` is roughly **1/30th** the LOC (lines of code) in `IxJs`. And it's bundle size is almost **1/5th** the size. `IxJS`/`RxJS` feature a far more expansive API than `FP`.
