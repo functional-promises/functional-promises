@@ -90,15 +90,14 @@ The **browser bundle** weighs in at **~30Kb** (using Webpack+Babel+Rollup+Uglify
 
 So `FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is almost **1/5th** the size. `IxJS`/`RxJS` also feature a far more expansive API.
 
-BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has a fair bit more code to sort through.
+BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has a fair bit more code.
 
 <p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing.</p>
 
 <p>Their patterns have been quite influential on <code>FP</code>'s design.</p>
 
-<p><code>IxJS</code>'s modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).</p>
+<small><p><code>IxJS</code>'s modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).</p></small>
 
-<div style="clear: both;"></div>
 
 ### API Outline
 
@@ -251,14 +250,13 @@ If no truthy result is found, `.some()` returns `Promise<false>`.
 
 ```javascript
 FP.resolve([1, 2, 4])
-  .some(x => x % 2 === 0)
+  .none(x => x % 2 === 0)
   .then(results => {
-    // Will return true:
-    assert.equal(results, true)
+    assert.equal(results, false)
   })
 ```
 
-Returns `Promise<false>` on the first **item** to return falsey for `fn(item)`
+`.none()` resolves to `Promise<false>` on the first **item** to return falsey for `fn(item)`
 
 If no match is found it will return `Promise<true>`.
 
@@ -284,19 +282,6 @@ FP.resolve(email)
 
 #### Arguments
 
-* `condition`, echo/truthy function: `(x) => x`
-* `ifTrue`, echo function: `(x) => x`
-* `ifFalse`, quiet function: `() => null`
-
-The `condition` function should return either `true`/`false` or a promise that resolves to something `true`/`false`.
-
-`ifTrue` function is called if the `condition` resulted in a truthy value. Conversely, `ifFalse` will be called if we got a false answer.
-
-The return value of either `ifTrue`/`ifFalse` handler will be handed to the next `.then()`.
-
-Default values let you call `.thenIf` with no args - if you simply want to exclude falsey values down the chain.
-
-
 > Functional Promise Login Flow
 
 ```javascript
@@ -309,6 +294,19 @@ const authUser = (email, pass) => FP
     user => user, // return user to next .then function
     () => {throw new Error('Login Failed!')}))
 ```
+
+* `condition`, echo/truthy function: `(x) => x`
+* `ifTrue`, echo function: `(x) => x`
+* `ifFalse`, quiet function: `() => null`
+
+The `condition` function should return either `true`/`false` or a promise that resolves to something `true`/`false`.
+
+`ifTrue` function is called if the `condition` resulted in a truthy value. Conversely, `ifFalse` will be called if we got a false answer.
+
+The return value of either `ifTrue`/`ifFalse` handler will be handed to the next `.then()`.
+
+Default values let you call `.thenIf` with no args - if you simply want to exclude falsey values down the chain.
+
 
 # &#160;&#160; Utilities
 
@@ -348,6 +346,8 @@ Returns the key value.
 
 ## `FP.set(keyName, value)`
 
+> A common use-case includes dropping passwords or tokens.
+
 ```javascript
 FP.resolve({username: 'dan', password: 'sekret'})
   .set('password', undefined)
@@ -360,23 +360,24 @@ Use to set a single key's value on an object.
 
 Returns the **modified object.**
 
-> A common use-case includes dropping passwords or tokens.
-
 # Specialty Methods
 
 # &#160;&#160; Helpers
 
 ## `FP.resolve(<anything>)`
 
+> Promise like it's going out of style:
+
 ```javascript
-// Promise like it's going out of style:
 FP.resolve()
 FP.resolve(42)
 FP.resolve(fetch(url))
 FP.resolve(Promise.resolve(anything))
 ```
 
-Turn anything into an FP Promise. Also can upgrade any Promise-supporting library.
+Turn anything into a `Functional Promise`!
+
+Use to convert any Promise-like interface into an `FP`.
 
 ## `FP.all()`
 
@@ -386,21 +387,17 @@ FP.all([
   Promise.resolve(2)
 ])
 .then(results => assert.deepEqual(results, [1, 2]))
-```
 
-`FP.all()` provides an extended utility above the native `Promise.all()`, **supporting both Objects and Arrays.**
-
-_Note:_ Non-recursive.
-
-> Also works with keyed Objects:
-
-```javascript
 FP.all({
   one: Promise.resolve(1),
   two: Promise.resolve(2)
 })
 .then(results => assert.deepEqual(results, {one: 1, two: 2}))
 ```
+
+`FP.all()` provides an extended utility above the native `Promise.all()`, **supporting both Objects and Arrays.**
+
+_Note:_ Non-recursive.
 
 ## `FP.unpack()`
 
@@ -418,7 +415,6 @@ edgeCase()
 Use sparingly. Stream &amp; event handling are exempt from this 'rule'. If using ES2015, destructuring helps to (more cleanly) achieve what `deferred` attempts.
 
 `deferred` is an anti-pattern because it works against simple composition chains.
-
 
 # &#160;&#160; Events
 
@@ -488,7 +484,7 @@ const getTarget = FP
   .get('target')
   .chainEnd()
 
-getTarget(event)
+const handler = event => getTarget(event)
   .then(target => {console.log('Event target: ', target)})
 ```
 
@@ -508,35 +504,46 @@ squareAndFormatDecimal([5])
 .then(num => {
   assert.deepEqual(num, ['25.00'])
 })
-
 ```
 
 Create a re-usable sequence of steps:
-
 
 ## Events + Promise Chain
 
 ```javascript
 // Example DOM Code
-function addTodoHandler() {
+const form = document.querySelector('form')
+const submitHandler = createTodoHandler()
+form.addEventListener('submit', submitHandler)
+
+function createTodoHandler() {
   const statusLbl = document.querySelector('label.status')
   const setStatus = s => statusLbl.textContent = s
   const setError  = err => setStatus(`ERROR: ${err}`)
 
   return FP
-    .chain()
-    .then(event => event.target)
+    .chain() // input arg will get 'passed' in here
+    .get('target')
     .then(form => form.querySelector('input.todo-text').value)
     .then(todoText => ({id: null, complete: false, text: todoText}))
     .then(todoAPI.create)
-    .then(createResult => setStatus(createResult.message))
+    .tap(createResult => setStatus(createResult.message))
     .catch(setError)
     .chainEnd()
 }
-
-const form = document.querySelector('form')
-form.addEventListener('submit', addTodoHandler())
 ```
+
+The method `createTodoHandler()` gives you a Functional chain to:
+
+1. Define single-arg helper methods `setStatus()` & `setError()`
+1. Start chain expression
+1. Get element using `.get()` to extract `target` property (which will be a `<form></form>`)
+1. Get value from contained `input.todo-text` element
+1. Put todo's text into a JS Object shaped for service endpoint
+1. Pass data along to `todoAPI.create()` method
+1. Update UI with `setStatus()`
+1. Handle any errors w/ `setError()`
+
 
 ## Controller + Events + Promise Chain
 
@@ -551,11 +558,12 @@ todoCtrl
     todoCtrl.update({id: 1, text: 'updated item', complete: true})
   })
 
-/**
- * Here's a more realistic, 'tighter' example:
- * TodoController will return an object with `add` and `update` methods
- *  - based on FP.chain()
- */
+```
+
+> TodoController will return an object with `add` and `update` methods - based on FP.chain()
+
+```javascript
+// example code:
 function TodoController() {
   const statusLbl = document.querySelector('label.status')
   const setStatus = s => statusLbl.textContent = s
@@ -575,13 +583,12 @@ function TodoController() {
       .tap(updateResult => setStatus(updateResult.message))
       .chainEnd(),
   }
-
 }
 ```
 
-A more realistic 'class' like object.
+Another 'class' like object.
 
-Again, still all with simple functions:
+Only simple un-bound functions needed:
 
 
 # &#160;&#160; Modifiers
@@ -614,10 +621,7 @@ FP.resolve([1, 2, 3, 4, 5])
 
 Set `threadLimit` to constrain the amount of simultaneous tasks/promises can run.
 
-**Only applies to subsequent Array thenable.**
-
-_Best used with Array methods._
-
+**Only applies to subsequent thenable Array methods.**
 
 > Thanks to several influencial projects: RxJS, IxJS, Bluebird, asynquence, FantasyLand, Gulp, HighlandJS, et al.
 
