@@ -1,6 +1,6 @@
 {
   "name": "functional-promise",
-  "version": "1.4.21",
+  "version": "1.4.22",
   "description": "Composition Pipeline Promises Extension. See Complete Docs Here: http://fpromises.io/",
   "ava": {
     "require": [
@@ -8,7 +8,7 @@
     ],
     "babel": "inherit"
   },
-  "main": "src/index.js",
+  "main": "./src/index.js",
   "browser": "./dist/bundle.min.js",
   "repository": {
     "url": "https://github.com/justsml/functional-promises.git"
