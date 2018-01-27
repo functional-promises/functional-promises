@@ -25,9 +25,9 @@ npm install functional-promise
 > **Getting Started**
 > Use one of the following:
 
-```js
+```javascript
 const FP = require('functional-promise')
-// or:
+//  OR:
 import FP from 'functional-promise'
 ```
 
@@ -88,16 +88,16 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
 **Why not simply use [library X]?**
 
 * RxJS: `FP` is 1/5th the size. _Observable support still being evaluated._
-* Bluebird: `FP` adds some key features: _events_, _conditionals_, _chains_, _quiet errors_. (Disclaimer: I'm a contributor, with a low PR acceptance ratio. 😿)
+* Bluebird: `FP` adds some key features: _events_, _conditionals_, _chains_, _quiet errors_.
 
-`FP`'s NodeJS un-minified source is **only ~400 lines of code.**
+`FP`'s **un-minified source** is **only ~400 lines** of code.
 The **browser bundle** weighs in at **~20Kb** (using Webpack+Babel+Rollup+UglifyJS).
 
 ### Library Comparison
 
 | Library                     	                                    | # Files 	| # Lines Code 	 | **Browser** Bundle Kb
 |------------------------------	                                    |---------: |--------------: |-------------------:
-| **Functional Promise v1.4** 	                                    |       8 	|           376	 | 20 Kb
+| **Functional Promise v1.4** 	                                    |       8 	|           378	 | 20 Kb
 | [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       |      38 	|         5,188	 | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12,366	 | 145 Kb
@@ -111,8 +111,7 @@ BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has 
 
 <p>Their patterns have been quite influential on <code>FP</code>'s design.</p>
 
-<small><p><code>IxJS</code>'s modular design also allows for bundle sizes to potentially be smaller (using quite different syntax).</p></small>
-
+<b>Note:</b>&#160;<small><p><code>R/IxJS</code>'s modular design also allows for bundle sizes to <i>potentially</i> be smaller (using quite different syntax).</p></small>
 
 ### API Outline
 
