@@ -362,7 +362,7 @@
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'deepEqual'</span><span class="p">,</span> <span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span> <span class="c1">// [2, 4</span>
   <span class="p">})</span>
 </code></pre>
 <blockquote>
@@ -377,7 +377,7 @@
   <span class="p">.</span><span class="nx">chainEnd</span><span class="p">()</span> <span class="c1">// returns function</span>
 
 <span class="nx">squareAndFormatDecimal</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'deepEqual'</span><span class="p">,</span> <span class="nx">num</span><span class="p">,</span> <span class="p">[</span><span class="s1">'25.00'</span><span class="p">,</span> <span class="s1">'100.00'</span><span class="p">,</span> <span class="s1">'400.00'</span><span class="p">]))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">num</span><span class="p">))</span> <span class="c1">// ['25.00', '100.00', '400.00']</span>
 </code></pre>
 <blockquote>
 <p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code></a> with <code>FP.thenIf()</code> to handle <code>response.ok === false</code> with custom response.</p>
@@ -486,6 +486,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 
 <ul>
 <li><code>.tap(fn)</code></li>
+<li><code>.delay(msec)</code></li>
 </ul></li>
 <li><a href="#properties">Properties</a>
 
@@ -539,14 +540,14 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>            <span class="c1">// convert to numeric [99]</span>
   <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// is gte 1, idx = 0</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">index</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="c1">// 0</span>
   <span class="p">})</span>
 </code></pre>
 <p>Any <code>.then()</code> which would handle an array, may instead use one of the <code>FP</code> array methods.</p>
 <h2 id='fp-map'><code>FP.map(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">5</span><span class="p">)])</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'deepEqual'</span><span class="p">,</span> <span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span> <span class="c1">// [2, 4, 6, 8, 10</span>
   <span class="p">})</span>
 </code></pre>
 <p>Similar to <code>Array.prototype.map((item[, index, array]) =&gt; {})</code>.</p>
@@ -560,22 +561,22 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <p>Using <code>FP.map()</code> to do this lets you focus on the important logic: <code>x =&gt; x * 2</code></p>
 <h2 id='fp-filter'><code>FP.filter(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nb">Boolean</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'deepEqual'</span><span class="p">,</span> <span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span> <span class="c1">// [1, 3, 5]</span>
 
 <span class="c1">// Or similarly:</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">value</span> <span class="o">=&gt;</span> <span class="nx">value</span> <span class="p">?</span> <span class="kc">true</span> <span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'deepEqual'</span><span class="p">,</span> <span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span> <span class="c1">// [1, 3, 5]</span>
 </code></pre>
 <p>Use <code>.filter()</code> to omit items from the input array by passing through a given function. Items will be omitted if the function returns a falsey value.</p>
 
 <aside class="notice">
-  The <code>Boolean</code> type can be used as a truthiness check. For example: <code>console.log('equal', Boolean(1), true)</code>, <code>console.log('equal', Boolean(false), false)</code>, <code>console.log('equal', Boolean(null), false)</code>.
+  The <code>Boolean</code> type can be used as a truthiness check. For example: <code>assert.equal(Boolean(1), true)</code>, <code>assert.equal(Boolean(false), false)</code>, <code>assert.equal(Boolean(null), false)</code>.
 </aside>
 <h2 id='fp-find'><code>FP.find(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'deepEqual'</span><span class="p">,</span> <span class="nx">results</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// 2</span>
   <span class="p">})</span>
 </code></pre>
 <p>Returns first item to return truthy for <code>fn(item)</code></p>
@@ -584,7 +585,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <h2 id='fp-findindex'><code>FP.findIndex(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">,</span> <span class="nx">results</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// 1</span>
   <span class="p">})</span>
 </code></pre>
 <p>Returns first <strong>item&#39;s index</strong> to return truthy for <code>fn(item)</code></p>
@@ -593,7 +594,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <h2 id='fp-some'><code>FP.some(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">,</span> <span class="nx">results</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
   <span class="p">})</span>
 </code></pre>
 <p>Returns <code>Promise&lt;true&gt;</code> on the first <strong>item</strong> to return truthy for <code>fn(item)</code></p>
@@ -602,7 +603,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <h2 id='fp-none'><code>FP.none(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">none</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">,</span> <span class="nx">results</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// false</span>
   <span class="p">})</span>
 </code></pre>
 <p><code>.none()</code> resolves to <code>Promise&lt;false&gt;</code> on the first <strong>item</strong> to return falsey for <code>fn(item)</code></p>
@@ -649,6 +650,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <h1 id='utilities'><small>&#160;&#160; Utilities</small></h1><h2 id='tap'><code>.tap(fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'https://api.github.com/users/justsml'</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`github user req ok? </span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Keys:'</span><span class="p">,</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">data</span><span class="p">)))</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
 </code></pre>
 <p>The <code>.tap()</code> method is <code>FP</code>&#39;s primary way to use the familiar <code>console.log()</code> - know it well.</p>
@@ -715,13 +717,13 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
   <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
   <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="p">])</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'deepEqual'</span><span class="p">,</span> <span class="nx">results</span><span class="p">))</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span>
 
 <span class="nx">FP</span><span class="p">.</span><span class="nx">all</span><span class="p">({</span>
   <span class="na">one</span><span class="p">:</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
   <span class="na">two</span><span class="p">:</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="p">})</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'deepEqual'</span><span class="p">,</span> <span class="nx">results</span><span class="p">))</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span>
 </code></pre>
 <p><code>FP.all()</code> provides an extended utility above the native <code>Promise.all()</code>, <strong>supporting both Objects and Arrays.</strong></p>
 
@@ -733,7 +735,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <span class="p">}</span>
 
 <span class="nx">edgeCase</span><span class="p">()</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">,</span> <span class="nx">result</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
 </code></pre>
 <p>Use sparingly. Stream &amp; event handling are exempt from this &#39;rule&#39;. If using ES2015, destructuring helps to (more cleanly) achieve what <code>deferred</code> attempts.</p>
 
