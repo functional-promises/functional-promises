@@ -1,4 +1,4 @@
-const isArrayLike = require('lodash/isArrayLike')
+const {isEnumerable} = require('./modules/utils')
 const {FPInputError} = require('./modules/errors')
 
 module.exports = {map, find, findIndex, filter, reduce}
@@ -92,7 +92,7 @@ function map(args, fn, options) {
   return new FP((resolve, reject) => {
     innerValues.then(items => {
       args = [...items]
-      if (!isArrayLike(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'))
+      if (!isEnumerable(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'))
       const complete = () => {
         if (errors.length >= 1) {
           reject(errors[0])

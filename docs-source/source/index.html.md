@@ -97,13 +97,13 @@ The **browser bundle** weighs in at **~20Kb** (using Webpack+Babel+Rollup+Uglify
 
 | Library                     	                                    | # Files 	| # Lines Code 	 | **Browser** Bundle Kb
 |------------------------------	                                    |---------: |--------------: |-------------------:
-| **Functional Promise v1.4** 	                                    |       8 	|           378	 | 20 Kb
+| **Functional Promise v1.4.30**                                  	|       8 	|           384	 | 16 Kb
 | [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       |      38 	|         5,188	 | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12,366	 | 145 Kb
 
 
-So `FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is almost **1/5th** the size. `IxJS`/`RxJS` do feature a far larger API.
+So `FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is about **1/9th** the size. `IxJS`/`RxJS` do feature a far larger API.
 
 BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has a fair bit more code.
 
@@ -321,7 +321,7 @@ Default values let you call `.thenIf` with no args - if you simply want to exclu
 
 # &#160;&#160; Utilities
 
-## `FP.tap(fn)`
+## `fp.tap(fn)`
 
 ```javascript
 FP.resolve(fetch('https://api.github.com/users/justsml'))
@@ -337,7 +337,7 @@ It works just like `.then()` **except it's return value is ignored.** The next `
 
 Perfect for logging or other background tasks (where results don't need to block).
 
-## `FP.delay(ms)`
+## `fp.delay(ms)`
 
 ```javascript
 const waitMs = 5

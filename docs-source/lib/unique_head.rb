@@ -7,7 +7,8 @@ class UniqueHeadCounter < Middleman::Renderers::MiddlemanRedcarpetHTML
   end
   def header(text, header_level)
     friendly_text = text.to_s.gsub("&#160;", "").gsub(%r{\([^)]*\)}, "").gsub(%r{<[^>]*>}, "")
-    friendly_text = friendly_text.parameterize.to_s.gsub("160-", "").gsub(%r{-?code-?}, "")
+    friendly_text = friendly_text.parameterize
+    #.to_s.gsub("160-", "").gsub(%r{-?code-?}, "")
     text = "<small>#{text}</small>" if text.include? "&#160;"
     @head_count[friendly_text] ||= 0
     @head_count[friendly_text] += 1

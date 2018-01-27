@@ -1,19 +1,19 @@
-const isFunction        = require('lodash/isFunction')
 const {FunctionalError} = require('./modules/errors')
-const {listen}          = require('./events')
-const {chain, chainEnd} = require('./monads')
+const {isFunction}      = require('./modules/utils')
 const {map, filter}     = require('./arrays')
 const {reduce}          = require('./arrays')
 const {find, findIndex} = require('./arrays')
-const {all, cast}       = require('./promise')
-const {reject, delay}   = require('./promise')
 const {thenIf, _thenIf} = require('./conditional')
 const {tapIf}           = require('./conditional')
+const {listen}          = require('./events')
+const {chain, chainEnd} = require('./monads')
+const {all, cast}       = require('./promise')
+const {reject, delay}   = require('./promise')
 const FP = FunctionalPromise
 
-function FunctionalPromise(resolveRejectCB, ...unknownArgs) {
+function FunctionalPromise(resolveRejectCB, unknownArgs) {
   if (!(this instanceof FunctionalPromise)) {return new FunctionalPromise(resolveRejectCB)}
-  if (unknownArgs.length > 0) throw new Error('FunctionalPromise only accepts 1 argument')
+  if (unknownArgs != undefined) throw new Error('FunctionalPromise only accepts 1 argument')
   this._FP = {
     concurrencyLimit: 4,
     hardErrorLimit: -1,

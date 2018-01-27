@@ -1,6 +1,6 @@
 {
   "name": "functional-promise",
-  "version": "1.4.25",
+  "version": "1.4.30",
   "description": "Composition Pipeline Promises Extension. See Complete Docs Here: http://fpromises.io/",
   "ava": {
     "require": [
@@ -40,7 +40,6 @@
     "babel-preset-env": "^1.6.1",
     "chalk": "^2.3.0",
     "jsdom": "^11.5.1",
-    "lodash": "^4.17.4",
     "webpack": "^3.10.0"
   },
   "devDependencies": {

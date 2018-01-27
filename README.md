@@ -1,10 +1,9 @@
-# Functional Promises
+# Functional Promises (beta)
 
 
 [![Build Status](https://travis-ci.org/justsml/functional-promises.svg?branch=master)](https://travis-ci.org/justsml/functional-promises)
 [![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat)](https://github.com/justsml/functional-promises)
 [![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat)](https://github.com/justsml/functional-promises)
-
 
 # [Updated Documentation: fpromises.io](http://www.fpromises.io/)
 
@@ -14,7 +13,7 @@
 
 This library is aimed at supporting a specific **Function Chaining technique** (using composition).
 
-There are many names for this pattern. Including Composition Pipeline and Promise Chain.
+There are many names for this general pattern. Including Composition Pipeline and Promise Chain.
 The emphasis here is a seamless async/sync Developer Experience. I call this pattern a `Functional River` - your `data` is the _water_, and your `functions` describe its _path_ or riverbed.
 
 ### Advantages
@@ -28,23 +27,31 @@ The emphasis here is a seamless async/sync Developer Experience. I call this pat
 
 #### Library Comparison
 
-| Library                     	| # Files 	| # Lines Code 	 | **Browser** Bundle Kb
-|------------------------------	|---------: |--------------: |-------------------:
-| **Functional Promise v1.4** 	|       8 	|          376 	 | 20 Kb
-| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1             	|      38 	|         5,188 	 | 80 Kb
+Total Lines of Code (LoC) calculated using `cloc` CLI utility.
+
+LoC included in comparison because: smaller surface == hopefully fewer places bugs can hide.
+
+(Maturity should factor in.)
+
+
+| Library                     	                                    | # Files   | Lines of Code  | **Browser** Bundle Kb
+|------------------------------	                                    |---------: |--------------: |-------------------:
+| **Functional Promise v1.4.30**                                  	|       8 	|           384	 | 16 Kb
+| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       |      38 	|         5,188	 | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
-| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12,366 	 | 145 Kb
+| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12,366	 | 145 Kb
 
+Admittedly `IxJS`/`RxJS` have a far larger API than `FP` also some behavior in `RxJS`/`IxJS` may never be added.
+Currently however there is a lot of overlap with `FP` (plus more planned).
 
-This shows `FP` is roughly **1/30th** the LOC (lines of code) in `IxJs`. And it's bundle size is almost **1/5th** the size. `IxJS`/`RxJS` feature a far more expansive API than `FP`.
+The table above show `FP` is roughly **1/30th** the LOC (lines of code) in `R/IxJs`.
+`FP`'s bundle size is about **10%** the size of either `RxJS`/`IxJS`.
 
-`BluebirdJS` and `FP` have roughly the same number of API methods, yet `Bluebird` has a **fair bit more code** to sort through.
+`BluebirdJS` and `FP` have roughly the same number of API methods, yet `Bluebird` has a **fair bit more code**.
 
-> **Let me be clear: Bluebird and RxJS/IxJS are amazing.**
+> **To be clear: Bluebird and RxJS/IxJS are amazing.** Their interface/designs has been very influential on `FP`.
 >
-> Their patterns have clearly been influential on `FP`'s design.
->
-> Note: [IxJS](https://github.com/ReactiveX/IxJS)'s hyper-modular design also allows for bundles to be lots smaller (though using quite different syntax, either `.pipe(...)` or `ix/iterable`/`ix/add/...`).
+> Note: [R/IxJS](https://github.com/ReactiveX/IxJS)'s hyper-modular design also allows for bundles to be lots smaller (though using quite different syntax, either `.pipe(...)` or `ix/iterable`/`ix/add/...`).
 
 
 ## Installation
