@@ -16,6 +16,21 @@ search: true
 
 # Functional Promises
 
+> **Installation**
+
+```sh
+npm install functional-promise
+```
+
+> **Getting Started**
+> Use one of the following:
+
+```js
+const FP = require('functional-promise')
+// or:
+import FP from 'functional-promise'
+```
+
 ###### [View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
 
 > <p style='text-align: center;'><strong style='font-size: 24px;'>Examples &amp; Awesome Shit</strong></p>
@@ -63,6 +78,7 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
 [![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat)](https://github.com/justsml/functional-promises)
 [![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat)](https://github.com/justsml/functional-promises)
 
+
 ### Summary
 
 **Functional Promises** are an extension of the native Promises API (`.then()`/`.catch()`).
@@ -75,13 +91,13 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
 * Bluebird: `FP` adds some key features: _events_, _conditionals_, _chains_, _quiet errors_. (Disclaimer: I'm a contributor, with a low PR acceptance ratio. 😿)
 
 `FP`'s NodeJS un-minified source is **only ~400 lines of code.**
-The **browser bundle** weighs in at **~30Kb** (using Webpack+Babel+Rollup+UglifyJS).
+The **browser bundle** weighs in at **~20Kb** (using Webpack+Babel+Rollup+UglifyJS).
 
 ### Library Comparison
 
 | Library                     	                                    | # Files 	| # Lines Code 	 | **Browser** Bundle Kb
 |------------------------------	                                    |---------: |--------------: |-------------------:
-| **Functional Promise v1.4** 	                                    |       8 	|           376	 | 30 Kb
+| **Functional Promise v1.4** 	                                    |       8 	|           376	 | 20 Kb
 | [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       |      38 	|         5,188	 | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12,366	 | 145 Kb
@@ -103,41 +119,39 @@ BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has 
 
 All `.then()`-derived methods are listed first. It's the bulk of the API.
 
-* [Thenable Methods](#thenable-methods)
-    * [Arrays](#array-methods)
-        * `.map(fn)`
-        * `.filter(fn)`
-        * `.find(fn)`
-        * `.findIndex(fn)`
-        * `.some(fn)`
-        * `.none(fn)`
-        * `.series(fn)`
-        * `.forEach(fn)` - use `.map()` instead (write _proper_ `functions`)
-    * [Errors](#errors) _(WIP)_
-        * `.catch(fn)`
-        * `.catch(filter, fn)`
-    * [Conditional](#conditional)
-        * `.thenIf()`
-    * [Utilities](#utilities)
-        * `.tap(fn)`
-        * `.delay(msec)`
-    * [Properties](#properties)
-        * `.get(keyName)`
-        * `.set(keyName, value)`
-* [Specialty Methods](#specialty-methods)
-    * [Helpers](#helpers)
-        * `FP.resolve()`
-        * `FP.all(Object/Array)`
-        * `FP.unpack()`
-    * [Events](#events)
-        * `.listen(obj, ...eventNames)`
-    * [Composition Pipelines](#composition-pipelines)
-        * `FP.chain()`
-        * `.chainEnd()`
-    * [Modifiers](#modifiers)
-        * `.quiet()` - prevents errors from stopping array methods mid-loop
-        * `.concurrency(threadLimit)` - limits parallel workers for array methods
-
+* [Thenable Methods](http://www.fpromises.io/#thenable-methods)
+    * [Arrays](http://www.fpromises.io/#array-methods)
+        * [`.map(fn)`](http://www.fpromises.io/#fp-map)
+        * [`.filter(fn)`](http://www.fpromises.io/#fp-filter)
+        * [`.find(fn)`](http://www.fpromises.io/#fp-find)
+        * [`.findIndex(fn)`](http://www.fpromises.io/#fp-findIndex)
+        * [`.some(fn)`](http://www.fpromises.io/#fp-some)
+        * [`.none(fn)`](http://www.fpromises.io/#fp-none)
+        * [`.series(fn)`](http://www.fpromises.io/#fp-series)
+    * [Errors](http://www.fpromises.io/#errors) _(WIP)_
+        * [`.catch(fn)`](http://www.fpromises.io/#fp-catch)
+        * [`.catch(filter, fn)`](http://www.fpromises.io/#fp-catch)
+    * [Conditional](http://www.fpromises.io/#conditional)
+        * [`.thenIf(fn, ifTrue, ifFalse)`](http://www.fpromises.io/#fp-thenIf)
+    * [Utilities](http://www.fpromises.io/#utilities)
+        * [`.tap(fn)`](http://www.fpromises.io/#fp-tap)
+        * [`.delay(msec)`](http://www.fpromises.io/#fp-delay)
+    * [Properties](http://www.fpromises.io/#properties)
+        * [`.get(keyName)`](http://www.fpromises.io/#fp-get)
+        * [`.set(keyName, value)`](http://www.fpromises.io/#fp-set)
+* [Specialty Methods](http://www.fpromises.io/#specialty-methods)
+    * [Helpers](http://www.fpromises.io/#helpers)
+        * [`FP.resolve()`](http://www.fpromises.io/#fp-resolve)
+        * [`FP.all(Object/Array)`](http://www.fpromises.io/#fp-all)
+        * [`FP.unpack()`](http://www.fpromises.io/#fp-unpack)
+    * [Events](http://www.fpromises.io/#events)
+        * [`.listen(obj, ...eventNames)`](http://www.fpromises.io/#fp-listen)
+    * [Composition Pipelines](http://www.fpromises.io/#composition-pipelines)
+        * [`FP.chain(options)`](http://www.fpromises.io/#fp-chain)
+        * [`.chainEnd()`](http://www.fpromises.io/#fp-chainend)
+    * [Modifiers](http://www.fpromises.io/#modifiers)
+        * [`.quiet()` - prevents errors from stopping array methods mid-loop](http://www.fpromises.io/#fp-quiet)
+        * [`.concurrency(threadLimit)` - limits parallel workers for array methods](http://www.fpromises.io/#fp-concurrency)
 
 # Thenable Methods
 
@@ -308,7 +322,7 @@ Default values let you call `.thenIf` with no args - if you simply want to exclu
 
 # &#160;&#160; Utilities
 
-## `.tap(fn)`
+## `FP.tap(fn)`
 
 ```javascript
 FP.resolve(fetch('https://api.github.com/users/justsml'))
@@ -324,7 +338,7 @@ It works just like `.then()` **except it's return value is ignored.** The next `
 
 Perfect for logging or other background tasks (where results don't need to block).
 
-## `.delay(ms)`
+## `FP.delay(ms)`
 
 ```javascript
 const waitMs = 5
@@ -471,7 +485,7 @@ _Yikes._
 
 Let's look at some code &amp; see how `FP` improves the situation:
 
-## `.listen()` event helper
+## `FP.listen()` event helper
 
 ```javascript
 FP.chain()
@@ -498,9 +512,13 @@ Chained Functional Promises unlock a powerful technique: **Reusable Async Compos
 
 <!-- **Examples and usage patterns below:** -->
 
-## `FP.chain()` / `.chainEnd()`
+## `FP.chain() / .chainEnd()`
 
-> Methods `FP.chain()` and `.chainEnd()` must be used together.
+The method `FP.chain()` starts 'recording' your functional chain.
+
+All chain-based features (`FP.listen(el, ...events)`, `FP.run(opts)`, et. al.) use `.chainEnd()` to get a function to 'replay' the methods after `.chain()`.
+
+Whether directly or indirectly `.chainEnd()` must be called.
 
 ```javascript
 const getTarget = FP
@@ -514,7 +532,6 @@ const handler = event => getTarget(event)
 
 `FP.chain()` is a static method on `FP`.
 
-
 ## Re-usable Promise Chains
 
 ```javascript
@@ -524,13 +541,17 @@ const squareAndFormatDecimal = FP
   .map(x => parseFloat(x).toFixed(2))
   .chainEnd()
 
-squareAndFormatDecimal([5])
-.then(num => {
-  console.log(num) // ['25.00']
-})
+squareAndFormatDecimal([5, 6])
+  .then(num => console.log(num)) // ['25.00', '36.00']
 ```
 
-Create a re-usable sequence of steps:
+Create a re-usable chain of 2 steps:
+
+1. Create a chain, name it `squareAndFormatDecimal`.
+1. When `squareAndFormatDecimal(nums)` is passed an `Array<Number>` it must:
+  1. Square each number.
+  1. Convert each number to a decimal, then format with [`float.toFixed(2)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed).
+1. Execute named function `squareAndFormatDecimal` with array `[5, 6]`.
 
 ## Events + Promise Chain
 
@@ -616,7 +637,7 @@ Only simple un-bound functions needed:
 
 # &#160;&#160; Modifiers
 
-## `.quiet()`
+## `FP.quiet()`
 
 ```javascript
 FP.resolve([2, 1, 0])
@@ -631,7 +652,7 @@ Suppresses errors by converting them to return values.
 
 **Only applies to subsequent Array thenables.**
 
-## `.concurrency(threadLimit)`
+## `FP.concurrency(threadLimit)`
 
 ```javascript
 FP.resolve([1, 2, 3, 4, 5])

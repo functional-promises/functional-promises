@@ -30,7 +30,7 @@ The emphasis here is a seamless async/sync Developer Experience. I call this pat
 
 | Library                     	| # Files 	| # Lines Code 	 | **Browser** Bundle Kb
 |------------------------------	|---------: |--------------: |-------------------:
-| **Functional Promise v1.4** 	|       8 	|          376 	 | 30 Kb
+| **Functional Promise v1.4** 	|       8 	|          376 	 | 20 Kb
 | [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1             	|      38 	|         5,188 	 | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12,366 	 | 145 Kb
@@ -44,7 +44,7 @@ This shows `FP` is roughly **1/30th** the LOC (lines of code) in `IxJs`. And it'
 >
 > Their patterns have clearly been influential on `FP`'s design.
 >
-> [IxJS](https://github.com/ReactiveX/IxJS)'s hyper-modular design also allows for bundles to be lots smaller (though using quite different syntax, either `.pipe(...)` or `ix/iterable`/`ix/add/...`).
+> Note: [IxJS](https://github.com/ReactiveX/IxJS)'s hyper-modular design also allows for bundles to be lots smaller (though using quite different syntax, either `.pipe(...)` or `ix/iterable`/`ix/add/...`).
 
 
 ## Installation
@@ -93,12 +93,44 @@ FP.chain() // start a chain
   .listen(button, 'click') // end the repeatable chain, started at `.chain()`
 ```
 
-# [View API](http://fpromises.io/#api)
+# [API Outline](http://fpromises.io/)
 
-
+* [Thenable Methods](http://www.fpromises.io/#thenable-methods)
+    * [Arrays](http://www.fpromises.io/#array-methods)
+        * [`.map(fn)`](http://www.fpromises.io/#fp-map)
+        * [`.filter(fn)`](http://www.fpromises.io/#fp-filter)
+        * [`.find(fn)`](http://www.fpromises.io/#fp-find)
+        * [`.findIndex(fn)`](http://www.fpromises.io/#fp-findIndex)
+        * [`.some(fn)`](http://www.fpromises.io/#fp-some)
+        * [`.none(fn)`](http://www.fpromises.io/#fp-none)
+        * [`.series(fn)`](http://www.fpromises.io/#fp-series)
+    * [Errors](http://www.fpromises.io/#errors)
+        * [`.catch(fn)`](http://www.fpromises.io/#fp-catch)
+        * [`.catch(filter, fn)`](http://www.fpromises.io/#fp-catch)
+    * [Conditional](http://www.fpromises.io/#conditional)
+        * [`.thenIf(fn, ifTrue, ifFalse)`](http://www.fpromises.io/#fp-thenIf)
+    * [Utilities](http://www.fpromises.io/#utilities)
+        * [`.tap(fn)`](http://www.fpromises.io/#fp-tap)
+        * [`.delay(msec)`](http://www.fpromises.io/#fp-delay)
+    * [Properties](http://www.fpromises.io/#properties)
+        * [`.get(keyName)`](http://www.fpromises.io/#fp-get)
+        * [`.set(keyName, value)`](http://www.fpromises.io/#fp-set)
+* [Specialty Methods](http://www.fpromises.io/#specialty-methods)
+    * [Helpers](http://www.fpromises.io/#helpers)
+        * [`FP.resolve()`](http://www.fpromises.io/#fp-resolve)
+        * [`FP.all(Object/Array)`](http://www.fpromises.io/#fp-all)
+        * [`FP.unpack()`](http://www.fpromises.io/#fp-unpack)
+    * [Events](http://www.fpromises.io/#events)
+        * [`.listen(obj, ...eventNames)`](http://www.fpromises.io/#fp-listen)
+    * [Composition Pipelines](http://www.fpromises.io/#composition-pipelines)
+        * [`FP.chain(options)`](http://www.fpromises.io/#fp-chain)
+        * [`.chainEnd()`](http://www.fpromises.io/#fp-chainend)
+    * [Modifiers](http://www.fpromises.io/#modifiers)
+        * [`.quiet()` - prevents errors from stopping array methods mid-loop](http://www.fpromises.io/#fp-quiet)
+        * [`.concurrency(threadLimit)` - limits parallel workers for array methods](http://www.fpromises.io/#fp-concurrency)
 
 
 
 > Thanks to several influencial projects: [RxJS](https://github.com/ReactiveX/RxJS), [IxJS](https://github.com/ReactiveX/IxJS), [Bluebird](https://github.com/petkaantonov/bluebird), [asynquence](https://github.com/getify/asynquence), [FantasyLand](https://github.com/fantasyland/fantasy-land), [Gulp](https://github.com/gulpjs/gulp), [HighlandJS](https://github.com/caolan/highland), et al.
 >
-> Special thanks to [Kyle Simpson](https://github.com/getify), [Eric Elliot](https://medium.com/@_ericelliott), [MPJ](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q).
+> Special thanks to [Kyle Simpson](https://github.com/getify), [Eric Elliot](https://medium.com/@_ericelliott), and [Sarah Drasner](https://sarahdrasnerdesign.com/) for their work for the OSS community, as well as their advice & encouragement.
