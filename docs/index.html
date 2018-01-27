@@ -274,6 +274,9 @@
                   <li>
                     <a href="#tap" class="toc-h2 toc-link" data-title="<code>.tap(fn)</code>"><code>.tap(fn)</code></a>
                   </li>
+                  <li>
+                    <a href="#delay" class="toc-h2 toc-link" data-title="<code>.delay(ms)</code>"><code>.delay(ms)</code></a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -380,7 +383,7 @@
 <blockquote>
 <p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code></a> with <code>FP.thenIf()</code> to handle <code>response.ok === false</code> with custom response.</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods</span>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">//// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">}))</span>
   <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span> <span class="c1">// thenIf lets us handle branching logic</span>
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check if response is ok</span>
@@ -622,7 +625,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <blockquote>
 <p>Functional Promise Login Flow</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Check if login successful, returning a token:</span>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">//// Check if login successful, returning a token:</span>
 <span class="kr">const</span> <span class="nx">authUser</span> <span class="o">=</span> <span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">FP</span>
   <span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">})</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="nx">svc</span><span class="p">.</span><span class="nx">loginGetUser</span><span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">))</span>
@@ -649,11 +652,30 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
 </code></pre>
-<p>The <code>.tap()</code> method is <code>FP</code>&#39;s counterpart to <code>console.log()</code> - know it well.</p>
+<p>The <code>.tap()</code> method is <code>FP</code>&#39;s primary way to use the familiar <code>console.log()</code> - know it well.</p>
 
-<p>It works just like <code>.then()</code> except it&#39;s return value is ignored. The next <code>thenable</code> will get the same input.</p>
+<p>It works just like <code>.then()</code> <strong>except it&#39;s return value is ignored.</strong> The next <code>thenable</code> will get the same input.</p>
 
 <p>Perfect for logging or other background tasks (where results don&#39;t need to block).</p>
+<h2 id='delay'><code>.delay(ms)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">waitMs</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="kr">const</span> <span class="nx">started</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+  <span class="c1">// 3 'main' ways to delay results</span>
+  <span class="c1">// (examples to delay execution per-array-method)</span>
+  <span class="c1">// #1: Shorthand w/ the static helper</span>
+  <span class="c1">// .map(FP.delay(waitMs))</span>
+  <span class="c1">// #2: Chaining off the static helper: FP.delay(waitMs)</span>
+  <span class="c1">// .map(num =&gt; FP.delay(waitMs).then(() =&gt; num))</span>
+  <span class="c1">// #3: With FP's instance method</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">delay</span><span class="p">(</span><span class="nx">waitMs</span><span class="p">))</span>
+  <span class="c1">// and</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">measuredDelay</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">started</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Delay Successful: </span><span class="p">${</span><span class="nx">measuredDelay</span> <span class="o">&gt;=</span> <span class="mi">15</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+  <span class="p">})</span>
+</code></pre>
+<p><code>.delay(milliseconds)</code> is a helpful utility. It can help you avoid exceeding rate-limits in APIs. You can also use it to for simulated bottlenecks, adding &#39;slowdowns&#39; exactly where needed can greatly assist in locating many kinds of complex bugs.</p>
 <h1 id='properties'><small>&#160;&#160; Properties</small></h1>
 <p>These methods are particularly helpful for dealing with data extraction/transformation.</p>
 <h2 id='fp-get'><code>FP.get(keyName)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="na">foo</span><span class="p">:</span> <span class="mi">42</span><span class="p">})</span>
@@ -717,7 +739,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <p>Use sparingly. Stream &amp; event handling are exempt from this &#39;rule&#39;. If using ES2015, destructuring helps to (more cleanly) achieve what <code>deferred</code> attempts.</p>
 
 <p><code>deferred</code> is an anti-pattern because it works against composition.</p>
-<h1 id='events'><small>&#160;&#160; Events</small></h1><pre class="highlight javascript tab-javascript"><code><span class="c1">// Example DOM code:</span>
+<h1 id='events'><small>&#160;&#160; Events</small></h1><pre class="highlight javascript tab-javascript"><code><span class="c1">//// Example DOM code:</span>
 <span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'submitBtn'</span><span class="p">)</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
@@ -792,7 +814,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <span class="p">})</span>
 </code></pre>
 <p>Create a re-usable sequence of steps:</p>
-<h2 id='events-promise-chain'>Events + Promise Chain</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// Example DOM Code</span>
+<h2 id='events-promise-chain'>Events + Promise Chain</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">//// Example DOM Code</span>
 <span class="kr">const</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'form'</span><span class="p">)</span>
 <span class="kr">const</span> <span class="nx">submitHandler</span> <span class="o">=</span> <span class="nx">createTodoHandler</span><span class="p">()</span>
 <span class="nx">form</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'submit'</span><span class="p">,</span> <span class="nx">submitHandler</span><span class="p">)</span>
@@ -825,7 +847,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <li>Update UI with <code>setStatus()</code></li>
 <li>Handle any errors w/ <code>setError()</code></li>
 </ol>
-<h2 id='controller-events-promise-chain'>Controller + Events + Promise Chain</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// using a more complete controller/component interface:</span>
+<h2 id='controller-events-promise-chain'>Controller + Events + Promise Chain</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">//// using a more complete controller/component interface:</span>
 <span class="kr">const</span> <span class="nx">todoCtrl</span> <span class="o">=</span> <span class="nx">TodoController</span><span class="p">()</span>
 
 <span class="nx">todoCtrl</span>
@@ -838,7 +860,7 @@ The <strong>browser bundle</strong> weighs in at <strong>~30Kb</strong> (using W
 <blockquote>
 <p>TodoController will return an object with <code>add</code> and <code>update</code> methods - based on FP.chain()</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// example code:</span>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">//// example code:</span>
 <span class="kd">function</span> <span class="nx">TodoController</span><span class="p">()</span> <span class="p">{</span>
   <span class="kr">const</span> <span class="nx">statusLbl</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'label.status'</span><span class="p">)</span>
   <span class="kr">const</span> <span class="nx">setStatus</span> <span class="o">=</span> <span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">statusLbl</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">s</span>

@@ -1,15 +1,13 @@
 
 
 .runkit-placeholder {
-  max-height: 350px;
   margin-left: 50%;
   width: 50%;
-  // width: calc(50% - 36px);
   right: 0px;
   position: absolute;
   overflow-y: scroll;
   overflow-x: hidden;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.33);
 }
 
 .runkit-start {
@@ -18,21 +16,18 @@
 }
 
 .runkit-close {
-  color: #CC0000;
+  border-bottom: dashed 1px #333;
+  text-decoration: none;
+  color: #660000; // #f92672;
   right: 20px;
-  font-size: 105%;
-  font-weight: 900;
+  font-size: 15.5px;
+  font-weight: 500;
   position: fixed;
-}
 
-.runkit-close {
   &:link {
-    color: #CC0000;
+    color: #660000; // #f92672;
   }
   &:hover {
-    color: #330000;
-  }
-  &:visited {
     color: #CC0000;
   }
 }
