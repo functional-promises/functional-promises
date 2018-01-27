@@ -1,4 +1,3 @@
-const functionsIn       = require('lodash/functionsIn')
 const isFunction        = require('lodash/isFunction')
 const {FunctionalError} = require('./modules/errors')
 const {listen}          = require('./events')
@@ -58,9 +57,7 @@ FP.unpack = unpack
 
 
 FP.prototype.addStep = function(name, args) {
-  if (this.steps) {
-    this.steps.push([name, this, args])
-  }
+  if (this.steps) this.steps.push([name, this, args])
   return this
 }
 
@@ -83,9 +80,7 @@ FP.prototype.get = function(keyName) {
 FP.prototype.set = function(keyName, value) {
   if (this.steps) return this.addStep('set', [...arguments])
   return this.then(obj => {
-    if (typeof obj === 'object') {
-      obj[keyName] = value
-    }
+    if (typeof obj === 'object') obj[keyName] = value
     return obj
   })
 }
@@ -110,8 +105,7 @@ function then(fn) {
 function tap(fn) {
   if (this.steps) return this.addStep('tap', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.tap(fn)`. Must be a function. Currently: ' + typeof fn)
-  return this._FP
-  .promise.then(value => {
+  return this._FP.promise.then(value => {
     fn(value) // fires in the node callback queue (aka background task)
     return value
   })
@@ -119,29 +113,22 @@ function tap(fn) {
 
 function resolve(value) {
   return new FP((resolve, reject) => {
-    if (value && isFunction(value.then)) {
-      return value.then(resolve).catch(reject)
-    }
+    if (value && isFunction(value.then)) return value.then(resolve).catch(reject)
     resolve(value)
   })
 }
 
 function promisify(cb) {
-  return (...args) => new FP((yah, nah) => {
-    return cb.call(this, ...args, (err, res) => {
-      if (err) return nah(err)
-      return yah(res)
-    })
-  })
+  return (...args) => new FP((yah, nah) =>
+    cb.call(this, ...args, (err, res) => err ? nah(err) : yah(res)))
 }
 
 function promisifyAll(obj) {
   if (!obj || !Object.getPrototypeOf(obj)) { throw new Error('Invalid Argument obj in promisifyAll(obj)') }
-  return functionsIn(obj)
-  .reduce((obj, fn) => {
-    if (!/Sync/.test(fn) && !obj[`${fn}Async`]) {
-      obj[`${fn}Async`] = promisify(obj[`${fn}`])
-    }
+  return Object.getOwnPropertyNames(obj)
+  .filter(key => typeof obj[key] === 'function')
+  .reduce((obj, fnName) => {
+    if (!/Sync/.test(fnName) && !obj[`${fnName}Async`]) obj[`${fnName}Async`] = promisify(obj[`${fnName}`])
     return obj
   }, obj)
 }

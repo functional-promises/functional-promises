@@ -3,20 +3,16 @@ const {FPInputError} = require('./modules/errors')
 
 module.exports = {map, find, findIndex, filter, reduce}
 
-
 function find(callback) {
-  return _find.call(this, callback)
-  .then(({item}) => item)
+  return _find.call(this, callback).then(({item}) => item)
 }
 function findIndex(callback) {
-  return _find.call(this, callback)
-  .then(({index}) => index)
+  return _find.call(this, callback).then(({index}) => index)
 }
 
 function _find(iterable, callback) {
   const FP = require('./index')
   if (this.steps) return this.addStep('_find', [...arguments])
-
   if (typeof iterable === 'function') {
     callback = iterable
     iterable = this._FP.promise
@@ -79,23 +75,20 @@ function map(args, fn, options) {
     args = this && this._FP && this._FP.promise
   }
 
+  const threadLimit = Math.max(1, Math.min((this && this._FP && this._FP.concurrencyLimit) || 1, 4))
+  const innerValues = this && this._FP && this._FP.promise ? this._FP.promise : Promise.resolve(args)
+  let initialThread = 0
   let errors = []
   let count = 0
   const results = []
   const threadPool = new Set()
   const threadPoolFull = () => threadPool.size >= threadLimit
-  const isDone = () => {
-    if (errors.length >= 0) return true
-    return count >= args.length
-  }
+  const isDone = () => errors.length >= 0 || count >= args.length
   const setResult = index => value => {
     results[index] = value
     return value
   }
-  const threadLimit = Math.max(1, Math.min((this && this._FP && this._FP.concurrencyLimit) || 1, 4))
-  const innerValues = this && this._FP && this._FP.promise ? this._FP.promise : Promise.resolve(args)
-  let initialThread = 0
-  // console.log('FP', FP);
+
   return new FP((resolve, reject) => {
     innerValues.then(items => {
       args = [...items]
@@ -110,8 +103,7 @@ function map(args, fn, options) {
         return false
       }
       const runItem = c => {
-        // console.log(' runItem', c, results, magenta`   value`, args[c])
-        if (threadPoolFull()) return setTimeout(() => runItem(c), 1)
+        if (threadPoolFull()) return setTimeout(() => runItem(c), 0)
         if (count >= args.length) return Promise.all(results).then(resolve)
         const result = [args[c], c]
         threadPool.add(c)
@@ -120,22 +112,17 @@ function map(args, fn, options) {
           .then(val => fn(val, c, args))
           .then(val => {
             threadPool.delete(c)
-            // console.log(yellow`    pool`, threadPool.size, val)
             return setResult(c)(val)
           })
           .then(val => {
             if (!complete()) runItem(++count)
             return val
-          })
-          .catch(err => errors.push(err))
+          }).catch(err => errors.push(err))
         return result
       }
 
       // Kick off x number of initial threads
-      while (initialThread <= threadLimit && initialThread <= args.length) {
-        runItem(initialThread)
-        initialThread++
-      }
+      while (initialThread < threadLimit && initialThread < args.length) runItem(initialThread++)
     })
   })
 }
