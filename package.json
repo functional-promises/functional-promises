@@ -22,6 +22,7 @@
     "build": "npm run build-dev && npm run build-live",
     "build-live": "NODE_ENV=production webpack",
     "build-dev": "NODE_ENV=development webpack",
+    "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",
     "deploy": "npm run version-bump-revision && npm run build && npm run docs-build && npm run test && npm run publish",
     "version-bump-revision": "node ./misc/package-version-manager.js 0.0.1",
     "version-bump-minor": "node ./misc/package-version-manager.js 0.1.0"

@@ -90,14 +90,14 @@ function startRunkitInstance(codeBlock) {
     // minHeight: codeBox.height + 'px',
     onEvaluate: function() {
       // console.log('onEvaluate', arguments)
-      // REQUEST: I'd like the inner document.body.scrollHeight
-      var minHeight = parseFloat(placeholder.style.minHeight)
-      var multiplier = minHeight < 200
-        ? 1.5
-        : minHeight < 400
-        ? 1.3
-        : 1.25
-      placeholder.style.minHeight = minHeight * multiplier
+      // TODO: I'd like the inner document.body.scrollHeight
+      // var minHeight = parseFloat(placeholder.style.minHeight)
+      // var multiplier = minHeight < 200
+      //   ? 1.5
+      //   : minHeight < 400
+      //     ? 1.3
+      //     : 1.25
+      // placeholder.style.minHeight = (minHeight * multiplier) + 'px'
       // console.info('onEvaluate', placeholder.style.minHeight)
     }
   })

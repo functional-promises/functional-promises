@@ -946,5 +946,12 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
       gtag('config', 'UA-112472862-1');
     </script>
 
+    <script>
+      window.addEventListener('hashchange', function(event) {
+        var hash = self.location.hash;
+        hash = !hash ? 'top' : hash.slice(1);
+        dataLayer.push({'pageCategory': hash});
+      });
+    </script>
   </body>
 </html>
