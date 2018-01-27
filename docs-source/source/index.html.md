@@ -50,7 +50,7 @@ squareAndFormatDecimal([5, 10, 20])
 > Use [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) with `FP.thenIf()` to handle `response.ok === false` with custom response.
 
 ```javascript
-// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods
+//// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods
 FP.resolve(fetch('/profile', {method: 'GET'}))
   .thenIf( // thenIf lets us handle branching logic
     res => res.ok, // Check if response is ok
@@ -283,7 +283,7 @@ FP.resolve(email)
 > Functional Promise Login Flow
 
 ```javascript
-// Check if login successful, returning a token:
+//// Check if login successful, returning a token:
 const authUser = (email, pass) => FP
   .resolve({email, pass})
   .then(({email, pass}) => svc.loginGetUser(email, pass))
@@ -440,7 +440,7 @@ Use sparingly. Stream &amp; event handling are exempt from this 'rule'. If using
 # &#160;&#160; Events
 
 ```javascript
-// Example DOM code:
+//// Example DOM code:
 const button = document.getElementById('submitBtn')
 FP.chain()
   .get('target')
@@ -534,7 +534,7 @@ Create a re-usable sequence of steps:
 ## Events + Promise Chain
 
 ```javascript
-// Example DOM Code
+//// Example DOM Code
 const form = document.querySelector('form')
 const submitHandler = createTodoHandler()
 form.addEventListener('submit', submitHandler)
@@ -572,7 +572,7 @@ The method `createTodoHandler()` gives you a Functional chain to:
 
 
 ```javascript
-// using a more complete controller/component interface:
+//// using a more complete controller/component interface:
 const todoCtrl = TodoController()
 
 todoCtrl
@@ -586,7 +586,7 @@ todoCtrl
 > TodoController will return an object with `add` and `update` methods - based on FP.chain()
 
 ```javascript
-// example code:
+//// example code:
 function TodoController() {
   const statusLbl = document.querySelector('label.status')
   const setStatus = s => statusLbl.textContent = s
