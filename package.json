@@ -16,7 +16,7 @@
   "homepage": "http://fpromises.io/",
   "scripts": {
     "start": "npm run build && webpack --watch",
-    "test": "ava --serial --fail-fast=1 --verbose tests",
+    "test": "ava --serial --fail-fast=1 --verbose tests/*.js",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
     "build": "npm run build-dev && npm run build-live",
