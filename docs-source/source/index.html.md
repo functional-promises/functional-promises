@@ -317,12 +317,35 @@ FP.resolve(fetch('https://api.github.com/users/justsml'))
   .then(data => console.log(data))
 ```
 
-The `.tap()` method is `FP`'s counterpart to `console.log()` - know it well.
+The `.tap()` method is `FP`'s primary way to use the familiar `console.log()` - know it well.
 
-It works just like `.then()` except it's return value is ignored. The next `thenable` will get the same input.
+It works just like `.then()` **except it's return value is ignored.** The next `thenable` will get the same input.
 
 Perfect for logging or other background tasks (where results don't need to block).
 
+## `.delay(ms)`
+
+```javascript
+const waitMs = 5
+const started = Date.now()
+
+FP.resolve([1, 2, 3])
+  // 3 'main' ways to delay results
+  // (examples to delay execution per-array-method)
+  // #1: Shorthand w/ the static helper
+  // .map(FP.delay(waitMs))
+  // #2: Chaining off the static helper: FP.delay(waitMs)
+  // .map(num => FP.delay(waitMs).then(() => num))
+  // #3: With FP's instance method
+  .map(num => FP.resolve(num).delay(waitMs))
+  // and
+  .then(() => {
+    const measuredDelay = Date.now() - started
+    console.log(`Delay Successful: ${measuredDelay >= 15}`)
+  })
+```
+
+`.delay(milliseconds)` is a helpful utility. It can help you avoid exceeding rate-limits in APIs. You can also use it to for simulated bottlenecks, adding 'slowdowns' exactly where needed can greatly assist in locating many kinds of complex bugs.
 
 # &#160;&#160; Properties
 

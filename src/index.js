@@ -7,7 +7,7 @@ const {map, filter}     = require('./arrays')
 const {reduce}          = require('./arrays')
 const {find, findIndex} = require('./arrays')
 const {all, cast}       = require('./promise')
-const {reject}          = require('./promise')
+const {reject, delay}   = require('./promise')
 const {thenIf, _thenIf} = require('./conditional')
 const {tapIf}           = require('./conditional')
 const FP = FunctionalPromise
@@ -31,6 +31,8 @@ FP.prototype.cast = cast
 FP.prototype.reject = reject
 FP.prototype.tap = tap
 FP.prototype.then = then
+FP.prototype.delay = delay
+FP.delay = delay
 
 // Monadic Methods
 FP.chain = chain

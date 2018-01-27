@@ -75,3 +75,20 @@ test('FP.unpack() reject', t => {
     .then(err => t.fail(err))
     .catch(err => t.truthy(err))
 })
+
+test('FP.delay()', t => {
+  const started = Date.now()
+  return FP.resolve([1, 2, 3])
+  .concurrency(1)
+  .map(num => FP.resolve(num).delay(5))
+  .then(() => t.truthy(Date.now() - started >= 15))
+})
+
+test('FP.delay() - static usage', t => {
+  const started = Date.now()
+  return FP.resolve([1, 2, 3])
+  .concurrency(1)
+  .map(num => FP.delay(5).then(() => num))
+  .then(() => t.truthy(Date.now() - started >= 15))
+})
+
