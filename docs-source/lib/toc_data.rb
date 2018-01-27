@@ -7,7 +7,7 @@ def toc_data(page_content)
   headers = []
   html_doc.css('h1, h2, h3').each do |header|
     # lbl = header.children.to_s.gsub("<code>", "").gsub("</code>", "")
-    id = header.attribute('id').gsub("160-", "").gsub(%r{-?code-?}, "")
+    id = header.attribute('id').to_s.gsub("160-", "").gsub(%r{-?code-?}, "")
     # puts "Label: #{lbl}"
     # puts "  Id: #{id}"
 
