@@ -99,16 +99,16 @@ FP.prototype.catch = function(fn) {
 function then(fn) {
   if (this.steps) return this.addStep('then', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn)
-  return this._FP.promise.then(fn)
+  return FP.resolve(this._FP.promise.then(fn))
 }
 
 function tap(fn) {
   if (this.steps) return this.addStep('tap', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.tap(fn)`. Must be a function. Currently: ' + typeof fn)
-  return this._FP.promise.then(value => {
+  return FP.resolve(this._FP.promise.then(value => {
     fn(value) // fires in the node callback queue (aka background task)
     return value
-  })
+  }))
 }
 
 function resolve(value) {
