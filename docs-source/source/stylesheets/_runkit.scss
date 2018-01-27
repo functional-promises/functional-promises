@@ -2,32 +2,38 @@
 
 .runkit-placeholder {
   margin-left: 50%;
-  width: 50%;
   right: 0px;
   position: absolute;
   overflow-y: scroll;
   overflow-x: hidden;
-  background-color: rgba(255, 255, 255, 0.33);
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 90;
 }
 
 .runkit-start {
   right: 30px;
   position: absolute;
+  margin-top: -20px;
+  font-size: 15.5px;
+  z-index: 10;
+  font-weight: 500;
 }
 
 .runkit-close {
+  z-index: 100;
+  font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
   border-bottom: dashed 1px #333;
   text-decoration: none;
-  color: #660000; // #f92672;
-  right: 20px;
+  color: #CC0000; // #f92672;
+  right: 30px;
   font-size: 15.5px;
   font-weight: 500;
   position: fixed;
+  margin-top: 10px;
+  transition: 150ms color ease-out;
 
-  &:link {
-    color: #660000; // #f92672;
-  }
   &:hover {
-    color: #CC0000;
+    color: #666;
+    border-bottom: dashed 1px #c00;
   }
 }

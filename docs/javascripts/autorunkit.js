@@ -54,23 +54,11 @@ function getCloseRunkitButton(codeBlock, editor) {
   link.addEventListener('click', function (e) {
     e.preventDefault()
     codeBlock.style.visibility = 'visible'
-    editor.style.display = 'none'
+    // editor.style.display = 'none'
+    editor.parentNode.removeChild(editor)
   })
   return link
 }
-
-// function getFloatingCloseButton(codeBlock, editor) {
-//   var link = document.createElement('a')
-//   link.classList.add('runkit-close runkit-bottom')
-//   link.textContent = 'Close'
-//   link.href = ''
-//   link.addEventListener('click', function (e) {
-//     e.preventDefault()
-//     codeBlock.style.visibility = 'visible'
-//     editor.style.display = 'none'
-//   })
-//   return link
-// }
 
 function getPlaceholder(elem) {
   // console.log('Placeholder:', JSON.stringify(elem))
@@ -97,7 +85,7 @@ function startRunkitInstance(codeBlock) {
   // load the runkit widget
   codeBlock.runkitNotebook = RunKit.createNotebook({
     element: placeholder,
-    preamble: 'const FP = require(\'functional-promise\');\n' + 'const assert = require(\'better-assert\');\n',
+    preamble: 'const FP = require(\'functional-promise\');\n',
     source: source,// + '\n',
     // minHeight: codeBox.height + 'px',
     onEvaluate: function() {

@@ -77,7 +77,9 @@
         $toc.find(tocListSelector).filter(":not(.active)").slideUp(150);
         $toc.find(tocListSelector).filter(".active").slideDown(150);
         // TODO remove classnames
-        document.title = $best.data("title") + " – " + originalTitle;
+        var htmlPattern = /<[^>]*>/g
+        var cleanTitle = ($best.data("title") + " – " + originalTitle).replace(htmlPattern, '');
+        document.title = cleanTitle;
       }
     };
 

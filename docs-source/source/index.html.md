@@ -27,9 +27,8 @@ FP.resolve(['1', '2', '3', '4', '5'])
   .map(Number)
   .filter(x => x % 2 === 0)
   .then(results => {
-    assert.deepEqual(results, [2, 4])
+    console.log('deepEqual', results, [2, 4])
   })
-
 ```
 
 > Create re-usable sequences of functions with `.chain()`.
@@ -44,7 +43,7 @@ const squareAndFormatDecimal = FP
   .chainEnd() // returns function
 
 squareAndFormatDecimal([5, 10, 20])
-  .then(num => assert.deepEqual(num, ['25.00', '100.00', '400.00']))
+  .then(num => console.log('deepEqual', num, ['25.00', '100.00', '400.00']))
 ```
 
 > Use [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) with `FP.thenIf()` to handle `response.ok === false` with custom response.
@@ -159,7 +158,7 @@ FP.resolve(rawData)
   .map(Number)            // convert to numeric [99]
   .findIndex(n => n >= 1) // is gte 1, idx = 0
   .then(index => {
-    assert.equal(index, 0)
+    console.log('equal', index, 0)
   })
 ```
 
@@ -171,7 +170,7 @@ Any `.then()` which would handle an array, may instead use one of the `FP` array
 FP.resolve([1, 2, 3, 4, Promise.resolve(5)])
   .map(x => x * 2)
   .then(results => {
-    assert.deepEqual(results, [2, 4, 6, 8, 10])
+    console.log('deepEqual', results, [2, 4, 6, 8, 10])
   })
 ```
 
@@ -190,18 +189,18 @@ Using `FP.map()` to do this lets you focus on the important logic: `x => x * 2`
 ```javascript
 FP.resolve([1, null, 3, null, 5])
   .filter(Boolean)
-  .then(results => assert.deepEqual(results, [1, 3, 5]))
+  .then(results => console.log('deepEqual', results, [1, 3, 5]))
 
 // Or similarly:
 FP.resolve([1, null, 3, null, 5])
   .filter(value => value ? true : false)
-  .then(results => assert.deepEqual(results, [1, 3, 5]))
+  .then(results => console.log('deepEqual', results, [1, 3, 5]))
 ```
 
 Use `.filter()` to omit items from the input array by passing through a given function. Items will be omitted if the function returns a falsey value.
 
 <aside class="notice">
-  The <code>Boolean</code> type can be used as a truthiness check. For example: <code>assert.equal(Boolean(1), true)</code>, <code>assert.equal(Boolean(false), false)</code>, <code>assert.equal(Boolean(null), false)</code>.
+  The <code>Boolean</code> type can be used as a truthiness check. For example: <code>console.log('equal', Boolean(1), true)</code>, <code>console.log('equal', Boolean(false), false)</code>, <code>console.log('equal', Boolean(null), false)</code>.
 </aside>
 
 ## `FP.find(iterable, fn)`
@@ -210,7 +209,7 @@ Use `.filter()` to omit items from the input array by passing through a given fu
 FP.resolve([1, 2, 3, 4, 5])
   .find(x => x % 2 === 0)
   .then(results => {
-    assert.deepEqual(results, 2)
+    console.log('deepEqual', results, 2)
   })
 ```
 
@@ -224,7 +223,7 @@ If no match is found it will return `undefined`.
 FP.resolve([1, 2, 3, 4, 5])
   .findIndex(x => x % 2 === 0)
   .then(results => {
-    assert.equal(results, 1)
+    console.log('equal', results, 1)
   })
 ```
 
@@ -238,7 +237,7 @@ If no match is found it will return `-1`.
 FP.resolve([1, 2, 4])
   .some(x => x % 2 === 0)
   .then(results => {
-    assert.equal(results, true)
+    console.log('equal', results, true)
   })
 ```
 
@@ -252,7 +251,7 @@ If no truthy result is found, `.some()` returns `Promise<false>`.
 FP.resolve([1, 2, 4])
   .none(x => x % 2 === 0)
   .then(results => {
-    assert.equal(results, false)
+    console.log('equal', results, false)
   })
 ```
 
@@ -407,13 +406,13 @@ FP.all([
   Promise.resolve(1),
   Promise.resolve(2)
 ])
-.then(results => assert.deepEqual(results, [1, 2]))
+.then(results => console.log('deepEqual', results))
 
 FP.all({
   one: Promise.resolve(1),
   two: Promise.resolve(2)
 })
-.then(results => assert.deepEqual(results, {one: 1, two: 2}))
+.then(results => console.log('deepEqual', results))
 ```
 
 `FP.all()` provides an extended utility above the native `Promise.all()`, **supporting both Objects and Arrays.**
@@ -430,7 +429,7 @@ function edgeCase() {
 }
 
 edgeCase()
-  .then(result => assert.equal(result, 'All done!'))
+  .then(result => console.log('equal', result))
 ```
 
 Use sparingly. Stream &amp; event handling are exempt from this 'rule'. If using ES2015, destructuring helps to (more cleanly) achieve what `deferred` attempts.
@@ -525,7 +524,7 @@ const squareAndFormatDecimal = FP
 
 squareAndFormatDecimal([5])
 .then(num => {
-  assert.deepEqual(num, ['25.00'])
+  console.log(num) // ['25.00']
 })
 ```
 
@@ -580,7 +579,6 @@ todoCtrl
   .then(result => {
     todoCtrl.update({id: 1, text: 'updated item', complete: true})
   })
-
 ```
 
 > TodoController will return an object with `add` and `update` methods - based on FP.chain()
@@ -623,7 +621,7 @@ FP.resolve([2, 1, 0])
   .quiet()
   .map(x => 2 / x)
   .then(results => {
-    assert.deepEqual(results, [1, 2, Error])
+    console.log(results) // [1, 2, Error])
   })
 ```
 
@@ -638,7 +636,7 @@ FP.resolve([1, 2, 3, 4, 5])
   .concurrency(2)
   .map(x => x * 2)
   .then(results => {
-    assert.deepEqual(results, [2, 4, 6, 8, 10])
+    console.log(results)// [2, 4, 6, 8, 10]
   })
 ```
 
