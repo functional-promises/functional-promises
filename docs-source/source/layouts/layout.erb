@@ -130,7 +130,12 @@ under the License.
       window.addEventListener('hashchange', function(event) {
         var hash = self.location.hash;
         hash = !hash ? 'top' : hash.slice(1);
-        dataLayer.push({'pageCategory': hash});
+        if (hash && hash.length >= 1) {
+          gtag('event', 'screen_view', {
+            'app_name': 'fpromises',
+            'screen_name': hash
+          });
+        }
       });
     </script>
   </body>

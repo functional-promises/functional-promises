@@ -525,8 +525,8 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
 <li><a href="http://www.fpromises.io/#composition-pipelines">Composition Pipelines</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#fp-chain"><code>FP.chain(options)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-chainend"><code>.chainEnd()</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-chain-chainend"><code>FP.chain(options)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-chain-chainend"><code>.chainEnd()</code></a></li>
 </ul></li>
 <li><a href="http://www.fpromises.io/#modifiers">Modifiers</a>
 
@@ -950,7 +950,12 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
       window.addEventListener('hashchange', function(event) {
         var hash = self.location.hash;
         hash = !hash ? 'top' : hash.slice(1);
-        dataLayer.push({'pageCategory': hash});
+        if (hash && hash.length >= 1) {
+          gtag('event', 'screen_view', {
+            'app_name': 'fpromises',
+            'screen_name': hash
+          });
+        }
       });
     </script>
   </body>
