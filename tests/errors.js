@@ -18,14 +18,14 @@ test('Can override .catch() result', t => {
   .then(data => t.truthy(data.message === 'temp error, plz try again'))
 })
 
-test('Can .catch(filterType, fn) filtering by Error type', t => {
-  return FP.resolve()
-  .then(() => {throw new Error('Oh noes')})
-  .tap(() => t.fail('must skip to the .catch section!'))
-  .catch(TypeError, () => t.fail('arg too specific for .catch(type)'))
-  .catch(SyntaxError, () => t.fail('arg too specific for .catch(type)'))
-  .catch(ReferenceError, () => t.fail('arg too specific for .catch(type)'))
-  .catch(err => {
-    t.truthy(err.message === 'Oh noes')
-  })
-})
+// test('Can .catch(filterType, fn) filtering by Error type', t => {
+//   return FP.resolve()
+//   .then(() => {throw new Error('Oh noes')})
+//   .tap(() => t.fail('must skip to the .catch section!'))
+//   .catch(TypeError, () => t.fail('arg too specific for .catch(type)'))
+//   .catch(SyntaxError, () => t.fail('arg too specific for .catch(type)'))
+//   .catch(ReferenceError, () => t.fail('arg too specific for .catch(type)'))
+//   .catch(err => {
+//     t.truthy(err.message === 'Oh noes')
+//   })
+// })
