@@ -85,15 +85,20 @@ FP.prototype.set = function(keyName, value) {
   })
 }
 
-FP.prototype.catch = function(fn) {
+FP.prototype.catch = function(expr, fn) {
   if (this.steps) return this.addStep('catch', [...arguments])
-  if (this._FP.error) {
-    const result = fn(this._FP.error)
-    this._FP.error = undefined // no dbl-catch
-    return result
-  }
-  // bypass error handling
-  return FP.resolve(this._FP.value)
+  if (typeof expr === 'object' && isFunction(fn)) {
+    // nada
+  } else if (isFunction(expr)) {
+    fn = expr
+    expr = Error
+  } else { throw new FunctionalError('Invalid args for `.catch()`') }
+
+  if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.catch(fn)`. Must be a function. Currently: ' + typeof fn)
+  return FP.resolve(this._FP.promise.catch(err => {
+    if ((err instanceof expr)) return fn(err) // try re-throw, might be really slow...
+    throw err
+  }))
 }
 
 function then(fn) {

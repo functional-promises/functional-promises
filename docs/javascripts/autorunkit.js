@@ -9,6 +9,26 @@ document.addEventListener('DOMContentLoaded', function() {
   autoRunkit()
 })
 
+function makeElem(type, attributes/*, children*/) {
+  var el = document.createElement(type);
+  for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    children[_key - 2] = arguments[_key]
+  }
+  Object.keys(attributes).forEach(key => {
+    // would it be better to use propertys
+    el.setAttribute(key, attributes[key])
+  })
+
+  children.forEach(function (child) {
+    if (typeof child === 'string') {
+      el.appendChild(document.createTextNode(child));
+    } else {
+      el.appendChild(child);
+    }
+  });
+  return el;
+}
+
 function autoRunkit() {
   if (typeof RunKit !== 'undefined') {
     initRunKit()
@@ -35,10 +55,7 @@ function canRunCodeBlock(codeBlock) {
 }
 
 function addRunkitButton(codeBlock) {
-  var link = document.createElement('a')
-  link.classList.add('runkit-start')
-  link.textContent = 'Edit/Run Live'
-  link.href = ''
+  var link = makeElem('a', {'class': 'runkit-start', 'href': ''}, 'Edit/Test (powered by RunKit)')
   link.addEventListener('click', function (e) {
     e.preventDefault()
     startRunkitInstance(codeBlock)
@@ -47,10 +64,7 @@ function addRunkitButton(codeBlock) {
 }
 
 function getCloseRunkitButton(codeBlock, editor) {
-  var link = document.createElement('a')
-  link.classList.add('runkit-close')
-  link.textContent = 'Close Editor'
-  link.href = ''
+  var link = makeElem('a', {'class': 'runkit-close', 'href': ''}, 'Close Editor')
   link.addEventListener('click', function (e) {
     e.preventDefault()
     codeBlock.style.visibility = 'visible'
@@ -61,14 +75,8 @@ function getCloseRunkitButton(codeBlock, editor) {
 }
 
 function getPlaceholder(elem) {
-  // console.log('Placeholder:', JSON.stringify(elem))
-  var placeholder = document.createElement('div')
-  placeholder.classList.add('runkit-placeholder')
-  placeholder.style.minHeight = elem.height + 'px'
-  placeholder.style.top = (window.scrollY + elem.top) + 'px'
-  placeholder.style.width = elem.width + 'px'
-  // console.log('placeholder.style', placeholder.style)
-  return placeholder
+  var style = 'minHeight:' + elem.height + 'px; top:' + (window.scrollY + elem.top) + 'px; width:' + elem.width + 'px;'
+  return makeElem('div', {'class': 'runkit-placeholder', 'style': style})
 }
 
 function startRunkitInstance(codeBlock) {
