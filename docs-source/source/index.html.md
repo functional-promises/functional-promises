@@ -42,7 +42,7 @@ FP.resolve(['1', '2', '3', '4', '5'])
   .map(Number)
   .filter(x => x % 2 === 0)
   .then(results => {
-    console.log(results)) // [2, 4
+    console.log(results) // [2, 4
   })
 ```
 
