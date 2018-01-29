@@ -325,6 +325,15 @@ Default values let you call `.thenIf` with no args - if you simply want to exclu
 ## `fp.tap(fn)`
 
 ```javascript
+FP.resolve(fetch('http://jsonplaceholder.typicode.com/photos/11'))
+  .tap(res => console.log(`ok:${res.ok}`))
+  .then(res => res.json())
+  .tap(data => console.log('Keys: ' + Object.keys(data).sort().join(',')))
+  .then(data => `<img src='${data.url}' alt='${data.title}' />`)
+  .tap(data => console.log('Image Url: ' + data.url))
+```
+
+```javascript
 FP.resolve(fetch('https://api.github.com/users/justsml'))
   .tap(res => console.log(`github user req ok? ${res.ok}`))
   .then(res => res.json())
@@ -339,6 +348,8 @@ It works just like `.then()` **except it's return value is ignored.** The next `
 Perfect for logging or other background tasks (where results don't need to block).
 
 ## `fp.delay(ms)`
+
+> Delay per-array item.
 
 ```javascript
 const waitMs = 5
@@ -356,7 +367,21 @@ FP.resolve([1, 2, 3])
   // and
   .then(() => {
     const measuredDelay = Date.now() - started
-    console.log(`Delay Successful: ${measuredDelay >= 15}`)
+    console.log(`Delayed ${measuredDelay}ms.`)
+    console.log(`Success: ${measuredDelay >= 15}`)
+  })
+```
+
+> Single delay added mid-sequence.
+
+```javascript
+const started = Date.now()
+FP.resolve([1, 2, 3])
+  .delay(250)
+  .map(num => num + num)
+  .then(() => {
+    const measuredDelay = Date.now() - started
+    console.log(`Delayed ${measuredDelay}ms.`)
   })
 ```
 
