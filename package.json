@@ -1,7 +1,7 @@
 {
   "name": "functional-promise",
-  "version": "1.4.40",
-  "description": "Composition Pipeline Promises Extension. See Complete Docs Here: http://fpromises.io/",
+  "version": "1.4.42",
+  "description": "Composition Pipeline Promises Extension. See Complete Docs Here: http://www.fpromises.io/",
   "ava": {
     "require": [
       "babel-register"
@@ -13,7 +13,7 @@
   "repository": {
     "url": "https://github.com/justsml/functional-promises.git"
   },
-  "homepage": "http://fpromises.io/",
+  "homepage": "http://www.fpromises.io/",
   "scripts": {
     "start": "npm run build && webpack --watch",
     "test": "ava --serial --fail-fast=1 --verbose tests/*.js",

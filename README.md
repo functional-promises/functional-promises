@@ -34,12 +34,12 @@ LoC included in comparison because: smaller surface == hopefully fewer places bu
 (Maturity should factor in.)
 
 
-| Library                     	                                    | # Files   | Lines of Code  | **Browser** Bundle Kb
-|------------------------------	                                    |---------: |--------------: |-------------------:
-| **Functional Promise v1.4.30**                                  	|       8 	|           384	 | 16 Kb
-| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       |      38 	|         5,188	 | 80 Kb
-| [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
-| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12,366	 | 145 Kb
+| Library                     	                                    | Main deal | Files   | Lines of Code  | .min.js kB
+|------------------------------	                                    |-----------|---------: |--------------: |-------------------:
+| **Functional Promise v1.4.30**                                  	| Sync & Async Chains | 8 |           384	 | 16 Kb
+| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       | Promises Replacement |        38 |         5,188	 | 80 Kb
+| [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	| Observables Chaining |     458 |        12,266  | 150 Kb
+| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	| \[Async\]Iterable Chaining |     521 |        12,366	 | 145 Kb
 
 Admittedly `IxJS`/`RxJS` have a far larger API than `FP` also some behavior in `RxJS`/`IxJS` may never be added.
 Currently however there is a lot of overlap with `FP` (plus more planned).

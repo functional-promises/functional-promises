@@ -78,6 +78,7 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
 [![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat)](https://github.com/justsml/functional-promises)
 [![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat)](https://github.com/justsml/functional-promises)
 
+[![NPM](https://nodei.co/npm/functional-promise.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/functional-promise)
 
 ### Summary
 
@@ -95,12 +96,12 @@ The **browser bundle** weighs in at **~20Kb** (using Webpack+Babel+Rollup+Uglify
 
 ### Library Comparison
 
-| Library                     	                                    | # Files 	| # Lines Code 	 | **Browser** Bundle Kb
-|------------------------------	                                    |---------: |--------------: |-------------------:
-| **Functional Promise v1.4.30**                                  	|       8 	|           384	 | 16 Kb
-| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       |      38 	|         5,188	 | 80 Kb
-| [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	|     458 	|        12,266  | 150 Kb
-| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	|     521 	|        12,366	 | 145 Kb
+| Library                     	                                    | Main deal | Files   | Lines of Code  | .min.js kB
+|------------------------------	                                    |-----------|---------: |--------------: |-------------------:
+| **Functional Promise v1.4.30**                                  	| Sync & Async Chains | 8 |           384	 | 16 Kb
+| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       | Promises Replacement |        38 |         5,188	 | 80 Kb
+| [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	| Observables Chaining |     458 |        12,266  | 150 Kb
+| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	| \[Async\]Iterable Chaining |     521 |        12,366	 | 145 Kb
 
 
 So `FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is about **1/9th** the size. `IxJS`/`RxJS` do feature a far larger API.
