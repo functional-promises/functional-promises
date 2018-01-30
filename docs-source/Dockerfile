@@ -16,6 +16,6 @@ WORKDIR /slate
 
 RUN bundle install
 
-ENTRYPOINT /usr/local/bin/bundler exec middleman build
-# ENTRYPOINT /usr/local/bin/bundler exec middleman build --verbose
+# ENTRYPOINT /usr/local/bin/bundler exec middleman build
+ENTRYPOINT /usr/local/bin/bundler exec middleman build --verbose
 

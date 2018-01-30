@@ -64,7 +64,7 @@ squareAndFormatDecimal([5, 10, 20])
 > Use [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) with `FP.thenIf()` to handle `response.ok === false` with custom response.
 
 ```javascript
-//// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods
+//// Wrap `fetch()` with `FP.resolve()` to use `FP`'s methods
 FP.resolve(fetch('/profile', {method: 'GET'}))
   .thenIf( // thenIf lets us handle branching logic
     res => res.ok, // Check if response is ok
@@ -274,6 +274,28 @@ FP.resolve([1, 2, 4])
 
 If no match is found it will return `Promise<true>`.
 
+# &#160;&#160; Errors
+
+## `FP.catch(fn)`
+## `FP.catchIf(type, fn)`
+
+> Catching errors by type
+
+```javascript
+FP.resolve()
+  .then(() => {
+    throw new TypeError('Oh noes')
+  })
+  .then(() => console.error('must skip this!'))
+  .catch(ReferenceError, () => console.error('arg too specific for .catch(type)'))
+  .catch(SyntaxError, () => console.error('arg too specific for .catch(type)'))
+  .catch(TypeError, err => console.info('Success!!! filtered .catch(type)', err))
+  .catch(err => console.error('Fallback, no error type matched'))
+```
+
+`.catch()` is analgous to native Promise error handling.
+
+This example uses `TypeError` matching to print the 'success' message - ignoring the other `catch`'s.
 
 # &#160;&#160; Conditional
 

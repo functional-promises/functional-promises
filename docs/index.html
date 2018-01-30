@@ -261,6 +261,17 @@
               </ul>
           </li>
           <li>
+            <a href="#errors" class="toc-h1 toc-link" data-title="<small>   Errors</small>"><small>   Errors</small></a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#fp-catch" class="toc-h2 toc-link" data-title="<code>FP.catch(fn)</code>"><code>FP.catch(fn)</code></a>
+                  </li>
+                  <li>
+                    <a href="#fp-catchif" class="toc-h2 toc-link" data-title="<code>FP.catchIf(type, fn)</code>"><code>FP.catchIf(type, fn)</code></a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#conditional" class="toc-h1 toc-link" data-title="<small>   Conditional</small>"><small>   Conditional</small></a>
               <ul class="toc-list-h2">
                   <li>
@@ -395,7 +406,7 @@
 <blockquote>
 <p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code></a> with <code>FP.thenIf()</code> to handle <code>response.ok === false</code> with custom response.</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">//// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods</span>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">//// Wrap `fetch()` with `FP.resolve()` to use `FP`'s methods</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">}))</span>
   <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span> <span class="c1">// thenIf lets us handle branching logic</span>
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check if response is ok</span>
@@ -628,6 +639,23 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
 <p><code>.none()</code> resolves to <code>Promise&lt;false&gt;</code> on the first <strong>item</strong> to return falsey for <code>fn(item)</code></p>
 
 <p>If no match is found it will return <code>Promise&lt;true&gt;</code>.</p>
+<h1 id='errors'><small>&#160;&#160; Errors</small></h1><h2 id='fp-catch'><code>FP.catch(fn)</code></h2><h2 id='fp-catchif'><code>FP.catchIf(type, fn)</code></h2>
+<blockquote>
+<p>Catching errors by type</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">'Oh noes'</span><span class="p">)</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'must skip this!'</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">ReferenceError</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'arg too specific for .catch(type)'</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">SyntaxError</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'arg too specific for .catch(type)'</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">TypeError</span><span class="p">,</span> <span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'Success!!! filtered .catch(type)'</span><span class="p">,</span> <span class="nx">err</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'Fallback, no error type matched'</span><span class="p">))</span>
+</code></pre>
+<p><code>.catch()</code> is analgous to native Promise error handling.</p>
+
+<p>This example uses <code>TypeError</code> matching to print the &#39;success&#39; message - ignoring the other <code>catch</code>&#39;s.</p>
 <h1 id='conditional'><small>&#160;&#160; Conditional</small></h1><h2 id='fp-thenif'><code>FP.thenIf()</code></h2>
 <blockquote>
 <p>Email &#39;validator&#39;</p>
@@ -666,16 +694,13 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
 <p>The return value of either <code>ifTrue</code>/<code>ifFalse</code> handler will be handed to the next <code>.then()</code>.</p>
 
 <p>Default values let you call <code>.thenIf</code> with no args - if you simply want to exclude falsey values down the chain.</p>
-<h1 id='utilities'><small>&#160;&#160; Utilities</small></h1><h2 id='fp-tap'><code>fp.tap(fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">fetch</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'isomorphic-fetch'</span><span class="p">)</span>
-
-<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'http://jsonplaceholder.typicode.com/photos/11'</span><span class="p">))</span>
+<h1 id='utilities'><small>&#160;&#160; Utilities</small></h1><h2 id='fp-tap'><code>fp.tap(fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'http://jsonplaceholder.typicode.com/photos/11'</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`ok:</span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
   <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Keys: '</span> <span class="o">+</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">sort</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">','</span><span class="p">)))</span>
-  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">)))</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">fetch</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'isomorphic-fetch'</span><span class="p">)</span>
-
-<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'https://api.github.com/users/justsml'</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="s2">`&lt;img src='</span><span class="p">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">url</span><span class="p">}</span><span class="s2">' alt='</span><span class="p">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">title</span><span class="p">}</span><span class="s2">' /&gt;`</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Image Url: '</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">url</span><span class="p">))</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'https://api.github.com/users/justsml'</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`github user req ok? </span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
   <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Keys:'</span><span class="p">,</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">data</span><span class="p">)))</span>
@@ -686,7 +711,11 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
 <p>It works just like <code>.then()</code> <strong>except it&#39;s return value is ignored.</strong> The next <code>thenable</code> will get the same input.</p>
 
 <p>Perfect for logging or other background tasks (where results don&#39;t need to block).</p>
-<h2 id='fp-delay'><code>fp.delay(ms)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">waitMs</span> <span class="o">=</span> <span class="mi">5</span>
+<h2 id='fp-delay'><code>fp.delay(ms)</code></h2>
+<blockquote>
+<p>Delay per-array item.</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">waitMs</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="kr">const</span> <span class="nx">started</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
 
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
@@ -701,7 +730,20 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
   <span class="c1">// and</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kr">const</span> <span class="nx">measuredDelay</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">started</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Delay Successful: </span><span class="p">${</span><span class="nx">measuredDelay</span> <span class="o">&gt;=</span> <span class="mi">15</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Delayed </span><span class="p">${</span><span class="nx">measuredDelay</span><span class="p">}</span><span class="s2">ms.`</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Success: </span><span class="p">${</span><span class="nx">measuredDelay</span> <span class="o">&gt;=</span> <span class="mi">15</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+  <span class="p">})</span>
+</code></pre>
+<blockquote>
+<p>Single delay added mid-sequence.</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">started</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">delay</span><span class="p">(</span><span class="mi">250</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">num</span> <span class="o">+</span> <span class="nx">num</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">measuredDelay</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">started</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Delayed </span><span class="p">${</span><span class="nx">measuredDelay</span><span class="p">}</span><span class="s2">ms.`</span><span class="p">)</span>
   <span class="p">})</span>
 </code></pre>
 <p><code>.delay(milliseconds)</code> is a helpful utility. It can help you avoid exceeding rate-limits in APIs. You can also use it to for simulated bottlenecks, adding &#39;slowdowns&#39; exactly where needed can greatly assist in locating many kinds of complex bugs.</p>

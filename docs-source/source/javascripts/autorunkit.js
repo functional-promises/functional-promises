@@ -1,6 +1,6 @@
-'use strict'
 
 (function _wrapRunKit() {
+  'use strict';
 
   var isComment = /^\/\/\/\/*/
   var retryLimit = 10
@@ -21,7 +21,7 @@
     for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
       children[_key - 2] = arguments[_key]
     }
-    Object.keys(attributes).forEach(key => {
+    Object.keys(attributes).forEach(function(key) {
       el.setAttribute(key, attributes[key])
     })
 
@@ -118,8 +118,8 @@
 
   function resizeEditors() {
     var codeBlocks = getLiveCodeBlocks()
-    console.log('codeBlock', [...codeBlocks])
-    Array.prototype.map.call(codeBlocks, el => {
+    console.log('codeBlock', [].slice.call(codeBlocks))
+    Array.prototype.map.call(codeBlocks, function(el) {
       var editor = el.runkitElement
       clonePosition(el, editor)
     })
@@ -127,10 +127,10 @@
 
   function clonePosition(srcElem, targetElem) {
     var position = srcElem.getBoundingClientRect()
-    targetElem.style.width = position.width
-    targetElem.style.height = position.height
-    targetElem.style.left = position.left
-    targetElem.style.top = position.top + window.scrollY
+    targetElem.style.width = position.width + 'px'
+    targetElem.style.height = position.height + 'px'
+    targetElem.style.left = position.left + 'px'
+    targetElem.style.top = (position.top + window.scrollY) + 'px'
     return targetElem
   }
 
