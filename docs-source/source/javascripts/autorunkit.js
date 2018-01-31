@@ -118,7 +118,7 @@
 
   function resizeEditors() {
     var codeBlocks = getLiveCodeBlocks()
-    console.log('codeBlock', [].slice.call(codeBlocks))
+    // console.log('codeBlock', [].slice.call(codeBlocks))
     Array.prototype.map.call(codeBlocks, function(el) {
       var editor = el.runkitElement
       clonePosition(el, editor)
@@ -132,8 +132,8 @@
     // targetElem.style.left = position.left + 'px'
     targetElem.style.top = (position.top + window.scrollY) + 'px'
     setTimeout(function() {
-      console.log('src position', position)
-      console.log('newPos', targetElem.getBoundingClientRect())
+      // console.log('src position', position)
+      // console.log('newPos', targetElem.getBoundingClientRect())
     }, 10);
     return targetElem
   }
