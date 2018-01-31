@@ -75,7 +75,7 @@
   }
 
   function getPlaceholder(elem) {
-    var style = 'minHeight:' + elem.height + 'px; top:' + (window.scrollY + elem.top) + 'px; width:' + elem.width + 'px;'
+    var style = 'min-height:' + elem.height + 'px; top:' + (window.scrollY + elem.top) + 'px; width: ' + elem.width + 'px; right: 0;'// + elem.width + 'px;'
     return makeElem('div', {'class': 'runkit-placeholder', 'style': style})
   }
 
@@ -129,8 +129,12 @@
     var position = srcElem.getBoundingClientRect()
     targetElem.style.width = position.width + 'px'
     targetElem.style.height = position.height + 'px'
-    targetElem.style.left = position.left + 'px'
+    // targetElem.style.left = position.left + 'px'
     targetElem.style.top = (position.top + window.scrollY) + 'px'
+    setTimeout(function() {
+      console.log('src position', position)
+      console.log('newPos', targetElem.getBoundingClientRect())
+    }, 10);
     return targetElem
   }
 

@@ -374,23 +374,15 @@ Perfect for logging or other background tasks (where results don't need to block
 > Delay per-array item.
 
 ```javascript
-const waitMs = 5
 const started = Date.now()
 
-FP.resolve([1, 2, 3])
-  // 3 'main' ways to delay results
-  // (examples to delay execution per-array-method)
-  // #1: Shorthand w/ the static helper
-  // .map(FP.delay(waitMs))
-  // #2: Chaining off the static helper: FP.delay(waitMs)
-  // .map(num => FP.delay(waitMs).then(() => num))
-  // #3: With FP's instance method
-  .map(num => FP.resolve(num).delay(waitMs))
-  // and
+FP.resolve([1, 2, 3, 4])
+  .concurrency(1) // same as .serial()
+  .map(num => FP.resolve(num).delay(50))
   .then(() => {
-    const measuredDelay = Date.now() - started
-    console.log(`Delayed ${measuredDelay}ms.`)
-    console.log(`Success: ${measuredDelay >= 15}`)
+    const runtime = Date.now() - started
+    console.log(`Delayed ${runtime}ms.`)
+    console.log(`Success: ${runtime >= 200}`)
   })
 ```
 
@@ -402,12 +394,19 @@ FP.resolve([1, 2, 3])
   .delay(250)
   .map(num => num + num)
   .then(() => {
-    const measuredDelay = Date.now() - started
-    console.log(`Delayed ${measuredDelay}ms.`)
+    const runtime = Date.now() - started
+    console.log(`Delayed ${runtime}ms.`)
+    console.log(`Success: ${runtime >= 250}`)
   })
 ```
 
 `.delay(milliseconds)` is a helpful utility. It can help you avoid exceeding rate-limits in APIs. You can also use it to for simulated bottlenecks, adding 'slowdowns' exactly where needed can greatly assist in locating many kinds of complex bugs.
+
+#### Usage
+
+* Shorthand with static helper: `.then(FP.delay(waitMs))`
+* Nesting with static helper: FP.delay(waitMs): `.then(num => FP.delay(waitMs).then(() => num))`
+* Using FP's instance method. `FP.resolve([1, 2, 3]).delay(250)`
 
 # &#160;&#160; Properties
 

@@ -715,23 +715,15 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
 <blockquote>
 <p>Delay per-array item.</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">waitMs</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="kr">const</span> <span class="nx">started</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">started</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
 
-<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-  <span class="c1">// 3 'main' ways to delay results</span>
-  <span class="c1">// (examples to delay execution per-array-method)</span>
-  <span class="c1">// #1: Shorthand w/ the static helper</span>
-  <span class="c1">// .map(FP.delay(waitMs))</span>
-  <span class="c1">// #2: Chaining off the static helper: FP.delay(waitMs)</span>
-  <span class="c1">// .map(num =&gt; FP.delay(waitMs).then(() =&gt; num))</span>
-  <span class="c1">// #3: With FP's instance method</span>
-  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">delay</span><span class="p">(</span><span class="nx">waitMs</span><span class="p">))</span>
-  <span class="c1">// and</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">concurrency</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// same as .serial()</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">delay</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kr">const</span> <span class="nx">measuredDelay</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">started</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Delayed </span><span class="p">${</span><span class="nx">measuredDelay</span><span class="p">}</span><span class="s2">ms.`</span><span class="p">)</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Success: </span><span class="p">${</span><span class="nx">measuredDelay</span> <span class="o">&gt;=</span> <span class="mi">15</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+    <span class="kr">const</span> <span class="nx">runtime</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">started</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Delayed </span><span class="p">${</span><span class="nx">runtime</span><span class="p">}</span><span class="s2">ms.`</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Success: </span><span class="p">${</span><span class="nx">runtime</span> <span class="o">&gt;=</span> <span class="mi">200</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
   <span class="p">})</span>
 </code></pre>
 <blockquote>
@@ -742,11 +734,18 @@ The <strong>browser bundle</strong> weighs in at <strong>~20Kb</strong> (using W
   <span class="p">.</span><span class="nx">delay</span><span class="p">(</span><span class="mi">250</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">num</span> <span class="o">+</span> <span class="nx">num</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kr">const</span> <span class="nx">measuredDelay</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">started</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Delayed </span><span class="p">${</span><span class="nx">measuredDelay</span><span class="p">}</span><span class="s2">ms.`</span><span class="p">)</span>
+    <span class="kr">const</span> <span class="nx">runtime</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">started</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Delayed </span><span class="p">${</span><span class="nx">runtime</span><span class="p">}</span><span class="s2">ms.`</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Success: </span><span class="p">${</span><span class="nx">runtime</span> <span class="o">&gt;=</span> <span class="mi">250</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
   <span class="p">})</span>
 </code></pre>
 <p><code>.delay(milliseconds)</code> is a helpful utility. It can help you avoid exceeding rate-limits in APIs. You can also use it to for simulated bottlenecks, adding &#39;slowdowns&#39; exactly where needed can greatly assist in locating many kinds of complex bugs.</p>
+<h4 id='usage'>Usage</h4>
+<ul>
+<li>Shorthand with static helper: <code>.then(FP.delay(waitMs))</code></li>
+<li>Nesting with static helper: FP.delay(waitMs): <code>.then(num =&gt; FP.delay(waitMs).then(() =&gt; num))</code></li>
+<li>Using FP&#39;s instance method. <code>FP.resolve([1, 2, 3]).delay(250)</code></li>
+</ul>
 <h1 id='properties'><small>&#160;&#160; Properties</small></h1>
 <p>These methods are particularly helpful for dealing with data extraction/transformation.</p>
 <h2 id='fp-get'><code>FP.get(keyName)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="na">foo</span><span class="p">:</span> <span class="mi">42</span><span class="p">})</span>
