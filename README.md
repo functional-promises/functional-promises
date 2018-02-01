@@ -53,7 +53,6 @@ The table above show `FP` is roughly **1/30th** the LOC (lines of code) in `R/Ix
 >
 > Note: [R/IxJS](https://github.com/ReactiveX/IxJS)'s hyper-modular design also allows for bundles to be lots smaller (though using quite different syntax, either `.pipe(...)` or `ix/iterable`/`ix/add/...`).
 
-
 ## Installation
 
 ```sh
@@ -136,6 +135,16 @@ FP.chain() // start a chain
         * [`.quiet()` - prevents errors from stopping array methods mid-loop](http://www.fpromises.io/#fp-quiet)
         * [`.concurrency(threadLimit)` - limits parallel workers for array methods](http://www.fpromises.io/#fp-concurrency)
 
+
+
+## Development
+
+```sh
+git clone git@github.com:justsml/functional-promises.git
+cd functional-promises
+npm install
+npm test
+```
 
 
 > Thanks to several influencial projects: [RxJS](https://github.com/ReactiveX/RxJS), [IxJS](https://github.com/ReactiveX/IxJS), [Bluebird](https://github.com/petkaantonov/bluebird), [asynquence](https://github.com/getify/asynquence), [FantasyLand](https://github.com/fantasyland/fantasy-land), [Gulp](https://github.com/gulpjs/gulp), [HighlandJS](https://github.com/caolan/highland), et al.
