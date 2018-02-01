@@ -483,16 +483,24 @@ html, body {
     background-color: rgba(0,0,0,0.05);
     padding: 3px;
     border-radius: 3px;
-    @extend %break-words;
     @extend %code-font;
+    code {
+      white-space: nowrap;
+    }
   }
 
   pre>code {
+    word-break: break-all;
+    hyphens: auto;
     background-color: transparent;
     padding: 0;
   }
 
   aside {
+    code {
+      white-space: nowrap;
+    }
+
     padding-top: 1em;
     padding-bottom: 1em;
     margin-top: 1.15em;

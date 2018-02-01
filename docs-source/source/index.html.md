@@ -16,6 +16,7 @@ search: true
 
 # Functional Promises
 
+
 > **Installation**
 
 ```sh
@@ -31,7 +32,7 @@ const FP = require('functional-promise')
 import FP from 'functional-promise'
 ```
 
-###### [View `Functional Promises` on Github](https://github.com/justsml/functional-promises)
+###### [Star `Functional Promises` on Github](https://github.com/justsml/functional-promises)
 
 > <p style='text-align: center;'><strong style='font-size: 24px;'>Examples &amp; Awesome Shit</strong></p>
 
@@ -82,17 +83,23 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
 
 ### Summary
 
-**Functional Promises** are an extension of the native Promises API (`.then()`/`.catch()`).
+The **Functional Promises** library is a **Function Chaining Interface and Pattern.**
 
-**Core features:** Array Methods, Events, Object & Array `FP.all()` Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
+<aside class="warning">
+  <code>functional-promise</code> is not itself a <code>Promise</code> replacement in any way!
+</aside>
+
+<aside class="success">
+  <code>FP</code> features seamless support between synchronous code, `async`/`await`, and native Promises. The core <i>Functional Composition</i> is powered by the <a href="#fp-chain"><code>FP.chain()</code></a> construct.
+</aside>
+
+
+**Core features:** Array Methods, Events, Array **AND Object** `FP.all()` Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
 
 **Why not simply use [library X]?**
 
-* RxJS: `FP` is 1/5th the size. _Observable support still being evaluated._
-* Bluebird: `FP` adds some key features: _events_, _conditionals_, _chains_, _quiet errors_.
-
 `FP`'s **un-minified source** is **only ~400 lines** of code.
-The **browser bundle** weighs in at **~20Kb** (using Webpack+Babel+Rollup+UglifyJS).
+The **browser bundle** weighs in at **15-20Kb** (using Webpack+Babel+Rollup+UglifyJS).
 
 ### Library Comparison
 
@@ -104,20 +111,19 @@ The **browser bundle** weighs in at **~20Kb** (using Webpack+Babel+Rollup+Uglify
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	| \[Async\]Iterable Chaining |     521 |        12,366	 | 145 Kb
 
 
-So `FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is about **1/9th** the size. `IxJS`/`RxJS` do feature a far larger API.
+`FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is about **1/9th** the size! `IxJS`/`RxJS` feature a far larger API with 100's of methods.
 
-BluebirdJS and FP have roughly the same number of API methods, yet Bluebird has a fair bit more code.
+BluebirdJS and FP have roughly the same number (and type) of API methods, yet `FP` is far less code.
 
 <p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing.</p>
 
 <p>Their patterns have been quite influential on <code>FP</code>'s design.</p>
 
-<b>Note:</b>&#160;<small><p><code>R/IxJS</code>'s modular design also allows for bundle sizes to <i>potentially</i> be smaller (using quite different syntax).</p></small>
+<small><b>Note:</b>&#160;<p><code>R/IxJS</code>'s modular design also allows for bundle sizes to <i>potentially</i> be smaller (using quite different syntax).</p></small>
 
 ### API Outline
 
-
-All `.then()`-derived methods are listed first. It's the bulk of the API.
+All `.then()`-powered methods are listed first.
 
 * [Thenable Methods](http://www.fpromises.io/#thenable-methods)
     * [Arrays](http://www.fpromises.io/#array-methods)
@@ -130,7 +136,7 @@ All `.then()`-derived methods are listed first. It's the bulk of the API.
         * [`.series(fn)`](http://www.fpromises.io/#fp-series)
     * [Errors](http://www.fpromises.io/#errors) _(WIP)_
         * [`.catch(fn)`](http://www.fpromises.io/#fp-catch)
-        * [`.catch(filter, fn)`](http://www.fpromises.io/#fp-catch)
+        * [`.catchIf(filter, fn)`](http://www.fpromises.io/#fp-catch)
     * [Conditional](http://www.fpromises.io/#conditional)
         * [`.thenIf(fn, ifTrue, ifFalse)`](http://www.fpromises.io/#fp-thenif)
     * [Utilities](http://www.fpromises.io/#utilities)
@@ -146,7 +152,7 @@ All `.then()`-derived methods are listed first. It's the bulk of the API.
         * [`FP.unpack()`](http://www.fpromises.io/#fp-unpack)
     * [Events](http://www.fpromises.io/#events)
         * [`.listen(obj, ...eventNames)`](http://www.fpromises.io/#fp-listen)
-    * [Composition Pipelines](http://www.fpromises.io/#composition-pipelines)
+    * [Composition Pipeline](http://www.fpromises.io/#composition-pipeline)
         * [`FP.chain(options)`](http://www.fpromises.io/#fp-chain-chainend)
         * [`.chainEnd()`](http://www.fpromises.io/#fp-chain-chainend)
     * [Modifiers](http://www.fpromises.io/#modifiers)
@@ -159,7 +165,7 @@ All `.then()`-derived methods are listed first. It's the bulk of the API.
 
 > `Thenable` methods in `FP` include: Arrays, Errors, Conditional, Utilities, Properties, etc.
 
-You can think of most `FP` methods as **wrappers derived from Native Promise's `.then()`.**
+Most `FP` methods derive behavior from **Native Promise's `.then()`.**
 
 For example, `.tap(fn)`'s function will receive the resolved value exactly like a `.then()`. Except the function's `return` value will be ignored - and the next `thenable` in the chain will get the original input.
 
@@ -168,6 +174,8 @@ For example, `.tap(fn)`'s function will receive the resolved value exactly like 
 
 ```javascript
 const rawData = [null, undefined, NaN, 0, '99']
+
+// Async compatible (not needed in this simple sample)
 FP.resolve(rawData)
   .filter(Boolean)        // truthiness check = ["99"]
   .map(Number)            // convert to numeric [99]
@@ -175,17 +183,29 @@ FP.resolve(rawData)
   .then(index => {
     console.log(index) // 0
   })
+
+// Reuse functions, e.g. Native Array methods:
+rawData
+  .filter(Boolean)        // truthiness check = ["99"]
+  .map(Number)            // convert to numeric [99]
+  .findIndex(n => n >= 1)
 ```
 
 Any `.then()` which would handle an array, may instead use one of the `FP` array methods.
 
+<aside class='success'>
+  Please check examples below!
+</aside>
+
 ## `FP.map(iterable, fn)`
 
 ```javascript
-FP.resolve([1, 2, 3, 4, Promise.resolve(5)])
+FP.resolve([1, 2, 3, 4, 5])
+// Native es6 example: (Synchronous)
+//.then(nums => nums.map(x => x * 2))
   .map(x => x * 2)
   .then(results => {
-    console.log(results)) // [2, 4, 6, 8, 10
+    console.log(results) // [2, 4, 6, 8, 10]
   })
 ```
 
@@ -199,16 +219,24 @@ For example, let's say you have to multiply a list of numbers by 2.
 
 Using `FP.map()` to do this lets you focus on the important logic: `x => x * 2`
 
+> Another neat trick w/ `FP` is auto-resolving nested Promises. Now you can ignore finickey details, like when data will be available.
+
+```javascript
+const dumbPromises = [Promise.resolve(25), Promise.resolve(50)]
+
+FP.resolve(dumbPromises)
+  .concurrency(1)
+  .map(num => FP.delay(num).then(msec => `Delayed ${msec}`))
+  .then(results => console.log(results)))
+```
+
 ## `FP.filter(iterable, fn)`
 
 ```javascript
 FP.resolve([1, null, 3, null, 5])
   .filter(Boolean)
-  .then(results => console.log(results)) // [1, 3, 5]
-
 // Or similarly:
-FP.resolve([1, null, 3, null, 5])
-  .filter(value => value ? true : false)
+// .filter(value => value ? true : false)
   .then(results => console.log(results)) // [1, 3, 5]
 ```
 
@@ -377,8 +405,13 @@ Perfect for logging or other background tasks (where results don't need to block
 const started = Date.now()
 
 FP.resolve([1, 2, 3, 4])
-  .concurrency(1) // same as .serial()
-  .map(num => FP.resolve(num).delay(50))
+  .concurrency(1)
+  // now only 1 map() callback happens at a time
+  .map(num => {
+    return FP
+      .delay(50)
+      .resolve(num)
+  })
   .then(() => {
     const runtime = Date.now() - started
     console.log(`Delayed ${runtime}ms.`)
@@ -390,6 +423,7 @@ FP.resolve([1, 2, 3, 4])
 
 ```javascript
 const started = Date.now()
+
 FP.resolve([1, 2, 3])
   .delay(250)
   .map(num => num + num)
@@ -496,7 +530,7 @@ edgeCase()
 
 Use sparingly. Stream &amp; event handling are exempt from this 'rule'. If using ES2015, destructuring helps to (more cleanly) achieve what `deferred` attempts.
 
-`deferred` is an anti-pattern because it works against composition.
+`deferred` is an anti-pattern because it doesn't align well with Functional Composition.
 
 # &#160;&#160; Events
 
@@ -544,17 +578,18 @@ The `.listen()` method must be called after an `FP.chain()` sequence of `FP` met
 
 **Note:** The `.chainEnd()` method is automatically called.
 
-# &#160;&#160; Composition Pipelines
+# &#160;&#160; Composition Pipeline
 
-<!-- > *Non `.then()`-based Methods* -->
+Composition Pipelines is a combination of ideas from [`Collection` Pipeline](https://martinfowler.com/articles/collection-pipeline/) and [Functional Composition](https://medium.com/javascript-scene/composing-software-an-introduction-27b72500d6ea).
+
 
 <aside class="notice">
-  <i>Forgive me Haskell people, but I'm calling this a monad.</i>
+  <i>Forgive me Haskell people, but I'm calling this a monad builder.</i>
 </aside>
 
 Chained Functional Promises unlock a powerful technique: **Reusable Async Composition Pipelines.**
 
-**Enough jargon!** _Let's make some monads in JavaScript:_
+**Enough jargon!** _Let's create some slick JavaScript:_
 
 <!-- **Examples and usage patterns below:** -->
 
@@ -591,7 +626,7 @@ squareAndFormatDecimal([5, 6])
   .then(num => console.log(num)) // ['25.00', '36.00']
 ```
 
-Create a re-usable chain of 2 steps:
+**HOW TO:** Create a re-usable chain with 2 `.map` steps:
 
 1. Create a chain, name it `squareAndFormatDecimal`.
 1. When `squareAndFormatDecimal(nums)` is passed an `Array<Number>` it must:
@@ -638,48 +673,60 @@ The method `createTodoHandler()` gives you a Functional chain to:
 
 ## Controller + Events + Promise Chain
 
+> Usage Example: (see Class implementation below)
 
 ```javascript
-//// using a more complete controller/component interface:
-const todoCtrl = TodoController()
+//// usage example - standard promise code:
+const todoApp = TodoApp()
 
-todoCtrl
-  .add('new item')
+todoApp.update({id: 1, text: 'updated item', complete: true})
+  .then(console.warn.bind(console, 'update response:'))
+
+todoApp.add('new item')
   .then(result => {
-    todoCtrl.update({id: 1, text: 'updated item', complete: true})
+    console.log('Added item', result)
   })
 ```
 
-> TodoController will return an object with `add` and `update` methods - based on FP.chain()
+> TodoApp will return an object with `add` and `update` methods - based on FP.chain()
 
 ```javascript
 //// example code:
-function TodoController() {
+function TodoApp() {
   const statusLbl = document.querySelector('label.status')
   const setStatus = s => statusLbl.textContent = s
 
   return {
     add: FP.chain()
-      .then(input => ({id: null, complete: false, text: input}))
+      .then(input => ({text: input, complete: false}))
       .then(todoAPI.create)
       .tap(createResult => setStatus(createResult.message))
       .chainEnd(),
+
     update: FP.chain()
+      // in v1.5.0: .get('id', 'completed', 'text') // or:
       .then(input => {
         const {id, complete, text} = input
         return {id, complete, text}
       })
       .then(todoAPI.update)
       .tap(updateResult => setStatus(updateResult.message))
-      .chainEnd(),
+      .chainEnd()
   }
 }
 ```
 
-Another 'class' like object.
+Example OOP style 'class' object/interface.
 
-Only simple un-bound functions needed:
+Here we implement the interface `{ add(item), update(item) }` **using chained function expressions**. It's implementation is hidden from the calling code.
 
+<aside class="notice">
+  <code>FP.chain()</code> is a powerful building block. Use with: events, streams, Observables (RxJS), AsyncIterables (IxJS), <code>for</code> loops, and basically anything that takes a function.
+  <br/>
+  <b>It returns a re-usable function, built out of a sequence of smaller functions.</b>
+</aside>
+
+This is a key differentiator between `functional-promise` and other chaining libraries. No lockin.
 
 # &#160;&#160; Modifiers
 
