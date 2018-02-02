@@ -101,3 +101,24 @@ SUM:
   comment: 135
   code: 5188
   nFiles: 38
+
+---
+# github.com/AlDanial/cloc
+header : 
+  cloc_url           : github.com/AlDanial/cloc
+  cloc_version       : 1.74
+  elapsed_seconds    : 0.0328729152679443
+  n_files            : 8
+  n_lines            : 474
+  files_per_second   : 243.361440103279
+  lines_per_second   : 14419.1653261193
+JavaScript :
+  nFiles: 8
+  blank: 60
+  comment: 24
+  code: 390
+SUM: 
+  blank: 60
+  comment: 24
+  code: 390
+  nFiles: 8

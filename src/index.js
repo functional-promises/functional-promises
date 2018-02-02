@@ -61,10 +61,8 @@ FP.prototype.serial = function() {
 }
 
 FP.prototype.get = function(...keyNames) {
-  // console.log('keyNames', keyNames)
   if (this.steps) return this.addStep('get', [...arguments])
   keyNames = flatten(keyNames)
-  console.log('keyNames', keyNames)
   return this.then((obj) => {
     if (typeof obj === 'object') {
       if (keyNames.length === 1) {
@@ -139,7 +137,7 @@ FP.promisifyAll = function promisifyAll(obj) {
   return Object.getOwnPropertyNames(obj)
   .filter(key => typeof obj[key] === 'function')
   .reduce((obj, fnName) => {
-    if (!/Sync/.test(fnName) && !obj[`${fnName}Async`]) obj[`${fnName}Async`] = promisify(obj[`${fnName}`])
+    if (!/Sync/.test(fnName) && !obj[`${fnName}Async`]) obj[`${fnName}Async`] = FP.promisify(obj[`${fnName}`])
     return obj
   }, obj)
 }
@@ -153,10 +151,6 @@ FP.unpack = function unpack() {
 module.exports = FunctionalPromise
 
 if (process && process.on) {
-  process.on('uncaughtException', function (e) {
-    console.error('Process: FATAL EXCEPTION: uncaughtException', e, '\n\n')
-  })
-  process.on('unhandledRejection', function (e) {
-    console.error('Process: FATAL PROMISE ERROR: unhandledRejection', e, '\n\n')
-  })
+  process.on('uncaughtException', e => console.error('Process: FATAL EXCEPTION: uncaughtException', e, '\n\n'))
+  process.on('unhandledRejection', e => console.error('Process: FATAL PROMISE ERROR: unhandledRejection', e, '\n\n'))
 }

@@ -1,5 +1,6 @@
 #/bin/bash
-
+set -e
+npm test
 npm run build
 npm run docs-build
 npm publish
