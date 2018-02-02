@@ -1,14 +1,14 @@
-const {FunctionalError} = require('./modules/errors')
-const {isFunction}      = require('./modules/utils')
-const {map, filter}     = require('./arrays')
-const {reduce}          = require('./arrays')
-const {find, findIndex} = require('./arrays')
-const {thenIf, _thenIf} = require('./conditional')
-const {tapIf}           = require('./conditional')
-const {listen}          = require('./events')
-const {chain, chainEnd} = require('./monads')
-const {all, cast}       = require('./promise')
-const {reject, delay}   = require('./promise')
+const {FunctionalError}     = require('./modules/errors')
+const {isFunction, flatten} = require('./modules/utils')
+const {map, filter}         = require('./arrays')
+const {reduce}              = require('./arrays')
+const {find, findIndex}     = require('./arrays')
+const {thenIf, _thenIf}     = require('./conditional')
+const {tapIf}               = require('./conditional')
+const {listen}              = require('./events')
+const {chain, chainEnd}     = require('./monads')
+const {all, cast}           = require('./promise')
+const {reject, delay}       = require('./promise')
 const FP = FunctionalPromise
 
 function FunctionalPromise(resolveRejectCB, unknownArgs) {
@@ -72,9 +72,24 @@ FP.prototype.serial = function() {
   return this.concurrency(1)
 }
 
-FP.prototype.get = function(keyName) {
+FP.prototype.get = function(...keyNames) {
+  // console.log('keyNames', keyNames)
   if (this.steps) return this.addStep('get', [...arguments])
-  return this.then((obj) => typeof obj === 'object' ? obj[keyName] : obj)
+  keyNames = flatten(keyNames)
+  console.log('keyNames', keyNames)
+  return this.then((obj) => {
+    if (typeof obj === 'object') {
+      if (keyNames.length === 1) {
+        return obj[keyNames[0]]
+      } else {
+        return keyNames.reduce((extracted, key) => {
+          extracted[key] = obj[key]
+          return extracted
+        }, {})
+      }
+    }
+    return obj
+  })
 }
 
 FP.prototype.set = function(keyName, value) {
