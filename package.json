@@ -1,6 +1,6 @@
 {
   "name": "functional-promise",
-  "version": "1.4.44",
+  "version": "1.5.1",
   "description": "Composition Pipeline Promises Extension. See Complete Docs Here: http://www.fpromises.io/",
   "ava": {
     "require": [

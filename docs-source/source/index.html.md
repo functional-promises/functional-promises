@@ -105,7 +105,7 @@ The **browser bundle** weighs in at **15-20Kb** (using Webpack+Babel+Rollup+Ugli
 
 | Library                     	                                    | Main deal | Files   | Lines of Code  | .min.js kB
 |------------------------------	                                    |-----------|---------: |--------------: |-------------------:
-| **Functional Promise v1.4.30**                                  	| Sync & Async Chains | 8 |           384	 | 16 Kb
+| **Functional Promise v1.5.1**                                   	| Sync & Async Chains | 8 |           390	 | 16 Kb
 | [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       | Promises Replacement |        38 |         5,188	 | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	| Observables Chaining |     458 |        12,266  | 150 Kb
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	| \[Async\]Iterable Chaining |     521 |        12,366	 | 145 Kb
