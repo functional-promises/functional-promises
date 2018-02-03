@@ -147,6 +147,8 @@ All `.then()`-powered methods are listed first.
         * [`.set(keyName, value)`](http://www.fpromises.io/#fp-set)
 * [Specialty Methods](http://www.fpromises.io/#specialty-methods)
     * [Helpers](http://www.fpromises.io/#helpers)
+        * [`FP.promisify(callback)`](http://www.fpromises.io/#fp-promisify)
+        * [`FP.promisifyAll(callback)`](http://www.fpromises.io/#fp-promisifyall)
         * [`FP.resolve()`](http://www.fpromises.io/#fp-resolve)
         * [`FP.all(Object/Array)`](http://www.fpromises.io/#fp-all)
         * [`FP.unpack()`](http://www.fpromises.io/#fp-unpack)
@@ -173,22 +175,27 @@ For example, `.tap(fn)`'s function will receive the resolved value exactly like 
 # &#160;&#160; Array Methods
 
 ```javascript
-const rawData = [null, undefined, NaN, 0, '99']
+const rawData = [-99, null, undefined, NaN, 0, '99']
 
-// Async compatible (not needed in this simple sample)
+// Async compatible (not needed in this simple example)
 FP.resolve(rawData)
-  .filter(Boolean)        // truthiness check = ["99"]
-  .map(Number)            // convert to numeric [99]
-  .findIndex(n => n >= 1) // is gte 1, idx = 0
+  .filter(Boolean)        // truthiness check = [-99, "99"]
+  .map(Number)            // convert to numeric [-99 99]
+  .findIndex(n => n >= 1) // is gte 1, idx = 1
   .then(index => {
     console.log(index) // 0
   })
+```
 
-// Reuse functions, e.g. Native Array methods:
+> Reuse functions, e.g. Native Array methods:
+
+```javascript
+const rawData = [-99, null, undefined, NaN, 0, '99']
+
 rawData
-  .filter(Boolean)        // truthiness check = ["99"]
-  .map(Number)            // convert to numeric [99]
-  .findIndex(n => n >= 1)
+  .filter(Boolean)        // truthiness check = [-99, "99"]
+  .map(Number)            // convert to numeric [-99, 99]
+  .findIndex(n => n >= 1) // <^ Native Array Methods ^^
 ```
 
 Any `.then()` which would handle an array, may instead use one of the `FP` array methods.
@@ -219,7 +226,7 @@ For example, let's say you have to multiply a list of numbers by 2.
 
 Using `FP.map()` to do this lets you focus on the important logic: `x => x * 2`
 
-> Another neat trick w/ `FP` is auto-resolving nested Promises. Now you can ignore finickey details, like when data will be available.
+> Another neat trick w/ `FP` is auto-resolving nested Promises. Now you can ignore finickey details, like when AJAX data will be available.
 
 ```javascript
 const dumbPromises = [Promise.resolve(25), Promise.resolve(50)]
