@@ -198,7 +198,7 @@ html, body {
 
     li {
       font-size: 0.8em;
-      line-height: 1.7;
+      line-height: 1.8;
       text-decoration: none;
     }
 
@@ -386,11 +386,11 @@ html, body {
   h2 {
     @extend %header-font;
     font-size: 19px;
-    margin-top: 8px;
+    margin-top: 16px;
     margin-bottom: 0;
     border-top: 1px solid #ccc;
-    padding-top: 1.2em;
-    padding-bottom: 1.2em;
+    padding-top: 1.4em;
+    padding-bottom: 1.4em;
     background-image: linear-gradient(to bottom, rgba(#fff, 0.2), rgba(#fff, 0));
 
     code { font-size: 21px; }
@@ -471,8 +471,12 @@ html, body {
   }
 
   p, li, dt, dd {
-    line-height: 1.6;
+    line-height: 1.7;
     margin-top: 0;
+  }
+
+  p {
+    margin: 2em 0 1.5em 0;
   }
 
   img {
@@ -555,7 +559,7 @@ html, body {
     background-color: $code-bg;
     color: #fff;
 
-    margin: 0;
+    margin: 1.8em 0;
     width: $examples-width;
 
     float:right;
@@ -565,7 +569,7 @@ html, body {
 
     @extend %right-col;
 
-    &>p { margin: 0; }
+    &>p { margin: 1em 0; }
 
     a {
       color: #fff;
@@ -584,9 +588,10 @@ html, body {
   blockquote {
     &>p {
       background-color: $code-annotation-bg;
-      padding: $code-annotation-padding 2em;
+      padding: 1.7em 2em 1em 2em;
       color: #eee;
     }
+    p + p { padding: 1.7em 0em; }
   }
 
   .left-block {

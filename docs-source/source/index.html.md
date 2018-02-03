@@ -17,13 +17,13 @@ search: true
 # Functional Promises
 
 
-> **Installation**
+> Install:
 
 ```sh
 npm install functional-promise
 ```
 
-> **Getting Started**
+> Import into your app:
 
 ```javascript
 //// Use one of the following:
@@ -86,15 +86,14 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
 The **Functional Promises** library is a **Function Chaining Interface and Pattern.**
 
 <aside class="warning">
-  <code>functional-promise</code> is not itself a <code>Promise</code> replacement in any way!
+  <code>functional-promise</code> is not itself a <code>Promise</code> replacement. It uses the native <code>Promise</code> API.
 </aside>
 
+**Core features:** Array Methods, Events, Array **AND Object** `FP.all()` Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
 <aside class="success">
   <code>FP</code> features seamless support between synchronous code, `async`/`await`, and native Promises. The core <i>Functional Composition</i> is powered by the <a href="#fp-chain"><code>FP.chain()</code></a> construct.
 </aside>
 
-
-**Core features:** Array Methods, Events, Array **AND Object** `FP.all()` Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
 
 **Why not simply use [library X]?**
 
@@ -111,15 +110,13 @@ The **browser bundle** weighs in at **15-20Kb** (using Webpack+Babel+Rollup+Ugli
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	| \[Async\]Iterable Chaining |     521 |        12,366	 | 145 Kb
 
 
-`FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is about **1/9th** the size! `IxJS`/`RxJS` feature a far larger API with 100's of methods.
+`FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is about **1/9th** the size! However `IxJS`/`RxJS` feature a far larger API with 100's of methods.
 
 BluebirdJS and FP have roughly the same number (and type) of API methods, yet `FP` is far less code.
 
-<p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing.</p>
+<p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing. Their patterns have been very influential on <code>FP</code>'s design.</p>
 
-<p>Their patterns have been quite influential on <code>FP</code>'s design.</p>
-
-<small><b>Note:</b>&#160;<p><code>R/IxJS</code>'s modular design also allows for bundle sizes to <i>potentially</i> be smaller (using quite different syntax).</p></small>
+<small><b>Note:</b>&#160;<p><code>R/IxJS</code>'s modular design also allows for bundle sizes to be smaller (using different syntax).</p></small>
 
 ### API Outline
 
@@ -379,7 +376,7 @@ Default values let you call `.thenIf` with no args - if you simply want to exclu
 
 # &#160;&#160; Utilities
 
-## `fp.tap(fn)`
+## `FP.tap(fn)`
 
 ```javascript
 FP.resolve(fetch('http://jsonplaceholder.typicode.com/photos/11'))
@@ -404,7 +401,7 @@ It works just like `.then()` **except it's return value is ignored.** The next `
 
 Perfect for logging or other background tasks (where results don't need to block).
 
-## `fp.delay(ms)`
+## `FP.delay(ms)`
 
 > Delay per-array item.
 
@@ -591,10 +588,10 @@ Composition Pipelines is a combination of ideas from [`Collection` Pipeline](htt
 
 
 <aside class="notice">
-  <i>Forgive me Haskell people, but I'm calling this a monad builder.</i>
+  <i>Forgive me Haskell people, but I'm calling this a monad builder.</i> Just <code>do</code> it! I mean work with me here.
 </aside>
 
-Chained Functional Promises unlock a powerful technique: **Reusable Async Composition Pipelines.**
+Chained Functional Promises unlock a powerful technique: **Reusable Async Composition Pipeline.**
 
 **Enough jargon!** _Let's create some slick JavaScript:_
 
