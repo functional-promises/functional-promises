@@ -1,8 +1,8 @@
 # Functional Promises (beta)
 
-[![Build Status](https://travis-ci.org/justsml/functional-promises.svg?branch=master)](https://travis-ci.org/justsml/functional-promises)
-[![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat)](https://github.com/justsml/functional-promises)
-[![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat)](https://github.com/justsml/functional-promises)
+[![Build Status](https://travis-ci.org/LameDuh/functional-promises.svg?branch=master)](https://travis-ci.org/LameDuh/functional-promises)
+[![GitHub package version](https://img.shields.io/github/package-json/v/LameDuh/functional-promises.svg?style=flat)](https://github.com/LameDuh/functional-promises)
+[![GitHub stars](https://img.shields.io/github/stars/LameDuh/functional-promises.svg?label=Stars&style=flat)](https://github.com/LameDuh/functional-promises)
 
 # [Updated Documentation: fpromises.io](http://www.fpromises.io/)
 
