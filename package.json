@@ -1,6 +1,6 @@
 {
   "name": "functional-promise",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Composition Pipeline Promises Extension. See Complete Docs Here: http://www.fpromises.io/",
   "ava": {
     "require": [
@@ -34,24 +34,23 @@
   },
   "license": "MIT",
   "dependencies": {
-    "ava": "^0.24.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "chalk": "^2.3.0",
-    "jsdom": "^11.5.1",
-    "webpack": "^3.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.35",
     "@babel/preset-env": "^7.0.0-beta.35",
+    "ava": "^0.24.0",
+    "babel-loader": "^7.1.2",
     "babel-plugin-transform-es2015-computed-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.7",
-    "rollup": "^0.52.3",
+    "jsdom": "^11.5.1",
     "rollup-loader": "^0.3.0",
     "rollup-plugin-commonjs": "^8.2.6",
-    "webpack-rollup-loader": "^0.6.0"
+    "rollup": "^0.52.3",
+    "webpack-rollup-loader": "^0.6.0",
+    "webpack": "^3.10.0"
   }
 }

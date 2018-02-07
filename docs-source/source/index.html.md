@@ -9,7 +9,7 @@ toc_footers:
   - <a class='bottom' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a>
 
 # includes:
-#   - errors
+#   - endorsements
 
 search: true
 ---
@@ -75,9 +75,9 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
   .then(avatarUrl => imgElement.src = avatarUrl)
 ```
 
-[![Build Status](https://travis-ci.org/justsml/functional-promises.svg?branch=master)](https://travis-ci.org/justsml/functional-promises)
-[![GitHub package version](https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat)](https://github.com/justsml/functional-promises)
-[![GitHub stars](https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&style=flat)](https://github.com/justsml/functional-promises)
+[![Build Status](https://travis-ci.org/LameDuh/functional-promises.svg?branch=master)](https://travis-ci.org/LameDuh/functional-promises)
+[![GitHub package version](https://img.shields.io/github/package-json/v/LameDuh/functional-promises.svg?style=flat)](https://github.com/LameDuh/functional-promises)
+[![GitHub stars](https://img.shields.io/github/stars/LameDuh/functional-promises.svg?label=Stars&style=flat)](https://github.com/LameDuh/functional-promises)
 
 [![NPM](https://nodei.co/npm/functional-promise.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/functional-promise)
 
