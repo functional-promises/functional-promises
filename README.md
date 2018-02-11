@@ -10,17 +10,21 @@
 
 ## Summary
 
-This library is aimed at supporting a specific **Function Chaining technique** (using composition).
+The Functional Promises library is a [Fluent API](https://en.wikipedia.org/wiki/Fluent_interface#JavaScript) supporting a specific **Function Chaining technique** (using composition).
 
-There are many names for this general pattern. Including Composition Pipeline and Promise Chain.
-The emphasis here is a seamless async/sync Developer Experience. I call this pattern a `Functional River` - your `data` is the _water_, and your `functions` describe its _path_ or riverbed.
+> Note: `FP` **doesn't replace or extend** Promises. It uses them.
+
+There are many names for this general pattern. Including [Collection Pipeline](https://martinfowler.com/articles/collection-pipeline/) and Promise Chain.
+The emphasis here is a seamless async/sync Developer Experience.
+
+I call this pattern a `Functional River` - your `data` is the _water_, and your `functions` describe its _path_ or riverbed.
 
 ### Advantages
 
 * Easily handle Sync, Async, Events, Promises, and Callbacks.
 * Familiar methods, including `Array.prototype.map`, `[].filter()`, `[].find()`, `[].some()`, etc.
 * Create Monads in JavaScript (so far as they contain side-effects to a sequence of instructions).
-* Point-free code is easily achieved.
+* Point-free code is easily achieved (no temp variables).
 * Higher code test coverage w/ less repetitive code in tests.
 * Use the best features from multiple programming styles: a little imperative, plenty functional, a pinch of OOP, yet still resembling declarative methods!!!
 
@@ -28,17 +32,15 @@ The emphasis here is a seamless async/sync Developer Experience. I call this pat
 
 Total Lines of Code (LoC) calculated using `cloc` CLI utility.
 
-LoC included in comparison because: smaller surface == hopefully fewer places bugs can hide.
-
-(Maturity should factor in.)
+LoC #'s included because a smaller surface === fewer places bugs can hide.
 
 
-| Library                     	                                    | Main deal | Files   | Lines of Code  | .min.js kB
-|------------------------------	                                    |-----------|---------: |--------------: |-------------------:
-| **Functional Promise v1.5.1**                                  	| Sync & Async Chains | 8 |           390	 | 16 Kb
-| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       | Promises Replacement |        38 |         5,188	 | 80 Kb
-| [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	| Observables Chaining |     458 |        12,266  | 150 Kb
-| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	| \[Async\]Iterable Chaining |     521 |        12,366	 | 145 Kb
+| Library                                                       | Main deal                  | Files     | Lines of Code  | .min.js kB
+|------------------------------                                 |-----------                 |---------: |--------------: |-------------------:
+| **Functional Promise v1.5.3**                                 | Sync & Async Chains        |         8 |           375  | 16 Kb
+| [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1   | Promises Replacement       |        38 |         5,188  | 80 Kb
+| [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6              | Observables Chaining       |       458 |        12,266  | 150 Kb
+| [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4              | \[Async\]Iterable Chaining |       521 |        12,366  | 145 Kb
 
 Admittedly `IxJS`/`RxJS` have a far larger API than `FP` also some behavior in `RxJS`/`IxJS` may never be added.
 Currently however there is a lot of overlap with `FP` (plus more planned).

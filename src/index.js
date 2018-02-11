@@ -1,12 +1,13 @@
 const {FunctionalError}          = require('./modules/errors')
 const {isFunction, flatten}      = require('./modules/utils')
-const {map, filter, reduce}      = require('./arrays')
-const {find, findIndex}          = require('./arrays')
-const {thenIf, _thenIf, tapIf}   = require('./conditional')
-const {listen}                   = require('./events')
 const {chain, chainEnd}          = require('./monads')
-const {all, cast, reject, delay} = require('./promise')
 const FP = FunctionalPromise
+
+Object.assign(FP.prototype,
+  require('./arrays'),
+  require('./events'),
+  require('./conditional'),
+  require('./promise'))
 
 function FunctionalPromise(resolveRejectCB, unknownArgs) {
   if (!(this instanceof FunctionalPromise)) {return new FunctionalPromise(resolveRejectCB)}
@@ -17,32 +18,13 @@ function FunctionalPromise(resolveRejectCB, unknownArgs) {
   }
 }
 
-// FPromise Core Stuff
-FP.prototype.all = FP.all = all
-FP.prototype.cast = cast
-FP.prototype.reject = reject
-FP.prototype.delay = delay
-FP.delay = delay
+FP.all = FP.prototype.all
+FP.delay = FP.prototype.delay
+FP.thenIf = FP.prototype._thenIf
 
 // Monadic Methods
 FP.chain = chain
 FP.prototype.chainEnd = chainEnd
-
-// Array Helpers
-FP.prototype.map = map
-FP.prototype.find = find
-FP.prototype.filter = filter
-FP.prototype.reduce = reduce
-FP.prototype.findIndex = findIndex
-
-// Conditional Methods
-FP.prototype.tapIf = tapIf
-FP.prototype.thenIf = thenIf
-FP.prototype._thenIf = _thenIf
-FP.thenIf = _thenIf
-
-// Events Methods
-FP.prototype.listen = listen
 
 FP.prototype.addStep = function(name, args) {
   if (this.steps) this.steps.push([name, this, args])
@@ -65,14 +47,11 @@ FP.prototype.get = function(...keyNames) {
   keyNames = flatten(keyNames)
   return this.then((obj) => {
     if (typeof obj === 'object') {
-      if (keyNames.length === 1) {
-        return obj[keyNames[0]]
-      } else {
-        return keyNames.reduce((extracted, key) => {
-          extracted[key] = obj[key]
-          return extracted
-        }, {})
-      }
+      if (keyNames.length === 1) return obj[keyNames[0]]
+      return keyNames.reduce((extracted, key) => {
+        extracted[key] = obj[key]
+        return extracted
+      }, {})
     }
     return obj
   })
