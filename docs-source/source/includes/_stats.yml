@@ -1,0 +1,43 @@
+
+file: ./functional-promise.min.js
+ouput_bytes:
+    original: 16744
+    gzip:     4532
+    brotli:   4055
+pretty_size:
+    original: 17K
+    gzip:     4.5K
+    brotli:   4.0K
+size_reduction:
+    gzip:     3.69x
+    brotli:   4.13x
+
+===============
+
+file: ./Rx.min.js
+ouput_bytes:
+    original: 149417
+    gzip:     31917
+    brotli:   27320
+pretty_size:
+    original: 146K
+    gzip:     32K
+    brotli:   27K
+size_reduction:
+    gzip:     4.68x
+    brotli:   5.47x
+
+===============
+
+file: ./Ix.min.js
+ouput_bytes:
+    original: 131832
+    gzip:     21942
+    brotli:   16641
+pretty_size:
+    original: 129K
+    gzip:     22K
+    brotli:   17K
+size_reduction:
+    gzip:     6.01x
+    brotli:   7.92x

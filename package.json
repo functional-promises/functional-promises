@@ -1,7 +1,7 @@
 {
   "name": "functional-promise",
-  "version": "1.5.3",
-  "description": "Composition Pipeline Promises Extension. See Complete Docs Here: http://www.fpromises.io/",
+  "version": "1.5.4",
+  "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: http://www.fpromises.io/",
   "ava": {
     "require": [
       "babel-register"
@@ -22,6 +22,7 @@
     "build": "npm run build-dev && npm run build-live",
     "build-live": "NODE_ENV=production webpack",
     "build-dev": "NODE_ENV=development webpack",
+    "postbuild": "./compress-file.sh",
     "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",
     "deploy": "npm run version-bump-revision && npm run build && npm run docs-build && npm run test && npm run publish",
     "version-bump-revision": "node ./misc/package-version-manager.js 0.0.1",

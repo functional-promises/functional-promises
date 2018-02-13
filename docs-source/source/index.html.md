@@ -6,10 +6,11 @@ title: Functional Promises - API Documentation
 
 toc_footers:
   - <a class='social github' href='https://github.com/justsml/functional-promises'>Star on GitHub</a>
-  - <a class='bottom' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a>
+# - <a class='bottom' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a>
 
-# includes:
-#   - endorsements
+includes:
+  - stats
+  - endorsements
 
 search: true
 ---
@@ -766,4 +767,10 @@ Set `threadLimit` to constrain the amount of simultaneous tasks/promises can run
 
 > Thanks to several influencial projects: RxJS, IxJS, Bluebird, asynquence, FantasyLand, Gulp, HighlandJS, et al.
 
+<blockquote style='text-align: right;'><p>
+  <br />
+  <a class='bottom' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a>
+</p></blockquote>
+
+# Misc
 
