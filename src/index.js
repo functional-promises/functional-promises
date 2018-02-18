@@ -13,6 +13,7 @@ function FunctionalPromise(resolveRejectCB, unknownArgs) {
   if (!(this instanceof FunctionalPromise)) {return new FunctionalPromise(resolveRejectCB)}
   if (unknownArgs != undefined) throw new Error('FunctionalPromise only accepts 1 argument')
   this._FP = {
+    errors: {limit: 1, count: 0},
     concurrencyLimit: 4,
     promise: new Promise(resolveRejectCB),
   }
@@ -26,23 +27,24 @@ FP.thenIf = FP.prototype._thenIf
 FP.chain = chain
 FP.prototype.chainEnd = chainEnd
 
-FP.prototype.addStep = function(name, args) {
+FP.prototype.addStep = function addStep(name, args) {
   if (this.steps) this.steps.push([name, this, args])
   return this
 }
 
-FP.prototype.concurrency = function(limit = Infinity) {
+FP.prototype.concurrency = function concurrency(limit = Infinity) {
   if (this.steps) return this.addStep('concurrency', [...arguments])
   this._FP.concurrencyLimit = limit
   return this
 }
 
-FP.prototype.serial = function() {
-  if (this.steps) return this.addStep('serial', [...arguments])
-  return this.concurrency(1)
+FP.prototype.quiet = function quiet(limit = Infinity) {
+  if (this.steps) return this.addStep('quiet', [...arguments])
+  this._FP.errors = { count: 0, limit: limit }
+  return this
 }
 
-FP.prototype.get = function(...keyNames) {
+FP.prototype.get = function get(...keyNames) {
   if (this.steps) return this.addStep('get', [...arguments])
   keyNames = flatten(keyNames)
   return this.then((obj) => {
@@ -57,7 +59,7 @@ FP.prototype.get = function(...keyNames) {
   })
 }
 
-FP.prototype.set = function(keyName, value) {
+FP.prototype.set = function set(keyName, value) {
   if (this.steps) return this.addStep('set', [...arguments])
   return this.then(obj => {
     if (typeof obj === 'object') obj[keyName] = value
@@ -74,7 +76,7 @@ FP.prototype.catch = function(fn) {
   }))
 }
 
-FP.prototype.catchIf = function(condition, fn) {
+FP.prototype.catchIf = function catchIf(condition, fn) {
   if (this.steps) return this.addStep('catchIf', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.catchIf(condition, fn)`. Must be a function. Currently: ' + typeof fn)
 

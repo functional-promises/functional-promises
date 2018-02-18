@@ -1,5 +1,5 @@
 const {isEnumerable} = require('./modules/utils')
-const {FPInputError} = require('./modules/errors')
+const {FPInputError, FunctionalError} = require('./modules/errors')
 
 module.exports = {map, find, findIndex, filter, reduce}
 
@@ -83,8 +83,9 @@ function map(args, fn, options) {
   const results = []
   const threadPool = new Set()
   const threadPoolFull = () => threadPool.size >= threadLimit
-  const isDone = () => errors.length >= 0 || count >= args.length
+  const isDone = () => errors.length >= this._FP.errors.limit || count >= args.length
   const setResult = index => value => {
+    threadPool.delete(index)
     results[index] = value
     return value
   }
@@ -94,14 +95,18 @@ function map(args, fn, options) {
       args = [...items]
       if (!isEnumerable(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'))
       const complete = () => {
-        if (errors.length >= 1) {
-          reject(errors[0])
-        } else if (!isDone()) {
+        if (errors.length >= this._FP.errors.limit) return true
+        if (!isDone()) {
           Promise.all(results).then(resolve)
           return true
         }
         return false
       }
+      const checkAndRun = val => {
+        if (!complete()) runItem(++count)
+        return val
+      }
+
       const runItem = c => {
         if (threadPoolFull()) return setTimeout(() => runItem(c), 0)
         if (count >= args.length) return Promise.all(results).then(resolve)
@@ -110,14 +115,25 @@ function map(args, fn, options) {
         // either get value with `fn(item)` or `item.then(fn)`
         results[c] = Promise.resolve(args[c])
           .then(val => fn(val, c, args))
-          .then(val => {
-            threadPool.delete(c)
-            return setResult(c)(val)
+          .then(val => setResult(c)(val))
+          .then(checkAndRun)
+          .catch(err => {
+            this._FP.errors.count++
+            errors.push(err)
+            if (errors.length >= this._FP.errors.limit) {
+              console.warn('Error Limit:', c, JSON.stringify(this._FP.errors))
+              setResult(c)(err)
+              const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded`, {errors, results, ctx: this})
+              reject(fpErr)
+            } else {
+              console.warn('Error OK:', JSON.stringify(this._FP.errors))
+              Promise
+                .resolve(err)
+                .then(setResult(c))
+                .then(checkAndRun)
+            }
+            // return err
           })
-          .then(val => {
-            if (!complete()) runItem(++count)
-            return val
-          }).catch(err => errors.push(err))
         return result
       }
 
