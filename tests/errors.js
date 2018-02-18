@@ -11,7 +11,7 @@ test('Can .quiet() "swallow" Error', t => {
     return n;
   })
   .then((results) => {
-    t.truthy(results[3] instanceof TypeError)
+    t.ok(results[3].resolvedErrors[0] instanceof TypeError)
   })
   .catch(err => {
     console.warn('err', err.message)

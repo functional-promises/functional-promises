@@ -127,7 +127,7 @@ function map(args, fn, options) {
 
       const runItem = c => {
         if (threadPoolFull()) return setTimeout(() => runItem(c), 0)
-        const isComplete = complete()
+        // const isComplete = complete()
         if (results[c]) {
           console.error('completed/processing item already', c, results[c])
           return results[c]
@@ -155,21 +155,20 @@ function map(args, fn, options) {
               console.dir(fpErr)
               Promise.resolve(setResult(c)(err))
                 .then(() => {
-                  reject(fpErr)
+                  rejectIt(fpErr)
                 })
             } else {
               console.warn('Error OK:', JSON.stringify(this._FP.errors))
               console.dir(err)
               return Promise
                 .resolve()
-                .then(() => {
-                  setResult(c)({resolvedErrors: [err]})
-                })
+                .then(() => setResult(c)({resolvedErrors: [err]}))
                 .then(checkAndRun)
             }
             // return err
           })
-        return result
+
+        return altResults[c]
       }
 
       // Kick off x number of initial threads

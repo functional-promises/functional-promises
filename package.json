@@ -16,7 +16,7 @@
   "homepage": "http://www.fpromises.io/",
   "scripts": {
     "start": "npm run build && webpack --watch",
-    "test": "ava --serial --fail-fast=1 --verbose tests/*.js",
+    "test": "ava --serial --verbose tests/errors.js",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
     "build": "npm run build-dev && npm run build-live",
@@ -34,8 +34,7 @@
     "url": "http://www.danlevy.net/"
   },
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.35",
     "@babel/preset-env": "^7.0.0-beta.35",
@@ -48,10 +47,11 @@
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.7",
     "jsdom": "^11.5.1",
+    "rollup": "^0.52.3",
     "rollup-loader": "^0.3.0",
     "rollup-plugin-commonjs": "^8.2.6",
-    "rollup": "^0.52.3",
-    "webpack-rollup-loader": "^0.6.0",
-    "webpack": "^3.10.0"
+    "tape": "^4.8.0",
+    "webpack": "^3.10.0",
+    "webpack-rollup-loader": "^0.6.0"
   }
 }
