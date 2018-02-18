@@ -1,11 +1,13 @@
 const test = require('ava')
 const FP = require('../src')
 
-test('Can .quiet(2) "swallow" Error', t => {
+test('Can .quiet() "swallow" Error', t => {
   return FP.resolve([1, 2, 3, 4])
-  .quiet()
+  .quiet(10)
   .map((n) => {
-    if (n === 4) { throw new TypeError('#4 found, dummy error!') }
+    if (n === 4) {
+      throw new TypeError('#4 found, dummy error!')
+    }
     return n;
   })
   .then((results) => {
@@ -21,7 +23,9 @@ test('Can .quiet(1) + 2 errors trigger .catch()', t => {
   return FP.resolve([1, 2, 3, 4])
   .quiet(1)
   .map((n) => {
-    if (n <= 3) { throw new TypeError('#3 or #4 found, dummy error!') }
+    if (n <= 3) {
+      throw new TypeError('#3 or #4 found, dummy error!')
+    }
     return n;
   })
   .then((results) => t.fail('shouldnt get here'))

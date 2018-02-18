@@ -95,10 +95,7 @@ FP.prototype.then = function then(fn) {
 FP.prototype.tap = function tap(fn) {
   if (this.steps) return this.addStep('tap', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.tap(fn)`. Must be a function. Currently: ' + typeof fn)
-  return FP.resolve(this._FP.promise.then(value => {
-    fn(value) // fires in the node callback queue (aka background task)
-    return value
-  }))
+  return FP.resolve(this._FP.promise.then(value => fn(value) ? value : value))
 }
 
 FP.resolve = function resolve(value) {

@@ -75,45 +75,74 @@ function map(args, fn, options) {
     args = this && this._FP && this._FP.promise
   }
 
+  let resolvedOrRejected = false
   const threadLimit = Math.max(1, Math.min((this && this._FP && this._FP.concurrencyLimit) || 1, 4))
   const innerValues = this && this._FP && this._FP.promise ? this._FP.promise : Promise.resolve(args)
   let initialThread = 0
   let errors = []
   let count = 0
-  const results = []
+  const results = [], altResults = []
   const threadPool = new Set()
   const threadPoolFull = () => threadPool.size >= threadLimit
-  const isDone = () => errors.length >= this._FP.errors.limit || count >= args.length
+  const isDone = () => resolvedOrRejected || errors.length >= this._FP.errors.limit || count >= args.length
   const setResult = index => value => {
     threadPool.delete(index)
     results[index] = value
+    count++
     return value
   }
 
   return new FP((resolve, reject) => {
+    const resolveIt = x => {
+      if (resolvedOrRejected) return;
+      resolvedOrRejected = true
+      resolve(x)
+    }
+    const rejectIt = x => {
+      if (resolvedOrRejected) return;
+      resolvedOrRejected = true
+      reject(x)
+    }
     innerValues.then(items => {
       args = [...items]
       if (!isEnumerable(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'))
       const complete = () => {
         if (errors.length >= this._FP.errors.limit) return true
-        if (!isDone()) {
-          Promise.all(results).then(resolve)
+        if (isDone()) {
+          Promise.all(altResults)
+          .then(data => {
+            console.log('data', data)
+            console.log('results', results)
+            return resolveIt(results)
+          })
           return true
         }
         return false
       }
       const checkAndRun = val => {
-        if (!complete()) runItem(++count)
+        if (resolvedOrRejected) return;
+        if (!complete()) runItem(count)
         return val
       }
 
       const runItem = c => {
         if (threadPoolFull()) return setTimeout(() => runItem(c), 0)
-        if (count >= args.length) return Promise.all(results).then(resolve)
+        const isComplete = complete()
+        if (results[c]) {
+          console.error('completed/processing item already', c, results[c])
+          return results[c]
+        }
+        // if (!isDone()) {
+        //   return results
+        // }
+          // .then(results => {
+          //   console.log('altResults', altResults)
+          //   resolve(results)
+          // })
         const result = [args[c], c]
         threadPool.add(c)
         // either get value with `fn(item)` or `item.then(fn)`
-        results[c] = Promise.resolve(args[c])
+        altResults[c] = Promise.resolve(args[c])
           .then(val => fn(val, c, args))
           .then(val => setResult(c)(val))
           .then(checkAndRun)
@@ -121,15 +150,21 @@ function map(args, fn, options) {
             this._FP.errors.count++
             errors.push(err)
             if (errors.length >= this._FP.errors.limit) {
+              const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded - #${c}  total: ${this._FP.errors.count}`, {errors, results, ctx: this})
               console.warn('Error Limit:', c, JSON.stringify(this._FP.errors))
-              setResult(c)(err)
-              const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded`, {errors, results, ctx: this})
-              reject(fpErr)
+              console.dir(fpErr)
+              Promise.resolve(setResult(c)(err))
+                .then(() => {
+                  reject(fpErr)
+                })
             } else {
               console.warn('Error OK:', JSON.stringify(this._FP.errors))
-              Promise
-                .resolve(err)
-                .then(setResult(c))
+              console.dir(err)
+              return Promise
+                .resolve()
+                .then(() => {
+                  setResult(c)({resolvedErrors: [err]})
+                })
                 .then(checkAndRun)
             }
             // return err

@@ -6,7 +6,10 @@ class FunctionalError extends Error {
     }
     super(msg)
     if (typeof options === 'object') {
-      Object.assign(this, options)
+      Object.getOwnPropertyNames(options)
+      .forEach(key => {
+        this[key] = options[key]
+      })
     }
     this.name = this.constructor.name
     // Capturing stack trace, excluding constructor call from it.
