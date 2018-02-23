@@ -1,20 +1,22 @@
 const test = require('ava')
 const FP = require('../src')
+const chalk = require('chalk').default
 
-test('Can .quiet() "swallow" Error', t => {
+test('Can .quiet() Error', t => {
+  t.plan(1)
   return FP.resolve([1, 2, 3, 4])
-  .quiet(10)
+  .quiet(42)
   .map((n) => {
     if (n === 4) {
-      throw new TypeError('#4 found, dummy error!')
+      return Promise.reject(new TypeError('#4 found, dummy error!'))
     }
     return n;
   })
   .then((results) => {
-    t.ok(results[3].resolvedErrors[0] instanceof TypeError)
+    t.truthy(results[3] instanceof TypeError)
   })
   .catch(err => {
-    console.warn('err', err.message)
+    console.warn(chalk.yellowBright`ERR:`, err.message)
     t.fail('shouldnt get here')
   })
 })
@@ -40,9 +42,12 @@ test('Can .quiet() swallow Errors', t => {
     return n;
   })
   .then((results) => {
-    t.truthy(resolve[3] instanceof TypeError)
+    t.truthy(results[3] instanceof TypeError)
   })
-  .catch(err => t.fail('shouldnt get here'))
+  .catch(err => {
+    console.log(chalk.cyanBright`FAILED TO QUIET ERROR:`, err)
+    t.fail('shouldnt get here')
+  })
 })
 
 test('Can .catch() thrown Errors', t => {

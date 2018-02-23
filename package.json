@@ -1,6 +1,6 @@
 {
   "name": "functional-promise",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: http://www.fpromises.io/",
   "ava": {
     "require": [
@@ -9,20 +9,20 @@
     "babel": "inherit"
   },
   "main": "./src/index.js",
-  "browser": "./dist/bundle.min.js",
+  "browser": "./dist/functional-promise.min.js",
   "repository": {
     "url": "https://github.com/justsml/functional-promises.git"
   },
   "homepage": "http://www.fpromises.io/",
   "scripts": {
     "start": "npm run build && webpack --watch",
-    "test": "ava --serial --verbose tests/errors.js",
+    "test": "ava --serial --verbose tests/*.js",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
     "build": "npm run build-dev && npm run build-live",
     "build-live": "NODE_ENV=production webpack",
     "build-dev": "NODE_ENV=development webpack",
-    "postbuild": "./compress-file.sh",
+    "postbuild": "./misc/compression-report.sh",
     "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",
     "deploy": "npm run version-bump-revision && npm run build && npm run docs-build && npm run test && npm run publish",
     "version-bump-revision": "node ./misc/package-version-manager.js 0.0.1",
@@ -52,6 +52,7 @@
     "rollup": "^0.52.3",
     "rollup-loader": "^0.3.0",
     "rollup-plugin-commonjs": "^8.2.6",
+    "strip-loader": "^0.1.2",
     "tape": "^4.8.0",
     "webpack": "^3.10.0",
     "webpack-rollup-loader": "^0.6.0"

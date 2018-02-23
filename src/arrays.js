@@ -108,18 +108,12 @@ function map(args, fn, options) {
       const complete = () => {
         if (errors.length > this._FP.errors.limit) {
           Promise.all(altResults)
-          .then(data => {
-            return rejectIt(results)
-          })
+          .then(data => rejectIt(results))
           return true
         }
         if (isDone()) {
           Promise.all(altResults)
-          .then(data => {
-            // console.log('data', data)
-            // console.log('results', results)
-            return resolveIt(results)
-          })
+          .then(data => resolveIt(results))
           return true
         }
         return false
@@ -136,7 +130,7 @@ function map(args, fn, options) {
         if (threadPoolFull()) return setTimeout(() => runItem(c), 0)
         // const isComplete = complete()
         if (results[c]) {
-          console.error('completed/processing item already', c, results[c])
+          // console.error('completed/processing item already', c, results[c])
           return results[c]
         }
         // if (!isDone()) {
@@ -161,7 +155,7 @@ function map(args, fn, options) {
               // console.warn('Error Limit:', c, JSON.stringify(this._FP.errors))
               Promise.resolve(setResult(c)(err))
               .then(() => {
-                  console.log('\nAHHHHH SHOULD END RUNNING NOW-ish!!!!!!!!!\n')
+                  // console.log('\nAHHHHH SHOULD END RUNNING NOW-ish!!!!!!!!!\n')
                   rejectIt(fpErr)
                 })
             } else {
@@ -169,7 +163,7 @@ function map(args, fn, options) {
               // console.dir(err)
               return Promise
                 .resolve()
-                .then(() => setResult(c)({resolvedError: err}))
+                .then(() => setResult(c)(err))
                 .then(checkAndRun)
             }
             // return err
