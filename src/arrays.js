@@ -84,11 +84,10 @@ function map(args, fn, options) {
   const results = [], altResults = []
   const threadPool = new Set()
   const threadPoolFull = () => threadPool.size >= threadLimit
-  const isDone = () => resolvedOrRejected || errors.length >= this._FP.errors.limit || count >= args.length
+  const isDone = () =>  count >= args.length || resolvedOrRejected || errors.length > this._FP.errors.limit
   const setResult = index => value => {
     threadPool.delete(index)
     results[index] = value
-    count++
     return value
   }
 
@@ -107,12 +106,18 @@ function map(args, fn, options) {
       args = [...items]
       if (!isEnumerable(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'))
       const complete = () => {
-        if (errors.length >= this._FP.errors.limit) return true
+        if (errors.length > this._FP.errors.limit) {
+          Promise.all(altResults)
+          .then(data => {
+            return rejectIt(results)
+          })
+          return true
+        }
         if (isDone()) {
           Promise.all(altResults)
           .then(data => {
-            console.log('data', data)
-            console.log('results', results)
+            // console.log('data', data)
+            // console.log('results', results)
             return resolveIt(results)
           })
           return true
@@ -121,11 +126,13 @@ function map(args, fn, options) {
       }
       const checkAndRun = val => {
         if (resolvedOrRejected) return;
-        if (!complete()) runItem(count)
+        if (!complete() && !results[count]) runItem(count)
         return val
       }
 
       const runItem = c => {
+        if (resolvedOrRejected) return;
+        count++
         if (threadPoolFull()) return setTimeout(() => runItem(c), 0)
         // const isComplete = complete()
         if (results[c]) {
@@ -139,7 +146,7 @@ function map(args, fn, options) {
           //   console.log('altResults', altResults)
           //   resolve(results)
           // })
-        const result = [args[c], c]
+        // const result = [args[c], c]
         threadPool.add(c)
         // either get value with `fn(item)` or `item.then(fn)`
         altResults[c] = Promise.resolve(args[c])
@@ -149,20 +156,20 @@ function map(args, fn, options) {
           .catch(err => {
             this._FP.errors.count++
             errors.push(err)
-            if (errors.length >= this._FP.errors.limit) {
-              const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded - #${c}  total: ${this._FP.errors.count}`, {errors, results, ctx: this})
-              console.warn('Error Limit:', c, JSON.stringify(this._FP.errors))
-              console.dir(fpErr)
+            if (errors.length > this._FP.errors.limit) {
+              const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded. CurrentArrayIndex=${c} ActualNumberOfErrors=${this._FP.errors.count}`, {errors, results, ctx: this})
+              // console.warn('Error Limit:', c, JSON.stringify(this._FP.errors))
               Promise.resolve(setResult(c)(err))
-                .then(() => {
+              .then(() => {
+                  console.log('\nAHHHHH SHOULD END RUNNING NOW-ish!!!!!!!!!\n')
                   rejectIt(fpErr)
                 })
             } else {
-              console.warn('Error OK:', JSON.stringify(this._FP.errors))
-              console.dir(err)
+              // console.warn('Error OK:', JSON.stringify(this._FP.errors))
+              // console.dir(err)
               return Promise
                 .resolve()
-                .then(() => setResult(c)({resolvedErrors: [err]}))
+                .then(() => setResult(c)({resolvedError: err}))
                 .then(checkAndRun)
             }
             // return err

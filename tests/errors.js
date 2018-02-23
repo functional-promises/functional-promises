@@ -24,7 +24,7 @@ test('Can .quiet(1) + 2 errors trigger .catch()', t => {
   .quiet(1)
   .map((n) => {
     if (n <= 3) {
-      throw new TypeError('#3 or #4 found, dummy error!')
+      throw new TypeError(n + ' Found #3 or #4 found, dummy error!')
     }
     return n;
   })
