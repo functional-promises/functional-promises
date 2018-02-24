@@ -3,9 +3,8 @@
 printf '# REPORT: COUNT LINES-OF-CODE\n\n' | tee stats-loc.yml
 
 printf '# (measures original source files)\n' | tee -a stats-loc.yml
-printf '# bundlers make measuring \n\n' | tee -a stats-loc.yml
 
-printf "# CREATED: $(date +%F) \n" | tee -a stats-loc.yml
+printf "# CREATED: $(date +%F)\\n" | tee -a stats-loc.yml
 
 printf '\n\n# FUNCTIONAL PROMISE:' | tee -a stats-loc.yml
 cloc --quiet --yaml src | tee -a stats-loc.yml

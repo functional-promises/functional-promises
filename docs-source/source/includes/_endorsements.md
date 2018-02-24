@@ -1,5 +1,5 @@
 ## Feedback
-##### and other kind words
+#### and other kind words
 
 * "Small is beautiful." - [Brendan Eich - inventor of JavaScript](https://twitter.com/BrendanEich/status/957404602470510594)
 * "Duuuuude!" - [Sarah Drasner](https://github.com/sdras)

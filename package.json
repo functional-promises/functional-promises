@@ -1,6 +1,6 @@
 {
   "name": "functional-promise",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: http://www.fpromises.io/",
   "ava": {
     "require": [
@@ -9,20 +9,20 @@
     "babel": "inherit"
   },
   "main": "./src/index.js",
-  "browser": "./dist/bundle.min.js",
+  "browser": "./dist/functional-promise.min.js",
   "repository": {
     "url": "https://github.com/justsml/functional-promises.git"
   },
   "homepage": "http://www.fpromises.io/",
   "scripts": {
     "start": "npm run build && webpack --watch",
-    "test": "ava --serial --fail-fast=1 --verbose tests/*.js",
+    "test": "ava --serial --verbose tests/*.js",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
     "build": "npm run build-dev && npm run build-live",
     "build-live": "NODE_ENV=production webpack",
     "build-dev": "NODE_ENV=development webpack",
-    "postbuild": "./compress-file.sh",
+    "postbuild": "./misc/compression-report.sh",
     "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",
     "deploy": "npm run version-bump-revision && npm run build && npm run docs-build && npm run test && npm run publish",
     "version-bump-revision": "node ./misc/package-version-manager.js 0.0.1",
@@ -34,8 +34,7 @@
     "url": "http://www.danlevy.net/"
   },
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.35",
     "@babel/preset-env": "^7.0.0-beta.35",
@@ -46,12 +45,16 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "chalk": "^2.3.1",
     "css-loader": "^0.28.7",
+    "debug": "^3.1.0",
     "jsdom": "^11.5.1",
+    "rollup": "^0.52.3",
     "rollup-loader": "^0.3.0",
     "rollup-plugin-commonjs": "^8.2.6",
-    "rollup": "^0.52.3",
-    "webpack-rollup-loader": "^0.6.0",
-    "webpack": "^3.10.0"
+    "strip-loader": "^0.1.2",
+    "tape": "^4.8.0",
+    "webpack": "^3.10.0",
+    "webpack-rollup-loader": "^0.6.0"
   }
 }

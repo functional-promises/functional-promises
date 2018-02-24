@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const webpackStripLoader = require('strip-loader')
 const path = require('path')
 const dev = process.env.NODE_ENV === 'development'
 // const rollupCommonjsPlugin = require('rollup-plugin-commonjs')
@@ -10,9 +11,16 @@ const config = module.exports = {
     pathinfo: true,
     // filename: path.join(__dirname, 'build', 'index.js'),
     path: path.resolve(__dirname, './dist'),
-    filename: `./bundle${dev ? '' : '.min'}.js`,
+    filename: `./functional-promise${dev ? '' : '.min'}.js`,
   },
   module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: webpackStripLoader
+          .loader('debug', 'console.log', 'console.warn', 'console.error')
+      }
+    ],
     rules: [
       // {
       //   test: /\.js$/,
@@ -33,8 +41,8 @@ const config = module.exports = {
       //     },
       //   }]
       // },
-      {test: /\.js$/, use: 'babel-loader'},
-      {test: /\.css$/, use: 'css-loader'},
+      { test: /\.js$/, use: 'babel-loader' },
+      { test: /\.css$/, use: 'css-loader' },
     ],
   },
 }

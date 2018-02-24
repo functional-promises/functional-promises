@@ -1,9 +1,8 @@
-const test = require('ava')
-const FP = require('../src')
+const test = require('tape')
+const FP = require('./src')
 const chalk = require('chalk').default
 
 test('Can .quiet() Error', t => {
-  t.plan(1)
   return FP.resolve([1, 2, 3, 4])
   .quiet(42)
   .map((n) => {
@@ -13,20 +12,60 @@ test('Can .quiet() Error', t => {
     return n;
   })
   .then((results) => {
-    t.truthy(results[3] instanceof TypeError)
+    t.ok(results[3] instanceof TypeError)
   })
   .catch(err => {
-    console.warn(chalk.yellowBright`ERR:`, err.message)
+    console.warn('err', err.message)
+    t.fail('shouldnt get here')
+  })
+  .then(x => t.end())
+})
+
+test('Can .quiet() eat Errors', t => {
+  t.plan(1)
+  FP.resolve([1, 2, 3, 4])
+  .quiet(1)
+  .map((n, index) => {
+    if (n === 4) { throw new TypeError(`${n}===4 - index===${index} (dummy error)`) }
+    console.log(chalk.blueBright`#3: n===`, n)
+    return n;
+  })
+  .then((results) => {
+    console.log(chalk.magenta(' #3: RESULTS:'), results)
+    t.ok(results[3] instanceof TypeError)
+  })
+  .catch(err => {
+    console.log(chalk.redBright` #3: ERROR:`, chalk.cyan(err.message), err)
     t.fail('shouldnt get here')
   })
 })
 
-test('Can .quiet(1) + 2 errors trigger .catch()', t => {
+test('Can .quiet() Error', t => {
   return FP.resolve([1, 2, 3, 4])
+  .quiet(10)
+  .map((n) => {
+    if (n === 4) {
+      return Promise.reject(new TypeError('#4 found, dummy error!'))
+    }
+    return n;
+  })
+  .then((results) => {
+    console.log(chalk.green`results`, results[3].message)
+    t.ok(results[3] instanceof TypeError)
+  })
+  .catch(err => {
+    t.fail('shouldnt get here')
+  })
+  .then(x => t.end())
+})
+
+test('Can .quiet(1) + 2 errors trigger .catch()', t => {
+  t.plan(1)
+  FP.resolve([1, 2, 3, 4])
   .quiet(1)
   .map((n) => {
     if (n <= 3) {
-      throw new TypeError(n + ' Found #3 or #4 found, dummy error!')
+      throw new TypeError(`n <= 3 --- n == ${n} --- dummy error!`)
     }
     return n;
   })
@@ -34,27 +73,12 @@ test('Can .quiet(1) + 2 errors trigger .catch()', t => {
   .catch(err => t.pass('overflowed .quiet() w/ errors.'))
 })
 
-test('Can .quiet() swallow Errors', t => {
-  return FP.resolve([1, 2, 3, 4])
-  .quiet(1)
-  .map((n) => {
-    if (n === 4) { throw new TypeError('#4 found, dummy error!') }
-    return n;
-  })
-  .then((results) => {
-    t.truthy(results[3] instanceof TypeError)
-  })
-  .catch(err => {
-    console.log(chalk.cyanBright`FAILED TO QUIET ERROR:`, err)
-    t.fail('shouldnt get here')
-  })
-})
-
 test('Can .catch() thrown Errors', t => {
-  return FP.resolve()
+  FP.resolve()
   .then(() => {throw new TypeError('Single toss')})
   .tap(() => t.fail('must skip to the .catch section!'))
-  .catch(err => t.truthy(err.message === 'Single toss'))
+  .catch(err => t.ok(err.message === 'Single toss'))
+  .then(x => t.end())
 })
 
 test('Can override .catch() results', t => {
@@ -62,7 +86,8 @@ test('Can override .catch() results', t => {
   .then(() => {throw new TypeError('Single toss')})
   .tap(() => t.fail('must skip to the .catch section!'))
   .catch(err => ({message: 'temp error, plz try again', _err: err}))
-  .then(data => t.truthy(data.message === 'temp error, plz try again'))
+  .then(data => t.ok(data.message === 'temp error, plz try again'))
+  .then(x => t.end())
 })
 
 test('Does .catchIf(filterType, fn) filtering by TypeError', t => {
@@ -72,7 +97,8 @@ test('Does .catchIf(filterType, fn) filtering by TypeError', t => {
   .catchIf(TypeError, () => t.fail('arg too specific for .catch(type)'))
   .catchIf(SyntaxError, () => t.fail('arg too specific for .catch(type)'))
   .catchIf(ReferenceError, () => t.fail('arg too specific for .catch(type)'))
-  .catch(err => t.truthy(err.message === 'Oh noes'))
+  .catch(err => t.ok(err.message === 'Oh noes'))
+  .then(x => t.end())
 })
 
 test('Does .catchIf(filterType, fn) skip negative tests', t => {
@@ -83,6 +109,7 @@ test('Does .catchIf(filterType, fn) skip negative tests', t => {
   .catchIf(SyntaxError, () => t.fail('arg too specific for .catch(type)'))
   .catchIf(TypeError, () => t.pass('successfully filtered .catch(type)'))
   .catch(err => t.fail(err.message === 'Oh noes'))
+  .then(x => t.end())
 })
 
 
@@ -93,7 +120,8 @@ test('Does .catch(filterType, fn) filtering by TypeError', t => {
   .catch(TypeError, () => t.fail('arg too specific for .catch(type)'))
   .catch(SyntaxError, () => t.fail('arg too specific for .catch(type)'))
   .catch(ReferenceError, () => t.fail('arg too specific for .catch(type)'))
-  .catch(err => t.truthy(err.message === 'Oh noes'))
+  .catch(err => t.ok(err.message === 'Oh noes'))
+  .then(x => t.end())
 })
 
 test('Does .catch(filterType, fn) skip negative tests', t => {
@@ -104,5 +132,6 @@ test('Does .catch(filterType, fn) skip negative tests', t => {
   .catch(SyntaxError, () => t.fail('arg too specific for .catch(type)'))
   .catch(TypeError, () => t.pass('successfully filtered .catch(type)'))
   .catch(err => t.fail(err.message === 'Oh noes'))
+  .then(x => t.end())
 })
 
