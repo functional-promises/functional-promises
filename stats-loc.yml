@@ -1,9 +1,7 @@
 # REPORT: COUNT LINES-OF-CODE
 
 # (measures original source files)
-# bundlers make measuring 
-
-# CREATED: 2018-02-02 
+# CREATED: 2018-02-22
 
 
 # FUNCTIONAL PROMISE:
@@ -12,20 +10,20 @@
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 1.74
-  elapsed_seconds    : 0.0313539505004883
+  elapsed_seconds    : 0.0607857704162598
   n_files            : 8
-  n_lines            : 480
-  files_per_second   : 255.151260759802
-  lines_per_second   : 15309.0756455881
+  n_lines            : 512
+  files_per_second   : 131.609749209661
+  lines_per_second   : 8423.02394941833
 JavaScript :
   nFiles: 8
   blank: 60
-  comment: 25
-  code: 395
+  comment: 35
+  code: 417
 SUM: 
   blank: 60
-  comment: 25
-  code: 395
+  comment: 35
+  code: 417
   nFiles: 8
 
 
@@ -35,11 +33,11 @@ SUM:
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 1.74
-  elapsed_seconds    : 1.24228382110596
+  elapsed_seconds    : 2.38884496688843
   n_files            : 458
   n_lines            : 24854
-  files_per_second   : 368.675814832926
-  lines_per_second   : 20006.7002223964
+  files_per_second   : 191.724455269512
+  lines_per_second   : 10404.1912909792
 TypeScript :
   nFiles: 457
   blank: 2325
@@ -63,11 +61,11 @@ SUM:
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 1.74
-  elapsed_seconds    : 1.49522590637207
+  elapsed_seconds    : 2.99602198600769
   n_files            : 521
   n_lines            : 14922
-  files_per_second   : 348.442330874352
-  lines_per_second   : 9979.76288158749
+  files_per_second   : 173.897255238187
+  lines_per_second   : 4980.60430453787
 TypeScript :
   nFiles: 521
   blank: 1609
@@ -86,11 +84,11 @@ SUM:
 header : 
   cloc_url           : github.com/AlDanial/cloc
   cloc_version       : 1.74
-  elapsed_seconds    : 0.153122901916504
+  elapsed_seconds    : 0.238221883773804
   n_files            : 38
   n_lines            : 5928
-  files_per_second   : 248.16666562864
-  lines_per_second   : 38713.9998380678
+  files_per_second   : 159.5151520004
+  lines_per_second   : 24884.3637120625
 JavaScript :
   nFiles: 38
   blank: 605
@@ -101,24 +99,3 @@ SUM:
   comment: 135
   code: 5188
   nFiles: 38
-
----
-# github.com/AlDanial/cloc
-header : 
-  cloc_url           : github.com/AlDanial/cloc
-  cloc_version       : 1.74
-  elapsed_seconds    : 0.0328729152679443
-  n_files            : 8
-  n_lines            : 474
-  files_per_second   : 243.361440103279
-  lines_per_second   : 14419.1653261193
-JavaScript :
-  nFiles: 8
-  blank: 60
-  comment: 24
-  code: 390
-SUM: 
-  blank: 60
-  comment: 24
-  code: 390
-  nFiles: 8
