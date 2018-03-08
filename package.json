@@ -3,12 +3,11 @@
   "version": "1.5.5",
   "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: http://www.fpromises.io/",
   "ava": {
-    "require": [
-      "babel-register"
-    ],
+    "require": ["@std/esm", "babel-register"],
     "babel": "inherit"
   },
   "main": "./src/index.js",
+  "@std/esm": "cjs",
   "browser": "./dist/functional-promise.min.js",
   "repository": {
     "url": "https://github.com/justsml/functional-promises.git"
@@ -34,17 +33,20 @@
     "url": "http://www.danlevy.net/"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@std/esm": "^0.25.2"
+  },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.35",
-    "@babel/preset-env": "^7.0.0-beta.35",
     "ava": "^0.24.0",
-    "babel-loader": "^7.1.2",
     "babel-plugin-transform-es2015-computed-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
+    "babel-preset-2017": "0.0.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-register": "^6.26.0",
     "chalk": "^2.3.1",
     "css-loader": "^0.28.7",
     "debug": "^3.1.0",

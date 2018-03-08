@@ -22,7 +22,7 @@ class FPInputError extends FunctionalError {}
 class FPSoftError extends FunctionalError {}
 class FPTimeout extends FunctionalError {}
 
-module.exports = {
+export {
   FunctionalError,
   FunctionalUserError,
   FPUnexpectedError,

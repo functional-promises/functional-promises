@@ -1,13 +1,12 @@
-const {FunctionalError}          = require('./modules/errors')
-const {isFunction, flatten}      = require('./modules/utils')
-const {chain, chainEnd}          = require('./monads')
-const FP = FunctionalPromise
+import {FunctionalError}          from './modules/errors'
+import {isFunction, flatten}      from './modules/utils'
+import {chain, chainEnd}          from './monads'
+import arrays                     from './arrays'
+import events                     from './events'
+import conditional                from './conditional'
+import promise                    from './promise'
 
-Object.assign(FP.prototype,
-  require('./arrays'),
-  require('./events'),
-  require('./conditional'),
-  require('./promise'))
+Object.assign(FunctionalPromise.prototype, arrays, events, conditional, promise)
 
 function FunctionalPromise(resolveRejectCB, unknownArgs) {
   if (!(this instanceof FunctionalPromise)) {return new FunctionalPromise(resolveRejectCB)}
@@ -19,32 +18,32 @@ function FunctionalPromise(resolveRejectCB, unknownArgs) {
   }
 }
 
-FP.all = FP.prototype.all
-FP.delay = FP.prototype.delay
-FP.thenIf = FP.prototype._thenIf
+FunctionalPromise.all = FunctionalPromise.prototype.all
+FunctionalPromise.delay = FunctionalPromise.prototype.delay
+FunctionalPromise.thenIf = FunctionalPromise.prototype._thenIf
 
 // Monadic Methods
-FP.chain = chain
-FP.prototype.chainEnd = chainEnd
+FunctionalPromise.chain = chain
+FunctionalPromise.prototype.chainEnd = chainEnd
 
-FP.prototype.addStep = function addStep(name, args) {
+FunctionalPromise.prototype.addStep = function addStep(name, args) {
   if (this.steps) this.steps.push([name, this, args])
   return this
 }
 
-FP.prototype.concurrency = function concurrency(limit = Infinity) {
+FunctionalPromise.prototype.concurrency = function concurrency(limit = Infinity) {
   if (this.steps) return this.addStep('concurrency', [...arguments])
-  this._FP.concurrencyLimit = limit
+  this._FunctionalPromise.concurrencyLimit = limit
   return this
 }
 
-FP.prototype.quiet = function quiet(limit = Infinity) {
+FunctionalPromise.prototype.quiet = function quiet(limit = Infinity) {
   if (this.steps) return this.addStep('quiet', [...arguments])
-  this._FP.errors = { count: 0, limit: limit }
+  this._FunctionalPromise.errors = { count: 0, limit: limit }
   return this
 }
 
-FP.prototype.get = function get(...keyNames) {
+FunctionalPromise.prototype.get = function get(...keyNames) {
   if (this.steps) return this.addStep('get', [...arguments])
   keyNames = flatten(keyNames)
   return this.then((obj) => {
@@ -59,7 +58,7 @@ FP.prototype.get = function get(...keyNames) {
   })
 }
 
-FP.prototype.set = function set(keyName, value) {
+FunctionalPromise.prototype.set = function set(keyName, value) {
   if (this.steps) return this.addStep('set', [...arguments])
   return this.then(obj => {
     if (typeof obj === 'object') obj[keyName] = value
@@ -67,66 +66,66 @@ FP.prototype.set = function set(keyName, value) {
   })
 }
 
-FP.prototype.catch = function(fn) {
+FunctionalPromise.prototype.catch = function(fn) {
   if (this.steps) return this.addStep('catch', [...arguments])
   if (arguments.length === 2) return this.catchIf(...arguments)
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.catch(fn)`. Must be a function. Currently: ' + typeof fn)
-  return FP.resolve(this._FP.promise.catch(err => {
+  return FunctionalPromise.resolve(this._FunctionalPromise.promise.catch(err => {
     return fn(err) // try re-throw, might be really slow...
   }))
 }
 
-FP.prototype.catchIf = function catchIf(condition, fn) {
+FunctionalPromise.prototype.catchIf = function catchIf(condition, fn) {
   if (this.steps) return this.addStep('catchIf', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.catchIf(condition, fn)`. Must be a function. Currently: ' + typeof fn)
 
-  return FP.resolve(this._FP.promise.catch(err => {
+  return FunctionalPromise.resolve(this._FunctionalPromise.promise.catch(err => {
     if (condition && err instanceof condition) return fn(err) // try re-throw, might be really slow...
     throw err
   }))
 }
 
-FP.prototype.then = function then(fn) {
+FunctionalPromise.prototype.then = function then(fn) {
   if (this.steps) return this.addStep('then', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn)
-  return FP.resolve(this._FP.promise.then(fn))
+  return FunctionalPromise.resolve(this._FunctionalPromise.promise.then(fn))
 }
 
-FP.prototype.tap = function tap(fn) {
+FunctionalPromise.prototype.tap = function tap(fn) {
   if (this.steps) return this.addStep('tap', [...arguments])
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.tap(fn)`. Must be a function. Currently: ' + typeof fn)
-  return FP.resolve(this._FP.promise.then(value => fn(value) ? value : value))
+  return FunctionalPromise.resolve(this._FunctionalPromise.promise.then(value => fn(value) ? value : value))
 }
 
-FP.resolve = function resolve(value) {
+FunctionalPromise.resolve = function resolve(value) {
   return new FP((resolve, reject) => {
     if (value && isFunction(value.then)) return value.then(resolve).catch(reject)
     resolve(value)
   })
 }
 
-FP.promisify = function promisify(cb) {
+FunctionalPromise.promisify = function promisify(cb) {
   return (...args) => new FP((yah, nah) =>
     cb.call(this, ...args, (err, res) => err ? nah(err) : yah(res)))
 }
 
-FP.promisifyAll = function promisifyAll(obj) {
+FunctionalPromise.promisifyAll = function promisifyAll(obj) {
   if (!obj || !Object.getPrototypeOf(obj)) { throw new Error('Invalid Argument obj in promisifyAll(obj)') }
   return Object.getOwnPropertyNames(obj)
   .filter(key => typeof obj[key] === 'function')
   .reduce((obj, fnName) => {
-    if (!/Sync/.test(fnName) && !obj[`${fnName}Async`]) obj[`${fnName}Async`] = FP.promisify(obj[`${fnName}`])
+    if (!/Sync/.test(fnName) && !obj[`${fnName}Async`]) obj[`${fnName}Async`] = FunctionalPromise.promisify(obj[`${fnName}`])
     return obj
   }, obj)
 }
 
-FP.unpack = function unpack() {
+FunctionalPromise.unpack = function unpack() {
   let resolve, reject, promise;
   promise = new Promise((yah, nah) => { resolve = yah; reject = nah })
   return { promise, resolve, reject }
 }
 
-module.exports = FunctionalPromise
+export default FunctionalPromise
 
 if (process && process.on) {
   process.on('uncaughtException', e => console.error('Process: FATAL EXCEPTION: uncaughtException', e, '\n\n'))

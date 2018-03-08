@@ -32,7 +32,7 @@ const data = {
   "updated_at": "2018-01-12T17:48:42Z"
 }
 
-module.exports = function fakeFetch(url, opts) {
+export default function fakeFetch(url, opts) {
   return {
     ok: true,
     json: () => data

@@ -1,6 +1,6 @@
 const path = require('path')
 const test = require('ava')
-const FP = require('../src')
+const FP = require('../src').default
 
 test('FP.resolve(true)', t => {
   return FP.resolve(true)

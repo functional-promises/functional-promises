@@ -1,6 +1,6 @@
-const {isPromiseLike} = require('./modules/utils')
+import {isPromiseLike} from './modules/utils'
 
-module.exports = {thenIf, tapIf, _thenIf}
+export {thenIf, tapIf, _thenIf}
 
 function thenIf(cond, ifTrue, ifFalse) {
   if (this.steps) return this.addStep('thenIf', [...arguments])

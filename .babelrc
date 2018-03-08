@@ -1,24 +1,6 @@
 {
   "sourceMaps": "inline",
   "retainLines": true,
-  "presets": [
-    [
-      "env",
-      {
-        "debug": false,
-        "modules": false,
-        "useBuiltIns": true,
-        "targets": {
-          "browsers": ["last 2 versions", "safari >= 10"],
-          "node": "current"
-        }
-      }
-    ]
-  ],
-  "plugins": [
-    ["transform-es2015-computed-properties", {
-      "loose": true
-    }]
-  ]
-  /* "plugins": ["transform-es2015-modules-commonjs", "babel-plugin-transform-runtime"] */
+  "modules": false,
+  "presets": ["es2016", "es2017"]
 }

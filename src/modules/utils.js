@@ -1,4 +1,5 @@
-const utils = module.exports = {
+
+const utils = {
   isPromiseLike(p) {
     return p && typeof p.then === 'function'
   },
@@ -16,3 +17,5 @@ const utils = module.exports = {
     return arr.reduce((results, item) => results.concat(Array.isArray(item) ? utils.flatten(item) : [item]), [])
   }
 }
+
+export default utils

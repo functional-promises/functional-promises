@@ -1,6 +1,6 @@
-const {FPInputError} = require('./modules/errors')
+import {FPInputError} from './modules/errors'
 
-module.exports = {all, cast, reject, delay}
+export {all, cast, reject, delay}
 
 function all(promises) {
   const FP = require('./')

@@ -1,6 +1,6 @@
-const {FPInputError} = require('./modules/errors')
+import {FPInputError} from './modules/errors'
 
-module.exports = {chain, chainEnd}
+export {chain, chainEnd}
 
 
 /**

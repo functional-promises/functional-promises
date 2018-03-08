@@ -1,6 +1,6 @@
-const {FPInputError} = require('./modules/errors')
+import {FPInputError} from './modules/errors'
 
-module.exports = {listen}
+export {listen}
 
 function listen(obj, ...eventNames) {
   if (typeof eventNames === 'string') eventNames = [eventNames]
