@@ -3,6 +3,7 @@
 @import 'variables';
 @import 'icon-font';
 // @import 'rtl'; // uncomment to switch to RTL format
+@import 'runkit';
 
 /*
 Copyright 2008-2013 Concur Technologies, Inc.
@@ -59,8 +60,10 @@ html, body {
   bottom: 0;
   width: $nav-width;
   background-color: $nav-bg;
-  font-size: 13px;
+  font-size: 110%;
   font-weight: bold;
+
+  small { font-size: 75%; }
 
   // language selector for mobile devices
   .lang-selector {
@@ -103,9 +106,10 @@ html, body {
   }
 
   .logo {
-    max-width: 100%;
-    margin-bottom: $logo-margin;
-  }
+    max-width: 60%;
+    margin-bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;  }
 
   .search-results {
     margin-top: 0;
@@ -194,7 +198,7 @@ html, body {
 
     li {
       font-size: 0.8em;
-      line-height: 1.7;
+      line-height: 1.8;
       text-decoration: none;
     }
 
@@ -339,6 +343,11 @@ html, body {
     clear: both;
   }
 
+
+  aside.warning {color: #fff;}
+
+
+
   &>h1, &>h2, &>h3, &>h4, &>h5, &>h6, &>p, &>table, &>ul, &>ol, &>aside, &>dl {
     margin-right: $examples-width;
     padding: 0 $main-padding;
@@ -377,12 +386,14 @@ html, body {
   h2 {
     @extend %header-font;
     font-size: 19px;
-    margin-top: 4em;
+    margin-top: 16px;
     margin-bottom: 0;
     border-top: 1px solid #ccc;
-    padding-top: 1.2em;
-    padding-bottom: 1.2em;
+    padding-top: 1.4em;
+    padding-bottom: 1.4em;
     background-image: linear-gradient(to bottom, rgba(#fff, 0.2), rgba(#fff, 0));
+
+    code { font-size: 21px; }
   }
 
   // h2s right after h1s should bump right up
@@ -394,14 +405,21 @@ html, body {
 
   h3, h4, h5, h6 {
     @extend %header-font;
-    font-size: 15px;
+    // font-size: 15px;
     margin-top: 2.5em;
     margin-bottom: 0.8em;
   }
 
-  h4, h5, h6 {
-    font-size: 10px;
-  }
+  // h4, h5, h6 {
+  //   font-size: 10px;
+  // }
+
+  h1 { font-size: 2.2em; }
+  h2 { font-size: 1.9em; }
+  h3 { font-size: 1.7em; }
+  h4 { font-size: 1.3em; }
+  h5 { font-size: 1.0em; }
+  h6 { font-size: 0.7em; }
 
   hr {
     margin: 2em 0;
@@ -453,8 +471,12 @@ html, body {
   }
 
   p, li, dt, dd {
-    line-height: 1.6;
+    line-height: 1.7;
     margin-top: 0;
+  }
+
+  p {
+    margin: 2em 0 1.5em 0;
   }
 
   img {
@@ -465,25 +487,34 @@ html, body {
     background-color: rgba(0,0,0,0.05);
     padding: 3px;
     border-radius: 3px;
-    @extend %break-words;
     @extend %code-font;
+    code {
+      white-space: nowrap;
+    }
   }
 
   pre>code {
+    word-break: break-all;
+    hyphens: auto;
     background-color: transparent;
     padding: 0;
   }
 
   aside {
+    code {
+      white-space: nowrap;
+    }
+
     padding-top: 1em;
     padding-bottom: 1em;
-    margin-top: 1.5em;
-    margin-bottom: 1.5em;
+    margin-top: 1.15em;
+    margin-bottom: 1.15em;
     background: $aside-notice-bg;
     line-height: 1.6;
-
+    font-weight: 700;
     &.warning {
       background-color: $aside-warning-bg;
+      color: #FFF;
     }
 
     &.success {
@@ -528,7 +559,7 @@ html, body {
     background-color: $code-bg;
     color: #fff;
 
-    margin: 0;
+    margin: 1.8em 0;
     width: $examples-width;
 
     float:right;
@@ -538,7 +569,7 @@ html, body {
 
     @extend %right-col;
 
-    &>p { margin: 0; }
+    &>p { margin: 1em 0; }
 
     a {
       color: #fff;
@@ -557,9 +588,26 @@ html, body {
   blockquote {
     &>p {
       background-color: $code-annotation-bg;
-      padding: $code-annotation-padding 2em;
+      padding: 1.7em 2em 1em 2em;
       color: #eee;
     }
+    p + p { padding: 1.7em 0em; }
+  }
+
+  .left-block {
+    &>p {
+      background: #DFDFDF !important;
+      color: #333;
+      padding: 4px 2em !important;
+    }
+    display: block;
+    margin-right: 50%;
+    box-sizing: border-box;
+    // float: left;
+    background: #DFDFDF !important;
+    color: #333;
+    margin: 4px 0px 12px 0px;
+    padding: 13px 0px;
   }
 }
 

@@ -6,8 +6,13 @@ def toc_data(page_content)
   # get a flat list of headers
   headers = []
   html_doc.css('h1, h2, h3').each do |header|
+    # lbl = header.children.to_s.gsub("<code>", "").gsub("</code>", "")
+    id = header.attribute('id').to_s.gsub("160-", "").gsub(%r{-?code-?}, "")
+    # puts "Label: #{lbl}"
+    # puts "  Id: #{id}"
+
     headers.push({
-      id: header.attribute('id').to_s,
+      id: id,
       content: header.children,
       level: header.name[1].to_i,
       children: []

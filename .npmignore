@@ -1,0 +1,7 @@
+# .npmignore
+docs
+docs-source
+.vscode
+
+
+

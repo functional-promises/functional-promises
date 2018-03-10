@@ -1,13 +1,19 @@
 class FunctionalError extends Error {
   constructor(msg, options) {
-    if (typeof msg === 'object' && msg.message) {
+    if (typeof msg === 'object') {
       options = msg
-      msg = msg.message
+      if ( msg.message ) msg = msg.message
     }
     super(msg)
     if (typeof options === 'object') {
-      Object.assign(this, options)
+      Object.getOwnPropertyNames(options)
+      .forEach(key => {
+        this[key] = options[key]
+      })
     }
+    this.name = this.constructor.name
+    // Capturing stack trace, excluding constructor call from it.
+    Error.captureStackTrace(this, this.constructor)
   }
 }
 class FunctionalUserError extends FunctionalError {}

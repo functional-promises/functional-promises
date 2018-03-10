@@ -3,6 +3,10 @@
 @import 'variables';
 @import 'icon-font';
 
+.runkit-placeholder { display: none; }
+.runkit-start { display: none; }
+.runkit-close { display: none; }
+
 /*
 Copyright 2008-2013 Concur Technologies, Inc.
 
@@ -85,7 +89,7 @@ body {
     font-size: 2.5em;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
-    margin-top: 1em;
+    margin-top: 8px;
     margin-bottom: $h1-margin-bottom;
     border: 2px solid $print-color-light;
     border-width: 2px 0;
@@ -95,7 +99,7 @@ body {
   h2 {
     @extend %header-font;
     font-size: 1.8em;
-    margin-top: 2em;
+    margin-top: 4px;
     border-top: 2px solid $print-color-light;
     padding-top: 0.8em;
   }
@@ -109,7 +113,7 @@ body {
   h3, h4 {
     @extend %header-font;
     font-size: 0.8em;
-    margin-top: 1.5em;
+    margin-top: 2px;
     margin-bottom: 0.8em;
     text-transform: uppercase;
   }

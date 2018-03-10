@@ -1,22 +1,24 @@
-const FP = require('./')
+const {FPInputError} = require('./modules/errors')
 
-module.exports = function _init(FP) {
-  FP.prototype.all = FP.all = all
-  FP.prototype.cast = cast
-  FP.prototype.reject = reject
-}
+module.exports = {all, cast, reject, delay}
 
 function all(promises) {
-  return Array.isArray(promises) ? Promise.all(promises) : allObjectKeys(promises)
+  const FP = require('./')
+  return FP.resolve(Array.isArray(promises)
+   ? Promise.all(promises)
+   : promiseAllObject(promises))
 }
 
-function allObjectKeys(object) {
-  return FP.resolve(Object.keys(object))
-  .map(key => FP.all([key, object[key]]))
-  .reduce((obj, [key, val]) => {
-    obj[key] = val;
-    return obj;
-  }, {})
+function promiseAllObject(obj) {
+  const keys = Object.getOwnPropertyNames(obj)
+  const values = keys.map(key => obj[key])
+  return Promise.all(values)
+  .then(results => {
+    return results.reduce((obj, val, index) => {
+      const key = keys[index]
+      return Object.assign({[key]: val}, obj)
+    }, {})
+  })
 }
 
 function cast(obj) {
@@ -31,4 +33,16 @@ function reject(err) {
     return Promise.reject(err)
   }
   throw new Error(`Reject only accepts a new instance of Error!`)
+}
+
+function delay(value, delay) {
+  const FP = require('./')
+  if (arguments.length === 1) {
+    delay = value
+    value = this || null
+  }
+  if (!Number.isInteger(delay)) throw new FPInputError('fp.delay([promise,] millisec) requires a numeric arg.')
+  return new FP(resolve => {
+    setTimeout(() => resolve(value), delay)
+  })
 }

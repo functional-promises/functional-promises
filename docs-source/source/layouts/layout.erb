@@ -22,7 +22,6 @@ under the License.
     end
   end
 %>
-
 <!doctype html>
 <html>
   <head>
@@ -43,6 +42,10 @@ under the License.
     <% end %>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112472862-1"></script>
+
+    <script src="https://embed.runkit.com"></script>
+    <%= javascript_include_tag  "autorunkit" %>
+
   </head>
 
   <body class="<%= page_classes %>" data-languages="<%=h language_tabs.map{ |lang| lang.is_a?(Hash) ? lang.keys.first : lang }.to_json %>">
@@ -123,5 +126,17 @@ under the License.
       gtag('config', 'UA-112472862-1');
     </script>
 
+    <script>
+      window.addEventListener('hashchange', function(event) {
+        var hash = self.location.hash;
+        hash = !hash ? 'top' : hash.slice(1);
+        if (hash && hash.length >= 1) {
+          gtag('event', 'screen_view', {
+            'app_name': 'fpromises',
+            'screen_name': hash
+          });
+        }
+      });
+    </script>
   </body>
 </html>

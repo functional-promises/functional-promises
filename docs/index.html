@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html>
   <head>
@@ -201,6 +200,10 @@
       <script src="javascripts/all.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112472862-1"></script>
+
+    <script src="https://embed.runkit.com"></script>
+    <script src="javascripts/autorunkit.js"></script>
+
   </head>
 
   <body class="index" data-languages="[]">
@@ -224,6 +227,9 @@
                     <a href="#summary" class="toc-h2 toc-link" data-title="Summary">Summary</a>
                   </li>
                   <li>
+                    <a href="#library-comparison" class="toc-h2 toc-link" data-title="Library Comparison">Library Comparison</a>
+                  </li>
+                  <li>
                     <a href="#api-outline" class="toc-h2 toc-link" data-title="API Outline">API Outline</a>
                   </li>
               </ul>
@@ -232,52 +238,66 @@
             <a href="#thenable-methods" class="toc-h1 toc-link" data-title="Thenable Methods">Thenable Methods</a>
           </li>
           <li>
-            <a href="#160-160-array-methods" class="toc-h1 toc-link" data-title="   Array Methods">   Array Methods</a>
+            <a href="#array-methods" class="toc-h1 toc-link" data-title="<small>   Array Methods</small>"><small>   Array Methods</small></a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#code-fp-map-iterable-fn-code" class="toc-h2 toc-link" data-title="<code>FP.map(iterable, fn)</code>"><code>FP.map(iterable, fn)</code></a>
+                    <a href="#fp-map" class="toc-h2 toc-link" data-title="<code>FP.map(iterable, fn)</code>"><code>FP.map(iterable, fn)</code></a>
                   </li>
                   <li>
-                    <a href="#code-fp-filter-iterable-fn-code" class="toc-h2 toc-link" data-title="<code>FP.filter(iterable, fn)</code>"><code>FP.filter(iterable, fn)</code></a>
+                    <a href="#fp-filter" class="toc-h2 toc-link" data-title="<code>FP.filter(iterable, fn)</code>"><code>FP.filter(iterable, fn)</code></a>
                   </li>
                   <li>
-                    <a href="#code-fp-find-iterable-fn-code" class="toc-h2 toc-link" data-title="<code>FP.find(iterable, fn)</code>"><code>FP.find(iterable, fn)</code></a>
+                    <a href="#fp-find" class="toc-h2 toc-link" data-title="<code>FP.find(iterable, fn)</code>"><code>FP.find(iterable, fn)</code></a>
                   </li>
                   <li>
-                    <a href="#code-fp-findindex-iterable-fn-code" class="toc-h2 toc-link" data-title="<code>FP.findIndex(iterable, fn)</code>"><code>FP.findIndex(iterable, fn)</code></a>
+                    <a href="#fp-findindex" class="toc-h2 toc-link" data-title="<code>FP.findIndex(iterable, fn)</code>"><code>FP.findIndex(iterable, fn)</code></a>
                   </li>
                   <li>
-                    <a href="#code-fp-some-iterable-fn-code" class="toc-h2 toc-link" data-title="<code>FP.some(iterable, fn)</code>"><code>FP.some(iterable, fn)</code></a>
+                    <a href="#fp-some" class="toc-h2 toc-link" data-title="<code>FP.some(iterable, fn)</code>"><code>FP.some(iterable, fn)</code></a>
                   </li>
                   <li>
-                    <a href="#code-fp-none-iterable-fn-code" class="toc-h2 toc-link" data-title="<code>FP.none(iterable, fn)</code>"><code>FP.none(iterable, fn)</code></a>
+                    <a href="#fp-none" class="toc-h2 toc-link" data-title="<code>FP.none(iterable, fn)</code>"><code>FP.none(iterable, fn)</code></a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#160-160-conditional" class="toc-h1 toc-link" data-title="   Conditional">   Conditional</a>
+            <a href="#errors" class="toc-h1 toc-link" data-title="<small>   Errors</small>"><small>   Errors</small></a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#code-fp-thenif-code" class="toc-h2 toc-link" data-title="<code>FP.thenIf()</code>"><code>FP.thenIf()</code></a>
+                    <a href="#fp-catch" class="toc-h2 toc-link" data-title="<code>FP.catch(fn)</code>"><code>FP.catch(fn)</code></a>
+                  </li>
+                  <li>
+                    <a href="#fp-catchif" class="toc-h2 toc-link" data-title="<code>FP.catchIf(type, fn)</code>"><code>FP.catchIf(type, fn)</code></a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#160-160-utilities" class="toc-h1 toc-link" data-title="   Utilities">   Utilities</a>
+            <a href="#conditional" class="toc-h1 toc-link" data-title="<small>   Conditional</small>"><small>   Conditional</small></a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#code-tap-fn-code" class="toc-h2 toc-link" data-title="<code>.tap(fn)</code>"><code>.tap(fn)</code></a>
+                    <a href="#fp-thenif" class="toc-h2 toc-link" data-title="<code>FP.thenIf()</code>"><code>FP.thenIf()</code></a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#160-160-properties" class="toc-h1 toc-link" data-title="   Properties">   Properties</a>
+            <a href="#utilities" class="toc-h1 toc-link" data-title="<small>   Utilities</small>"><small>   Utilities</small></a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#code-fp-get-keyname-code" class="toc-h2 toc-link" data-title="<code>FP.get(keyName)</code>"><code>FP.get(keyName)</code></a>
+                    <a href="#fp-tap" class="toc-h2 toc-link" data-title="<code>FP.tap(fn)</code>"><code>FP.tap(fn)</code></a>
                   </li>
                   <li>
-                    <a href="#code-fp-set-keyname-value-code" class="toc-h2 toc-link" data-title="<code>FP.set(keyName, value)</code>"><code>FP.set(keyName, value)</code></a>
+                    <a href="#fp-delay" class="toc-h2 toc-link" data-title="<code>FP.delay(ms)</code>"><code>FP.delay(ms)</code></a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#properties" class="toc-h1 toc-link" data-title="<small>   Properties</small>"><small>   Properties</small></a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#fp-get" class="toc-h2 toc-link" data-title="<code>FP.get(keyName)</code>"><code>FP.get(keyName)</code></a>
+                  </li>
+                  <li>
+                    <a href="#fp-set" class="toc-h2 toc-link" data-title="<code>FP.set(keyName, value)</code>"><code>FP.set(keyName, value)</code></a>
                   </li>
               </ul>
           </li>
@@ -285,29 +305,32 @@
             <a href="#specialty-methods" class="toc-h1 toc-link" data-title="Specialty Methods">Specialty Methods</a>
           </li>
           <li>
-            <a href="#160-160-helpers" class="toc-h1 toc-link" data-title="   Helpers">   Helpers</a>
+            <a href="#helpers" class="toc-h1 toc-link" data-title="<small>   Helpers</small>"><small>   Helpers</small></a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#code-fp-resolve-lt-anything-gt-code" class="toc-h2 toc-link" data-title="<code>FP.resolve(&lt;anything&gt;)</code>"><code>FP.resolve(&lt;anything&gt;)</code></a>
+                    <a href="#fp-resolve" class="toc-h2 toc-link" data-title="<code>FP.resolve(&lt;anything&gt;)</code>"><code>FP.resolve(&lt;anything&gt;)</code></a>
                   </li>
                   <li>
-                    <a href="#code-fp-all-code" class="toc-h2 toc-link" data-title="<code>FP.all()</code>"><code>FP.all()</code></a>
+                    <a href="#fp-all" class="toc-h2 toc-link" data-title="<code>FP.all()</code>"><code>FP.all()</code></a>
                   </li>
-              </ul>
-          </li>
-          <li>
-            <a href="#160-160-events" class="toc-h1 toc-link" data-title="   Events">   Events</a>
-              <ul class="toc-list-h2">
                   <li>
-                    <a href="#code-listen-code-event-helper" class="toc-h2 toc-link" data-title="<code>.listen()</code> event helper"><code>.listen()</code> event helper</a>
+                    <a href="#fp-unpack" class="toc-h2 toc-link" data-title="<code>FP.unpack()</code>"><code>FP.unpack()</code></a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#160-160-composition-pipelines" class="toc-h1 toc-link" data-title="   Composition Pipelines">   Composition Pipelines</a>
+            <a href="#events" class="toc-h1 toc-link" data-title="<small>   Events</small>"><small>   Events</small></a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#code-chain-code-code-chainend-code" class="toc-h2 toc-link" data-title="<code>.chain()</code> / <code>.chainEnd()</code>"><code>.chain()</code> / <code>.chainEnd()</code></a>
+                    <a href="#fp-listen-event-helper" class="toc-h2 toc-link" data-title="<code>FP.listen()</code> event helper"><code>FP.listen()</code> event helper</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#composition-pipeline" class="toc-h1 toc-link" data-title="<small>   Composition Pipeline</small>"><small>   Composition Pipeline</small></a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#fp-chain-chainend" class="toc-h2 toc-link" data-title="<code>FP.chain() / .chainEnd()</code>"><code>FP.chain() / .chainEnd()</code></a>
                   </li>
                   <li>
                     <a href="#re-usable-promise-chains" class="toc-h2 toc-link" data-title="Re-usable Promise Chains">Re-usable Promise Chains</a>
@@ -321,20 +344,30 @@
               </ul>
           </li>
           <li>
-            <a href="#160-160-modifiers" class="toc-h1 toc-link" data-title="   Modifiers">   Modifiers</a>
+            <a href="#modifiers" class="toc-h1 toc-link" data-title="<small>   Modifiers</small>"><small>   Modifiers</small></a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#code-quiet-code" class="toc-h2 toc-link" data-title="<code>.quiet()</code>"><code>.quiet()</code></a>
+                    <a href="#fp-quiet" class="toc-h2 toc-link" data-title="<code>FP.quiet()</code>"><code>FP.quiet()</code></a>
                   </li>
                   <li>
-                    <a href="#code-concurrency-threadlimit-code" class="toc-h2 toc-link" data-title="<code>.concurrency(threadLimit)</code>"><code>.concurrency(threadLimit)</code></a>
+                    <a href="#fp-concurrency" class="toc-h2 toc-link" data-title="<code>FP.concurrency(threadLimit)</code>"><code>FP.concurrency(threadLimit)</code></a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#misc" class="toc-h1 toc-link" data-title="Misc">Misc</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#detailed-stats" class="toc-h2 toc-link" data-title="Detailed Stats">Detailed Stats</a>
+                  </li>
+                  <li>
+                    <a href="#feedback" class="toc-h2 toc-link" data-title="Feedback">Feedback</a>
                   </li>
               </ul>
           </li>
       </div>
         <ul class="toc-footer">
             <li><a class='social github' href='https://github.com/justsml/functional-promises'>Star on GitHub</a></li>
-            <li><a class='bottom' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
@@ -342,19 +375,29 @@
       <div class="content">
         <h1 id='functional-promises'>Functional Promises</h1>
 <blockquote>
-<p><a href="https://github.com/justsml/functional-promises">View <code>Functional Promises</code> on Github</a></p>
+<p>Install:</p>
+</blockquote>
+<pre class="highlight sh tab-shell"><code>npm install functional-promise
+</code></pre>
+<blockquote>
+<p>Import into your app:</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">//// Use one of the following:</span>
+<span class="kr">const</span> <span class="nx">FP</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'functional-promise'</span><span class="p">)</span>
+<span class="c1">//  OR:</span>
+<span class="kr">import</span> <span class="nx">FP</span> <span class="nx">from</span> <span class="s1">'functional-promise'</span>
+</code></pre><h6 id='star-functional-promises-on-github'><a href="https://github.com/justsml/functional-promises">Star <code>Functional Promises</code> on Github</a></h6>
+<blockquote>
+<p style='text-align: center;'><strong style='font-size: 24px;'>Examples &amp; Awesome Shit</strong></p>
 
-<p style='text-align: center;'><strong style='font-size: 19px;'>Summary of Awesome Shit</strong></p>
-
-<p>Use familiar Array-style methods are built-in.</p>
+<p>Array-style methods are built-in:</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'5'</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// [2, 4</span>
   <span class="p">})</span>
-
 </code></pre>
 <blockquote>
 <p>Create re-usable sequences of functions with <code>.chain()</code>.</p>
@@ -368,136 +411,203 @@
   <span class="p">.</span><span class="nx">chainEnd</span><span class="p">()</span> <span class="c1">// returns function</span>
 
 <span class="nx">squareAndFormatDecimal</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="p">[</span><span class="s1">'25.00'</span><span class="p">,</span> <span class="s1">'100.00'</span><span class="p">,</span> <span class="s1">'400.00'</span><span class="p">]))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">num</span><span class="p">))</span> <span class="c1">// ['25.00', '100.00', '400.00']</span>
 </code></pre>
-<p><a href="https://travis-ci.org/justsml/functional-promises"><img src="https://travis-ci.org/justsml/functional-promises.svg?branch=master" alt="Build Status" /></a>
-<a href="https://github.com/justsml/functional-promises"><img src="https://img.shields.io/github/package-json/v/justsml/functional-promises.svg?style=flat" alt="GitHub package version" /></a>
-<a href="https://github.com/justsml/functional-promises"><img src="https://img.shields.io/github/stars/justsml/functional-promises.svg?label=Stars&amp;style=flat" alt="GitHub stars" /></a></p>
-<h3 id='summary'>Summary</h3>
-<p>Functional Promises are an extension of the native Promises API (<code>.then()</code>/<code>.catch()</code>).</p>
-
-<p><strong>Core features:</strong> Array Methods, Events, Object &amp; Array <code>FP.all()</code> Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.</p>
-
-<p><strong>Why not simply use [library X]?</strong></p>
-
-<ul>
-<li>RxJS: <code>FP</code> is 1/6th the size. Observable support still being evaluated.</li>
-<li>Bluebird: <code>FP</code> adds some key features: <em>events</em>, <em>conditionals</em>, <em>chains</em>, <em>quiet errors</em>. (Disclaimer: I&#39;m a contributor, with a low PR acceptance ratio. 😿)</li>
-</ul>
-
-<p><code>FP</code> is currently <strong>only a couple 100 lines of code.</strong>
-The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (using Webpack+Babel+Rollup+UglifyJS).</p>
-<h3 id='api-outline'>API Outline</h3>
 <blockquote>
 <p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code></a> with <code>FP.thenIf()</code> to handle <code>response.ok === false</code> with custom response.</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Wrap `fetch`'s return Promise with `FP.resolve()` to use `FP`'s methods</span>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">//// Wrap `fetch()` with `FP.resolve()` to use `FP`'s methods</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">}))</span>
   <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span> <span class="c1">// thenIf lets us handle branching logic</span>
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check if response is ok</span>
     <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(),</span> <span class="c1">// if true, return the parsed body</span>
-    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">,</span> <span class="na">error</span><span class="p">:</span> <span class="nx">res</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
+    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span> <span class="c1">// Get the resulting objects `avatar` value</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
-
 </code></pre>
-<blockquote>
-<p><code>FP.thenIf()</code> replaces the <code>if</code> branching code here:</p>
-</blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">})</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
-     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="p">{</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">,</span> <span class="na">error</span><span class="p">:</span> <span class="nx">res</span><span class="p">}</span>
-     <span class="p">}</span>
-  <span class="p">})</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">avatar</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
-</code></pre>
-<p>All <code>.then()</code>-derived methods are listed first. It&#39;s the bulk of the API.</p>
+<p><a href="https://travis-ci.org/LameDuh/functional-promises"><img src="https://travis-ci.org/LameDuh/functional-promises.svg?branch=master" alt="Build Status" /></a>
+<a href="https://github.com/LameDuh/functional-promises"><img src="https://img.shields.io/github/package-json/v/LameDuh/functional-promises.svg?style=flat" alt="GitHub package version" /></a>
+<a href="https://github.com/LameDuh/functional-promises"><img src="https://img.shields.io/github/stars/LameDuh/functional-promises.svg?label=Stars&amp;style=flat" alt="GitHub stars" /></a></p>
+
+<p><a href="https://www.npmjs.com/package/functional-promise"><img src="https://nodei.co/npm/functional-promise.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM" /></a></p>
+<h3 id='summary'>Summary</h3>
+<p>The <strong>Functional Promises</strong> library is a <strong>Function Chaining Interface and Pattern.</strong></p>
+
+<aside class="warning">
+  <code>functional-promise</code> is not itself a <code>Promise</code> replacement. It uses the native <code>Promise</code> API.
+</aside>
+
+<p><strong>Core features:</strong> Array Methods, Events, Array <strong>AND Object</strong> <code>FP.all()</code> Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
+<aside class="success">
+  <code>FP</code> features seamless support between synchronous code, <code>async</code>/<code>await</code>, and native Promises. The core <i>Functional Composition</i> is powered by the <a href="#fp-chain"><code>FP.chain()</code></a> construct.
+</aside></p>
+
+<p><strong>Why not simply use [library X]?</strong></p>
+
+<p><code>FP</code>&#39;s <strong>un-minified source</strong> is <strong>only ~400 lines</strong> of code.
+The <strong>browser bundle</strong> weighs in at <strong>15-20Kb</strong> (using Webpack+Babel+Rollup+UglifyJS).</p>
+<h3 id='library-comparison'>Library Comparison</h3>
+<table><thead>
+<tr>
+<th>Library</th>
+<th>Main deal</th>
+<th style="text-align: right">Files</th>
+<th style="text-align: right">Lines of Code</th>
+<th style="text-align: right">.min.js kB</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>Functional Promise v1.5.1</strong></td>
+<td>Sync &amp; Async Chains</td>
+<td style="text-align: right">8</td>
+<td style="text-align: right">390</td>
+<td style="text-align: right">16 Kb</td>
+</tr>
+<tr>
+<td><a href="https://github.com/petkaantonov/bluebird">Bluebird</a> v3.5.1</td>
+<td>Promises Replacement</td>
+<td style="text-align: right">38</td>
+<td style="text-align: right">5,188</td>
+<td style="text-align: right">80 Kb</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ReactiveX/RxJS">RxJS</a> v5.5.6</td>
+<td>Observables Chaining</td>
+<td style="text-align: right">458</td>
+<td style="text-align: right">12,266</td>
+<td style="text-align: right">150 Kb</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ReactiveX/IxJS">IxJS</a> v2.3.4</td>
+<td>[Async]Iterable Chaining</td>
+<td style="text-align: right">521</td>
+<td style="text-align: right">12,366</td>
+<td style="text-align: right">145 Kb</td>
+</tr>
+</tbody></table>
+
+<p><code>FP</code> is roughly <strong>1/30th</strong> the lines of code in <code>IxJs</code>. And it&#39;s bundle size is about <strong>1/9th</strong> the size! However <code>IxJS</code>/<code>RxJS</code> feature a far larger API with 100&#39;s of methods.</p>
+
+<p>BluebirdJS and FP have roughly the same number (and type) of API methods, yet <code>FP</code> is far less code.</p>
+
+<p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing. Their patterns have been very influential on <code>FP</code>'s design.</p>
+
+<p><small><b>Note:</b>&#160;<p><code>R/IxJS</code>&#39;s modular design also allows for bundle sizes to be smaller (using different syntax).</p></small></p>
+<h3 id='api-outline'>API Outline</h3>
+<p>All <code>.then()</code>-powered methods are listed first.</p>
 
 <ul>
-<li><a href="#thenable-methods">Thenable Methods</a>
+<li><a href="http://www.fpromises.io/#thenable-methods">Thenable Methods</a>
 
 <ul>
-<li><a href="#160-160-array-methods">Arrays</a>
+<li><a href="http://www.fpromises.io/#array-methods">Arrays</a>
 
 <ul>
-<li><code>.map(fn)</code></li>
-<li><code>.filter(fn)</code></li>
-<li><code>.find(fn)</code></li>
-<li><code>.findIndex(fn)</code></li>
-<li><code>.some(fn)</code></li>
-<li><code>.none(fn)</code></li>
-<li><code>.series(fn)</code></li>
-<li><code>.forEach(fn)</code> - use <code>.map()</code> instead (write <em>proper</em> <code>functions</code>)</li>
+<li><a href="http://www.fpromises.io/#fp-map"><code>.map(fn)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-filter"><code>.filter(fn)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-find"><code>.find(fn)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-findindex"><code>.findIndex(fn)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-some"><code>.some(fn)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-none"><code>.none(fn)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-series"><code>.series(fn)</code></a></li>
 </ul></li>
-<li><a href="#160-160-errors">Errors</a> <em>(WIP)</em>
+<li><a href="http://www.fpromises.io/#errors">Errors</a> <em>(WIP)</em>
 
 <ul>
-<li><code>.catch(fn)</code></li>
-<li><code>.catch(filter, fn)</code></li>
+<li><a href="http://www.fpromises.io/#fp-catch"><code>.catch(fn)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-catch"><code>.catchIf(filter, fn)</code></a></li>
 </ul></li>
-<li><a href="#160-160-conditional">Conditional</a>
+<li><a href="http://www.fpromises.io/#conditional">Conditional</a>
 
 <ul>
-<li><code>.thenIf()</code></li>
+<li><a href="http://www.fpromises.io/#fp-thenif"><code>.thenIf(fn, ifTrue, ifFalse)</code></a></li>
 </ul></li>
-<li><a href="#160-160-utilities">Utilities</a>
+<li><a href="http://www.fpromises.io/#utilities">Utilities</a>
 
 <ul>
-<li><code>.tap(fn)</code></li>
+<li><a href="http://www.fpromises.io/#fp-tap"><code>.tap(fn)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-delay"><code>.delay(msec)</code></a></li>
 </ul></li>
-<li><a href="#160-160-properties">Properties</a>
+<li><a href="http://www.fpromises.io/#properties">Properties</a>
 
 <ul>
-<li><code>.get(keyName)</code></li>
-<li><code>.set(keyName, value)</code></li>
+<li><a href="http://www.fpromises.io/#fp-get"><code>.get(keyName)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-set"><code>.set(keyName, value)</code></a></li>
 </ul></li>
 </ul></li>
-<li><a href="#specialty-methods">Specialty Methods</a>
+<li><a href="http://www.fpromises.io/#specialty-methods">Specialty Methods</a>
 
 <ul>
-<li><a href="#160-160-helpers">Helpers</a>
+<li><a href="http://www.fpromises.io/#helpers">Helpers</a>
 
 <ul>
-<li><code>FP.resolve()</code></li>
-<li><code>FP.all(Object/Array)</code></li>
+<li><a href="http://www.fpromises.io/#fp-promisify"><code>FP.promisify(callback)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-promisifyall"><code>FP.promisifyAll(callback)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-resolve"><code>FP.resolve()</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-all"><code>FP.all(Object/Array)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-unpack"><code>FP.unpack()</code></a></li>
 </ul></li>
-<li><a href="#160-160-events">Events</a>
+<li><a href="http://www.fpromises.io/#events">Events</a>
 
 <ul>
-<li><code>.listen(obj, ...eventNames)</code></li>
+<li><a href="http://www.fpromises.io/#fp-listen"><code>.listen(obj, ...eventNames)</code></a></li>
 </ul></li>
-<li><a href="#160-160-composition-pipelines">Composition Pipelines</a>
+<li><a href="http://www.fpromises.io/#composition-pipeline">Composition Pipeline</a>
 
 <ul>
-<li><code>FP.chain()</code></li>
-<li><code>.chainEnd()</code></li>
+<li><a href="http://www.fpromises.io/#fp-chain-chainend"><code>FP.chain(options)</code></a></li>
+<li><a href="http://www.fpromises.io/#fp-chain-chainend"><code>.chainEnd()</code></a></li>
 </ul></li>
-<li><a href="#160-160-modifiers">Modifiers</a>
+<li><a href="http://www.fpromises.io/#modifiers">Modifiers</a>
 
 <ul>
-<li><code>.quiet()</code> - prevents errors from stopping array methods mid-loop</li>
-<li><code>.concurrency(threadLimit)</code> - limits parallel workers for array methods</li>
+<li><a href="http://www.fpromises.io/#fp-quiet"><code>.quiet()</code> - prevents errors from stopping array methods mid-loop</a></li>
+<li><a href="http://www.fpromises.io/#fp-concurrency"><code>.concurrency(threadLimit)</code> - limits parallel workers for array methods</a></li>
 </ul></li>
 </ul></li>
 </ul>
 <h1 id='thenable-methods'>Thenable Methods</h1>
-<p>You can think of most <code>FP</code> methods as <strong>wrappers derived from Native Promise&#39;s <code>.then()</code>.</strong></p>
-
-<p>For example, <code>.tap(fn)</code>&#39;s function will receive the resolved value exactly like a <code>.then()</code>. Except the function&#39;s <code>return</code> value will be ignored - and the next <code>thenable</code> in the chain will get the original input.</p>
-
+<blockquote>
 <p>A <code>.catch()</code> is another type of <code>thenable</code>! It works because an Error in a Promise will cause it to skip or &quot;surf&quot; over <code>thenables</code> until it finds a special <code>thenable</code>: <code>.catch()</code>. It then takes that Error value and passes it into the function. <code>.catch(err=&gt;{log(err.message)})</code></p>
 
-<p>See all <code>thenable</code> methods in <code>FP</code>: Arrays, Errors, Conditional, Utilities, Properties, etc.</p>
-<h1 id='160-160-array-methods'>&#160;&#160; Array Methods</h1>
+<p><code>Thenable</code> methods in <code>FP</code> include: Arrays, Errors, Conditional, Utilities, Properties, etc.</p>
+</blockquote>
+
+<p>Most <code>FP</code> methods derive behavior from <strong>Native Promise&#39;s <code>.then()</code>.</strong></p>
+
+<p>For example, <code>.tap(fn)</code>&#39;s function will receive the resolved value exactly like a <code>.then()</code>. Except the function&#39;s <code>return</code> value will be ignored - and the next <code>thenable</code> in the chain will get the original input.</p>
+<h1 id='array-methods'><small>&#160;&#160; Array Methods</small></h1><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">rawData</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">99</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="kc">NaN</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'99'</span><span class="p">]</span>
+
+<span class="c1">// Async compatible (not needed in this simple example)</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">rawData</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nb">Boolean</span><span class="p">)</span>        <span class="c1">// truthiness check = [-99, "99"]</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>            <span class="c1">// convert to numeric [-99 99]</span>
+  <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// is gte 1, idx = 1</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">index</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="c1">// 0</span>
+  <span class="p">})</span>
+</code></pre>
+<blockquote>
+<p>Reuse functions, e.g. Native Array methods:</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">rawData</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">99</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="kc">NaN</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'99'</span><span class="p">]</span>
+
+<span class="nx">rawData</span>
+  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nb">Boolean</span><span class="p">)</span>        <span class="c1">// truthiness check = [-99, "99"]</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>            <span class="c1">// convert to numeric [-99, 99]</span>
+  <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// &lt;^ Native Array Methods ^^</span>
+</code></pre>
 <p>Any <code>.then()</code> which would handle an array, may instead use one of the <code>FP</code> array methods.</p>
-<h2 id='code-fp-map-iterable-fn-code'><code>FP.map(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">5</span><span class="p">)])</span>
+
+<aside class='success'>
+  Please check examples below!
+</aside>
+<h2 id='fp-map'><code>FP.map(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="c1">// Native es6 example: (Synchronous)</span>
+<span class="c1">//.then(nums =&gt; nums.map(x =&gt; x * 2))</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// [2, 4, 6, 8, 10]</span>
   <span class="p">})</span>
 </code></pre>
 <p>Similar to <code>Array.prototype.map((item[, index, array]) =&gt; {})</code>.</p>
@@ -509,74 +619,105 @@ The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (us
 <p>For example, let&#39;s say you have to multiply a list of numbers by 2.</p>
 
 <p>Using <code>FP.map()</code> to do this lets you focus on the important logic: <code>x =&gt; x * 2</code></p>
-<h2 id='code-fp-filter-iterable-fn-code'><code>FP.filter(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+
+<blockquote>
+<p>Another neat trick w/ <code>FP</code> is auto-resolving nested Promises. Now you can ignore finickey details, like when AJAX data will be available.</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">dumbPromises</span> <span class="o">=</span> <span class="p">[</span><span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">25</span><span class="p">),</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">50</span><span class="p">)]</span>
+
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">dumbPromises</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">concurrency</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">delay</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">msec</span> <span class="o">=&gt;</span> <span class="s2">`Delayed </span><span class="p">${</span><span class="nx">msec</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)))</span>
+</code></pre><h2 id='fp-filter'><code>FP.filter(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nb">Boolean</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span>
+<span class="c1">// Or similarly:</span>
+<span class="c1">// .filter(value =&gt; value ? true : false)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span> <span class="c1">// [1, 3, 5]</span>
 </code></pre>
 <p>Use <code>.filter()</code> to omit items from the input array by passing through a given function. Items will be omitted if the function returns a falsey value.</p>
-<h2 id='code-fp-find-iterable-fn-code'><code>FP.find(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
-<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
-  <span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+
+<aside class="notice">
+  The <code>Boolean</code> type can be used as a truthiness check. For example: <code>assert.equal(Boolean(1), true)</code>, <code>assert.equal(Boolean(false), false)</code>, <code>assert.equal(Boolean(null), false)</code>.
+</aside>
+<h2 id='fp-find'><code>FP.find(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// 2</span>
   <span class="p">})</span>
 </code></pre>
 <p>Returns first item to return truthy for <code>fn(item)</code></p>
 
 <p>If no match is found it will return <code>undefined</code>.</p>
-<h2 id='code-fp-findindex-iterable-fn-code'><code>FP.findIndex(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
-  <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+<h2 id='fp-findindex'><code>FP.findIndex(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// 1</span>
   <span class="p">})</span>
 </code></pre>
 <p>Returns first <strong>item&#39;s index</strong> to return truthy for <code>fn(item)</code></p>
 
 <p>If no match is found it will return <code>-1</code>.</p>
-<h2 id='code-fp-some-iterable-fn-code'><code>FP.some(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
-  <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+<h2 id='fp-some'><code>FP.some(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
   <span class="p">})</span>
 </code></pre>
 <p>Returns <code>Promise&lt;true&gt;</code> on the first <strong>item</strong> to return truthy for <code>fn(item)</code></p>
 
 <p>If no truthy result is found, <code>.some()</code> returns <code>Promise&lt;false&gt;</code>.</p>
-<h2 id='code-fp-none-iterable-fn-code'><code>FP.none(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
-  <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+<h2 id='fp-none'><code>FP.none(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">none</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="c1">// Will return true:</span>
-    <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// false</span>
   <span class="p">})</span>
 </code></pre>
-<p>Returns <code>Promise&lt;false&gt;</code> on the first <strong>item</strong> to return falsey for <code>fn(item)</code></p>
+<p><code>.none()</code> resolves to <code>Promise&lt;false&gt;</code> on the first <strong>item</strong> to return falsey for <code>fn(item)</code></p>
 
 <p>If no match is found it will return <code>Promise&lt;true&gt;</code>.</p>
-<h1 id='160-160-conditional'>&#160;&#160; Conditional</h1><h2 id='code-fp-thenif-code'><code>FP.thenIf()</code></h2>
-<p><code>.thenIf(condition(value), ifTrue(value), ifFalse(value))</code></p>
-
+<h1 id='errors'><small>&#160;&#160; Errors</small></h1><h2 id='fp-catch'><code>FP.catch(fn)</code></h2><h2 id='fp-catchif'><code>FP.catchIf(type, fn)</code></h2>
 <blockquote>
-<p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"><code>fetch</code></a> with <code>FP.thenIf()</code> to handle when <code>response.ok === false</code> using custom response.</p>
+<p>Catching errors by type</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Wrap `fetch`'s returned Promise with `FP.resolve()` - enables `FP`'s methods</span>
-<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/profile'</span><span class="p">,</span> <span class="p">{</span><span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">}))</span>
-  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span> <span class="c1">// thenIf lets us handle branching logic</span>
-    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">,</span> <span class="c1">// Check if response is ok</span>
-    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(),</span> <span class="c1">// if true, return the parsed body</span>
-    <span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">avatar</span><span class="p">:</span> <span class="s1">'/no-photo.svg'</span><span class="p">,</span> <span class="na">error</span><span class="p">:</span> <span class="nx">res</span><span class="p">}))</span> <span class="c1">// fail, use default object</span>
-  <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span> <span class="c1">// Get the resulting objects `avatar` value</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">avatarUrl</span> <span class="o">=&gt;</span> <span class="nx">imgElement</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">avatarUrl</span><span class="p">)</span>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">'Oh noes'</span><span class="p">)</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'must skip this!'</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">ReferenceError</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'arg too specific for .catch(type)'</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">SyntaxError</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'arg too specific for .catch(type)'</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">TypeError</span><span class="p">,</span> <span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'Success!!! filtered .catch(type)'</span><span class="p">,</span> <span class="nx">err</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'Fallback, no error type matched'</span><span class="p">))</span>
 </code></pre>
+<p><code>.catch()</code> is analgous to native Promise error handling.</p>
+
+<p>This example uses <code>TypeError</code> matching to print the &#39;success&#39; message - ignoring the other <code>catch</code>&#39;s.</p>
+<h1 id='conditional'><small>&#160;&#160; Conditional</small></h1><h2 id='fp-thenif'><code>FP.thenIf()</code></h2>
 <blockquote>
 <p>Email &#39;validator&#39;</p>
 </blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Use like so:</span>
+<pre class="highlight javascript tab-javascript"><code><span class="kd">let</span> <span class="nx">email</span> <span class="o">=</span> <span class="s1">'dan@danlevy.net'</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">email</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span>
     <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="c1">// Conditional</span>
     <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Valid: '</span><span class="p">,</span> <span class="nx">e</span><span class="p">),</span> <span class="c1">// ifTrue</span>
     <span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'Bad Email: '</span><span class="p">,</span> <span class="nx">e</span><span class="p">))</span> <span class="c1">// ifFalse</span>
-</code></pre><h4 id='arguments'>Arguments</h4>
+</code></pre>
+<p><code>.thenIf(condition(value), ifTrue(value), ifFalse(value))</code></p>
+<h4 id='arguments'>Arguments</h4>
+<blockquote>
+<p>Functional Promise Login Flow</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">//// Check if login successful, returning a token:</span>
+<span class="kr">const</span> <span class="nx">authUser</span> <span class="o">=</span> <span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">FP</span>
+  <span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="nx">svc</span><span class="p">.</span><span class="nx">loginGetUser</span><span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span>
+    <span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">.</span><span class="nx">token</span><span class="p">,</span> <span class="c1">// is valid login</span>
+    <span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">,</span> <span class="c1">// return user to next .then function</span>
+    <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Login Failed!'</span><span class="p">)}))</span>
+</code></pre>
 <ul>
 <li><code>condition</code>, echo/truthy function: <code>(x) =&gt; x</code></li>
 <li><code>ifTrue</code>, echo function: <code>(x) =&gt; x</code></li>
@@ -590,44 +731,76 @@ The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (us
 <p>The return value of either <code>ifTrue</code>/<code>ifFalse</code> handler will be handed to the next <code>.then()</code>.</p>
 
 <p>Default values let you call <code>.thenIf</code> with no args - if you simply want to exclude falsey values down the chain.</p>
+<h1 id='utilities'><small>&#160;&#160; Utilities</small></h1><h2 id='fp-tap'><code>FP.tap(fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'http://jsonplaceholder.typicode.com/photos/11'</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`ok:</span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Keys: '</span> <span class="o">+</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">sort</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">','</span><span class="p">)))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="s2">`&lt;img src='</span><span class="p">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">url</span><span class="p">}</span><span class="s2">' alt='</span><span class="p">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">title</span><span class="p">}</span><span class="s2">' /&gt;`</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Image Url: '</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">url</span><span class="p">))</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'https://api.github.com/users/justsml'</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`github user req ok? </span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Keys:'</span><span class="p">,</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">data</span><span class="p">)))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+</code></pre>
+<p>The <code>.tap()</code> method is <code>FP</code>&#39;s primary way to use the familiar <code>console.log()</code> - know it well.</p>
 
-<blockquote>
-<p>Functional Login Flow</p>
-</blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// Check if login successfully returned a token:</span>
-<span class="kr">const</span> <span class="nx">authUser</span> <span class="o">=</span> <span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">FP</span>
-  <span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">})</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="nx">svc</span><span class="p">.</span><span class="nx">loginGetUser</span><span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">pass</span><span class="p">))</span>
-  <span class="p">.</span><span class="nx">thenIf</span><span class="p">(</span>
-    <span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">.</span><span class="nx">token</span><span class="p">,</span> <span class="c1">// is valid login</span>
-    <span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">,</span> <span class="c1">// return user to next .then function</span>
-    <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Login Failed!'</span><span class="p">)}))</span>
-</code></pre><h1 id='160-160-utilities'>&#160;&#160; Utilities</h1><h2 id='code-tap-fn-code'><code>.tap(fn)</code></h2>
-<p>The <code>.tap()</code> method is <code>FP</code>&#39;s counterpart to <code>console.log()</code> - know it well.</p>
-
-<p>It works just like <code>.then()</code> except it&#39;s return value is ignored. The next <code>thenable</code> will get the same input.</p>
+<p>It works just like <code>.then()</code> <strong>except it&#39;s return value is ignored.</strong> The next <code>thenable</code> will get the same input.</p>
 
 <p>Perfect for logging or other background tasks (where results don&#39;t need to block).</p>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'/user/42/photos'</span><span class="p">))</span>
-  <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`user photos req ok? </span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">ok</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
-</code></pre><h1 id='160-160-properties'>&#160;&#160; Properties</h1>
-<p>These methods are particularly helpful for dealing with data extraction/transformation.</p>
-<h2 id='code-fp-get-keyname-code'><code>FP.get(keyName)</code></h2>
-<p>Use to get a single key&#39;s value from an object.</p>
+<h2 id='fp-delay'><code>FP.delay(ms)</code></h2>
+<blockquote>
+<p>Delay per-array item.</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">started</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
 
-<p>Returns the key value.</p>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="na">foo</span><span class="p">:</span> <span class="mi">42</span><span class="p">})</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">concurrency</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="c1">// now only 1 map() callback happens at a time</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">FP</span>
+      <span class="p">.</span><span class="nx">delay</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">runtime</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">started</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Delayed </span><span class="p">${</span><span class="nx">runtime</span><span class="p">}</span><span class="s2">ms.`</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Success: </span><span class="p">${</span><span class="nx">runtime</span> <span class="o">&gt;=</span> <span class="mi">200</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+  <span class="p">})</span>
+</code></pre>
+<blockquote>
+<p>Single delay added mid-sequence.</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">started</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+
+<span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">delay</span><span class="p">(</span><span class="mi">250</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">num</span> <span class="o">+</span> <span class="nx">num</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">runtime</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">started</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Delayed </span><span class="p">${</span><span class="nx">runtime</span><span class="p">}</span><span class="s2">ms.`</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Success: </span><span class="p">${</span><span class="nx">runtime</span> <span class="o">&gt;=</span> <span class="mi">250</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+  <span class="p">})</span>
+</code></pre>
+<p><code>.delay(milliseconds)</code> is a helpful utility. It can help you avoid exceeding rate-limits in APIs. You can also use it to for simulated bottlenecks, adding &#39;slowdowns&#39; exactly where needed can greatly assist in locating many kinds of complex bugs.</p>
+<h4 id='usage'>Usage</h4>
+<ul>
+<li>Shorthand with static helper: <code>.then(FP.delay(waitMs))</code></li>
+<li>Nesting with static helper: FP.delay(waitMs): <code>.then(num =&gt; FP.delay(waitMs).then(() =&gt; num))</code></li>
+<li>Using FP&#39;s instance method. <code>FP.resolve([1, 2, 3]).delay(250)</code></li>
+</ul>
+<h1 id='properties'><small>&#160;&#160; Properties</small></h1>
+<p>These methods are particularly helpful for dealing with data extraction/transformation.</p>
+<h2 id='fp-get'><code>FP.get(keyName)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="na">foo</span><span class="p">:</span> <span class="mi">42</span><span class="p">})</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'foo'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="c1">// x === 42</span>
   <span class="p">})</span>
-</code></pre><h2 id='code-fp-set-keyname-value-code'><code>FP.set(keyName, value)</code></h2>
-<p>Use to set a single key&#39;s value on an object.</p>
+</code></pre>
+<p>Use to get a single key&#39;s value from an object.</p>
 
-<p>Returns the <strong>modified object.</strong></p>
-
+<p>Returns the key value.</p>
+<h2 id='fp-set'><code>FP.set(keyName, value)</code></h2>
 <blockquote>
 <p>A common use-case includes dropping passwords or tokens.</p>
 </blockquote>
@@ -636,188 +809,322 @@ The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (us
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">obj</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">password</span><span class="p">)</span> <span class="c1">// obj.password === undefined</span>
   <span class="p">})</span>
-</code></pre><h1 id='specialty-methods'>Specialty Methods</h1><h1 id='160-160-helpers'>&#160;&#160; Helpers</h1><h2 id='code-fp-resolve-lt-anything-gt-code'><code>FP.resolve(&lt;anything&gt;)</code></h2>
-<p>Turn anything into an FP Promise. Also can upgrade any Promise-supporting library.</p>
+</code></pre>
+<p>Use to set a single key&#39;s value on an object.</p>
+
+<p>Returns the <strong>modified object.</strong></p>
+<h1 id='specialty-methods'>Specialty Methods</h1><h1 id='helpers'><small>&#160;&#160; Helpers</small></h1><h2 id='fp-resolve'><code>FP.resolve(&lt;anything&gt;)</code></h2>
+<blockquote>
+<p>Promise like it&#39;s going out of style:</p>
+</blockquote>
 <pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">()</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">))</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">anything</span><span class="p">))</span>
-</code></pre><h2 id='code-fp-all-code'><code>FP.all()</code></h2>
-<p><code>FP.all()</code> provides an extended utility above the native <code>Promise.all()</code>, <strong>supporting both Objects and Arrays.</strong></p>
+</code></pre>
+<p>Turn anything into a <code>Functional Promise</code>!</p>
 
-<p><em>Note:</em> Non-recursive.</p>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span>
+<p>Use to convert any Promise-like interface into an <code>FP</code>.</p>
+<h2 id='fp-all'><code>FP.all()</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span>
   <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
   <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="p">])</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
-</code></pre>
-<blockquote>
-<p>Also works with keyed Objects:</p>
-</blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">all</span><span class="p">({</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span>
+
+<span class="nx">FP</span><span class="p">.</span><span class="nx">all</span><span class="p">({</span>
   <span class="na">one</span><span class="p">:</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
   <span class="na">two</span><span class="p">:</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="p">})</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">{</span><span class="na">one</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">two</span><span class="p">:</span> <span class="mi">2</span><span class="p">}))</span>
-</code></pre><h1 id='160-160-events'>&#160;&#160; Events</h1>
-<p>Promises can be awkward when dealing with events.</p>
-<h4 id='code-functional-promise-code-library-aims-to-find-a-harmonious-pattern'><code>Functional Promise</code> library aims to find a harmonious pattern.</h4><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'submitBtn'</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span>
+</code></pre>
+<p><code>FP.all()</code> provides an extended utility above the native <code>Promise.all()</code>, <strong>supporting both Objects and Arrays.</strong></p>
+
+<p><em>Note:</em> Non-recursive.</p>
+<h2 id='fp-unpack'><code>FP.unpack()</code></h2><pre class="highlight javascript tab-javascript"><code><span class="kd">function</span> <span class="nx">edgeCase</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="p">{</span> <span class="nx">promise</span><span class="p">,</span> <span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">unpack</span><span class="p">()</span>
+  <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="s1">'All done!'</span><span class="p">),</span> <span class="mi">1000</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nx">promise</span>
+<span class="p">}</span>
+
+<span class="nx">edgeCase</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
+</code></pre>
+<p>Use sparingly. Stream &amp; event handling are exempt from this &#39;rule&#39;. If using ES2015, destructuring helps to (more cleanly) achieve what <code>deferred</code> attempts.</p>
+
+<p><code>deferred</code> is an anti-pattern because it doesn&#39;t align well with Functional Composition.</p>
+<h1 id='events'><small>&#160;&#160; Events</small></h1><pre class="highlight javascript tab-javascript"><code><span class="c1">//// Example DOM code:</span>
+<span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'submitBtn'</span><span class="p">)</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">element</span> <span class="o">=&gt;</span> <span class="nx">element</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s1">'Clicked!'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="s1">'click'</span><span class="p">)</span>
 </code></pre>
+<aside class='warning'>
+  Promises can be awkward when dealing with events.
+</aside>
+
+<aside class='success'>
+  The <code>Functional Promise</code> library seeks a harmonious balance.
+</aside>
+
 <p>Key considerations:</p>
 
-<p>Let&#39;s start with their <strong>similarities</strong>, both are (essentially) async...</p>
+<p>Let&#39;s start with their <strong>similarity</strong>, both are (essentially) async...</p>
 
 <p>And now for some <strong>differences</strong>:</p>
 
 <ul>
-<li>Promises are single-execution cached values. Events can run many times per second with different arguments or data.</li>
+<li>Promises are single-execution cached values. Memoized. Events can run many times per second with different arguments or data.</li>
 <li>Events have control flow to think about (<code>e.preventDefault()</code>). Promises flow in one direction.</li>
 <li>Promises depend on <code>return</code>&#39;s everywhere. Event handlers which <code>return</code> may cause unexpected control-flow issues.</li>
 </ul>
 
 <p><em>Yikes.</em></p>
 
-<p>Let&#39;s look at some code &amp; see how <code>FP</code> solves this...</p>
-<h2 id='code-listen-code-event-helper'><code>.listen()</code> event helper</h2>
-<p>The <code>.listen()</code> method must be called after an <code>FP.chain()</code> sequence of <code>FP</code> methods.</p>
-
-<p><strong>Note:</strong> The <code>.chainEnd()</code> method is automatically called.</p>
-<pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
+<p>Let&#39;s look at some code &amp; see how <code>FP</code> improves the situation:</p>
+<h2 id='fp-listen-event-helper'><code>FP.listen()</code> event helper</h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'textContent'</span><span class="p">,</span> <span class="s1">'Clicked!'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="s1">'click'</span><span class="p">)</span>
-</code></pre><h1 id='160-160-composition-pipelines'>&#160;&#160; Composition Pipelines</h1>
-<blockquote>
-<p><em>Non <code>.then()</code>-based Methods</em></p>
-</blockquote>
+</code></pre>
+<p>The <code>.listen()</code> method must be called after an <code>FP.chain()</code> sequence of <code>FP</code> methods.</p>
+
+<p><strong>Note:</strong> The <code>.chainEnd()</code> method is automatically called.</p>
+<h1 id='composition-pipeline'><small>&#160;&#160; Composition Pipeline</small></h1>
+<p>Composition Pipelines is a combination of ideas from <a href="https://martinfowler.com/articles/collection-pipeline/"><code>Collection</code> Pipeline</a> and <a href="https://medium.com/javascript-scene/composing-software-an-introduction-27b72500d6ea">Functional Composition</a>.</p>
 
 <aside class="notice">
-  <i>Forgive me Haskell people, but I'm calling this a monad.</i>
+  <i>Forgive me Haskell people, but I'm calling this a monad builder.</i> Just <code>do</code> it! I mean work with me here.
 </aside>
 
-<p>Chained Functional Promises unlock a powerful technique: <strong>Reusable Async Composition Pipelines.</strong></p>
+<p>Chained Functional Promises unlock a powerful technique: <strong>Reusable Async Composition Pipeline.</strong></p>
 
-<p><strong>Enough jargon!</strong> <em>Let&#39;s rock some examples:</em></p>
+<p><strong>Enough jargon!</strong> <em>Let&#39;s create some slick JavaScript:</em></p>
 
 <!-- **Examples and usage patterns below:** -->
-<h2 id='code-chain-code-code-chainend-code'><code>.chain()</code> / <code>.chainEnd()</code></h2>
-<blockquote>
-<p>Both <code>.chain()</code> and <code>.chainEnd()</code> must be used together.</p>
-</blockquote>
+<h2 id='fp-chain-chainend'><code>FP.chain() / .chainEnd()</code></h2>
+<p>The method <code>FP.chain()</code> starts &#39;recording&#39; your functional chain.</p>
 
-<p><code>FP.chain()</code> is a static method on <code>FP</code>. Any</p>
+<p>All chain-based features (<code>FP.listen(el, ...events)</code>, <code>FP.run(opts)</code>, et. al.) use <code>.chainEnd()</code> to get a function to &#39;replay&#39; the methods after <code>.chain()</code>.</p>
+
+<p>Whether directly or indirectly <code>.chainEnd()</code> must be called.</p>
 <pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">getTarget</span> <span class="o">=</span> <span class="nx">FP</span>
   <span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">chainEnd</span><span class="p">()</span>
 
-<span class="nx">getTarget</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">handler</span> <span class="o">=</span> <span class="nx">event</span> <span class="o">=&gt;</span> <span class="nx">getTarget</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">target</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Event target: '</span><span class="p">,</span> <span class="nx">target</span><span class="p">)})</span>
-</code></pre><h2 id='re-usable-promise-chains'>Re-usable Promise Chains</h2>
-<p>Create a re-usable sequence of steps:</p>
-<pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">squareAndFormatDecimal</span> <span class="o">=</span> <span class="nx">FP</span>
+</code></pre>
+<p><code>FP.chain()</code> is a static method on <code>FP</code>.</p>
+<h2 id='re-usable-promise-chains'>Re-usable Promise Chains</h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">squareAndFormatDecimal</span> <span class="o">=</span> <span class="nx">FP</span>
   <span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">x</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">chainEnd</span><span class="p">()</span>
 
-<span class="nx">squareAndFormatDecimal</span><span class="p">([</span><span class="mi">5</span><span class="p">])</span>
-<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'squareAndFormatDecimal() Results: '</span><span class="p">,</span> <span class="nx">num</span><span class="p">)</span>
-  <span class="c1">// num === ['25.00']</span>
-<span class="p">})</span>
+<span class="nx">squareAndFormatDecimal</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">num</span><span class="p">))</span> <span class="c1">// ['25.00', '36.00']</span>
+</code></pre>
+<p><strong>HOW TO:</strong> Create a re-usable chain with 2 <code>.map</code> steps:</p>
 
-</code></pre><h2 id='events-promise-chain'>Events + Promise Chain</h2><pre class="highlight javascript tab-javascript"><code><span class="kd">function</span> <span class="nx">addTodoHandler</span><span class="p">()</span> <span class="p">{</span>
+<ol>
+<li>Create a chain, name it <code>squareAndFormatDecimal</code>.</li>
+<li>When <code>squareAndFormatDecimal(nums)</code> is passed an <code>Array&lt;Number&gt;</code> it must:
+
+<ol>
+<li>Square each number.</li>
+<li>Convert each number to a decimal, then format with <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed"><code>float.toFixed(2)</code></a>.</li>
+</ol></li>
+<li>Execute named function <code>squareAndFormatDecimal</code> with array <code>[5, 6]</code>.</li>
+</ol>
+<h2 id='events-promise-chain'>Events + Promise Chain</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">//// Example DOM Code</span>
+<span class="kr">const</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'form'</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">submitHandler</span> <span class="o">=</span> <span class="nx">createTodoHandler</span><span class="p">()</span>
+<span class="nx">form</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'submit'</span><span class="p">,</span> <span class="nx">submitHandler</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nx">createTodoHandler</span><span class="p">()</span> <span class="p">{</span>
   <span class="kr">const</span> <span class="nx">statusLbl</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'label.status'</span><span class="p">)</span>
   <span class="kr">const</span> <span class="nx">setStatus</span> <span class="o">=</span> <span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">statusLbl</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">s</span>
   <span class="kr">const</span> <span class="nx">setError</span>  <span class="o">=</span> <span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">setStatus</span><span class="p">(</span><span class="s2">`ERROR: </span><span class="p">${</span><span class="nx">err</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
 
   <span class="k">return</span> <span class="nx">FP</span>
-    <span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
-    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">event</span> <span class="o">=&gt;</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">chain</span><span class="p">()</span> <span class="c1">// input arg will get 'passed' in here</span>
+    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'target'</span><span class="p">)</span>
     <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">form</span> <span class="o">=&gt;</span> <span class="nx">form</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'input.todo-text'</span><span class="p">).</span><span class="nx">value</span><span class="p">)</span>
     <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">todoText</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span> <span class="na">complete</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="na">text</span><span class="p">:</span> <span class="nx">todoText</span><span class="p">}))</span>
     <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">todoAPI</span><span class="p">.</span><span class="nx">create</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">createResult</span> <span class="o">=&gt;</span> <span class="nx">setStatus</span><span class="p">(</span><span class="nx">createResult</span><span class="p">.</span><span class="nx">message</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">createResult</span> <span class="o">=&gt;</span> <span class="nx">setStatus</span><span class="p">(</span><span class="nx">createResult</span><span class="p">.</span><span class="nx">message</span><span class="p">))</span>
     <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">setError</span><span class="p">)</span>
     <span class="p">.</span><span class="nx">chainEnd</span><span class="p">()</span>
 <span class="p">}</span>
+</code></pre>
+<p>The method <code>createTodoHandler()</code> gives you a Functional chain to:</p>
 
-<span class="kr">const</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'form'</span><span class="p">)</span>
-<span class="nx">form</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'submit'</span><span class="p">,</span> <span class="nx">addTodoHandler</span><span class="p">())</span>
-</code></pre><h2 id='controller-events-promise-chain'>Controller + Events + Promise Chain</h2>
-<p>A more realistic &#39;class&#39; like object.</p>
+<ol>
+<li>Define single-arg helper methods <code>setStatus()</code> &amp; <code>setError()</code></li>
+<li>Start chain expression</li>
+<li>Get element using <code>.get()</code> to extract <code>target</code> property (which will be a <code>&lt;form&gt;&lt;/form&gt;</code>)</li>
+<li>Get value from contained <code>input.todo-text</code> element</li>
+<li>Put todo&#39;s text into a JS Object shaped for service endpoint</li>
+<li>Pass data along to <code>todoAPI.create()</code> method</li>
+<li>Update UI with <code>setStatus()</code></li>
+<li>Handle any errors w/ <code>setError()</code></li>
+</ol>
+<h2 id='controller-events-promise-chain'>Controller + Events + Promise Chain</h2>
+<blockquote>
+<p>Usage Example: (see Class implementation below)</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">//// usage example - standard promise code:</span>
+<span class="kr">const</span> <span class="nx">todoApp</span> <span class="o">=</span> <span class="nx">TodoApp</span><span class="p">()</span>
 
-<p>Again, still all with simple functions:</p>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">// using a more complete controller/component interface:</span>
-<span class="kr">const</span> <span class="nx">todoCtrl</span> <span class="o">=</span> <span class="nx">TodoController</span><span class="p">()</span>
+<span class="nx">todoApp</span><span class="p">.</span><span class="nx">update</span><span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">text</span><span class="p">:</span> <span class="s1">'updated item'</span><span class="p">,</span> <span class="na">complete</span><span class="p">:</span> <span class="kc">true</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">console</span><span class="p">,</span> <span class="s1">'update response:'</span><span class="p">))</span>
 
-<span class="nx">todoCtrl</span>
-  <span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">'new item'</span><span class="p">)</span>
+<span class="nx">todoApp</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">'new item'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">todoCtrl</span><span class="p">.</span><span class="nx">update</span><span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">text</span><span class="p">:</span> <span class="s1">'updated item'</span><span class="p">,</span> <span class="na">complete</span><span class="p">:</span> <span class="kc">true</span><span class="p">})</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Added item'</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span>
   <span class="p">})</span>
-
-<span class="cm">/**
- * Here's a more realistic, 'tighter' example:
- * TodoController will return an object with `add` and `update` methods
- *  - based on FP.chain()
- */</span>
-<span class="kd">function</span> <span class="nx">TodoController</span><span class="p">()</span> <span class="p">{</span>
+</code></pre>
+<blockquote>
+<p>TodoApp will return an object with <code>add</code> and <code>update</code> methods - based on FP.chain()</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">//// example code:</span>
+<span class="kd">function</span> <span class="nx">TodoApp</span><span class="p">()</span> <span class="p">{</span>
   <span class="kr">const</span> <span class="nx">statusLbl</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'label.status'</span><span class="p">)</span>
   <span class="kr">const</span> <span class="nx">setStatus</span> <span class="o">=</span> <span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">statusLbl</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">s</span>
 
   <span class="k">return</span> <span class="p">{</span>
     <span class="na">add</span><span class="p">:</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">input</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span> <span class="na">complete</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="na">text</span><span class="p">:</span> <span class="nx">input</span><span class="p">}))</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">input</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">text</span><span class="p">:</span> <span class="nx">input</span><span class="p">,</span> <span class="na">complete</span><span class="p">:</span> <span class="kc">false</span><span class="p">}))</span>
       <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">todoAPI</span><span class="p">.</span><span class="nx">create</span><span class="p">)</span>
       <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">createResult</span> <span class="o">=&gt;</span> <span class="nx">setStatus</span><span class="p">(</span><span class="nx">createResult</span><span class="p">.</span><span class="nx">message</span><span class="p">))</span>
       <span class="p">.</span><span class="nx">chainEnd</span><span class="p">(),</span>
+
     <span class="na">update</span><span class="p">:</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">chain</span><span class="p">()</span>
+      <span class="c1">// in v1.5.0: .get('id', 'completed', 'text') // or:</span>
       <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">input</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="kr">const</span> <span class="p">{</span><span class="nx">id</span><span class="p">,</span> <span class="nx">complete</span><span class="p">,</span> <span class="nx">text</span><span class="p">}</span> <span class="o">=</span> <span class="nx">input</span>
         <span class="k">return</span> <span class="p">{</span><span class="nx">id</span><span class="p">,</span> <span class="nx">complete</span><span class="p">,</span> <span class="nx">text</span><span class="p">}</span>
       <span class="p">})</span>
       <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">todoAPI</span><span class="p">.</span><span class="nx">update</span><span class="p">)</span>
       <span class="p">.</span><span class="nx">tap</span><span class="p">(</span><span class="nx">updateResult</span> <span class="o">=&gt;</span> <span class="nx">setStatus</span><span class="p">(</span><span class="nx">updateResult</span><span class="p">.</span><span class="nx">message</span><span class="p">))</span>
-      <span class="p">.</span><span class="nx">chainEnd</span><span class="p">(),</span>
+      <span class="p">.</span><span class="nx">chainEnd</span><span class="p">()</span>
   <span class="p">}</span>
-
 <span class="p">}</span>
-</code></pre><h1 id='160-160-modifiers'>&#160;&#160; Modifiers</h1><h2 id='code-quiet-code'><code>.quiet()</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</code></pre>
+<p>Example OOP style &#39;class&#39; object/interface.</p>
+
+<p>Here we implement the interface <code>{ add(item), update(item) }</code> <strong>using chained function expressions</strong>. It&#39;s implementation is hidden from the calling code.</p>
+
+<aside class="notice">
+  <code>FP.chain()</code> is a powerful building block. Use with: events, streams, Observables (RxJS), AsyncIterables (IxJS), <code>for</code> loops, and basically anything that takes a function.
+  <br/>
+  <b>It returns a re-usable function, built out of a sequence of smaller functions.</b>
+</aside>
+
+<p>This is a key differentiator between <code>functional-promise</code> and other chaining libraries. No lockin.</p>
+<h1 id='modifiers'><small>&#160;&#160; Modifiers</small></h1><h2 id='fp-quiet'><code>FP.quiet()</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">quiet</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="mi">2</span> <span class="o">/</span> <span class="nx">x</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">Error</span><span class="p">])</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// [1, 2, Error])</span>
   <span class="p">})</span>
 </code></pre>
 <p>Suppresses errors by converting them to return values.</p>
 
-<p><strong>Only applies to subsequent thenable.</strong></p>
-
-<p>Best used with Array methods.</p>
-<h2 id='code-concurrency-threadlimit-code'><code>.concurrency(threadLimit)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<p><strong>Only applies to subsequent Array thenables.</strong></p>
+<h2 id='fp-concurrency'><code>FP.concurrency(threadLimit)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">concurrency</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">assert</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="nx">results</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span><span class="c1">// [2, 4, 6, 8, 10]</span>
   <span class="p">})</span>
 </code></pre>
 <p>Set <code>threadLimit</code> to constrain the amount of simultaneous tasks/promises can run.</p>
 
-<p><strong>Only applies to subsequent Array thenable.</strong></p>
-
-<p><em>Best used with Array methods.</em></p>
+<p><strong>Only applies to subsequent thenable Array methods.</strong></p>
 
 <blockquote>
-<p>Thanks to several influencial projects: RxJS, Bluebird, asynquence, FantasyLand, Gulp, HighlandJS, et al.</p>
+<p>Thanks to several influencial projects: RxJS, IxJS, Bluebird, asynquence, FantasyLand, Gulp, HighlandJS, et al.</p>
 </blockquote>
 
+<blockquote style='text-align: right;'><p>
+  <br />
+  <a class='bottom' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a>
+</p></blockquote>
+<h1 id='misc'>Misc</h1><h2 id='detailed-stats'>Detailed Stats</h2><h5 id='functional-promise-min-js-compression-results'><code>./functional-promise.min.js</code> Compression Results</h5>
+<table><thead>
+<tr>
+<th>Utility</th>
+<th>File Size</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>original</em></td>
+<td>17K</td>
+</tr>
+<tr>
+<td>gzip</td>
+<td>4.5K  (3.69 X smaller)</td>
+</tr>
+<tr>
+<td>brotli</td>
+<td>4.0K  (4.13 X smaller)</td>
+</tr>
+</tbody></table>
+<h5 id='rx-min-js-compression-results'><code>./Rx.min.js</code> Compression Results</h5>
+<table><thead>
+<tr>
+<th>Utility</th>
+<th>File Size</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>original</em></td>
+<td>146K</td>
+</tr>
+<tr>
+<td>gzip</td>
+<td>32K  (4.68 X smaller)</td>
+</tr>
+<tr>
+<td>brotli</td>
+<td>27K  (5.47 X smaller)</td>
+</tr>
+</tbody></table>
+<h5 id='ix-min-js-compression-results'><code>./Ix.min.js</code> Compression Results</h5>
+<table><thead>
+<tr>
+<th>Utility</th>
+<th>File Size</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>original</em></td>
+<td>129K</td>
+</tr>
+<tr>
+<td>gzip</td>
+<td>22K  (6.01 X smaller)</td>
+</tr>
+<tr>
+<td>brotli</td>
+<td>17K  (7.92 X smaller)</td>
+</tr>
+</tbody></table>
+<h2 id='feedback'>Feedback</h2><h5 id='and-other-kind-words'>and other kind words</h5>
+<ul>
+<li>&quot;Small is beautiful.&quot; - <a href="https://twitter.com/BrendanEich/status/957404602470510594">Brendan Eich - inventor of JavaScript</a></li>
+<li>&quot;Duuuuude!&quot; - <a href="https://github.com/sdras">Sarah Drasner</a></li>
+<li>&quot;nice, impressive!&quot; - <a href="https://twitter.com/YDKJS">Kyle Simpson</a></li>
+<li>&quot;This is really cool. Well done Dan&quot; - <a href="https://twitter.com/jamonholmgren/status/957382985107456000">Jamon Holmgren</a></li>
+<li>&quot;quick first impression: they look amazing&quot; - <a href="https://twitter.com/brianleroux">Brian Leroux</a></li>
+<li>&quot;Oh wow, really like that interface!&quot; - <a href="https://github.com/lord/slate/pull/946#issuecomment-361167298">Robert Lord</a></li>
+<li>&quot;That&#39;s so damn cool!!&quot; - <a href="https://twitter.com/alfiedotwtf">Alfie John</a></li>
+<li>&quot;... At a quick glance this looks lovely. Blows my mind it can be so small.&quot; - <a href="https://twitter.com/skellock/status/957399605863317509">Steve Kellock</a></li>
+</ul>
+<h4 id='thank-you-all-for-the-support-amp-encouragement'>Thank you all for the support &amp; encouragement!</h4><h4 id='javascript-community-is-the-best'>JavaScript community is the best!</h4>
       </div>
       <div class="dark-box">
       </div>
@@ -831,5 +1138,17 @@ The <strong>browser bundle</strong> only clocks in at <strong>~20Kb</strong> (us
       gtag('config', 'UA-112472862-1');
     </script>
 
+    <script>
+      window.addEventListener('hashchange', function(event) {
+        var hash = self.location.hash;
+        hash = !hash ? 'top' : hash.slice(1);
+        if (hash && hash.length >= 1) {
+          gtag('event', 'screen_view', {
+            'app_name': 'fpromises',
+            'screen_name': hash
+          });
+        }
+      });
+    </script>
   </body>
 </html>
