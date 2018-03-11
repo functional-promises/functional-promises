@@ -92,3 +92,48 @@ test('FP.delay() - static usage', t => {
   .then(() => t.truthy(Date.now() - started >= 15))
 })
 
+test('FP.delay() with .concurrency(Infinity)', t => {
+  const started = Date.now()
+  FP.resolve([1, 2, 3, 4])
+    .concurrency(Infinity)
+    .map(num => {
+      return FP
+        .delay(50)
+        .resolve(num)
+    })
+    .then(() => {
+      const runtime = Date.now() - started
+      t.truthy(runtime > 50)
+    })
+})
+
+test('FP.delay() with .concurrency(10)', t => {
+  const started = Date.now()
+  FP.resolve([1, 2, 3, 4])
+    .concurrency(10)
+    .map(num => {
+      return FP
+        .delay(50)
+        .resolve(num)
+    })
+    .then(() => {
+      const runtime = Date.now() - started
+      t.truthy(runtime > 50)
+    })
+})
+
+test('FP.delay() with .concurrency(1)', t => {
+  const started = Date.now()
+  FP.resolve([1, 2, 3, 4])
+    .concurrency(1)
+    // now only 1 map() callback happens at a time
+    .map(num => {
+      return FP
+        .delay(50)
+        .resolve(num)
+    })
+    .then(() => {
+      const runtime = Date.now() - started
+      t.truthy(runtime > 50)
+    })
+})
