@@ -92,3 +92,14 @@ test('FP.delay() - static usage', t => {
     .then(() => t.truthy(Date.now() - started >= 15))
 })
 
+test('FP.finally()', t => {
+  let executed = false
+  return FP.resolve(4)
+    .then(p => { throw new Error('heck') })
+    .catch(err => 'uh oh')
+    .finally(x => {
+      t.is(x, undefined)
+      executed = true
+    })
+    .then(() => t.truthy(executed))
+})

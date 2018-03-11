@@ -98,6 +98,12 @@ FP.prototype.tap = function tap(fn) {
   return FP.resolve(this._FP.promise.then(value => fn(value) ? value : value))
 }
 
+FP.prototype.finally = function _finally(fn) {
+  if (this.steps) return this.addStep('finally', [...arguments])
+  if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.finally(fn)`. Must be a function. Currently: ' + typeof fn)
+  return FP.resolve(this._FP.promise.then(value => fn() ? value : value))
+}
+
 FP.resolve = function resolve(value) {
   return new FP((resolve, reject) => {
     if (value && isFunction(value.then)) return value.then(resolve).catch(reject)
