@@ -148,22 +148,6 @@ npm install
 npm test
 ```
 
-##### `FP.unpack`
-
-Use sparingly, this is uses destructuring to (more cleanly) achieve what `deferred` attempts. `deferred` is an anti-pattern 90% of the time. Stream & event handling are exempt from this 'rule'.
-
-```js
-function uncommonEventHandlingEdgeCase() {
-  const { promise, resolve, reject } = FP.unpack()
-  setTimeout(() => { resolve('All done!') }, 1000)
-  return promise
-}
-uncommonEventHandlingEdgeCase()
-  .then(result =>
-    // result === 'All done!'
-  )
-```
-
 > Thanks to several influencial projects: [RxJS](https://github.com/ReactiveX/RxJS), [IxJS](https://github.com/ReactiveX/IxJS), [Bluebird](https://github.com/petkaantonov/bluebird), [asynquence](https://github.com/getify/asynquence), [FantasyLand](https://github.com/fantasyland/fantasy-land), [Gulp](https://github.com/gulpjs/gulp), [HighlandJS](https://github.com/caolan/highland), et al.
 >
 > Special thanks to [Kyle Simpson](https://github.com/getify), [Eric Elliot](https://medium.com/@_ericelliott), and [Sarah Drasner](https://sarahdrasnerdesign.com/) for their work for the OSS community, as well as their advice & encouragement.
