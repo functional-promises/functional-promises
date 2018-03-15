@@ -5,7 +5,7 @@ title: Functional Promises - API Documentation
 #   - javascript
 
 toc_footers:
-  - <a class='social github' href='https://github.com/justsml/functional-promises'>Star on GitHub</a>
+  - <a class='social github' href='https://github.com/functional-promises/functional-promises'>Star on GitHub</a>
 # - <a class='bottom' target='_blank' href='https://github.com/lord/slate'>Docs Powered by Slate</a>
 
 includes:
@@ -33,7 +33,7 @@ const FP = require('functional-promise')
 import FP from 'functional-promise'
 ```
 
-###### [Star `Functional Promises` on Github](https://github.com/justsml/functional-promises)
+###### [Star `Functional Promises` on Github](https://github.com/functional-promises/functional-promises)
 
 > <p style='text-align: center;'><strong style='font-size: 24px;'>Examples &amp; Awesome Shit</strong></p>
 
@@ -76,9 +76,9 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
   .then(avatarUrl => imgElement.src = avatarUrl)
 ```
 
-[![Build Status](https://travis-ci.org/LameDuh/functional-promises.svg?branch=master)](https://travis-ci.org/LameDuh/functional-promises)
-[![GitHub package version](https://img.shields.io/github/package-json/v/LameDuh/functional-promises.svg?style=flat)](https://github.com/LameDuh/functional-promises)
-[![GitHub stars](https://img.shields.io/github/stars/LameDuh/functional-promises.svg?label=Stars&style=flat)](https://github.com/LameDuh/functional-promises)
+[![Build Status](https://travis-ci.org/functional-promises/functional-promises.svg?branch=master)](https://travis-ci.org/functional-promises/functional-promises)
+[![GitHub package version](https://img.shields.io/github/package-json/v/functional-promises/functional-promises.svg?style=flat)](https://github.com/functional-promises/functional-promises)
+[![GitHub stars](https://img.shields.io/github/stars/functional-promises/functional-promises.svg?label=Stars&style=flat)](https://github.com/functional-promises/functional-promises)
 
 [![NPM](https://nodei.co/npm/functional-promise.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/functional-promise)
 
