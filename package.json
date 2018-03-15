@@ -1,6 +1,6 @@
 {
   "name": "functional-promise",
-  "version": "1.5.5",
+  "version": "1.5.7",
   "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: http://www.fpromises.io/",
   "ava": {
     "require": [
@@ -11,7 +11,7 @@
   "main": "./src/index.js",
   "browser": "./dist/functional-promise.min.js",
   "repository": {
-    "url": "https://github.com/justsml/functional-promises.git"
+    "url": "https://github.com/functional-promises/functional-promises.git"
   },
   "homepage": "http://www.fpromises.io/",
   "scripts": {
@@ -36,8 +36,6 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.35",
-    "@babel/preset-env": "^7.0.0-beta.35",
     "ava": "^0.24.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-es2015-computed-properties": "^6.24.1",
