@@ -148,7 +148,6 @@ npm install
 npm test
 ```
 
-
 > Thanks to several influencial projects: [RxJS](https://github.com/ReactiveX/RxJS), [IxJS](https://github.com/ReactiveX/IxJS), [Bluebird](https://github.com/petkaantonov/bluebird), [asynquence](https://github.com/getify/asynquence), [FantasyLand](https://github.com/fantasyland/fantasy-land), [Gulp](https://github.com/gulpjs/gulp), [HighlandJS](https://github.com/caolan/highland), et al.
 >
 > Special thanks to [Kyle Simpson](https://github.com/getify), [Eric Elliot](https://medium.com/@_ericelliott), and [Sarah Drasner](https://sarahdrasnerdesign.com/) for their work for the OSS community, as well as their advice & encouragement.

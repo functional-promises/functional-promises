@@ -55,7 +55,7 @@ test('FP.promisifyAll(obj)', t => {
 test('FP.unpack() resolve', t => {
   const asyncFunc = () => {
     const { promise, resolve } = FP.unpack()
-    Promise.resolve(true)
+    FP.resolve(true)
       .then(x => resolve(x))
     return promise
   }
@@ -67,7 +67,7 @@ test('FP.unpack() resolve', t => {
 test('FP.unpack() reject', t => {
   const asyncFunc = () => {
     const { promise, reject } = FP.unpack()
-    Promise.resolve('Error!')
+    FP.resolve('Error!')
       .then(x => reject(x))
     return promise
   }
@@ -79,16 +79,27 @@ test('FP.unpack() reject', t => {
 test('FP.delay()', t => {
   const started = Date.now()
   return FP.resolve([1, 2, 3])
-  .concurrency(1)
-  .map(num => FP.resolve(num).delay(5))
-  .then(() => t.truthy(Date.now() - started >= 15))
+    .concurrency(1)
+    .map(num => FP.resolve(num).delay(5))
+    .then(() => t.truthy(Date.now() - started >= 15))
 })
 
 test('FP.delay() - static usage', t => {
   const started = Date.now()
   return FP.resolve([1, 2, 3])
-  .concurrency(1)
-  .map(num => FP.delay(5).then(() => num))
-  .then(() => t.truthy(Date.now() - started >= 15))
+    .concurrency(1)
+    .map(num => FP.delay(5).then(() => num))
+    .then(() => t.truthy(Date.now() - started >= 15))
 })
 
+test('FP.finally()', t => {
+  let executed = false
+  return FP.resolve(4)
+    .then(p => { throw new Error('heck') })
+    .catch(err => 'uh oh')
+    .finally(x => {
+      t.is(x, undefined)
+      executed = true
+    })
+    .then(() => t.truthy(executed))
+})
