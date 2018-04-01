@@ -20,9 +20,8 @@ function FunctionalPromise(resolveRejectCB, unknownArgs) {
 }
 
 FP.all = FP.prototype.all
-FP.delay = FP.prototype.delay
 FP.thenIf = FP.prototype._thenIf
-// FP.prototype.delay = FP.prototype._delay
+FP.delay = msec => FP.resolve().delay(msec)
 
 // Monadic Methods
 FP.chain = chain

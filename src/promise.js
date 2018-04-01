@@ -45,11 +45,11 @@ function _delay(msec) {
 
 function delay(msec) {
   const FP = require('./')
-  if (this && this.then) {
-    console.log('delay.this.then', msec)
+  if (this && this._FP) {
+    // console.log('delay.this.then', msec)
     return FP.resolve(this.then(_delay(msec)))
   } else {
-    console.log('delay.util', msec)
+    // console.log('delay.util', msec)
     return _delay(msec)()
   }
 }
