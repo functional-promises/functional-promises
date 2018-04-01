@@ -77,13 +77,16 @@ test('FP.unpack() reject', t => {
 })
 
 test('FP.delay()', t => {
+  t.plan(1)
   const started = Date.now()
+  // console.log('FP.resolve().delay(50)', FP.resolve().delay(50))
   return FP.resolve([1, 2, 3])
   .concurrency(1)
   .map(num => FP.resolve(num).delay(5))
   .then(() => t.truthy(Date.now() - started >= 15))
 })
 
+// TODO: Re-add static method support
 test('FP.delay() - static usage', t => {
   const started = Date.now()
   return FP.resolve([1, 2, 3])
@@ -92,3 +95,50 @@ test('FP.delay() - static usage', t => {
   .then(() => t.truthy(Date.now() - started >= 15))
 })
 
+test('FP.delay() with .concurrency(Infinity)', t => {
+  const started = Date.now()
+  return FP.resolve([1, 2, 3, 4])
+    .concurrency(Infinity)
+    .map(num => {
+      return FP
+        .resolve(num)
+        .delay(50)
+    })
+    .then(() => {
+      const runtime = Date.now() - started
+      t.truthy(runtime > 50)
+    })
+})
+
+test('FP.delay() with .concurrency(10)', t => {
+  const started = Date.now()
+  return FP.resolve([1, 2, 3, 4])
+    .concurrency(10)
+    .map(num => {
+      return FP
+        .resolve(num)
+        .delay(50)
+    })
+    .then(() => {
+      const runtime = Date.now() - started
+      // console.log('runtime', runtime);
+      t.truthy(runtime >= 50)
+    })
+})
+
+test('FP.delay() with .concurrency(1)', t => {
+  const started = Date.now()
+  return FP.resolve([1, 2, 3, 4])
+    .concurrency(1)
+    // now only 1 map() callback happens at a time
+    .map(num => {
+      return FP
+        .resolve(num)
+        .delay(50)
+    })
+    .then(() => {
+      const runtime = Date.now() - started
+      // console.log('runtime #2.1', runtime);
+      t.truthy(runtime > 50)
+    })
+})

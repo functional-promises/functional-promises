@@ -1,8 +1,8 @@
 # Functional Promises (beta)
 
-[![Build Status](https://travis-ci.org/LameDuh/functional-promises.svg?branch=master)](https://travis-ci.org/LameDuh/functional-promises)
-[![GitHub package version](https://img.shields.io/github/package-json/v/LameDuh/functional-promises.svg?style=flat)](https://github.com/LameDuh/functional-promises)
-[![GitHub stars](https://img.shields.io/github/stars/LameDuh/functional-promises.svg?label=Stars&style=flat)](https://github.com/LameDuh/functional-promises)
+[![Build Status](https://travis-ci.org/functional-promises/functional-promises.svg?branch=master)](https://travis-ci.org/functional-promises/functional-promises)
+[![GitHub package version](https://img.shields.io/github/package-json/v/functional-promises/functional-promises.svg?style=flat)](https://github.com/functional-promises/functional-promises)
+[![GitHub stars](https://img.shields.io/github/stars/functional-promises/functional-promises.svg?label=Stars&style=flat)](https://github.com/functional-promises/functional-promises)
 
 # [Updated Documentation: fpromises.io](http://www.fpromises.io/)
 
@@ -142,7 +142,7 @@ FP.chain() // start a chain
 ## Development
 
 ```sh
-git clone git@github.com:justsml/functional-promises.git
+git clone git@github.com:functional-promises/functional-promises.git
 cd functional-promises
 npm install
 npm test
