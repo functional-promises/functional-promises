@@ -22,6 +22,7 @@ function FunctionalPromise(resolveRejectCB, unknownArgs) {
 FP.all = FP.prototype.all
 FP.delay = FP.prototype.delay
 FP.thenIf = FP.prototype._thenIf
+// FP.prototype.delay = FP.prototype._delay
 
 // Monadic Methods
 FP.chain = chain
@@ -98,7 +99,7 @@ FP.prototype.tap = function tap(fn) {
   return FP.resolve(this._FP.promise.then(value => fn(value) ? value : value))
 }
 
-FP.resolve = function resolve(value) {
+FP.resolve = FP.prototype.resolve = function resolve(value) {
   return new FP((resolve, reject) => {
     if (value && isFunction(value.then)) return value.then(resolve).catch(reject)
     resolve(value)

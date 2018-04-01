@@ -1,6 +1,6 @@
 const {FPInputError} = require('./modules/errors')
 
-module.exports = {all, cast, reject, delay}
+module.exports = {all, cast, reject, delay, _delay}
 
 function all(promises) {
   const FP = require('./')
@@ -35,14 +35,21 @@ function reject(err) {
   throw new Error(`Reject only accepts a new instance of Error!`)
 }
 
-function delay(value, delay) {
+function _delay(msec) {
   const FP = require('./')
-  if (arguments.length === 1) {
-    delay = value
-    value = this || null
-  }
-  if (!Number.isInteger(delay)) throw new FPInputError('fp.delay([promise,] millisec) requires a numeric arg.')
-  return new FP(resolve => {
-    setTimeout(() => resolve(value), delay)
+  if (!Number.isInteger(msec)) throw new FPInputError('FP.delay(millisec) requires a numeric arg.')
+  return value => new FP(resolve => {
+    setTimeout(() => resolve(value), msec)
   })
+}
+
+function delay(msec) {
+  const FP = require('./')
+  if (this && this.then) {
+    console.log('delay.this.then', msec)
+    return FP.resolve(this.then(_delay(msec)))
+  } else {
+    console.log('delay.util', msec)
+    return _delay(msec)()
+  }
 }

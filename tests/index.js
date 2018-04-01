@@ -77,7 +77,9 @@ test('FP.unpack() reject', t => {
 })
 
 test('FP.delay()', t => {
+  t.plan(1)
   const started = Date.now()
+  console.log('FP.resolve().delay(50)', FP.resolve().delay(50))
   return FP.resolve([1, 2, 3])
   .concurrency(1)
   .map(num => FP.resolve(num).delay(5))
