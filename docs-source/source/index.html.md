@@ -232,7 +232,7 @@ const dumbPromises = [Promise.resolve(25), Promise.resolve(50)]
 FP.resolve(dumbPromises)
   .concurrency(1)
   .map(num => FP.delay(num).then(msec => `Delayed ${msec}`))
-  .then(results => console.log(results)))
+  .then(results => console.log(results))
 ```
 
 ## `FP.filter(iterable, fn)`
