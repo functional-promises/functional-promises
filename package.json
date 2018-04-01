@@ -37,7 +37,7 @@
   "dependencies": {},
   "devDependencies": {
     "ava": "^0.24.0",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "^7.1.4",
     "babel-plugin-transform-es2015-computed-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
