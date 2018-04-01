@@ -71,9 +71,7 @@ FP.prototype.catch = function(fn) {
   if (this.steps) return this.addStep('catch', [...arguments])
   if (arguments.length === 2) return this.catchIf(...arguments)
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.catch(fn)`. Must be a function. Currently: ' + typeof fn)
-  return FP.resolve(this._FP.promise.catch(err => {
-    return fn(err) // try re-throw, might be really slow...
-  }))
+  return FP.resolve(this._FP.promise.catch(err => fn(err)))
 }
 
 FP.prototype.catchIf = function catchIf(condition, fn) {
