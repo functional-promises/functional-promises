@@ -17,17 +17,13 @@ search: true
 
 # Functional Promises
 
-
-> Install:
-
 ```sh
+# Install
 npm install functional-promise
 ```
 
-> Import into your app:
-
 ```javascript
-//// Use one of the following:
+//// Import into your app:
 const FP = require('functional-promise')
 //  OR:
 import FP from 'functional-promise'
@@ -37,11 +33,11 @@ import FP from 'functional-promise'
 
 > <p style='text-align: center;'><strong style='font-size: 24px;'>Examples &amp; Awesome Shit</strong></p>
 
-> Array-style methods are built-in:
+> <p style='padding: 1.7em 28px;'>Array-style methods are built-in:</p>
 
 ```javascript
 FP.resolve(['1', '2', '3', '4', '5'])
-  .map(Number)
+  .map(x => parseInt(x))
   .filter(x => x % 2 === 0)
   .then(results => {
     console.log(results) // [2, 4
@@ -80,26 +76,34 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
 [![GitHub package version](https://img.shields.io/github/package-json/v/functional-promises/functional-promises.svg?style=flat)](https://github.com/functional-promises/functional-promises)
 [![GitHub stars](https://img.shields.io/github/stars/functional-promises/functional-promises.svg?label=Stars&style=flat)](https://github.com/functional-promises/functional-promises)
 
-[![NPM](https://nodei.co/npm/functional-promise.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/functional-promise)
+[![NPM](https://nodei.co/npm/functional-promises.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/functional-promises)
+
+<aside class="success">
+  Quotable
+  <ul>
+    <li> &quot;Small is beautiful.&quot; <a href='https://twitter.com/BrendanEich/status/957404602470510594' target='_blank'>Brendan Eich - co-inventor of JavaScript</a>
+    <li> &quot;Duuuuude!&quot; <a href='https://github.com/sdras' target='_blank'>Sarah Drasner</a>
+    <li> &quot;Nice, impressive!&quot; <a href='https://twitter.com/YDKJS' target='_blank'>Kyle Simpson</a>
+  </ul>
+</aside>
 
 ### Summary
 
-The **Functional Promises** library is a **Function Chaining Interface and Pattern.**
+The **Functional Promises** library is a Fluent **Function Chaining Interface and Pattern.**
 
-<aside class="warning">
-  <code>functional-promise</code> is not itself a <code>Promise</code> replacement. It uses the native <code>Promise</code> API.
-</aside>
 
 **Core features:** Array Methods, Events, Array **AND Object** `FP.all()` Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
-<aside class="success">
-  <code>FP</code> features seamless support between synchronous code, `async`/`await`, and native Promises. The core <i>Functional Composition</i> is powered by the <a href="#fp-chain"><code>FP.chain()</code></a> construct.
-</aside>
 
+<code>FP</code> features seamless support between synchronous code, `async`/`await`, and native Promises. The core <i>Functional Composition</i> is powered by the <a href="#fp-chain"><code>FP.chain()</code></a> construct.
 
 **Why not simply use [library X]?**
 
 `FP`'s **un-minified source** is **only ~400 lines** of code.
-The **browser bundle** weighs in at **15-20Kb** (using Webpack+Babel+Rollup+UglifyJS).
+The **compressed+minified bundle** measures in at a humble **~4Kb**. The **minified bundle** weighs in around **15-20Kb** (using Webpack+Babel+Rollup+UglifyJS).
+
+<aside class="warning">
+  Note: <code>functional-promise</code> is not a <code>Promise</code> replacement. It uses the native <code>Promise</code> API.
+</aside>
 
 ### Library Comparison
 
@@ -117,47 +121,47 @@ BluebirdJS and FP have roughly the same number (and type) of API methods, yet `F
 
 <p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing. Their patterns have been very influential on <code>FP</code>'s design.</p>
 
-<small><b>Note:</b>&#160;<p><code>R/IxJS</code>'s modular design also allows for bundle sizes to be smaller (using different syntax).</p></small>
+<small><p><b>Note:</b>&#160;<code>R/IxJS</code>'s modular design also allows for bundle sizes to be smaller (using different syntax).</p></small>
 
 ### API Outline
 
 All `.then()`-powered methods are listed first.
 
-* [Thenable Methods](http://www.fpromises.io/#thenable-methods)
-    * [Arrays](http://www.fpromises.io/#array-methods)
-        * [`.map(fn)`](http://www.fpromises.io/#fp-map)
-        * [`.filter(fn)`](http://www.fpromises.io/#fp-filter)
-        * [`.find(fn)`](http://www.fpromises.io/#fp-find)
-        * [`.findIndex(fn)`](http://www.fpromises.io/#fp-findindex)
-        * [`.some(fn)`](http://www.fpromises.io/#fp-some)
-        * [`.none(fn)`](http://www.fpromises.io/#fp-none)
-        * [`.series(fn)`](http://www.fpromises.io/#fp-series)
-    * [Errors](http://www.fpromises.io/#errors) _(WIP)_
-        * [`.catch(fn)`](http://www.fpromises.io/#fp-catch)
-        * [`.catchIf(filter, fn)`](http://www.fpromises.io/#fp-catch)
-    * [Conditional](http://www.fpromises.io/#conditional)
-        * [`.thenIf(fn, ifTrue, ifFalse)`](http://www.fpromises.io/#fp-thenif)
-    * [Utilities](http://www.fpromises.io/#utilities)
-        * [`.tap(fn)`](http://www.fpromises.io/#fp-tap)
-        * [`.delay(msec)`](http://www.fpromises.io/#fp-delay)
-    * [Properties](http://www.fpromises.io/#properties)
-        * [`.get(keyName)`](http://www.fpromises.io/#fp-get)
-        * [`.set(keyName, value)`](http://www.fpromises.io/#fp-set)
-* [Specialty Methods](http://www.fpromises.io/#specialty-methods)
-    * [Helpers](http://www.fpromises.io/#helpers)
-        * [`FP.promisify(callback)`](http://www.fpromises.io/#fp-promisify)
-        * [`FP.promisifyAll(callback)`](http://www.fpromises.io/#fp-promisifyall)
-        * [`FP.resolve()`](http://www.fpromises.io/#fp-resolve)
-        * [`FP.all(Object/Array)`](http://www.fpromises.io/#fp-all)
-        * [`FP.unpack()`](http://www.fpromises.io/#fp-unpack)
-    * [Events](http://www.fpromises.io/#events)
-        * [`.listen(obj, ...eventNames)`](http://www.fpromises.io/#fp-listen)
-    * [Composition Pipeline](http://www.fpromises.io/#composition-pipeline)
-        * [`FP.chain(options)`](http://www.fpromises.io/#fp-chain-chainend)
-        * [`.chainEnd()`](http://www.fpromises.io/#fp-chain-chainend)
-    * [Modifiers](http://www.fpromises.io/#modifiers)
-        * [`.quiet()` - prevents errors from stopping array methods mid-loop](http://www.fpromises.io/#fp-quiet)
-        * [`.concurrency(threadLimit)` - limits parallel workers for array methods](http://www.fpromises.io/#fp-concurrency)
+* [Thenable Methods](https://www.fpromises.io/#thenable-methods)
+    * [Arrays](https://www.fpromises.io/#array-methods)
+        * [`.map(fn)`](https://www.fpromises.io/#fp-map)
+        * [`.filter(fn)`](https://www.fpromises.io/#fp-filter)
+        * [`.find(fn)`](https://www.fpromises.io/#fp-find)
+        * [`.findIndex(fn)`](https://www.fpromises.io/#fp-findindex)
+        * [`.some(fn)`](https://www.fpromises.io/#fp-some)
+        * [`.none(fn)`](https://www.fpromises.io/#fp-none)
+        * [`.series(fn)`](https://www.fpromises.io/#fp-series)
+    * [Errors](https://www.fpromises.io/#errors) _(WIP)_
+        * [`.catch(fn)`](https://www.fpromises.io/#fp-catch)
+        * [`.catchIf(filter, fn)`](https://www.fpromises.io/#fp-catch)
+    * [Conditional](https://www.fpromises.io/#conditional)
+        * [`.thenIf(fn, ifTrue, ifFalse)`](https://www.fpromises.io/#fp-thenif)
+    * [Utilities](https://www.fpromises.io/#utilities)
+        * [`.tap(fn)`](https://www.fpromises.io/#fp-tap)
+        * [`.delay(msec)`](https://www.fpromises.io/#fp-delay)
+    * [Properties](https://www.fpromises.io/#properties)
+        * [`.get(keyName)`](https://www.fpromises.io/#fp-get)
+        * [`.set(keyName, value)`](https://www.fpromises.io/#fp-set)
+* [Specialty Methods](https://www.fpromises.io/#specialty-methods)
+    * [Helpers](https://www.fpromises.io/#helpers)
+        * [`FP.promisify(callback)`](https://www.fpromises.io/#fp-promisify)
+        * [`FP.promisifyAll(callback)`](https://www.fpromises.io/#fp-promisifyall)
+        * [`FP.resolve()`](https://www.fpromises.io/#fp-resolve)
+        * [`FP.all(Object/Array)`](https://www.fpromises.io/#fp-all)
+        * [`FP.unpack()`](https://www.fpromises.io/#fp-unpack)
+    * [Events](https://www.fpromises.io/#events)
+        * [`.listen(obj, ...eventNames)`](https://www.fpromises.io/#fp-listen)
+    * [Composition Pipeline](https://www.fpromises.io/#composition-pipeline)
+        * [`FP.chain(options)`](https://www.fpromises.io/#fp-chain-chainend)
+        * [`.chainEnd()`](https://www.fpromises.io/#fp-chain-chainend)
+    * [Modifiers](https://www.fpromises.io/#modifiers)
+        * [`.quiet()` - prevents errors from stopping array methods mid-loop](https://www.fpromises.io/#fp-quiet)
+        * [`.concurrency(threadLimit)` - limits parallel workers for array methods](https://www.fpromises.io/#fp-concurrency)
 
 # Thenable Methods
 
@@ -170,6 +174,10 @@ Most `FP` methods derive behavior from **Native Promise's `.then()`.**
 For example, `.tap(fn)`'s function will receive the resolved value exactly like a `.then()`. Except the function's `return` value will be ignored - and the next `thenable` in the chain will get the original input.
 
 
+<aside class='success'>
+  Click the Edit/Test link above code samples to run them live! <span style='font-size: 28px;'>👉</span>
+</aside>
+
 # &#160;&#160; Array Methods
 
 ```javascript
@@ -177,11 +185,11 @@ const rawData = [-99, null, undefined, NaN, 0, '99']
 
 // Async compatible (not needed in this simple example)
 FP.resolve(rawData)
-  .filter(Boolean)        // truthiness check = [-99, "99"]
-  .map(Number)            // convert to numeric [-99 99]
+  .filter(x => x)         // truthiness check = [-99, "99"]
+  .map(x => parseInt(x))  // convert to numeric [-99 99]
   .findIndex(n => n >= 1) // is gte 1, idx = 1
   .then(index => {
-    console.log(index) // 0
+    console.log(index)    // 0
   })
 ```
 
@@ -191,16 +199,20 @@ FP.resolve(rawData)
 const rawData = [-99, null, undefined, NaN, 0, '99']
 
 rawData
-  .filter(Boolean)        // truthiness check = [-99, "99"]
-  .map(Number)            // convert to numeric [-99, 99]
+  .filter(x => x)         // truthiness check = [-99, "99"]
+  .map(x => parseInt(x))  // convert to numeric [-99, 99]
   .findIndex(n => n >= 1) // <^ Native Array Methods ^^
 ```
 
 Any `.then()` which would handle an array, may instead use one of the `FP` array methods.
 
-<aside class='success'>
-  Please check examples below!
-</aside>
+1. map
+1. filter
+1. find/findIndex
+1. some
+1. none
+
+
 
 ## `FP.map(iterable, fn)`
 
@@ -231,7 +243,8 @@ const dumbPromises = [Promise.resolve(25), Promise.resolve(50)]
 
 FP.resolve(dumbPromises)
   .concurrency(1)
-  .map(num => FP.delay(num).then(msec => `Delayed ${msec}`))
+  .map(num => FP.resolve(num).delay(num))
+  .then(msec => `Delayed ${msec}`)
   .then(results => console.log(results))
 ```
 
@@ -485,9 +498,108 @@ Returns the **modified object.**
 
 # &#160;&#160; Helpers
 
+## `FP.promisify(function)`
+
+```js
+//// fs - file system module
+const fs = require('fs')
+const readFileAsync = FP.promisify(fs.readFile)
+
+readFileAsync('/tmp/test.csv', 'utf8')
+  .then(data => console.log(data))
+
+```
+
+Utility to get a Promise-enabled version of any NodeJS-style callback function `(err, result)`.
+
+
+
+## `FP.promisifyAll()`
+
+```js
+//// Common promisifyAll Examples:
+
+// fs - node's file system module
+const fs = FP.promisifyAll(require('fs'))
+/* USAGE:
+fs.readFileAsync('/tmp/test.csv', 'utf8')
+  .then(data => data.split('\n'))
+  .map(line => line.split(','))
+  .then(renderTable)
+*/
+
+// Redis
+const redis = require('redis')
+// FP.promisifyAll(redis) // 💩 wont work
+FP.promisifyAll(redis.RedisClient.prototype) // 👍
+FP.promisifyAll(redis.Multi.prototype) // 👍
+/* USAGE:
+client.getAsync('foo')
+  .then(data => console.log('results', data)) */
+
+// Mongodb (Note: use Monk, or Mongoose w/ native Promise support)
+const MongoClient = require('mongodb').MongoClient;
+FP.promisifyAll(MongoClient)
+/* USAGE:
+MongoClient.connectAsync('mongodb://localhost:27017')
+  .then(db => db.collection('documents')) // get collection
+  .then(FP.promisifyAll) // check to make sure we can use *Async methods
+  .then(db => db.findAsync({})) // query w/ findAsync
+  .catch(err => console.error('mongodb failed', err)) */
+
+// mysql - Note: that mysql's classes are not properties of the main export
+// Here's another way to `promisifyAll` prototypes directly
+FP.promisifyAll(require('mysql/lib/Connection').prototype)
+FP.promisifyAll(require('mysql/lib/Pool').prototype)
+
+// pg - Note: postgres client is same as `node-postgres`
+// - and pg supports promises natively now!
+
+// Mongoose
+const mongoose = FP.promisifyAll(require('mongoose'))
+/* USAGE:
+mongoose.Promise = FP
+model.findAsync({})
+  .then(results => {...}) */
+
+// Request
+FP.promisifyAll(require('request'))
+/* USAGE:
+request.getAsync(url)
+request.postAsync(url, data)
+// requestAsync(..) // will not return a promise */
+
+// rimraf - The module is a single function, use `FP.promisify`
+const rimrafAsync = Promise.promisify(require('rimraf'))
+
+// Nodemailer
+FP.promisifyAll(require('nodemailer'))
+
+// xml2js
+FP.promisifyAll(require('xml2js'))
+```
+
+`FP.promisifyAll(Object/Class/Prototype)` accepts an `Object/Class/Prototype-based-thing` and for every key of type `function` it adds a promisified version using the naming convention `obj.[functionName]Async()`.
+
+Compared to `bluebird`, FP added a few tweaks to make it more versatile, specifically it works on any object - not limited to Classes and functions w/ a `prototype`.
+
+> `promisifyAll` is inspired by Bluebird's API.
+
+
+```js
+//// edge case:
+const AwkwardLib = require("...")
+const tmpInstance = AwkwardLib.createInstance()
+FP.promisifyAll(Object.getPrototypeOf(tmpInstance))
+// All new instances (incl tmpInstance) will feature .*Async() methods
+```
+
+In all of the above cases the library made its classes available in one way or another. If this is not the case (factory functions, et al.), you can still promisify by creating a throwaway instance:
+
+
 ## `FP.resolve(<anything>)`
 
-> Promise like it's going out of style:
+> Promise anything like it's going out of style:
 
 ```javascript
 FP.resolve()
@@ -496,7 +608,7 @@ FP.resolve(fetch(url))
 FP.resolve(Promise.resolve(anything))
 ```
 
-Turn anything into a `Functional Promise`!
+Turn anything into a `Functional Promise` wrapped promise!
 
 Use to convert any Promise-like interface into an `FP`.
 

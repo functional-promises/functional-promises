@@ -308,6 +308,12 @@
             <a href="#helpers" class="toc-h1 toc-link" data-title="<small>   Helpers</small>"><small>   Helpers</small></a>
               <ul class="toc-list-h2">
                   <li>
+                    <a href="#fp-promisify" class="toc-h2 toc-link" data-title="<code>FP.promisify(function)</code>"><code>FP.promisify(function)</code></a>
+                  </li>
+                  <li>
+                    <a href="#fp-promisifyall" class="toc-h2 toc-link" data-title="<code>FP.promisifyAll()</code>"><code>FP.promisifyAll()</code></a>
+                  </li>
+                  <li>
                     <a href="#fp-resolve" class="toc-h2 toc-link" data-title="<code>FP.resolve(&lt;anything&gt;)</code>"><code>FP.resolve(&lt;anything&gt;)</code></a>
                   </li>
                   <li>
@@ -373,16 +379,9 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='functional-promises'>Functional Promises</h1>
-<blockquote>
-<p>Install:</p>
-</blockquote>
-<pre class="highlight sh tab-shell"><code>npm install functional-promise
-</code></pre>
-<blockquote>
-<p>Import into your app:</p>
-</blockquote>
-<pre class="highlight javascript tab-javascript"><code><span class="c1">//// Use one of the following:</span>
+        <h1 id='functional-promises'>Functional Promises</h1><pre class="highlight sh tab-shell"><code><span class="c"># Install</span>
+npm install functional-promise
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">//// Import into your app:</span>
 <span class="kr">const</span> <span class="nx">FP</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'functional-promise'</span><span class="p">)</span>
 <span class="c1">//  OR:</span>
 <span class="kr">import</span> <span class="nx">FP</span> <span class="nx">from</span> <span class="s1">'functional-promise'</span>
@@ -390,10 +389,10 @@
 <blockquote>
 <p style='text-align: center;'><strong style='font-size: 24px;'>Examples &amp; Awesome Shit</strong></p>
 
-<p>Array-style methods are built-in:</p>
+<p style='padding: 1.7em 28px;'>Array-style methods are built-in:</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'5'</span><span class="p">])</span>
-  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">x</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// [2, 4</span>
@@ -429,23 +428,31 @@
 <a href="https://github.com/functional-promises/functional-promises"><img src="https://img.shields.io/github/package-json/v/functional-promises/functional-promises.svg?style=flat" alt="GitHub package version" /></a>
 <a href="https://github.com/functional-promises/functional-promises"><img src="https://img.shields.io/github/stars/functional-promises/functional-promises.svg?label=Stars&amp;style=flat" alt="GitHub stars" /></a></p>
 
-<p><a href="https://www.npmjs.com/package/functional-promise"><img src="https://nodei.co/npm/functional-promise.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM" /></a></p>
-<h3 id='summary'>Summary</h3>
-<p>The <strong>Functional Promises</strong> library is a <strong>Function Chaining Interface and Pattern.</strong></p>
+<p><a href="https://www.npmjs.com/package/functional-promises"><img src="https://nodei.co/npm/functional-promises.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM" /></a></p>
 
-<aside class="warning">
-  <code>functional-promise</code> is not itself a <code>Promise</code> replacement. It uses the native <code>Promise</code> API.
-</aside>
-
-<p><strong>Core features:</strong> Array Methods, Events, Array <strong>AND Object</strong> <code>FP.all()</code> Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
 <aside class="success">
-  <code>FP</code> features seamless support between synchronous code, <code>async</code>/<code>await</code>, and native Promises. The core <i>Functional Composition</i> is powered by the <a href="#fp-chain"><code>FP.chain()</code></a> construct.
-</aside></p>
+  Quotable
+  <ul>
+    <li> &quot;Small is beautiful.&quot; <a href='https://twitter.com/BrendanEich/status/957404602470510594' target='_blank'>Brendan Eich - co-inventor of JavaScript</a>
+    <li> &quot;Duuuuude!&quot; <a href='https://github.com/sdras' target='_blank'>Sarah Drasner</a>
+    <li> &quot;Nice, impressive!&quot; <a href='https://twitter.com/YDKJS' target='_blank'>Kyle Simpson</a>
+  </ul>
+</aside>
+<h3 id='summary'>Summary</h3>
+<p>The <strong>Functional Promises</strong> library is a Fluent <strong>Function Chaining Interface and Pattern.</strong></p>
+
+<p><strong>Core features:</strong> Array Methods, Events, Array <strong>AND Object</strong> <code>FP.all()</code> Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.</p>
+
+<p><code>FP</code> features seamless support between synchronous code, <code>async</code>/<code>await</code>, and native Promises. The core <i>Functional Composition</i> is powered by the <a href="#fp-chain"><code>FP.chain()</code></a> construct.</p>
 
 <p><strong>Why not simply use [library X]?</strong></p>
 
 <p><code>FP</code>&#39;s <strong>un-minified source</strong> is <strong>only ~400 lines</strong> of code.
-The <strong>browser bundle</strong> weighs in at <strong>15-20Kb</strong> (using Webpack+Babel+Rollup+UglifyJS).</p>
+The <strong>compressed+minified bundle</strong> measures in at a humble <strong>~4Kb</strong>. The <strong>minified bundle</strong> weighs in around <strong>15-20Kb</strong> (using Webpack+Babel+Rollup+UglifyJS).</p>
+
+<aside class="warning">
+  Note: <code>functional-promise</code> is not a <code>Promise</code> replacement. It uses the native <code>Promise</code> API.
+</aside>
 <h3 id='library-comparison'>Library Comparison</h3>
 <table><thead>
 <tr>
@@ -492,77 +499,77 @@ The <strong>browser bundle</strong> weighs in at <strong>15-20Kb</strong> (using
 
 <p><b>To be clear:</b> Bluebird, RxJS and IxJS are amazing. Their patterns have been very influential on <code>FP</code>'s design.</p>
 
-<p><small><b>Note:</b>&#160;<p><code>R/IxJS</code>&#39;s modular design also allows for bundle sizes to be smaller (using different syntax).</p></small></p>
+<p><small><p><b>Note:</b>&#160;<code>R/IxJS</code>&#39;s modular design also allows for bundle sizes to be smaller (using different syntax).</p></small></p>
 <h3 id='api-outline'>API Outline</h3>
 <p>All <code>.then()</code>-powered methods are listed first.</p>
 
 <ul>
-<li><a href="http://www.fpromises.io/#thenable-methods">Thenable Methods</a>
+<li><a href="https://www.fpromises.io/#thenable-methods">Thenable Methods</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#array-methods">Arrays</a>
+<li><a href="https://www.fpromises.io/#array-methods">Arrays</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#fp-map"><code>.map(fn)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-filter"><code>.filter(fn)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-find"><code>.find(fn)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-findindex"><code>.findIndex(fn)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-some"><code>.some(fn)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-none"><code>.none(fn)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-series"><code>.series(fn)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-map"><code>.map(fn)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-filter"><code>.filter(fn)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-find"><code>.find(fn)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-findindex"><code>.findIndex(fn)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-some"><code>.some(fn)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-none"><code>.none(fn)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-series"><code>.series(fn)</code></a></li>
 </ul></li>
-<li><a href="http://www.fpromises.io/#errors">Errors</a> <em>(WIP)</em>
+<li><a href="https://www.fpromises.io/#errors">Errors</a> <em>(WIP)</em>
 
 <ul>
-<li><a href="http://www.fpromises.io/#fp-catch"><code>.catch(fn)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-catch"><code>.catchIf(filter, fn)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-catch"><code>.catch(fn)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-catch"><code>.catchIf(filter, fn)</code></a></li>
 </ul></li>
-<li><a href="http://www.fpromises.io/#conditional">Conditional</a>
+<li><a href="https://www.fpromises.io/#conditional">Conditional</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#fp-thenif"><code>.thenIf(fn, ifTrue, ifFalse)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-thenif"><code>.thenIf(fn, ifTrue, ifFalse)</code></a></li>
 </ul></li>
-<li><a href="http://www.fpromises.io/#utilities">Utilities</a>
+<li><a href="https://www.fpromises.io/#utilities">Utilities</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#fp-tap"><code>.tap(fn)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-delay"><code>.delay(msec)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-tap"><code>.tap(fn)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-delay"><code>.delay(msec)</code></a></li>
 </ul></li>
-<li><a href="http://www.fpromises.io/#properties">Properties</a>
+<li><a href="https://www.fpromises.io/#properties">Properties</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#fp-get"><code>.get(keyName)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-set"><code>.set(keyName, value)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-get"><code>.get(keyName)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-set"><code>.set(keyName, value)</code></a></li>
 </ul></li>
 </ul></li>
-<li><a href="http://www.fpromises.io/#specialty-methods">Specialty Methods</a>
+<li><a href="https://www.fpromises.io/#specialty-methods">Specialty Methods</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#helpers">Helpers</a>
+<li><a href="https://www.fpromises.io/#helpers">Helpers</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#fp-promisify"><code>FP.promisify(callback)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-promisifyall"><code>FP.promisifyAll(callback)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-resolve"><code>FP.resolve()</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-all"><code>FP.all(Object/Array)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-unpack"><code>FP.unpack()</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-promisify"><code>FP.promisify(callback)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-promisifyall"><code>FP.promisifyAll(callback)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-resolve"><code>FP.resolve()</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-all"><code>FP.all(Object/Array)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-unpack"><code>FP.unpack()</code></a></li>
 </ul></li>
-<li><a href="http://www.fpromises.io/#events">Events</a>
+<li><a href="https://www.fpromises.io/#events">Events</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#fp-listen"><code>.listen(obj, ...eventNames)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-listen"><code>.listen(obj, ...eventNames)</code></a></li>
 </ul></li>
-<li><a href="http://www.fpromises.io/#composition-pipeline">Composition Pipeline</a>
+<li><a href="https://www.fpromises.io/#composition-pipeline">Composition Pipeline</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#fp-chain-chainend"><code>FP.chain(options)</code></a></li>
-<li><a href="http://www.fpromises.io/#fp-chain-chainend"><code>.chainEnd()</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-chain-chainend"><code>FP.chain(options)</code></a></li>
+<li><a href="https://www.fpromises.io/#fp-chain-chainend"><code>.chainEnd()</code></a></li>
 </ul></li>
-<li><a href="http://www.fpromises.io/#modifiers">Modifiers</a>
+<li><a href="https://www.fpromises.io/#modifiers">Modifiers</a>
 
 <ul>
-<li><a href="http://www.fpromises.io/#fp-quiet"><code>.quiet()</code> - prevents errors from stopping array methods mid-loop</a></li>
-<li><a href="http://www.fpromises.io/#fp-concurrency"><code>.concurrency(threadLimit)</code> - limits parallel workers for array methods</a></li>
+<li><a href="https://www.fpromises.io/#fp-quiet"><code>.quiet()</code> - prevents errors from stopping array methods mid-loop</a></li>
+<li><a href="https://www.fpromises.io/#fp-concurrency"><code>.concurrency(threadLimit)</code> - limits parallel workers for array methods</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -576,15 +583,19 @@ The <strong>browser bundle</strong> weighs in at <strong>15-20Kb</strong> (using
 <p>Most <code>FP</code> methods derive behavior from <strong>Native Promise&#39;s <code>.then()</code>.</strong></p>
 
 <p>For example, <code>.tap(fn)</code>&#39;s function will receive the resolved value exactly like a <code>.then()</code>. Except the function&#39;s <code>return</code> value will be ignored - and the next <code>thenable</code> in the chain will get the original input.</p>
+
+<aside class='success'>
+  Click the Edit/Test link above code samples to run them live! <span style='font-size: 28px;'>👉</span>
+</aside>
 <h1 id='array-methods'><small>&#160;&#160; Array Methods</small></h1><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">rawData</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">99</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="kc">NaN</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'99'</span><span class="p">]</span>
 
 <span class="c1">// Async compatible (not needed in this simple example)</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">rawData</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nb">Boolean</span><span class="p">)</span>        <span class="c1">// truthiness check = [-99, "99"]</span>
-  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>            <span class="c1">// convert to numeric [-99 99]</span>
+  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span><span class="p">)</span>         <span class="c1">// truthiness check = [-99, "99"]</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">x</span><span class="p">))</span>  <span class="c1">// convert to numeric [-99 99]</span>
   <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// is gte 1, idx = 1</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">index</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="c1">// 0</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span>    <span class="c1">// 0</span>
   <span class="p">})</span>
 </code></pre>
 <blockquote>
@@ -593,15 +604,19 @@ The <strong>browser bundle</strong> weighs in at <strong>15-20Kb</strong> (using
 <pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">rawData</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">99</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="kc">NaN</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'99'</span><span class="p">]</span>
 
 <span class="nx">rawData</span>
-  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nb">Boolean</span><span class="p">)</span>        <span class="c1">// truthiness check = [-99, "99"]</span>
-  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nb">Number</span><span class="p">)</span>            <span class="c1">// convert to numeric [-99, 99]</span>
+  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span><span class="p">)</span>         <span class="c1">// truthiness check = [-99, "99"]</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">x</span><span class="p">))</span>  <span class="c1">// convert to numeric [-99, 99]</span>
   <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// &lt;^ Native Array Methods ^^</span>
 </code></pre>
 <p>Any <code>.then()</code> which would handle an array, may instead use one of the <code>FP</code> array methods.</p>
 
-<aside class='success'>
-  Please check examples below!
-</aside>
+<ol>
+<li>map</li>
+<li>filter</li>
+<li>find/findIndex</li>
+<li>some</li>
+<li>none</li>
+</ol>
 <h2 id='fp-map'><code>FP.map(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 <span class="c1">// Native es6 example: (Synchronous)</span>
 <span class="c1">//.then(nums =&gt; nums.map(x =&gt; x * 2))</span>
@@ -627,7 +642,8 @@ The <strong>browser bundle</strong> weighs in at <strong>15-20Kb</strong> (using
 
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">dumbPromises</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">concurrency</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">delay</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">msec</span> <span class="o">=&gt;</span> <span class="s2">`Delayed </span><span class="p">${</span><span class="nx">msec</span><span class="p">}</span><span class="s2">`</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">num</span><span class="p">).</span><span class="nx">delay</span><span class="p">(</span><span class="nx">num</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">msec</span> <span class="o">=&gt;</span> <span class="s2">`Delayed </span><span class="p">${</span><span class="nx">msec</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">))</span>
 </code></pre><h2 id='fp-filter'><code>FP.filter(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nb">Boolean</span><span class="p">)</span>
@@ -813,16 +829,100 @@ The <strong>browser bundle</strong> weighs in at <strong>15-20Kb</strong> (using
 <p>Use to set a single key&#39;s value on an object.</p>
 
 <p>Returns the <strong>modified object.</strong></p>
-<h1 id='specialty-methods'>Specialty Methods</h1><h1 id='helpers'><small>&#160;&#160; Helpers</small></h1><h2 id='fp-resolve'><code>FP.resolve(&lt;anything&gt;)</code></h2>
+<h1 id='specialty-methods'>Specialty Methods</h1><h1 id='helpers'><small>&#160;&#160; Helpers</small></h1><h2 id='fp-promisify'><code>FP.promisify(function)</code></h2><pre class="highlight javascript"><code><span class="c1">//// fs - file system module</span>
+<span class="kr">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'fs'</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">readFileAsync</span> <span class="o">=</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">promisify</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">)</span>
+
+<span class="nx">readFileAsync</span><span class="p">(</span><span class="s1">'/tmp/test.csv'</span><span class="p">,</span> <span class="s1">'utf8'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+
+</code></pre>
+<p>Utility to get a Promise-enabled version of any NodeJS-style callback function <code>(err, result)</code>.</p>
+<h2 id='fp-promisifyall'><code>FP.promisifyAll()</code></h2><pre class="highlight javascript"><code><span class="c1">//// Common promisifyAll Examples:</span>
+
+<span class="c1">// fs - node's file system module</span>
+<span class="kr">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'fs'</span><span class="p">))</span>
+<span class="cm">/* USAGE:
+fs.readFileAsync('/tmp/test.csv', 'utf8')
+  .then(data =&gt; data.split('\n'))
+  .map(line =&gt; line.split(','))
+  .then(renderTable)
+*/</span>
+
+<span class="c1">// Redis</span>
+<span class="kr">const</span> <span class="nx">redis</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'redis'</span><span class="p">)</span>
+<span class="c1">// FP.promisifyAll(redis) // 💩 wont work</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nx">redis</span><span class="p">.</span><span class="nx">RedisClient</span><span class="p">.</span><span class="nx">prototype</span><span class="p">)</span> <span class="c1">// 👍</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Multi</span><span class="p">.</span><span class="nx">prototype</span><span class="p">)</span> <span class="c1">// 👍</span>
+<span class="cm">/* USAGE:
+client.getAsync('foo')
+  .then(data =&gt; console.log('results', data)) */</span>
+
+<span class="c1">// Mongodb (Note: use Monk, or Mongoose w/ native Promise support)</span>
+<span class="kr">const</span> <span class="nx">MongoClient</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mongodb'</span><span class="p">).</span><span class="nx">MongoClient</span><span class="p">;</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nx">MongoClient</span><span class="p">)</span>
+<span class="cm">/* USAGE:
+MongoClient.connectAsync('mongodb://localhost:27017')
+  .then(db =&gt; db.collection('documents')) // get collection
+  .then(FP.promisifyAll) // check to make sure we can use *Async methods
+  .then(db =&gt; db.findAsync({})) // query w/ findAsync
+  .catch(err =&gt; console.error('mongodb failed', err)) */</span>
+
+<span class="c1">// mysql - Note: that mysql's classes are not properties of the main export</span>
+<span class="c1">// Here's another way to `promisifyAll` prototypes directly</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'mysql/lib/Connection'</span><span class="p">).</span><span class="nx">prototype</span><span class="p">)</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'mysql/lib/Pool'</span><span class="p">).</span><span class="nx">prototype</span><span class="p">)</span>
+
+<span class="c1">// pg - Note: postgres client is same as `node-postgres`</span>
+<span class="c1">// - and pg supports promises natively now!</span>
+
+<span class="c1">// Mongoose</span>
+<span class="kr">const</span> <span class="nx">mongoose</span> <span class="o">=</span> <span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'mongoose'</span><span class="p">))</span>
+<span class="cm">/* USAGE:
+mongoose.Promise = FP
+model.findAsync({})
+  .then(results =&gt; {...}) */</span>
+
+<span class="c1">// Request</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">))</span>
+<span class="cm">/* USAGE:
+request.getAsync(url)
+request.postAsync(url, data)
+// requestAsync(..) // will not return a promise */</span>
+
+<span class="c1">// rimraf - The module is a single function, use `FP.promisify`</span>
+<span class="kr">const</span> <span class="nx">rimrafAsync</span> <span class="o">=</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">promisify</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'rimraf'</span><span class="p">))</span>
+
+<span class="c1">// Nodemailer</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'nodemailer'</span><span class="p">))</span>
+
+<span class="c1">// xml2js</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">'xml2js'</span><span class="p">))</span>
+</code></pre>
+<p><code>FP.promisifyAll(Object/Class/Prototype)</code> accepts an <code>Object/Class/Prototype-based-thing</code> and for every key of type <code>function</code> it adds a promisified version using the naming convention <code>obj.[functionName]Async()</code>.</p>
+
+<p>Compared to <code>bluebird</code>, FP added a few tweaks to make it more versatile, specifically it works on any object - not limited to Classes and functions w/ a <code>prototype</code>.</p>
+
 <blockquote>
-<p>Promise like it&#39;s going out of style:</p>
+<p><code>promisifyAll</code> is inspired by Bluebird&#39;s API.</p>
+</blockquote>
+<pre class="highlight javascript"><code><span class="c1">//// edge case:</span>
+<span class="kr">const</span> <span class="nx">AwkwardLib</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"..."</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">tmpInstance</span> <span class="o">=</span> <span class="nx">AwkwardLib</span><span class="p">.</span><span class="nx">createInstance</span><span class="p">()</span>
+<span class="nx">FP</span><span class="p">.</span><span class="nx">promisifyAll</span><span class="p">(</span><span class="nb">Object</span><span class="p">.</span><span class="nx">getPrototypeOf</span><span class="p">(</span><span class="nx">tmpInstance</span><span class="p">))</span>
+<span class="c1">// All new instances (incl tmpInstance) will feature .*Async() methods</span>
+</code></pre>
+<p>In all of the above cases the library made its classes available in one way or another. If this is not the case (factory functions, et al.), you can still promisify by creating a throwaway instance:</p>
+<h2 id='fp-resolve'><code>FP.resolve(&lt;anything&gt;)</code></h2>
+<blockquote>
+<p>Promise anything like it&#39;s going out of style:</p>
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">()</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">))</span>
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">anything</span><span class="p">))</span>
 </code></pre>
-<p>Turn anything into a <code>Functional Promise</code>!</p>
+<p>Turn anything into a <code>Functional Promise</code> wrapped promise!</p>
 
 <p>Use to convert any Promise-like interface into an <code>FP</code>.</p>
 <h2 id='fp-all'><code>FP.all()</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span>
@@ -1115,7 +1215,7 @@ The <strong>browser bundle</strong> weighs in at <strong>15-20Kb</strong> (using
 </tbody></table>
 <h2 id='feedback'>Feedback</h2><h4 id='and-other-kind-words'>and other kind words</h4>
 <ul>
-<li>&quot;Small is beautiful.&quot; - <a href="https://twitter.com/BrendanEich/status/957404602470510594">Brendan Eich - inventor of JavaScript</a></li>
+<li>&quot;Small is beautiful.&quot; - <a href="https://twitter.com/BrendanEich/status/957404602470510594">Brendan Eich - co-inventor of JavaScript</a></li>
 <li>&quot;Duuuuude!&quot; - <a href="https://github.com/sdras">Sarah Drasner</a></li>
 <li>&quot;nice, impressive!&quot; - <a href="https://twitter.com/YDKJS">Kyle Simpson</a></li>
 <li>&quot;This is really cool. Well done Dan&quot; - <a href="https://twitter.com/jamonholmgren/status/957382985107456000">Jamon Holmgren</a></li>
