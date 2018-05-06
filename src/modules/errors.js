@@ -7,9 +7,9 @@ class FunctionalError extends Error {
     super(msg)
     if (typeof options === 'object') {
       Object.getOwnPropertyNames(options)
-      .forEach(key => {
-        this[key] = options[key]
-      })
+        .forEach(key => {
+          this[key] = options[key]
+        })
     }
     this.name = this.constructor.name
     // Capturing stack trace, excluding constructor call from it.

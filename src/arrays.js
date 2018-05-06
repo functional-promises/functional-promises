@@ -108,12 +108,12 @@ function map(args, fn, options) {
       const complete = () => {
         if (errors.length > this._FP.errors.limit) {
           Promise.all(altResults)
-          .then(data => rejectIt(results))
+            .then(data => rejectIt(results))
           return true
         }
         if (isDone()) {
           Promise.all(altResults)
-          .then(data => resolveIt(results))
+            .then(data => resolveIt(results))
           return true
         }
         return false
@@ -133,14 +133,6 @@ function map(args, fn, options) {
           // console.error('completed/processing item already', c, results[c])
           return results[c]
         }
-        // if (!isDone()) {
-        //   return results
-        // }
-          // .then(results => {
-          //   console.log('altResults', altResults)
-          //   resolve(results)
-          // })
-        // const result = [args[c], c]
         threadPool.add(c)
         // either get value with `fn(item)` or `item.then(fn)`
         altResults[c] = Promise.resolve(args[c])
@@ -154,19 +146,17 @@ function map(args, fn, options) {
               const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded. CurrentArrayIndex=${c} ActualNumberOfErrors=${this._FP.errors.count}`, {errors, results, ctx: this})
               // console.warn('Error Limit:', c, JSON.stringify(this._FP.errors))
               Promise.resolve(setResult(c)(err))
-              .then(() => {
+                .then(() => {
                   // console.log('\nAHHHHH SHOULD END RUNNING NOW-ish!!!!!!!!!\n')
                   rejectIt(fpErr)
                 })
             } else {
               // console.warn('Error OK:', JSON.stringify(this._FP.errors))
-              // console.dir(err)
               return Promise
                 .resolve()
                 .then(() => setResult(c)(err))
                 .then(checkAndRun)
             }
-            // return err
           })
 
         return altResults[c]

@@ -13,9 +13,9 @@ function FunctionalPromise(resolveRejectCB, unknownArgs) {
   if (!(this instanceof FunctionalPromise)) {return new FunctionalPromise(resolveRejectCB)}
   if (unknownArgs != undefined) throw new Error('FunctionalPromise only accepts 1 argument')
   this._FP = {
-    errors: {limit: 1, count: 0},
+    errors:           {limit: 1, count: 0},
+    promise:          new Promise(resolveRejectCB),
     concurrencyLimit: 4,
-    promise: new Promise(resolveRejectCB),
   }
 }
 
@@ -111,11 +111,11 @@ FP.promisify = function promisify(cb) {
 FP.promisifyAll = function promisifyAll(obj) {
   if (!obj || !Object.getPrototypeOf(obj)) { throw new Error('Invalid Argument obj in promisifyAll(obj)') }
   return Object.getOwnPropertyNames(obj)
-  .filter(key => typeof obj[key] === 'function')
-  .reduce((obj, fnName) => {
-    if (!/Sync/.test(fnName) && !obj[`${fnName}Async`]) obj[`${fnName}Async`] = FP.promisify(obj[`${fnName}`])
-    return obj
-  }, obj)
+    .filter(key => typeof obj[key] === 'function')
+    .reduce((obj, fnName) => {
+      if (!/Sync/.test(fnName) && !obj[`${fnName}Async`]) obj[`${fnName}Async`] = FP.promisify(obj[`${fnName}`])
+      return obj
+    }, obj)
 }
 
 FP.unpack = function unpack() {

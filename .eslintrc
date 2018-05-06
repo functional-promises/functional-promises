@@ -1,0 +1,50 @@
+{
+  "extends": [
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react",
+    "prettier/standard"
+  ],
+  "plugins": [
+    "react",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "modules": true,
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "no-console": 0,
+    "comma-dangle": 0,
+    "handle-callback-err": [2, "^(err|error)$"],
+    "strict": 0,
+    "quotes": [1, "single", { "allowTemplateLiterals": true, "avoidEscape": true }],
+    "indent": ["error", 2, {
+              "ignoredNodes": ["ConditionalExpression"],
+              "ignoreComments": true,
+              "MemberExpression": 1,
+              "ArrayExpression": "first",
+              "ObjectExpression": "first" }],
+    "key-spacing": ["error", {
+      "multiLine": {
+        "beforeColon": false,
+        "afterColon": true
+      },
+      "align": {
+        "beforeColon": false,
+        "afterColon": true,
+        "on": "value"
+      }
+    }]
+  }
+}

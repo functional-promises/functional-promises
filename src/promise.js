@@ -11,9 +11,9 @@ function promiseAllObject(obj) {
   const keys = Object.getOwnPropertyNames(obj)
   const values = keys.map(key => obj[key])
   return Promise.all(values).then(results => results.reduce((obj, val, index) => {
-      const key = keys[index]
-      return Object.assign({[key]: val}, obj)
-    }, {}))
+    const key = keys[index]
+    return Object.assign({[key]: val}, obj)
+  }, {}))
 }
 
 function cast(obj) { return Promise.resolve(obj) }
