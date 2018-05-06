@@ -1,6 +1,6 @@
-const {FunctionalError}          = require('./modules/errors')
-const {isFunction, flatten}      = require('./modules/utils')
-const {chain, chainEnd}          = require('./monads')
+const { FunctionalError } = require('./modules/errors')
+const { isFunction, flatten } = require('./modules/utils')
+const { chain, chainEnd } = require('./monads')
 const FP = FunctionalPromise
 
 Object.assign(FP.prototype,
@@ -10,10 +10,10 @@ Object.assign(FP.prototype,
   require('./promise'))
 
 function FunctionalPromise(resolveRejectCB, unknownArgs) {
-  if (!(this instanceof FunctionalPromise)) {return new FunctionalPromise(resolveRejectCB)}
+  if (!(this instanceof FunctionalPromise)) { return new FunctionalPromise(resolveRejectCB) }
   if (unknownArgs != undefined) throw new Error('FunctionalPromise only accepts 1 argument')
   this._FP = {
-    errors:           {limit: 1, count: 0},
+    errors:           { limit: 1, count: 0 },
     promise:          new Promise(resolveRejectCB),
     concurrencyLimit: 4,
   }
@@ -67,7 +67,7 @@ FP.prototype.set = function set(keyName, value) {
   })
 }
 
-FP.prototype.catch = function(fn) {
+FP.prototype.catch = function (fn) {
   if (this.steps) return this.addStep('catch', [...arguments])
   if (arguments.length === 2) return this.catchIf(...arguments)
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.catch(fn)`. Must be a function. Currently: ' + typeof fn)

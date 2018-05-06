@@ -1,13 +1,13 @@
-const {isEnumerable} = require('./modules/utils')
-const {FPInputError, FunctionalError} = require('./modules/errors')
+const { isEnumerable } = require('./modules/utils')
+const { FPInputError, FunctionalError } = require('./modules/errors')
 
-module.exports = {map, find, findIndex, filter, reduce}
+module.exports = { map, find, findIndex, filter, reduce }
 
 function find(callback) {
-  return _find.call(this, callback).then(({item}) => item)
+  return _find.call(this, callback).then(({ item }) => item)
 }
 function findIndex(callback) {
-  return _find.call(this, callback).then(({index}) => index)
+  return _find.call(this, callback).then(({ index }) => index)
 }
 
 function _find(iterable, callback) {
@@ -21,8 +21,8 @@ function _find(iterable, callback) {
   return FP.resolve(iterable)
     .filter(callback)
     .then(results => results && results[0]
-        ? {item: results[0], index: results.indexOf(results[0])}
-        : {item: undefined,  index: -1})
+      ? { item: results[0], index: results.indexOf(results[0]) }
+      : { item: undefined, index: -1 })
 }
 
 function filter(iterable, callback) {
@@ -74,7 +74,6 @@ function map(args, fn, options) {
     fn = args
     args = this && this._FP && this._FP.promise
   }
-
   let resolvedOrRejected = false
   const threadLimit = Math.max(1, Math.min((this && this._FP && this._FP.concurrencyLimit) || 1, 4))
   const innerValues = this && this._FP && this._FP.promise ? this._FP.promise : Promise.resolve(args)
@@ -84,13 +83,12 @@ function map(args, fn, options) {
   const results = [], altResults = []
   const threadPool = new Set()
   const threadPoolFull = () => threadPool.size >= threadLimit
-  const isDone = () =>  count >= args.length || resolvedOrRejected || errors.length > this._FP.errors.limit
+  const isDone = () => count >= args.length || resolvedOrRejected || errors.length > this._FP.errors.limit
   const setResult = index => value => {
     threadPool.delete(index)
     results[index] = value
     return value
   }
-
   return new FP((resolve, reject) => {
     const resolveIt = x => {
       if (resolvedOrRejected) return;
@@ -107,13 +105,11 @@ function map(args, fn, options) {
       if (!isEnumerable(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'))
       const complete = () => {
         if (errors.length > this._FP.errors.limit) {
-          Promise.all(altResults)
-            .then(data => rejectIt(results))
+          Promise.all(altResults).then(data => rejectIt(results))
           return true
         }
         if (isDone()) {
-          Promise.all(altResults)
-            .then(data => resolveIt(results))
+          Promise.all(altResults).then(data => resolveIt(results))
           return true
         }
         return false
@@ -128,11 +124,7 @@ function map(args, fn, options) {
         if (resolvedOrRejected) return;
         count++
         if (threadPoolFull()) return setTimeout(() => runItem(c), 0)
-        // const isComplete = complete()
-        if (results[c]) {
-          // console.error('completed/processing item already', c, results[c])
-          return results[c]
-        }
+        if (results[c]) return results[c]
         threadPool.add(c)
         // either get value with `fn(item)` or `item.then(fn)`
         altResults[c] = Promise.resolve(args[c])
@@ -143,17 +135,13 @@ function map(args, fn, options) {
             this._FP.errors.count++
             errors.push(err)
             if (errors.length > this._FP.errors.limit) {
-              const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded. CurrentArrayIndex=${c} ActualNumberOfErrors=${this._FP.errors.count}`, {errors, results, ctx: this})
+              const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded. CurrentArrayIndex=${c} ActualNumberOfErrors=${this._FP.errors.count}`, { errors, results, ctx: this })
               // console.warn('Error Limit:', c, JSON.stringify(this._FP.errors))
               Promise.resolve(setResult(c)(err))
-                .then(() => {
-                  // console.log('\nAHHHHH SHOULD END RUNNING NOW-ish!!!!!!!!!\n')
-                  rejectIt(fpErr)
-                })
+                .then(() => { rejectIt(fpErr) })
             } else {
               // console.warn('Error OK:', JSON.stringify(this._FP.errors))
-              return Promise
-                .resolve()
+              return Promise.resolve()
                 .then(() => setResult(c)(err))
                 .then(checkAndRun)
             }

@@ -1,6 +1,6 @@
-const {FPInputError} = require('./modules/errors')
+const { FPInputError } = require('./modules/errors')
 
-module.exports = {all, cast, reject, delay, _delay}
+module.exports = { all, cast, reject, delay, _delay }
 
 function all(promises) {
   const FP = require('./')
@@ -12,7 +12,7 @@ function promiseAllObject(obj) {
   const values = keys.map(key => obj[key])
   return Promise.all(values).then(results => results.reduce((obj, val, index) => {
     const key = keys[index]
-    return Object.assign({[key]: val}, obj)
+    return Object.assign({ [key]: val }, obj)
   }, {}))
 }
 
