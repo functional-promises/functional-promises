@@ -1,7 +1,7 @@
 {
   "name": "functional-promise",
-  "version": "1.5.8",
-  "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: http://www.fpromises.io/",
+  "version": "1.5.9",
+  "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: https://www.fpromises.io/",
   "ava": {
     "require": [
       "babel-register"
@@ -13,7 +13,7 @@
   "repository": {
     "url": "https://github.com/functional-promises/functional-promises.git"
   },
-  "homepage": "http://www.fpromises.io/",
+  "homepage": "https://www.fpromises.io/",
   "scripts": {
     "start": "npm run build && webpack --watch",
     "test": "ava --serial --verbose tests/*.js",
