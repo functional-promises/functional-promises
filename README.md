@@ -1,4 +1,4 @@
-# Functional Promises (beta)
+# Functional Promises
 
 [![Build Status](https://travis-ci.org/functional-promises/functional-promises.svg?branch=master)](https://travis-ci.org/functional-promises/functional-promises)
 [![GitHub package version](https://img.shields.io/github/package-json/v/functional-promises/functional-promises.svg?style=flat)](https://github.com/functional-promises/functional-promises)
