@@ -1,6 +1,6 @@
 {
   "name": "functional-promise",
-  "version": "1.5.10",
+  "version": "1.5.11",
   "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: https://www.fpromises.io/",
   "ava": {
     "require": [
