@@ -16,7 +16,7 @@ function _find(iterable, callback) {
 
   return FP.resolve(iterable)
     .filter(callback)
-    .then(([item]) => item ? { item: results[0], index: results.indexOf(results[0]) } : { item: undefined, index: -1 })
+    .then((results) => results[0] != undefined ? { item: results[0], index: results.indexOf(results[0]) } : { item: undefined, index: -1 })
 }
 
 function filter(iterable, callback) {
