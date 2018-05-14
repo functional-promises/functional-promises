@@ -3,6 +3,8 @@ const { isFunction, flatten } = require('./modules/utils')
 const { chain, chainEnd } = require('./monads')
 const FP = FunctionalPromise
 
+FP.default = FP
+
 Object.assign(FP.prototype,
   require('./arrays'),
   require('./events'),
