@@ -36,23 +36,23 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "ava": "^0.24.0",
+    "ava": "^0.25.0",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-es2015-computed-properties": "^6.24.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "chalk": "^2.3.1",
-    "css-loader": "^0.28.7",
+    "babel-preset-env": "^1.7.0",
+    "chalk": "^2.4.1",
+    "css-loader": "^0.28.11",
     "debug": "^3.1.0",
-    "jsdom": "^11.5.1",
-    "rollup": "^0.52.3",
+    "jsdom": "^11.10.0",
+    "rollup": "^0.59.1",
     "rollup-loader": "^0.3.0",
     "rollup-plugin-commonjs": "^8.2.6",
     "strip-loader": "^0.1.2",
-    "tape": "^4.8.0",
+    "tape": "^4.9.0",
     "webpack": "^3.10.0",
-    "webpack-rollup-loader": "^0.6.0"
+    "webpack-rollup-loader": "^0.7.1"
   }
 }
