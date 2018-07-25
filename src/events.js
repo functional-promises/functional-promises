@@ -12,5 +12,5 @@ module.exports = {
       return () => obj[obj.removeEventListener ? 'removeEventListener' : 'off'](eventName, handler)
     })
     return this
-  }
+  },
 }

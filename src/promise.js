@@ -1,6 +1,6 @@
 const { FPInputError } = require('./modules/errors')
 
-module.exports = { all, cast, reject, delay, _delay }
+module.exports = { all, reject, delay, _delay }
 
 function all(promises) {
   const FP = require('./')
@@ -16,11 +16,7 @@ function promiseAllObject(obj) {
   }, {}))
 }
 
-function cast(obj) { return Promise.resolve(obj) }
-
 function reject(err) {
-  // ret._captureStackTrace();
-  // ret._rejectCallback(reason, true);
   if (err instanceof Error) {
     if (this) this._error = err
     return Promise.reject(err)

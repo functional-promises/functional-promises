@@ -73,7 +73,7 @@ function map(args, fn, options) {
   const results = []
   const threadPool = new Set()
   const threadPoolFull = () => threadPool.size >= threadLimit
-  const isDone = () => count >= args.length || resolvedOrRejected || errors.length > this._FP.errors.limit
+  const isDone = () => errors.length >= this._FP.errors.limit || count >= args.length || resolvedOrRejected
   const setResult = index => value => {
     threadPool.delete(index)
     results[index] = value
@@ -81,11 +81,11 @@ function map(args, fn, options) {
   }
   return new FP((resolve, reject) => {
     const resolveIt = x => {
-      if (resolvedOrRejected) { return null; } else { resolvedOrRejected = true; }
+      if (resolvedOrRejected) { return null } else { resolvedOrRejected = true }
       resolve(x)
     }
     const rejectIt = x => {
-      if (resolvedOrRejected) { return null; } else { resolvedOrRejected = true; }
+      if (resolvedOrRejected) { return null } else { resolvedOrRejected = true }
       reject(x)
     }
     innerValues.then(items => {
@@ -99,7 +99,7 @@ function map(args, fn, options) {
         return false
       }
       const checkAndRun = val => {
-        if (resolvedOrRejected) return;
+        if (resolvedOrRejected) return
         if (!complete() && !results[count]) runItem(count)
         return val
       }
@@ -118,7 +118,8 @@ function map(args, fn, options) {
             this._FP.errors.count++
             errors.push(err)
             if (errors.length > this._FP.errors.limit) {
-              const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded. CurrentArrayIndex=${c} ActualNumberOfErrors=${this._FP.errors.count}`, { errors, results, ctx: this })
+              const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded.
+              idx=${c} errCnt=${this._FP.errors.count}`, { errors, results, ctx: this })
               Promise.resolve(setResult(c)(err)).then(() => { rejectIt(fpErr) })
             } else { // console.warn('Error OK:', JSON.stringify(this._FP.errors))
               return Promise.resolve().then(() => setResult(c)(err)).then(checkAndRun)

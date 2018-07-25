@@ -24,10 +24,13 @@ function FunctionalPromise(resolveRejectCB, unknownArgs) {
 FP.all = FP.prototype.all
 FP.thenIf = FP.prototype._thenIf
 FP.delay = msec => FP.resolve().delay(msec)
+FP.silent = limit => FP.resolve().silent(limit)
 
 // Monadic Methods
 FP.chain = chain
 FP.prototype.chainEnd = chainEnd
+FP.reject = FP.prototype.reject
+
 
 FP.prototype.addStep = function addStep(name, args) {
   if (this.steps) this.steps.push([name, this, args])
@@ -40,11 +43,12 @@ FP.prototype.concurrency = function concurrency(limit = Infinity) {
   return this
 }
 
-FP.prototype.quiet = function quiet(limit = Infinity) {
+FP.prototype.quiet = function quiet(errorLimit = Infinity) {
   if (this.steps) return this.addStep('quiet', [...arguments])
-  this._FP.errors = { count: 0, limit: limit }
+  this._FP.errors = { count: 0, limit: errorLimit }
   return this
 }
+FP.prototype.silent = FP.prototype.quiet
 
 FP.prototype.get = function get(...keyNames) {
   if (this.steps) return this.addStep('get', [...arguments])
@@ -121,14 +125,13 @@ FP.promisifyAll = function promisifyAll(obj) {
 }
 
 FP.unpack = function unpack() {
-  let resolve, reject, promise;
-  promise = new Promise((yah, nah) => { resolve = yah; reject = nah })
+  let resolve, reject, promise = new Promise((yah, nah) => { resolve = yah; reject = nah })
   return { promise, resolve, reject }
 }
 
 module.exports = FunctionalPromise
 
 if (process && process.on) {
-  process.on('uncaughtException', e => console.error('Process: FATAL EXCEPTION: uncaughtException', e, '\n\n'))
-  process.on('unhandledRejection', e => console.error('Process: FATAL PROMISE ERROR: unhandledRejection', e, '\n\n'))
+  // process.on('uncaughtException', e => console.error('FPromises: FATAL EXCEPTION: uncaughtException', e))
+  process.on('unhandledRejection', e => console.error('FPromises: FATAL PROMISE ERROR: unhandledRejection', e))
 }
