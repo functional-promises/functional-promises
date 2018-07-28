@@ -33,7 +33,7 @@ test('Can FP.quiet(1) + 2 errors trigger .catch()', t => {
       }
       return n
     })
-    .then((results) => t.fail('shouldnt get here'))
+    .then((results) => t.fail('shouldn\'t get here'))
     .catch(() => t.pass('overflowed .quiet() w/ errors.'))
 })
 
@@ -116,7 +116,10 @@ test('Can override .catch() w/ .chain()', t => {
 
   return pipeline([1])
     .catch(() => t.pass('Testing Expected Error'))
-    .then(() => t.fail('FAIL: unexpected .then hit'))
+    .then(result => {
+      console.log(result)
+      t.fail('FAIL: unexpected .then hit')
+    })
 })
 
 test('Can override .catch() w/ .chain().quiet(10)', t => {

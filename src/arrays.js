@@ -73,7 +73,7 @@ function map(args, fn, options) {
   const results = []
   const threadPool = new Set()
   const threadPoolFull = () => threadPool.size >= threadLimit
-  const isDone = () => errors.length >= this._FP.errors.limit || count >= args.length || resolvedOrRejected
+  const isDone = () => errors.length > this._FP.errors.limit || count >= args.length || resolvedOrRejected
   const setResult = index => value => {
     threadPool.delete(index)
     results[index] = value
@@ -86,6 +86,7 @@ function map(args, fn, options) {
     }
     const rejectIt = x => {
       if (resolvedOrRejected) { return null } else { resolvedOrRejected = true }
+      console.log('Action.reject:', resolvedOrRejected, x)
       reject(x)
     }
     innerValues.then(items => {
@@ -120,7 +121,7 @@ function map(args, fn, options) {
             if (errors.length > this._FP.errors.limit) {
               const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded.
               idx=${c} errCnt=${this._FP.errors.count}`, { errors, results, ctx: this })
-              Promise.resolve(setResult(c)(err)).then(() => { rejectIt(fpErr) })
+              Promise.resolve(setResult(c)(err)).then(() => rejectIt(fpErr))
             } else { // console.warn('Error OK:', JSON.stringify(this._FP.errors))
               return Promise.resolve().then(() => setResult(c)(err)).then(checkAndRun)
             }

@@ -15,7 +15,7 @@ function FunctionalPromise(resolveRejectCB, unknownArgs) {
   if (!(this instanceof FunctionalPromise)) { return new FunctionalPromise(resolveRejectCB) }
   if (unknownArgs != undefined) throw new Error('FunctionalPromise only accepts 1 argument')
   this._FP = {
-    errors:           { limit: 1, count: 0 },
+    errors:           { limit: 0, count: 0 },
     promise:          new Promise(resolveRejectCB),
     concurrencyLimit: 4,
   }

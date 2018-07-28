@@ -82,8 +82,11 @@ test('FP.delay()', t => {
   // console.log('FP.resolve().delay(50)', FP.resolve().delay(50))
   return FP.resolve([1, 2, 3])
   .concurrency(1)
-  .map(num => FP.resolve(num).delay(5))
-  .then(() => t.truthy(Date.now() - started >= 15))
+  .map(num => FP.resolve(Date.now()).delay(5))
+  .then(timestamps => {
+    console.log('timestamps', timestamps)
+    t.truthy(Date.now() - started >= 15)
+  })
 })
 
 // TODO: Re-add static method support
@@ -91,8 +94,11 @@ test('FP.delay() - static usage', t => {
   const started = Date.now()
   return FP.resolve([1, 2, 3])
   .concurrency(1)
-  .map(num => FP.delay(5).then(() => num))
-  .then(() => t.truthy(Date.now() - started >= 15))
+  .map(num => FP.delay(5).then(() => Date.now()))
+  .then(timestamps => {
+    console.log('timestamps', timestamps)
+    t.truthy(Date.now() - started >= 15)
+  })
 })
 
 test('FP.delay() with .concurrency(Infinity)', t => {
