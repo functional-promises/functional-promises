@@ -115,14 +115,14 @@ test('Can override .catch() w/ .chain()', t => {
     .chainEnd()
 
   return pipeline([1])
-    .catch(() => t.pass('Testing Expected Error'))
     .then(result => {
-      console.log(result)
+      // console.log(result)
       t.fail('FAIL: unexpected .then hit')
     })
+    .catch(() => t.pass('Testing Expected Error'))
 })
 
-test.only('Can override .catch() w/ .chain().quiet()', t => {
+test('Can override .catch() w/ .chain().quiet()', t => {
   const pipeline = FP.chain()
     .quiet(3)
     .map(() => FP.reject(new Error('Fail!')))

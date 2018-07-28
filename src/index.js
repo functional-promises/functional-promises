@@ -133,5 +133,5 @@ module.exports = FunctionalPromises
 
 if (process && process.on) {
   // process.on('uncaughtException', e => console.error('FPromises: FATAL EXCEPTION: uncaughtException', e))
-  process.on('unhandledRejection', e => console.error('FPromises: FATAL PROMISE ERROR: unhandledRejection', e))
+  process.on('unhandledRejection', e => console.error('FPromises: FATAL ERROR: unhandledRejection', e))
 }

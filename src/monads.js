@@ -27,7 +27,7 @@ function chainEnd() {
   return input => {
     if (this.steps.length <= 0) throw new FPInputError('No steps defined between .chain() & .chainEnd()')
     let stepCount = 0
-    let promise = new FP((resolve) => setImmediate(() => resolve(input)))
+    let promise = new FP((resolve) => setTimeout(() => resolve(input), 0))
     while (stepCount < this.steps.length) {
       const [fnName, , args] = this.steps[stepCount]
       promise = promise[fnName](...args)

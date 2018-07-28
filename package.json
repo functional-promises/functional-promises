@@ -1,6 +1,6 @@
 {
   "name": "functional-promise",
-  "version": "1.5.90",
+  "version": "1.5.91",
   "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: https://www.fpromises.io/",
   "ava": {
     "require": [
@@ -16,7 +16,7 @@
   "homepage": "https://www.fpromises.io/",
   "scripts": {
     "start": "npm run build && webpack --watch",
-    "test": "ava --serial --verbose tests/*.js",
+    "test": "ava --serial --verbose tests/errors.js",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
     "build": "npm run build-dev && npm run build-live",

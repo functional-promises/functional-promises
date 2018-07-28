@@ -81,13 +81,13 @@ function map(args, fn, options) {
   }
   return FP.resolve(new Promise((resolve, reject) => {
     const resolveIt = x => {
-      console.log('Action.resolve:', resolvedOrRejected, x)
+      // console.log('Action.resolve:', resolvedOrRejected, x)
       if (resolvedOrRejected) { return null } else { resolvedOrRejected = true }
       resolve(x)
     }
     const rejectIt = x => {
       if (resolvedOrRejected) { return null } else { resolvedOrRejected = true }
-      console.log('Action.reject:', resolvedOrRejected, x)
+      // console.log('Action.reject:', resolvedOrRejected, x)
       reject(x)
     }
     innerValues.then(items => {
@@ -101,7 +101,7 @@ function map(args, fn, options) {
         return false
       }
       const checkAndRun = val => {
-        console.log('checkAndRun', count, resolvedOrRejected, val)
+        // console.log('checkAndRun', count, resolvedOrRejected, val)
         if (resolvedOrRejected) return
         if (!complete() && !results[count]) runItem(count)
         return val
@@ -120,7 +120,7 @@ function map(args, fn, options) {
           .catch(err => {
             this._FP.errors.count++
             errors.push(err)
-            console.log('ERR HANDLER!', errors.length, this._FP.errors.limit)
+            // console.log('ERR HANDLER!', errors.length, this._FP.errors.limit)
             if (errors.length > this._FP.errors.limit) {
               const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded.
               idx=${c} errCnt=${this._FP.errors.count}`, { errors, results, ctx: this })
