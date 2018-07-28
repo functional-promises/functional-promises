@@ -79,8 +79,9 @@ function map(args, fn, options) {
     results[index] = value
     return value
   }
-  return new FP((resolve, reject) => {
+  return FP.resolve(new Promise((resolve, reject) => {
     const resolveIt = x => {
+      console.log('Action.resolve:', resolvedOrRejected, x)
       if (resolvedOrRejected) { return null } else { resolvedOrRejected = true }
       resolve(x)
     }
@@ -100,6 +101,7 @@ function map(args, fn, options) {
         return false
       }
       const checkAndRun = val => {
+        console.log('checkAndRun', count, resolvedOrRejected, val)
         if (resolvedOrRejected) return
         if (!complete() && !results[count]) runItem(count)
         return val
@@ -118,6 +120,7 @@ function map(args, fn, options) {
           .catch(err => {
             this._FP.errors.count++
             errors.push(err)
+            console.log('ERR HANDLER!', errors.length, this._FP.errors.limit)
             if (errors.length > this._FP.errors.limit) {
               const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded.
               idx=${c} errCnt=${this._FP.errors.count}`, { errors, results, ctx: this })
@@ -133,5 +136,5 @@ function map(args, fn, options) {
       // Kick off x number of initial threads
       while (initialThread < threadLimit && initialThread < args.length) runItem(initialThread++)
     })
-  })
+  }))
 }

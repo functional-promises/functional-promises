@@ -25,16 +25,14 @@ function chainEnd() {
   const FP = require('./index')
 
   return input => {
-    return new FP((resolve, reject) => {
-      const iterator = this.steps[Symbol.iterator]()
-
-      const next = promise => {
-        const current = iterator.next()
-        if (current.done) return resolve(promise)
-        const [fnName, , args] = current.value
-        return next(promise[fnName](...args))
-      }
-      next(FP.resolve(input))
-    })
+    if (this.steps.length <= 0) throw new FPInputError('No steps defined between .chain() & .chainEnd()')
+    let stepCount = 0
+    let promise = new FP((resolve) => setImmediate(() => resolve(input)))
+    while (stepCount < this.steps.length) {
+      const [fnName, , args] = this.steps[stepCount]
+      promise = promise[fnName](...args)
+      stepCount++
+    }
+    return promise
   }
 }

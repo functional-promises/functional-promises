@@ -1,7 +1,7 @@
 const { FunctionalError } = require('./modules/errors')
 const { isFunction, flatten } = require('./modules/utils')
 const { chain, chainEnd } = require('./monads')
-const FP = FunctionalPromise
+const FP = FunctionalPromises
 
 FP.default = FP
 
@@ -11,9 +11,9 @@ Object.assign(FP.prototype,
   require('./conditional'),
   require('./promise'))
 
-function FunctionalPromise(resolveRejectCB, unknownArgs) {
-  if (!(this instanceof FunctionalPromise)) { return new FunctionalPromise(resolveRejectCB) }
-  if (unknownArgs != undefined) throw new Error('FunctionalPromise only accepts 1 argument')
+function FunctionalPromises(resolveRejectCB) {
+  if (!(this instanceof FunctionalPromises)) { return new FunctionalPromises(resolveRejectCB) }
+  if (arguments.length !== 1) throw new Error('FunctionalPromises constructor only accepts 1 callback argument')
   this._FP = {
     errors:           { limit: 0, count: 0 },
     promise:          new Promise(resolveRejectCB),
@@ -129,7 +129,7 @@ FP.unpack = function unpack() {
   return { promise, resolve, reject }
 }
 
-module.exports = FunctionalPromise
+module.exports = FunctionalPromises
 
 if (process && process.on) {
   // process.on('uncaughtException', e => console.error('FPromises: FATAL EXCEPTION: uncaughtException', e))
