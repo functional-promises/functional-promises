@@ -125,7 +125,7 @@ FP.promisifyAll = function promisifyAll(obj) {
 }
 
 FP.unpack = function unpack() {
-  let resolve, reject, promise = new Promise((yah, nah) => { resolve = yah; reject = nah })
+  let resolve, reject, promise = new FP((yah, nah) => { resolve = yah; reject = nah })
   return { promise, resolve, reject }
 }
 

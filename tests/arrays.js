@@ -1,4 +1,4 @@
-const test = require('ava')
+const test = require('ava').default
 const FP = require('../src')
 
 test('FP.map(x * 2)', t => {

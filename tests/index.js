@@ -84,7 +84,7 @@ test('FP.delay()', t => {
   .concurrency(1)
   .map(num => FP.resolve(Date.now()).delay(5))
   .then(timestamps => {
-    console.log('timestamps', timestamps)
+    // console.log('timestamps', timestamps)
     t.truthy(Date.now() - started >= 15)
   })
 })
@@ -96,7 +96,7 @@ test('FP.delay() - static usage', t => {
   .concurrency(1)
   .map(num => FP.delay(5).then(() => Date.now()))
   .then(timestamps => {
-    console.log('timestamps', timestamps)
+    // console.log('timestamps', timestamps)
     t.truthy(Date.now() - started >= 15)
   })
 })
@@ -112,7 +112,7 @@ test('FP.delay() with .concurrency(Infinity)', t => {
     })
     .then(() => {
       const runtime = Date.now() - started
-      t.truthy(runtime > 50)
+      t.truthy(runtime >= 50)
     })
 })
 
