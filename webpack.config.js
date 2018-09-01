@@ -51,10 +51,10 @@ const config = module.exports = {
 
 if (!dev) {
   config.plugins = config.plugins || []
-  config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-    compress: {
-      warnings: false,
-      drop_console: false,
-    },
-  }))
+  // config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+  //   compress: {
+  //     warnings: false,
+  //     drop_console: false,
+  //   },
+  // }))
 }

@@ -38,11 +38,13 @@
   "devDependencies": {
     "ava": "^0.25.0",
     "babel-loader": "^7.1.4",
+    "babel-minify": "^0.4.3",
     "babel-plugin-transform-es2015-computed-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-minify": "^0.4.3",
     "chalk": "^2.4.1",
     "css-loader": "^0.28.11",
     "debug": "^3.1.0",
