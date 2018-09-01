@@ -52,6 +52,7 @@
     "rollup-plugin-commonjs": "^8.2.6",
     "strip-loader": "^0.1.2",
     "tape": "^4.9.0",
+    "uglify-es": "^3.3.9",
     "webpack": "^3.10.0",
     "webpack-rollup-loader": "^0.7.1"
   }

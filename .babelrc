@@ -5,12 +5,11 @@
     [
       "env",
       {
-        "debug": false,
+        "debug": true,
         "modules": false,
         "useBuiltIns": true,
         "targets": {
-          "browsers": ["last 2 versions", "safari >= 10"],
-          "node": "current"
+          "browsers": [">= 3%"]
         }
       }
     ]
