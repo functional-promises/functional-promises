@@ -1,6 +1,6 @@
 {
   "sourceMaps": "inline",
-  "retainLines": true,
+  "retainLines": false,
   "env": {
     "production": {
       "presets": ["minify"]
@@ -10,8 +10,8 @@
     [
       "env",
       {
-        "debug": true,
-        "modules": false,
+        "debug": false,
+        "modules": "commonjs",
         "useBuiltIns": true,
         "targets": {
           "chrome": "68"

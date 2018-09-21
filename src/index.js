@@ -1,18 +1,16 @@
-const { FunctionalError } = require('./modules/errors')
-const { isFunction, flatten } = require('./modules/utils')
-const { chain, chainEnd } = require('./monads')
-const FP = FunctionalPromises
+import { FunctionalError } from './modules/errors'
+import { isFunction, flatten } from './modules/utils'
+import { chain, chainEnd } from './monads'
+import arrays from './arrays'
+import events from './events'
+import conditional from './conditional'
+import promise from './promise'
 
-FP.default = FP
 
-Object.assign(FP.prototype,
-  require('./arrays'),
-  require('./events'),
-  require('./conditional'),
-  require('./promise'))
 
-function FunctionalPromises(resolveRejectCB) {
-  if (!(this instanceof FunctionalPromises)) { return new FunctionalPromises(resolveRejectCB) }
+
+function FP(resolveRejectCB) {
+  if (!(this instanceof FP)) { return new FP(resolveRejectCB) }
   if (arguments.length !== 1) throw new Error('FunctionalPromises constructor only accepts 1 callback argument')
   this._FP = {
     errors:           { limit: 0, count: 0 },
@@ -20,6 +18,9 @@ function FunctionalPromises(resolveRejectCB) {
     concurrencyLimit: 4,
   }
 }
+Object.assign(FP.prototype, arrays, events, conditional, promise)
+
+FP.default = FP
 
 FP.all = FP.prototype.all
 FP.thenIf = FP.prototype._thenIf
@@ -129,7 +130,7 @@ FP.unpack = function unpack() {
   return { promise, resolve, reject }
 }
 
-module.exports = FunctionalPromises
+export default FP
 
 if (process && process.on) {
   // process.on('uncaughtException', e => console.error('FPromises: FATAL EXCEPTION: uncaughtException', e))

@@ -18,8 +18,8 @@ const config = module.exports = {
       {
         test: /\.js$/,
         loader: webpackStripLoader
-          .loader('debug', 'console.log', 'console.warn', 'console.error')
-      }
+          .loader('debug', 'console.log', 'console.warn', 'console.error'),
+      },
     ],
     rules: [
       // {

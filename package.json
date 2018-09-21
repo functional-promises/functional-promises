@@ -1,14 +1,30 @@
 {
   "name": "functional-promise",
-  "version": "1.6.0",
+  "version": "1.6.2",
   "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: https://www.fpromises.io/",
+  "esm": "auto",
   "ava": {
     "require": [
       "babel-register"
     ],
-    "babel": "inherit"
+    "babel": {
+      "presets": [
+        [
+          "env",
+          {
+            "debug": false,
+            "modules": false,
+            "useBuiltIns": true,
+            "targets": {
+              "node": "6"
+            }
+          }
+        ]
+      ]
+    }
   },
   "main": "./src/index.js",
+  "module": "./src/index.js",
   "browser": "./dist/functional-promise.min.js",
   "repository": {
     "url": "https://github.com/functional-promises/functional-promises.git"
@@ -20,7 +36,7 @@
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
     "build": "npm run build-dev && npm run build-live",
-    "build-live": "NODE_ENV=production webpack",
+    "build-live": "NODE_ENV=production webpack && minify dist/functional-promise.min.js -d dist/",
     "build-dev": "NODE_ENV=development webpack",
     "postbuild": "./misc/compression-report.sh",
     "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",

@@ -1,13 +1,10 @@
-const { FPInputError } = require('./modules/errors')
-
-module.exports = { chain, chainEnd }
-
+import { FPInputError } from './modules/errors'
 
 /**
  * Start 'recording' a chain of commands, after steps defined call `.chainEnd()`
  * @returns FunctionalPromise
  */
-function chain() {
+export function chain() {
   const FP = require('./index')
   // create a placeholder/initial promise to hold the steps/chain data
   const promise = FP.resolve()
@@ -21,7 +18,7 @@ function chain() {
  * One of the few non-chainable methods in the API.
  * @returns a Function. It runs your functional chain!
  */
-function chainEnd() {
+export function chainEnd() {
   const FP = require('./index')
 
   return input => {

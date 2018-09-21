@@ -1,7 +1,7 @@
-const { isEnumerable } = require('./modules/utils')
-const { FPInputError, FunctionalError } = require('./modules/errors')
+import { isEnumerable } from './modules/utils'
+import { FPInputError, FunctionalError } from './modules/errors'
 
-module.exports = { map, find, findIndex, filter, reduce }
+export default { map, find, findIndex, filter, reduce }
 
 function find(callback) { return _find.call(this, callback).then(({ item }) => item) }
 function findIndex(callback) { return _find.call(this, callback).then(({ index }) => index) }

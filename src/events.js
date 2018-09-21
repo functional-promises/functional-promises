@@ -1,6 +1,6 @@
-const {FPInputError} = require('./modules/errors')
+import { FPInputError } from './modules/errors'
 
-module.exports = {
+export default {
   listen(obj, ...eventNames) {
     if (typeof eventNames === 'string') eventNames = [eventNames]
     if (!obj[obj.addEventListener ? 'addEventListener' : 'on']) throw new FPInputError('Valid EventEmitter required.')
