@@ -1,6 +1,6 @@
 import { isPromiseLike } from './modules/utils'
 
-export default {thenIf, tapIf, _thenIf}
+export {thenIf, tapIf, _thenIf}
 
 function thenIf(cond, ifTrue, ifFalse) {
   if (this.steps) return this.addStep('thenIf', [...arguments])

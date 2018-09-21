@@ -1,7 +1,7 @@
 import { isEnumerable } from './modules/utils'
 import { FPInputError, FunctionalError } from './modules/errors'
 
-export default { map, find, findIndex, filter, reduce }
+export { map, find, findIndex, filter, reduce }
 
 function find(callback) { return _find.call(this, callback).then(({ item }) => item) }
 function findIndex(callback) { return _find.call(this, callback).then(({ index }) => index) }

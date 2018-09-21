@@ -1,26 +1,28 @@
 import { FunctionalError } from './modules/errors'
 import { isFunction, flatten } from './modules/utils'
 import { chain, chainEnd } from './monads'
-import arrays from './arrays'
-import events from './events'
-import conditional from './conditional'
-import promise from './promise'
+import { map, find, findIndex, filter, reduce } from './arrays'
+import { listen } from './events'
+import { _thenIf, tapIf, thenIf } from './conditional'
+import { _delay, delay, reject, all as allPromises } from './promise'
 
 
+FP.prototype.all = allPromises
+FP.prototype.map = map
+FP.prototype.find = find
+FP.prototype.findIndex = findIndex
+FP.prototype.filter = filter
+FP.prototype.reduce = reduce
+FP.prototype.listen = listen
+FP.prototype.tapIf = tapIf
+FP.prototype.thenIf = thenIf
+FP.prototype._thenIf = _thenIf
+FP.prototype.delay = delay
+FP.prototype._delay = _delay
+FP.prototype.reject = reject
 
-
-function FP(resolveRejectCB) {
-  if (!(this instanceof FP)) { return new FP(resolveRejectCB) }
-  if (arguments.length !== 1) throw new Error('FunctionalPromises constructor only accepts 1 callback argument')
-  this._FP = {
-    errors:           { limit: 0, count: 0 },
-    promise:          new Promise(resolveRejectCB),
-    concurrencyLimit: 4,
-  }
-}
-Object.assign(FP.prototype, arrays, events, conditional, promise)
-
-FP.default = FP
+// FP.default = FP
+// export const all = allPromises
 
 FP.all = FP.prototype.all
 FP.thenIf = FP.prototype._thenIf
@@ -103,19 +105,19 @@ FP.prototype.tap = function tap(fn) {
   return FP.resolve(this._FP.promise.then(value => fn(value) ? value : value))
 }
 
-FP.resolve = FP.prototype.resolve = function resolve(value) {
+export const resolve = function resolve(value) {
   return new FP((resolve, reject) => {
     if (value && isFunction(value.then)) return value.then(resolve).catch(reject)
     resolve(value)
   })
 }
 
-FP.promisify = function promisify(cb) {
+export const promisify = function promisify(cb) {
   return (...args) => new FP((yah, nah) =>
     cb.call(this, ...args, (err, res) => err ? nah(err) : yah(res)))
 }
 
-FP.promisifyAll = function promisifyAll(obj) {
+export const promisifyAll = function promisifyAll(obj) {
   if (!obj || !Object.getPrototypeOf(obj)) { throw new Error('Invalid Argument obj in promisifyAll(obj)') }
   return Object.getOwnPropertyNames(obj)
     .filter(key => typeof obj[key] === 'function')
@@ -125,14 +127,22 @@ FP.promisifyAll = function promisifyAll(obj) {
     }, obj)
 }
 
-FP.unpack = function unpack() {
+export const unpack = function unpack() {
   let resolve, reject, promise = new FP((yah, nah) => { resolve = yah; reject = nah })
   return { promise, resolve, reject }
 }
 
-export default FP
 
-if (process && process.on) {
-  // process.on('uncaughtException', e => console.error('FPromises: FATAL EXCEPTION: uncaughtException', e))
-  process.on('unhandledRejection', e => console.error('FPromises: FATAL ERROR: unhandledRejection', e))
+export default function FP(resolveRejectCB) {
+  if (!(this instanceof FP)) { return new FP(resolveRejectCB) }
+  if (arguments.length !== 1) throw new Error('FunctionalPromises constructor only accepts 1 callback argument')
+  this._FP = {
+    errors:           { limit: 0, count: 0 },
+    promise:          new Promise(resolveRejectCB),
+    concurrencyLimit: 4,
+  }
 }
+// if (process && process.on) {
+//   // process.on('uncaughtException', e => console.error('FPromises: FATAL EXCEPTION: uncaughtException', e))
+//   process.on('unhandledRejection', e => console.error('FPromises: FATAL ERROR: unhandledRejection', e))
+// }
