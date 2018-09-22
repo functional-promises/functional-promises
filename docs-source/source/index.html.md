@@ -19,14 +19,14 @@ search: true
 
 ```sh
 # Install
-npm install functional-promise
+npm install functional-promises
 ```
 
 ```javascript
 //// Import into your app:
-const FP = require('functional-promise')
+const FP = require('functional-promises').default
 //  OR:
-import FP from 'functional-promise'
+import FP from 'functional-promises'
 ```
 
 ###### [Star `Functional Promises` on Github](https://github.com/functional-promises/functional-promises)
@@ -91,31 +91,30 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
 
 The **Functional Promises** library is a Fluent **Function Chaining Interface and Pattern.**
 
-
 **Core features:** Array Methods, Events, Array **AND Object** `FP.all()` Resolution, Re-usable Function Chains, Conditional/Branching Logic, Concurrency, Smart Error Handling.
 
 <code>FP</code> features seamless support between synchronous code, `async`/`await`, and native Promises. The core <i>Functional Composition</i> is powered by the <a href="#fp-chain"><code>FP.chain()</code></a> construct.
 
 **Why not simply use [library X]?**
 
-`FP`'s **un-minified source** is **only ~400 lines** of code.
-The **compressed+minified bundle** measures in at a humble **~4Kb**. The **minified bundle** weighs in around **15-20Kb** (using Webpack+Babel+Rollup+UglifyJS).
+`FP`'s **un-minified source** is **only ~370 lines** of code.
+The **compressed+minified bundle** weighs in at a humble **~3Kb**. The **non-gzipped bundle** weighs in around **10Kb** (using Webpack+Babel+Rollup+UglifyJS).
 
 <aside class="warning">
-  Note: <code>functional-promise</code> is not a <code>Promise</code> replacement. It uses the native <code>Promise</code> API.
+  Note: <code>functional-promises</code> is not a <code>Promise</code> replacement. It uses the native <code>Promise</code> API.
 </aside>
 
 ### Library Comparison
 
 | Library                     	                                    | Main deal | Files   | Lines of Code  | .min.js kB
 |------------------------------	                                    |-----------|---------: |--------------: |-------------------:
-| **Functional Promise v1.5.1**                                   	| Sync & Async Chains | 8 |           390	 | 16 Kb
+| **Functional Promise v1.6.3**                                   	| Sync & Async Chains | 8 |           376	 | 10 Kb / 3 Kb gzipped
 | [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       | Promises Replacement |        38 |         5,188	 | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	| Observables Chaining |     458 |        12,266  | 150 Kb
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	| \[Async\]Iterable Chaining |     521 |        12,366	 | 145 Kb
 
 
-`FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is about **1/9th** the size! However `IxJS`/`RxJS` feature a far larger API with 100's of methods.
+`FP` is roughly **1/30th** the lines of code in `IxJs`. And it's bundle size is about **1/9th** the size! However `IxJS`/`RxJS` features a far larger API with 100's of methods.
 
 BluebirdJS and FP have roughly the same number (and type) of API methods, yet `FP` is far less code.
 
@@ -843,7 +842,7 @@ Here we implement the interface `{ add(item), update(item) }` **using chained fu
   <b>It returns a re-usable function, built out of a sequence of smaller functions.</b>
 </aside>
 
-This is a key differentiator between `functional-promise` and other chaining libraries. No lockin.
+This is a key differentiator between `functional-promises` and other chaining libraries. No lockin.
 
 # &#160;&#160; Modifiers
 

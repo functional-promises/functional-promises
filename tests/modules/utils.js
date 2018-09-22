@@ -14,4 +14,3 @@ test('isPromiseLike', t => {
 test('flatten', t => {
   t.truthy(utils.isFunction(() => null))
 })
-
