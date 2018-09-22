@@ -11,6 +11,6 @@ test('isPromiseLike', t => {
   t.truthy(utils.isPromiseLike(Promise.resolve()) === true)
 })
 
-test('flatten', t => {
+test('isFunction', t => {
   t.truthy(utils.isFunction(() => null))
 })
