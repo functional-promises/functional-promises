@@ -7,7 +7,6 @@ test('flatten', t => {
 })
 
 test('isPromiseLike', t => {
-  console.log('utils', utils.isPromiseLike({then: () => null}))
   t.truthy(utils.isPromiseLike({then: () => null}) === true)
   t.truthy(utils.isPromiseLike(Promise.resolve()) === true)
 })

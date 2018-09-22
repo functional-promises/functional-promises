@@ -1,5 +1,5 @@
 const test = require('ava')
-const FP = require('../src')
+const FP = require('../src').default
 
 const fetch = require('./data/justsml.github')
 

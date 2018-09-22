@@ -1,5 +1,5 @@
 const test = require('ava')
-const FP = require('../src')
+const FP = require('../src').default
 const jsdom = require('jsdom')
 const EventEmitter = require('events')
 
@@ -35,11 +35,11 @@ test.cb('FP.chain().listen() DOM', t => {
   const listenChain = () => {
     const cleanupHandlers = []
     FP.chain()
-    .then(el => {
-      t.truthy(el)
-      t.end()
-    })
-    .listen(btn, 'click')
+      .then(el => {
+        t.truthy(el)
+        t.end()
+      })
+      .listen(btn, 'click')
     return {btn, cleanupHandlers}
   }
   Promise.resolve(listenChain())

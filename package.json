@@ -4,6 +4,10 @@
   "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: https://www.fpromises.io/",
   "esm": "auto",
   "ava": {
+    "files": [
+      "tests/**/*.js",
+      "!tests/data/**"
+    ],
     "require": [
       "esm",
       "babel-register"
@@ -33,7 +37,7 @@
   "homepage": "https://www.fpromises.io/",
   "scripts": {
     "start": "npm run build && webpack --watch",
-    "test": "ava --serial --verbose ${1:-tests/*.js}",
+    "test": "ava --serial --verbose ",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
     "build": "npm run build-dev && npm run build-live",

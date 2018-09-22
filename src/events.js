@@ -1,6 +1,6 @@
 import { FPInputError } from './modules/errors'
 
-export const listen = function(obj, ...eventNames) {
+export const listen = function listen(obj, ...eventNames) {
   if (typeof eventNames === 'string') eventNames = [eventNames]
   if (!obj[obj.addEventListener ? 'addEventListener' : 'on']) throw new FPInputError('Valid EventEmitter required.')
   // Gets callback to attach to the event handlers

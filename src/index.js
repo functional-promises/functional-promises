@@ -1,14 +1,17 @@
 import { FunctionalError } from './modules/errors'
 import utils from './modules/utils'
-import { chain, chainEnd } from './monads'
+import monads from './monads'
 import arrays from './arrays'
 import { listen } from './events'
-import { _thenIf, tapIf, thenIf } from './conditional'
+import conditional from './conditional'
 import promise from './promise'
+
 
 const { isFunction, flatten } = utils
 const { map, find, findIndex, filter, reduce } = arrays(FP)
-const {all, reject, delay, _delay} = promise(FP)
+const { all, reject, delay, _delay } = promise(FP)
+const { tapIf, thenIf, _thenIf } = conditional(FP)
+const { chain, chainEnd } = monads(FP)
 
 FP.prototype.all = all
 FP.prototype.map = map
