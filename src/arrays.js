@@ -1,5 +1,6 @@
-import { isEnumerable } from './modules/utils'
+import utils from './modules/utils'
 import { FPInputError, FunctionalError } from './modules/errors'
+const { isEnumerable } = utils
 
 export default function(FP) {
 
