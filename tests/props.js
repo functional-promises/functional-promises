@@ -1,5 +1,9 @@
 const test = require('ava')
-const FP = require('../src')
+const FP = require('../').default
+
+console.log(FP)
+console.log('FP.all', FP.all)
+console.log('FP.resolve', FP.resolve)
 
 test('FP.get(...keyNames)', t => FP
   .resolve({foo: 'bar', baz: 'woo'})

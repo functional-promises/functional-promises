@@ -1,3 +1,4 @@
+import FP from '../'
 import { isEnumerable } from './modules/utils'
 import { FPInputError, FunctionalError } from './modules/errors'
 
@@ -7,7 +8,6 @@ function find(callback) { return _find.call(this, callback).then(({ item }) => i
 function findIndex(callback) { return _find.call(this, callback).then(({ index }) => index) }
 
 function _find(iterable, callback) {
-  const FP = require('./index')
   if (this.steps) return this.addStep('_find', [...arguments])
   if (typeof iterable === 'function') {
     callback = iterable
@@ -30,7 +30,6 @@ function filter(iterable, callback) {
 }
 
 function reduce(iterable, reducer, initVal) {
-  const FP = require('./index')
   if (this.steps) return this.addStep('reduce', [...arguments])
   if (typeof iterable === 'function') {
     initVal = reducer
@@ -58,7 +57,6 @@ function reduce(iterable, reducer, initVal) {
 
 /*eslint max-statements: ["error", 60]*/
 function map(args, fn, options) {
-  const FP = require('./index')
   if (this.steps) return this.addStep('map', [...arguments])
   if (arguments.length === 1 && this && this._FP) {
     fn = args

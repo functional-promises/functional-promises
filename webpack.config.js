@@ -8,6 +8,8 @@ const config = module.exports = {
   devtool: dev ? 'cheap-inline-source-map' : undefined,
   entry: './src/index.js',
   output: {
+    library: 'FP',
+    libraryTarget: 'umd',
     pathinfo: true,
     // filename: path.join(__dirname, 'build', 'index.js'),
     path: path.resolve(__dirname, './dist'),

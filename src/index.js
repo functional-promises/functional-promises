@@ -6,7 +6,7 @@ import { listen } from './events'
 import { _thenIf, tapIf, thenIf } from './conditional'
 import { _delay, delay, reject, all as allPromises } from './promise'
 
-
+// FP.prototype.reso = resolve
 FP.prototype.all = allPromises
 FP.prototype.map = map
 FP.prototype.find = find
@@ -21,7 +21,7 @@ FP.prototype.delay = delay
 FP.prototype._delay = _delay
 FP.prototype.reject = reject
 
-// FP.default = FP
+FP.default = FP
 // export const all = allPromises
 
 FP.all = FP.prototype.all
@@ -33,7 +33,11 @@ FP.silent = limit => FP.resolve().silent(limit)
 FP.chain = chain
 FP.prototype.chainEnd = chainEnd
 FP.reject = FP.prototype.reject
+FP.resolve = resolve
 
+FP.promisify = promisify
+FP.promisifyAll = promisifyAll
+FP.unpack = unpack
 
 FP.prototype.addStep = function addStep(name, args) {
   if (this.steps) this.steps.push([name, this, args])
@@ -105,19 +109,19 @@ FP.prototype.tap = function tap(fn) {
   return FP.resolve(this._FP.promise.then(value => fn(value) ? value : value))
 }
 
-export const resolve = function resolve(value) {
+function resolve(value) {
   return new FP((resolve, reject) => {
     if (value && isFunction(value.then)) return value.then(resolve).catch(reject)
     resolve(value)
   })
 }
 
-export const promisify = function promisify(cb) {
+function promisify(cb) {
   return (...args) => new FP((yah, nah) =>
     cb.call(this, ...args, (err, res) => err ? nah(err) : yah(res)))
 }
 
-export const promisifyAll = function promisifyAll(obj) {
+function promisifyAll(obj) {
   if (!obj || !Object.getPrototypeOf(obj)) { throw new Error('Invalid Argument obj in promisifyAll(obj)') }
   return Object.getOwnPropertyNames(obj)
     .filter(key => typeof obj[key] === 'function')
@@ -127,7 +131,7 @@ export const promisifyAll = function promisifyAll(obj) {
     }, obj)
 }
 
-export const unpack = function unpack() {
+function unpack() {
   let resolve, reject, promise = new FP((yah, nah) => { resolve = yah; reject = nah })
   return { promise, resolve, reject }
 }
