@@ -1,6 +1,6 @@
 {
   "name": "functional-promises",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Fluent Composition Pipeline Promises API. See Complete Docs Here: https://www.fpromises.io/",
   "esm": "auto",
   "ava": {

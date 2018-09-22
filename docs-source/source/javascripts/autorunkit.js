@@ -94,7 +94,7 @@
     // load the runkit widget
     codeBlock.runkitNotebook = RunKit.createNotebook({
       element: placeholder,
-      preamble: 'import FP from \'functional-promise\';\nimport fetch from \'isomorphic-fetch\'\n\n',
+      preamble: 'const FP = require(\'functional-promise\').default;\nconst fetch = require(\'isomorphic-fetch\')\n\n',
       source: source,// + '\n',
       // minHeight: codeBox.height + 'px',
     })
