@@ -4,11 +4,13 @@ import { chain, chainEnd } from './monads'
 import arrays from './arrays'
 import { listen } from './events'
 import { _thenIf, tapIf, thenIf } from './conditional'
-import { _delay, delay, reject, all as allPromises } from './promise'
+import promise from './promise'
+
 const { isFunction, flatten } = utils
 const { map, find, findIndex, filter, reduce } = arrays(FP)
+const {all, reject, delay, _delay} = promise(FP)
 
-FP.prototype.all = allPromises
+FP.prototype.all = all
 FP.prototype.map = map
 FP.prototype.find = find
 FP.prototype.findIndex = findIndex
