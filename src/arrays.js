@@ -28,7 +28,7 @@ export default function(FP) {
       iterable = this._FP.promise
     }
 
-    return reduce(iterable, (acc, item) => Promise.resolve(callback(item)).then(x => (x ? acc.concat([item]) : acc)), [])
+    return reduce.call(this, iterable, (acc, item) => Promise.resolve(callback(item)).then(x => (x ? acc.concat([item]) : acc)), [])
   }
 
   function reduce(iterable, reducer, initVal) {

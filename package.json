@@ -24,7 +24,7 @@
       ]
     }
   },
-  "main": "./dist/functional-promise.js",
+  "main": "./dist/functional-promise.min.js",
   "module": "./src/index.js",
   "browser": "./dist/functional-promise.min.js",
   "repository": {
