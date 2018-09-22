@@ -380,11 +380,11 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='functional-promises'>Functional Promises</h1><pre class="highlight sh tab-shell"><code><span class="c"># Install</span>
-npm install functional-promise
+npm install functional-promises
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">//// Import into your app:</span>
-<span class="kr">const</span> <span class="nx">FP</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'functional-promise'</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">FP</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'functional-promises'</span><span class="p">).</span><span class="k">default</span>
 <span class="c1">//  OR:</span>
-<span class="kr">import</span> <span class="nx">FP</span> <span class="nx">from</span> <span class="s1">'functional-promise'</span>
+<span class="kr">import</span> <span class="nx">FP</span> <span class="nx">from</span> <span class="s1">'functional-promises'</span>
 </code></pre><h6 id='star-functional-promises-on-github'><a href="https://github.com/functional-promises/functional-promises">Star <code>Functional Promises</code> on Github</a></h6>
 <blockquote>
 <p style='text-align: center;'><strong style='font-size: 24px;'>Examples &amp; Awesome Shit</strong></p>
@@ -447,11 +447,11 @@ npm install functional-promise
 
 <p><strong>Why not simply use [library X]?</strong></p>
 
-<p><code>FP</code>&#39;s <strong>un-minified source</strong> is <strong>only ~400 lines</strong> of code.
-The <strong>compressed+minified bundle</strong> measures in at a humble <strong>~4Kb</strong>. The <strong>minified bundle</strong> weighs in around <strong>15-20Kb</strong> (using Webpack+Babel+Rollup+UglifyJS).</p>
+<p><code>FP</code>&#39;s <strong>un-minified source</strong> is <strong>only ~370 lines</strong> of code.
+The <strong>compressed+minified bundle</strong> weighs in at a humble <strong>~3Kb</strong>. The <strong>non-gzipped bundle</strong> weighs in around <strong>10Kb</strong> (using Webpack+Babel+Rollup+UglifyJS).</p>
 
 <aside class="warning">
-  Note: <code>functional-promise</code> is not a <code>Promise</code> replacement. It uses the native <code>Promise</code> API.
+  Note: <code>functional-promises</code> is not a <code>Promise</code> replacement. It uses the native <code>Promise</code> API.
 </aside>
 <h3 id='library-comparison'>Library Comparison</h3>
 <table><thead>
@@ -464,11 +464,11 @@ The <strong>compressed+minified bundle</strong> measures in at a humble <strong>
 </tr>
 </thead><tbody>
 <tr>
-<td><strong>Functional Promise v1.6.0</strong></td>
+<td><strong>Functional Promise v1.6.3</strong></td>
 <td>Sync &amp; Async Chains</td>
 <td style="text-align: right">8</td>
-<td style="text-align: right">390</td>
-<td style="text-align: right">16 Kb</td>
+<td style="text-align: right">376</td>
+<td style="text-align: right">10 Kb / 3 Kb gzipped</td>
 </tr>
 <tr>
 <td><a href="https://github.com/petkaantonov/bluebird">Bluebird</a> v3.5.1</td>
@@ -493,7 +493,7 @@ The <strong>compressed+minified bundle</strong> measures in at a humble <strong>
 </tr>
 </tbody></table>
 
-<p><code>FP</code> is roughly <strong>1/30th</strong> the lines of code in <code>IxJs</code>. And it&#39;s bundle size is about <strong>1/9th</strong> the size! However <code>IxJS</code>/<code>RxJS</code> feature a far larger API with 100&#39;s of methods.</p>
+<p><code>FP</code> is roughly <strong>1/30th</strong> the lines of code in <code>IxJs</code>. And it&#39;s bundle size is about <strong>1/9th</strong> the size! However <code>IxJS</code>/<code>RxJS</code> features a far larger API with 100&#39;s of methods.</p>
 
 <p>BluebirdJS and FP have roughly the same number (and type) of API methods, yet <code>FP</code> is far less code.</p>
 
@@ -1123,7 +1123,7 @@ request.postAsync(url, data)
   <b>It returns a re-usable function, built out of a sequence of smaller functions.</b>
 </aside>
 
-<p>This is a key differentiator between <code>functional-promise</code> and other chaining libraries. No lockin.</p>
+<p>This is a key differentiator between <code>functional-promises</code> and other chaining libraries. No lockin.</p>
 <h1 id='modifiers'><small>&#160;&#160; Modifiers</small></h1><h2 id='fp-quiet'><code>FP.quiet()</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">quiet</span><span class="p">()</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="mi">2</span> <span class="o">/</span> <span class="nx">x</span><span class="p">)</span>

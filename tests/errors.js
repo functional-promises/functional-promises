@@ -1,5 +1,5 @@
 const test = require('ava').default
-const FP = require('../src')
+const FP = require('../src').default
 // const FP = require('../index.d.ts')
 const chalk = require('chalk').default
 
@@ -128,11 +128,12 @@ test('Can override .catch() w/ .chain().quiet()', t => {
     .map(() => FP.reject(new Error('Fail!')))
     .chainEnd()
 
-  return Promise.all([pipeline([1])
-    .then(() => t.pass('Silenced err correctly!'))
-    .catch(() => t.fail('Error failed .quiet()')),
-  pipeline([1, 2, 3 ,4])
-    .then(() => t.fail('FAIL: Should have fired a .catch()!'))
-    .catch(() => t.pass('Success: Exceeded .quiet() error limit'))
+  return Promise.all([
+    pipeline([1])
+      .then(() => t.pass('Silenced err correctly!'))
+      .catch(() => t.fail('Error failed .quiet()')),
+    pipeline([1, 2, 3 ,4])
+      .then(() => t.fail('FAIL: Should have fired a .catch()!'))
+      .catch(() => t.pass('Success: Exceeded .quiet() error limit'))
   ])
 })

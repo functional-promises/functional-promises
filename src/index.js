@@ -1,25 +1,34 @@
-const { FunctionalError } = require('./modules/errors')
-const { isFunction, flatten } = require('./modules/utils')
-const { chain, chainEnd } = require('./monads')
-const FP = FunctionalPromises
+import { FunctionalError } from './modules/errors'
+import utils from './modules/utils'
+import monads from './monads'
+import arrays from './arrays'
+import { listen } from './events'
+import conditional from './conditional'
+import promise from './promise'
 
-FP.default = FP
 
-Object.assign(FP.prototype,
-  require('./arrays'),
-  require('./events'),
-  require('./conditional'),
-  require('./promise'))
+const { isFunction, flatten } = utils
+const { map, find, findIndex, filter, reduce } = arrays(FP)
+const { all, reject, delay, _delay } = promise(FP)
+const { tapIf, thenIf, _thenIf } = conditional(FP)
+const { chain, chainEnd } = monads(FP)
 
-function FunctionalPromises(resolveRejectCB) {
-  if (!(this instanceof FunctionalPromises)) { return new FunctionalPromises(resolveRejectCB) }
-  if (arguments.length !== 1) throw new Error('FunctionalPromises constructor only accepts 1 callback argument')
-  this._FP = {
-    errors:           { limit: 0, count: 0 },
-    promise:          new Promise(resolveRejectCB),
-    concurrencyLimit: 4,
-  }
-}
+FP.prototype.all = all
+FP.prototype.map = map
+FP.prototype.find = find
+FP.prototype.findIndex = findIndex
+FP.prototype.filter = filter
+FP.prototype.reduce = reduce
+FP.prototype.listen = listen
+FP.prototype.tapIf = tapIf
+FP.prototype.thenIf = thenIf
+FP.prototype._thenIf = _thenIf
+FP.prototype.delay = delay
+FP.prototype._delay = _delay
+FP.prototype.reject = reject
+
+// FP.default = FP
+// export const all = allPromises
 
 FP.all = FP.prototype.all
 FP.thenIf = FP.prototype._thenIf
@@ -30,7 +39,11 @@ FP.silent = limit => FP.resolve().silent(limit)
 FP.chain = chain
 FP.prototype.chainEnd = chainEnd
 FP.reject = FP.prototype.reject
+FP.resolve = resolve
 
+FP.promisify = promisify
+FP.promisifyAll = promisifyAll
+FP.unpack = unpack
 
 FP.prototype.addStep = function addStep(name, args) {
   if (this.steps) this.steps.push([name, this, args])
@@ -102,19 +115,19 @@ FP.prototype.tap = function tap(fn) {
   return FP.resolve(this._FP.promise.then(value => fn(value) ? value : value))
 }
 
-FP.resolve = FP.prototype.resolve = function resolve(value) {
+function resolve(value) {
   return new FP((resolve, reject) => {
     if (value && isFunction(value.then)) return value.then(resolve).catch(reject)
     resolve(value)
   })
 }
 
-FP.promisify = function promisify(cb) {
+function promisify(cb) {
   return (...args) => new FP((yah, nah) =>
     cb.call(this, ...args, (err, res) => err ? nah(err) : yah(res)))
 }
 
-FP.promisifyAll = function promisifyAll(obj) {
+function promisifyAll(obj) {
   if (!obj || !Object.getPrototypeOf(obj)) { throw new Error('Invalid Argument obj in promisifyAll(obj)') }
   return Object.getOwnPropertyNames(obj)
     .filter(key => typeof obj[key] === 'function')
@@ -124,14 +137,22 @@ FP.promisifyAll = function promisifyAll(obj) {
     }, obj)
 }
 
-FP.unpack = function unpack() {
+function unpack() {
   let resolve, reject, promise = new FP((yah, nah) => { resolve = yah; reject = nah })
   return { promise, resolve, reject }
 }
 
-module.exports = FunctionalPromises
 
-if (process && process.on) {
-  // process.on('uncaughtException', e => console.error('FPromises: FATAL EXCEPTION: uncaughtException', e))
-  process.on('unhandledRejection', e => console.error('FPromises: FATAL ERROR: unhandledRejection', e))
+export default function FP(resolveRejectCB) {
+  if (!(this instanceof FP)) { return new FP(resolveRejectCB) }
+  if (arguments.length !== 1) throw new Error('FunctionalPromises constructor only accepts 1 callback argument')
+  this._FP = {
+    errors:           { limit: 0, count: 0 },
+    promise:          new Promise(resolveRejectCB),
+    concurrencyLimit: 4,
+  }
 }
+// if (process && process.on) {
+//   // process.on('uncaughtException', e => console.error('FPromises: FATAL EXCEPTION: uncaughtException', e))
+//   process.on('unhandledRejection', e => console.error('FPromises: FATAL ERROR: unhandledRejection', e))
+// }

@@ -1,4 +1,3 @@
-const test = require('ava')
 const data = {
   "login": "justsml",
   "id": 397632,

@@ -1,5 +1,5 @@
-const test = require('ava').default
-const FP = require('../src')
+import test from 'ava'
+import FP from '../'
 
 test('FP.map(x * 2)', t => {
   return FP.resolve([1, 2, 3, 4, 5])

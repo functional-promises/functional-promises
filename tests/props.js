@@ -1,5 +1,5 @@
 const test = require('ava')
-const FP = require('../src')
+const FP = require('../').default
 
 test('FP.get(...keyNames)', t => FP
   .resolve({foo: 'bar', baz: 'woo'})

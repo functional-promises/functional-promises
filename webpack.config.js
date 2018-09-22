@@ -8,6 +8,8 @@ const config = module.exports = {
   devtool: dev ? 'cheap-inline-source-map' : undefined,
   entry: './src/index.js',
   output: {
+    library: 'FP',
+    libraryTarget: 'umd',
     pathinfo: true,
     // filename: path.join(__dirname, 'build', 'index.js'),
     path: path.resolve(__dirname, './dist'),
@@ -18,8 +20,8 @@ const config = module.exports = {
       {
         test: /\.js$/,
         loader: webpackStripLoader
-          .loader('debug', 'console.log', 'console.warn', 'console.error')
-      }
+          .loader('debug', 'console.log', 'console.warn', 'console.error'),
+      },
     ],
     rules: [
       // {

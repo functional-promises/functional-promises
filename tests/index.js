@@ -1,6 +1,6 @@
 const path = require('path')
 const test = require('ava')
-const FP = require('../src')
+const FP = require('../src').default
 
 test('FP.resolve(true)', t => {
   return FP.resolve(true)
@@ -17,7 +17,7 @@ test('FP.all(Object)', t => {
     one: Promise.resolve(1),
     two: Promise.resolve(2)
   })
-  .then(results => t.deepEqual(results, {one: 1, two: 2}))
+    .then(results => t.deepEqual(results, {one: 1, two: 2}))
 })
 
 test('FP.all(Array)', t => {
@@ -25,7 +25,7 @@ test('FP.all(Array)', t => {
     Promise.resolve(1),
     Promise.resolve(2)
   ])
-  .then(results => t.deepEqual(results, [1, 2]))
+    .then(results => t.deepEqual(results, [1, 2]))
 })
 
 test('FP.promisify(fn)', t => {
@@ -81,24 +81,24 @@ test('FP.delay()', t => {
   const started = Date.now()
   // console.log('FP.resolve().delay(50)', FP.resolve().delay(50))
   return FP.resolve([1, 2, 3])
-  .concurrency(1)
-  .map(num => FP.resolve(Date.now()).delay(5))
-  .then(timestamps => {
+    .concurrency(1)
+    .map(num => FP.resolve(Date.now()).delay(5))
+    .then(timestamps => {
     // console.log('timestamps', timestamps)
-    t.truthy(Date.now() - started >= 15)
-  })
+      t.truthy(Date.now() - started >= 15)
+    })
 })
 
 // TODO: Re-add static method support
 test('FP.delay() - static usage', t => {
   const started = Date.now()
   return FP.resolve([1, 2, 3])
-  .concurrency(1)
-  .map(num => FP.delay(5).then(() => Date.now()))
-  .then(timestamps => {
+    .concurrency(1)
+    .map(num => FP.delay(5).then(() => Date.now()))
+    .then(timestamps => {
     // console.log('timestamps', timestamps)
-    t.truthy(Date.now() - started >= 15)
-  })
+      t.truthy(Date.now() - started >= 15)
+    })
 })
 
 test('FP.delay() with .concurrency(Infinity)', t => {

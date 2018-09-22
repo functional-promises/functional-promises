@@ -1,4 +1,4 @@
-class FunctionalError extends Error {
+export class FunctionalError extends Error {
   constructor(msg, options) {
     if (typeof msg === 'object') {
       options = msg
@@ -16,17 +16,8 @@ class FunctionalError extends Error {
     Error.captureStackTrace(this, this.constructor)
   }
 }
-class FunctionalUserError extends FunctionalError {}
-class FPUnexpectedError extends FunctionalError {}
-class FPInputError extends FunctionalError {}
-class FPSoftError extends FunctionalError {}
-class FPTimeout extends FunctionalError {}
-
-module.exports = {
-  FunctionalError,
-  FunctionalUserError,
-  FPUnexpectedError,
-  FPInputError,
-  FPSoftError,
-  FPTimeout,
-}
+export class FunctionalUserError extends FunctionalError {}
+export class FPUnexpectedError extends FunctionalError {}
+export class FPInputError extends FunctionalError {}
+export class FPSoftError extends FunctionalError {}
+export class FPTimeout extends FunctionalError {}
