@@ -1,5 +1,5 @@
 const utils = {
-  isPromiseLike(p) { return p && typeof p.then === 'function' },
+  isPromiseLike(p) { return !!(p && typeof p.then === 'function') },
   isFunction(fn) { return typeof fn === 'function' },
   isEnumerable(list) { return list && Array.isArray(list) || typeof list[Symbol.iterator] === 'function' },
 
