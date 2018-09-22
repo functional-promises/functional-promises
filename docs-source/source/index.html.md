@@ -131,7 +131,6 @@ All `.then()`-powered methods are listed first.
         * [`.map(fn)`](https://www.fpromises.io/#fp-map)
         * [`.filter(fn)`](https://www.fpromises.io/#fp-filter)
         * [`.find(fn)`](https://www.fpromises.io/#fp-find)
-        * [`.findIndex(fn)`](https://www.fpromises.io/#fp-findindex)
         * [`.some(fn)`](https://www.fpromises.io/#fp-some)
         * [`.none(fn)`](https://www.fpromises.io/#fp-none)
         * [`.series(fn)`](https://www.fpromises.io/#fp-series)
@@ -186,9 +185,9 @@ const rawData = [-99, null, undefined, NaN, 0, '99']
 FP.resolve(rawData)
   .filter(x => x)         // truthiness check = [-99, "99"]
   .map(x => parseInt(x))  // convert to numeric [-99 99]
-  .findIndex(n => n >= 1) // is gte 1, idx = 1
-  .then(index => {
-    console.log(index)    // 0
+  .find(n => n >= 1) // is gte 1, idx = 1
+  .then(num => {
+    console.log(num)    // 99
   })
 ```
 
@@ -197,17 +196,18 @@ FP.resolve(rawData)
 ```javascript
 const rawData = [-99, null, undefined, NaN, 0, '99']
 
+// ... Compare w/ Native Array Method Usage:
 rawData
   .filter(x => x)         // truthiness check = [-99, "99"]
   .map(x => parseInt(x))  // convert to numeric [-99, 99]
-  .findIndex(n => n >= 1) // <^ Native Array Methods ^^
+  .find(n => n >= 1)
 ```
 
 Any `.then()` which would handle an array, may instead use one of the `FP` array methods.
 
 1. map
 1. filter
-1. find/findIndex
+1. find
 1. some
 1. none
 
@@ -276,20 +276,6 @@ FP.resolve([1, 2, 3, 4, 5])
 Returns first item to return truthy for `fn(item)`
 
 If no match is found it will return `undefined`.
-
-## `FP.findIndex(iterable, fn)`
-
-```javascript
-FP.resolve([1, 2, 3, 4, 5])
-  .findIndex(x => x % 2 === 0)
-  .then(results => {
-    console.log(results) // 1
-  })
-```
-
-Returns first **item's index** to return truthy for `fn(item)`
-
-If no match is found it will return `-1`.
 
 ## `FP.some(iterable, fn)`
 

@@ -250,9 +250,6 @@
                     <a href="#fp-find" class="toc-h2 toc-link" data-title="<code>FP.find(iterable, fn)</code>"><code>FP.find(iterable, fn)</code></a>
                   </li>
                   <li>
-                    <a href="#fp-findindex" class="toc-h2 toc-link" data-title="<code>FP.findIndex(iterable, fn)</code>"><code>FP.findIndex(iterable, fn)</code></a>
-                  </li>
-                  <li>
                     <a href="#fp-some" class="toc-h2 toc-link" data-title="<code>FP.some(iterable, fn)</code>"><code>FP.some(iterable, fn)</code></a>
                   </li>
                   <li>
@@ -513,7 +510,6 @@ The <strong>compressed+minified bundle</strong> weighs in at a humble <strong>~3
 <li><a href="https://www.fpromises.io/#fp-map"><code>.map(fn)</code></a></li>
 <li><a href="https://www.fpromises.io/#fp-filter"><code>.filter(fn)</code></a></li>
 <li><a href="https://www.fpromises.io/#fp-find"><code>.find(fn)</code></a></li>
-<li><a href="https://www.fpromises.io/#fp-findindex"><code>.findIndex(fn)</code></a></li>
 <li><a href="https://www.fpromises.io/#fp-some"><code>.some(fn)</code></a></li>
 <li><a href="https://www.fpromises.io/#fp-none"><code>.none(fn)</code></a></li>
 <li><a href="https://www.fpromises.io/#fp-series"><code>.series(fn)</code></a></li>
@@ -593,9 +589,9 @@ The <strong>compressed+minified bundle</strong> weighs in at a humble <strong>~3
 <span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">rawData</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span><span class="p">)</span>         <span class="c1">// truthiness check = [-99, "99"]</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">x</span><span class="p">))</span>  <span class="c1">// convert to numeric [-99 99]</span>
-  <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// is gte 1, idx = 1</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">index</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span>    <span class="c1">// 0</span>
+  <span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// is gte 1, idx = 1</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">num</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span>    <span class="c1">// 99</span>
   <span class="p">})</span>
 </code></pre>
 <blockquote>
@@ -603,17 +599,18 @@ The <strong>compressed+minified bundle</strong> weighs in at a humble <strong>~3
 </blockquote>
 <pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">rawData</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">99</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="kc">NaN</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'99'</span><span class="p">]</span>
 
+<span class="c1">// ... Compare w/ Native Array Method Usage:</span>
 <span class="nx">rawData</span>
   <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span><span class="p">)</span>         <span class="c1">// truthiness check = [-99, "99"]</span>
   <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">x</span><span class="p">))</span>  <span class="c1">// convert to numeric [-99, 99]</span>
-  <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// &lt;^ Native Array Methods ^^</span>
+  <span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span>
 </code></pre>
 <p>Any <code>.then()</code> which would handle an array, may instead use one of the <code>FP</code> array methods.</p>
 
 <ol>
 <li>map</li>
 <li>filter</li>
-<li>find/findIndex</li>
+<li>find</li>
 <li>some</li>
 <li>none</li>
 </ol>
@@ -665,15 +662,6 @@ The <strong>compressed+minified bundle</strong> weighs in at a humble <strong>~3
 <p>Returns first item to return truthy for <code>fn(item)</code></p>
 
 <p>If no match is found it will return <code>undefined</code>.</p>
-<h2 id='fp-findindex'><code>FP.findIndex(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
-  <span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="c1">// 1</span>
-  <span class="p">})</span>
-</code></pre>
-<p>Returns first <strong>item&#39;s index</strong> to return truthy for <code>fn(item)</code></p>
-
-<p>If no match is found it will return <code>-1</code>.</p>
 <h2 id='fp-some'><code>FP.some(iterable, fn)</code></h2><pre class="highlight javascript tab-javascript"><code><span class="nx">FP</span><span class="p">.</span><span class="nx">resolve</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
   <span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">results</span> <span class="o">=&gt;</span> <span class="p">{</span>
