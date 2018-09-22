@@ -9,7 +9,6 @@
       "!tests/data/**"
     ],
     "require": [
-      "esm",
       "babel-register"
     ],
     "babel": {
@@ -55,9 +54,7 @@
     "url": "http://www.danlevy.net/"
   },
   "license": "MIT",
-  "dependencies": {
-    "esm": "^3.0.84"
-  },
+  "dependencies": {},
   "devDependencies": {
     "ava": "^0.25.0",
     "babel-loader": "^7.1.4",
