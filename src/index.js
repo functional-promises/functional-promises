@@ -1,12 +1,13 @@
 import { FunctionalError } from './modules/errors'
-import { isFunction, flatten } from './modules/utils'
+import utils from './modules/utils'
 import { chain, chainEnd } from './monads'
-import { map, find, findIndex, filter, reduce } from './arrays'
+import arrays from './arrays'
 import { listen } from './events'
 import { _thenIf, tapIf, thenIf } from './conditional'
 import { _delay, delay, reject, all as allPromises } from './promise'
+const { isFunction, flatten } = utils
+const { map, find, findIndex, filter, reduce } = arrays(FP)
 
-// FP.prototype.reso = resolve
 FP.prototype.all = allPromises
 FP.prototype.map = map
 FP.prototype.find = find
@@ -21,7 +22,7 @@ FP.prototype.delay = delay
 FP.prototype._delay = _delay
 FP.prototype.reject = reject
 
-FP.default = FP
+// FP.default = FP
 // export const all = allPromises
 
 FP.all = FP.prototype.all
