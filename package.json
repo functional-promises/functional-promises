@@ -27,9 +27,11 @@
       ]
     }
   },
+  "typings": "./index.d.ts",
   "main": "./dist/functional-promise.min.js",
   "module": "./src/index.js",
   "browser": "./dist/functional-promise.min.js",
+  "unpkg": "./dist/functional-promise.min.js",
   "repository": {
     "url": "https://github.com/functional-promises/functional-promises.git"
   },
