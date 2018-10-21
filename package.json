@@ -76,7 +76,7 @@
     "rollup-plugin-commonjs": "^8.2.6",
     "strip-loader": "^0.1.2",
     "tape": "^4.9.0",
-    "webpack": "^3.10.0",
+    "webpack": "^4.20.2",
     "webpack-rollup-loader": "^0.7.1"
   }
 }
