@@ -8,7 +8,7 @@ import promise from './promise'
 
 
 const { isFunction, flatten } = utils
-const { map, find, findIndex, filter, reduce } = arrays(FP)
+const { map, find, findIndex, filter, flatMap, reduce } = arrays(FP)
 const { all, reject, delay, _delay } = promise(FP)
 const { tapIf, thenIf, _thenIf } = conditional(FP)
 const { chain, chainEnd } = monads(FP)
@@ -18,6 +18,7 @@ FP.prototype.map = map
 FP.prototype.find = find
 FP.prototype.findIndex = findIndex
 FP.prototype.filter = filter
+FP.prototype.flatMap = flatMap
 FP.prototype.reduce = reduce
 FP.prototype.listen = listen
 FP.prototype.tapIf = tapIf

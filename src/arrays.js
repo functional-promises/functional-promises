@@ -4,7 +4,7 @@ const { isEnumerable } = utils
 
 export default function(FP) {
 
-  return { map, find, findIndex, filter, reduce }
+  return { map, find, findIndex, filter, flatMap, reduce }
 
   function find(callback) { return _find.call(this, callback).then(({ item }) => item) }
   function findIndex(callback) { return _find.call(this, callback).then(({ index }) => index) }
@@ -20,6 +20,19 @@ export default function(FP) {
       .filter(callback)
       .then((results) => results[0] != undefined ? { item: results[0], index: results.indexOf(results[0]) } : { item: undefined, index: -1 })
   }
+  
+  function flatMap(iterable, callback) {
+    if (this.steps) return this.addStep('flatMap', [...arguments])
+    if (typeof iterable === 'function') {
+      callback = iterable
+      iterable = this._FP.promise
+    }
+    
+    return FP.resolve(iterable)
+      .map(callback)
+      .reduce((acc, arr) => acc.concat(...arr), [])
+  }
+
 
   function filter(iterable, callback) {
     if (this.steps) return this.addStep('filter', [...arguments])
@@ -56,7 +69,7 @@ export default function(FP) {
       })
     })
   }
-
+  
   /*eslint max-statements: ["error", 60]*/
   function map(args, fn, options) {
     if (this.steps) return this.addStep('map', [...arguments])

@@ -28,6 +28,30 @@ test('[...Promise].map(x * 4)', t => {
     })
 })
 
+test('FP.flatMap(x * 2)', t => {
+  return FP.resolve([[1, 2], [3, 4]])
+    .flatMap(x => x)
+    .then(results => {
+      t.deepEqual(results, [1, 2, 3, 4])
+    })
+})
+
+test('[...Promise].flatMap(f(x) * 2)', t => {
+  return FP.resolve([FP.resolve([1, 2]), FP.resolve([3, 4])])
+    .flatMap(x => x)
+    .then(results => {
+      t.deepEqual(results, [1, 2, 3, 4])
+    })
+})
+
+test('FP.flatMap(f(x) * 2)', t => {
+  return FP.resolve([1, 3])
+    .flatMap(x => [x, x+1])
+    .then(results => {
+      t.deepEqual(results, [1, 2, 3, 4])
+    })
+})
+
 test('FP.reduce(sum)', t => {
   return FP.resolve([1, 2, 3, 4, 5])
     .reduce((total, n) => total + n, 0)
