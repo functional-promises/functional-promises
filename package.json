@@ -44,7 +44,6 @@
     "build": "npm run build-dev && npm run build-live",
     "build-live": "NODE_ENV=production webpack && minify dist/functional-promise.min.js -d dist/",
     "build-dev": "NODE_ENV=development webpack",
-    "postbuild": "./misc/compression-report.sh",
     "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",
     "deploy": "npm run version-bump-revision && npm run build && npm run docs-build && npm run test && npm run publish",
     "version-bump-revision": "node ./misc/package-version-manager.js 0.0.1",
