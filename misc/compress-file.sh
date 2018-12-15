@@ -56,9 +56,10 @@ function printMarkdown {
 }
 
 
-getFileSizes
 
 compress
+
+getFileSizes
 
 if [ "$output_mode" == "yaml" ]; then
   printYaml
