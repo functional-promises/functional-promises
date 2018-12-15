@@ -4,6 +4,7 @@ import commonjs from 'rollup-plugin-commonjs'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import { sizeSnapshot } from 'rollup-plugin-size-snapshot'
 import { uglify } from 'rollup-plugin-uglify'
+import { terser } from 'rollup-plugin-terser'
 
 import pkg from './package.json'
 
@@ -51,6 +52,20 @@ const esm = [
       sizeSnapshot(),
     ],
   },
+  {
+    input,
+    output: { file: `dist/esm.min.js`, format: 'esm' },
+    external,
+    plugins: [
+      babel({
+        exclude: /node_modules/,
+        runtimeHelpers: true,
+        plugins: [['@babel/transform-runtime', { useESModules: true }]],
+      }),
+      sizeSnapshot(),
+      terser(),
+    ],
+  }
 ]
 
 

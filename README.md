@@ -4,7 +4,7 @@
 [![GitHub package version](https://img.shields.io/github/package-json/v/functional-promises/functional-promises.svg?style=flat)](https://github.com/functional-promises/functional-promises)
 [![GitHub stars](https://img.shields.io/github/stars/functional-promises/functional-promises.svg?label=Stars&style=flat)](https://github.com/functional-promises/functional-promises)
 
-# [Updated Documentation: fpromises.io](http://www.fpromises.io/)
+# [Updated Documentation: fpromises.io](https://www.fpromises.io/)
 
 [![New Docs](docs-source/source/images/FunctionalPromises-Docs-Upgraded-960w.gif?raw=true)](http://www.fpromises.io/)
 
