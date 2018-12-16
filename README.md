@@ -38,7 +38,7 @@ LoC #'s included because a smaller surface === fewer places bugs can hide.
 
 | Library                                                       | Main deal                  | Files     | Lines of Code  | .min.js kB
 |------------------------------                                 |-----------                 |---------: |--------------: |-------------------:
-| **Functional Promise v1.5.3**                                 | Sync & Async Chains        |         8 |           375  | 16 Kb (4Kb gzip)
+| **Functional Promise v1.8.0**                                 | Sync & Async Chains        |         8 |           375  | 7 Kb (1.7Kb gzip)
 | [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1   | Promises Replacement       |        38 |         5,188  | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6              | Observables Chaining       |       458 |        12,266  | 150 Kb
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4              | \[Async\]Iterable Chaining |       521 |        12,366  | 145 Kb

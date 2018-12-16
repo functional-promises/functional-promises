@@ -326,7 +326,7 @@
         };
 
         innerValues.then(function (items) {
-          args = items.concat();
+          args = [].concat(items);
           if (!isEnumerable(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'));
 
           var complete = function complete() {
