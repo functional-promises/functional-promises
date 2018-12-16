@@ -1,5 +1,5 @@
 const test = require('ava').default
-const FP = require('../src').default
+const FP = require('../')
 // const FP = require('../index.d.ts')
 const chalk = require('chalk').default
 

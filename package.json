@@ -4,28 +4,25 @@
   "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
   "esm": "auto",
   "ava": {
+    "babel": {
+      "testOptions": {
+        "presets": [
+          [
+            "module:ava/stage-4",
+            {
+              "modules": false
+            }
+          ]
+        ]
+      }
+    },
     "files": [
       "tests/**/*.js",
       "!tests/data/**"
     ],
     "require": [
-      "babel-register"
-    ],
-    "babel": {
-      "presets": [
-        [
-          "env",
-          {
-            "debug": false,
-            "modules": false,
-            "useBuiltIns": true,
-            "targets": {
-              "node": "6"
-            }
-          }
-        ]
-      ]
-    }
+      "esm"
+    ]
   },
   "typings": "./index.d.ts",
   "main": "./index.js",
@@ -54,12 +51,14 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@ava/babel-preset-stage-4": "^2.0.0",
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.2.1",
     "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/preset-env": "^7.2.0",
     "@babel/preset-react": "^7.0.0",
-    "ava": "^0.25.0",
+    "@babel/register": "^7.0.0",
+    "ava": "^1.0.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
@@ -70,6 +69,7 @@
     "eslint": "^5.7.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-react": "^7.9.1",
+    "esm": "^3.0.84",
     "jsdom": "^13.1.0",
     "rollup": "^0.67.4",
     "rollup-loader": "^0.3.0",
@@ -81,6 +81,7 @@
     "rollup-plugin-terser": "^3.0.0",
     "rollup-plugin-uglify": "^6.0.0",
     "strip-loader": "^0.1.2",
-    "tape": "^4.9.0"
+    "tape": "^4.9.0",
+    "webpack": "^4.27.1"
   }
 }

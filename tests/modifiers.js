@@ -1,5 +1,5 @@
 const test = require('ava')
-const FP = require('../src').default
+const FP = require('../')
 
 test('FP.concurrency()', t => {
   const squareAndFormatDecimal = FP

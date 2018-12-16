@@ -11,9 +11,12 @@ import pkg from './package.json'
 const input = 'src/index.js'
 const globalName = 'FP'
 
+console.log('PATHS:', require.main.paths)
+
 function external(id) {
-  console.log('external:', id)
-  return id !== 'src/index.js' && !id.startsWith('./')// && !id.startsWith('.')
+  const isExt = id !== 'src/index.js' && !id.startsWith('./') && !id.startsWith('/')
+  console.log('external:', isExt, id)
+  return isExt
 }
 
 const cjs = [
@@ -49,7 +52,7 @@ const esm = [
         runtimeHelpers: true,
         plugins: [['@babel/transform-runtime', { useESModules: true }]],
       }),
-      sizeSnapshot(),
+      // sizeSnapshot(),
     ],
   },
   {
@@ -62,8 +65,8 @@ const esm = [
         runtimeHelpers: true,
         plugins: [['@babel/transform-runtime', { useESModules: true }]],
       }),
-      sizeSnapshot(),
-      terser(),
+      // sizeSnapshot(),
+      // terser(),
     ],
   }
 ]
@@ -76,7 +79,9 @@ const umd = [
       file: `dist/umd.js`,
       format: 'umd',
       name: globalName,
-      // globals,
+      globals: {
+        [globalName]: 'FP'
+      },
     },
     // external: Object.keys(globals),
     plugins: [
@@ -87,13 +92,15 @@ const umd = [
       }),
       nodeResolve(),
       commonjs({
+
         include: /node_modules/,
         namedExports: {
+          // './modules/errors': ['FunctionalError', 'FPInputError' ]
           // 'node_modules/react-is/index.js': ['isValidElementType'],
         },
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
-      sizeSnapshot(),
+      // sizeSnapshot(),
     ],
   },
   {
@@ -102,7 +109,9 @@ const umd = [
       file: `dist/umd.min.js`,
       format: 'umd',
       name: globalName,
-      // globals,
+      globals: {
+        [globalName]: 'FP'
+      },
     },
     // external: Object.keys(globals),
     plugins: [
@@ -115,11 +124,12 @@ const umd = [
       commonjs({
         include: /node_modules/,
         namedExports: {
+          // './modules/errors': ['FunctionalError', 'FPInputError' ]
           // 'node_modules/react-is/index.js': ['isValidElementType'],
         },
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
-      sizeSnapshot(),
+      // sizeSnapshot(),
       uglify(),
     ],
   },
