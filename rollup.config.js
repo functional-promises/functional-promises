@@ -13,11 +13,15 @@ const globalName = 'FP'
 
 console.log('PATHS:', require.main.paths)
 
+// function external(id) {
+//   const isExt = id !== 'src/index.js' && !id.startsWith('./') && !id.startsWith('/')
+//   console.log('external:', isExt, id)
+//   return isExt
+// }
 function external(id) {
-  const isExt = id !== 'src/index.js' && !id.startsWith('./') && !id.startsWith('/')
-  console.log('external:', isExt, id)
-  return isExt
+  return id in pkg.devDependencies || id.startsWith('@babel/runtime');
 }
+
 
 const cjs = [
   {
@@ -118,6 +122,7 @@ const umd = [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
+
         plugins: [['@babel/transform-runtime', { useESModules: true }]],
       }),
       nodeResolve(),
