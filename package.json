@@ -1,6 +1,6 @@
 {
   "name": "functional-promises",
-  "version": "1.7.92",
+  "version": "1.7.94",
   "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
   "esm": "auto",
   "ava": {
@@ -10,7 +10,7 @@
           [
             "module:ava/stage-4",
             {
-              "modules": false
+              "modules": true
             }
           ]
         ]
@@ -58,20 +58,21 @@
     "@babel/preset-env": "^7.2.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@babel/runtime": "^7.2.0",
     "ava": "^1.0.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "babel-plugin-dev-expression": "^0.2.1",
     "chalk": "^2.4.1",
-    "css-loader": "^0.28.11",
-    "debug": "^3.1.0",
+    "css-loader": "^2.0.1",
+    "debug": "^4.1.0",
     "eslint": "^5.7.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-react": "^7.9.1",
     "esm": "^3.0.84",
     "jsdom": "^13.1.0",
-    "rollup": "^0.67.4",
+    "rollup": "^0.68.0",
     "rollup-loader": "^0.3.0",
     "rollup-plugin-babel": "^4.1.0",
     "rollup-plugin-commonjs": "^9.2.0",
@@ -81,7 +82,7 @@
     "rollup-plugin-terser": "^3.0.0",
     "rollup-plugin-uglify": "^6.0.0",
     "strip-loader": "^0.1.2",
-    "tape": "^4.9.0",
+    "tape": "^4.9.1",
     "webpack": "^4.27.1"
   }
 }

@@ -1,18 +1,5 @@
 'use strict';
 
-function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
-  subClass.__proto__ = superClass;
-}
-
-function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
-}
-
 function _setPrototypeOf(o, p) {
   _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
     o.__proto__ = p;
@@ -52,136 +39,32 @@ function _construct(Parent, args, Class) {
   return _construct.apply(null, arguments);
 }
 
-function _isNativeFunction(fn) {
-  return Function.toString.call(fn).indexOf("[native code]") !== -1;
-}
+function FunctionalError(msg, options) {
+  var _this = this;
 
-function _wrapNativeSuper(Class) {
-  var _cache = typeof Map === "function" ? new Map() : undefined;
+  if (!(this instanceof FunctionalError)) return _construct(FunctionalError, Array.prototype.slice.call(arguments));
 
-  _wrapNativeSuper = function _wrapNativeSuper(Class) {
-    if (Class === null || !_isNativeFunction(Class)) return Class;
+  if (typeof msg === 'object') {
+    options = msg;
+    if (msg.message) msg = msg.message;
+  }
 
-    if (typeof Class !== "function") {
-      throw new TypeError("Super expression must either be null or a function");
-    }
+  Error.call(this, msg);
 
-    if (typeof _cache !== "undefined") {
-      if (_cache.has(Class)) return _cache.get(Class);
-
-      _cache.set(Class, Wrapper);
-    }
-
-    function Wrapper() {
-      return _construct(Class, arguments, _getPrototypeOf(this).constructor);
-    }
-
-    Wrapper.prototype = Object.create(Class.prototype, {
-      constructor: {
-        value: Wrapper,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
+  if (typeof options === 'object') {
+    Object.getOwnPropertyNames(options).forEach(function (key) {
+      _this[key] = options[key];
     });
-    return _setPrototypeOf(Wrapper, Class);
-  };
+  }
 
-  return _wrapNativeSuper(Class);
+  this.name = this.constructor.name; // Capturing stack trace, excluding constructor call from it.
+
+  Error.captureStackTrace(this);
 }
-
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
+function FPInputError() {
+  if (!(this instanceof FPInputError)) return _construct(FPInputError, Array.prototype.slice.call(arguments));
+  FunctionalError.call.apply(FunctionalError, [this].concat(Array.prototype.slice.call(arguments)));
 }
-
-var FunctionalError =
-/*#__PURE__*/
-function (_Error) {
-  _inheritsLoose(FunctionalError, _Error);
-
-  function FunctionalError(msg, options) {
-    var _this;
-
-    if (typeof msg === 'object') {
-      options = msg;
-      if (msg.message) msg = msg.message;
-    }
-
-    _this = _Error.call(this, msg) || this;
-
-    if (typeof options === 'object') {
-      Object.getOwnPropertyNames(options).forEach(function (key) {
-        _this[key] = options[key];
-      });
-    }
-
-    _this.name = _this.constructor.name; // Capturing stack trace, excluding constructor call from it.
-
-    Error.captureStackTrace(_assertThisInitialized(_assertThisInitialized(_this)), _this.constructor);
-    return _this;
-  }
-
-  return FunctionalError;
-}(_wrapNativeSuper(Error));
-var FunctionalUserError =
-/*#__PURE__*/
-function (_FunctionalError) {
-  _inheritsLoose(FunctionalUserError, _FunctionalError);
-
-  function FunctionalUserError() {
-    return _FunctionalError.apply(this, arguments) || this;
-  }
-
-  return FunctionalUserError;
-}(FunctionalError);
-var FPUnexpectedError =
-/*#__PURE__*/
-function (_FunctionalError2) {
-  _inheritsLoose(FPUnexpectedError, _FunctionalError2);
-
-  function FPUnexpectedError() {
-    return _FunctionalError2.apply(this, arguments) || this;
-  }
-
-  return FPUnexpectedError;
-}(FunctionalError);
-var FPInputError =
-/*#__PURE__*/
-function (_FunctionalError3) {
-  _inheritsLoose(FPInputError, _FunctionalError3);
-
-  function FPInputError() {
-    return _FunctionalError3.apply(this, arguments) || this;
-  }
-
-  return FPInputError;
-}(FunctionalError);
-var FPSoftError =
-/*#__PURE__*/
-function (_FunctionalError4) {
-  _inheritsLoose(FPSoftError, _FunctionalError4);
-
-  function FPSoftError() {
-    return _FunctionalError4.apply(this, arguments) || this;
-  }
-
-  return FPSoftError;
-}(FunctionalError);
-var FPTimeout =
-/*#__PURE__*/
-function (_FunctionalError5) {
-  _inheritsLoose(FPTimeout, _FunctionalError5);
-
-  function FPTimeout() {
-    return _FunctionalError5.apply(this, arguments) || this;
-  }
-
-  return FPTimeout;
-}(FunctionalError);
 
 var utils = {
   isPromiseLike: function isPromiseLike(p) {

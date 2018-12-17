@@ -1,97 +1,74 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@babel/runtime/helpers/esm/inheritsLoose'), require('@babel/runtime/helpers/esm/assertThisInitialized'), require('@babel/runtime/helpers/esm/wrapNativeSuper')) :
-  typeof define === 'function' && define.amd ? define(['@babel/runtime/helpers/esm/inheritsLoose', '@babel/runtime/helpers/esm/assertThisInitialized', '@babel/runtime/helpers/esm/wrapNativeSuper'], factory) :
-  (global.FP = factory(global._inheritsLoose,global._assertThisInitialized,global._wrapNativeSuper));
-}(this, (function (_inheritsLoose,_assertThisInitialized,_wrapNativeSuper) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  global.FP = factory();
+}(typeof self !== 'undefined' ? self : this, function () { 'use strict';
 
-  _inheritsLoose = _inheritsLoose && _inheritsLoose.hasOwnProperty('default') ? _inheritsLoose['default'] : _inheritsLoose;
-  _assertThisInitialized = _assertThisInitialized && _assertThisInitialized.hasOwnProperty('default') ? _assertThisInitialized['default'] : _assertThisInitialized;
-  _wrapNativeSuper = _wrapNativeSuper && _wrapNativeSuper.hasOwnProperty('default') ? _wrapNativeSuper['default'] : _wrapNativeSuper;
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
 
-  var FunctionalError =
-  /*#__PURE__*/
-  function (_Error) {
-    _inheritsLoose(FunctionalError, _Error);
+    return _setPrototypeOf(o, p);
+  }
 
-    function FunctionalError(msg, options) {
-      var _this;
+  function isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
 
-      if (typeof msg === 'object') {
-        options = msg;
-        if (msg.message) msg = msg.message;
-      }
+    try {
+      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
-      _this = _Error.call(this, msg) || this;
-
-      if (typeof options === 'object') {
-        Object.getOwnPropertyNames(options).forEach(function (key) {
-          _this[key] = options[key];
-        });
-      }
-
-      _this.name = _this.constructor.name; // Capturing stack trace, excluding constructor call from it.
-
-      Error.captureStackTrace(_assertThisInitialized(_assertThisInitialized(_this)), _this.constructor);
-      return _this;
+  function _construct(Parent, args, Class) {
+    if (isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct(Parent, args, Class) {
+        var a = [null];
+        a.push.apply(a, args);
+        var Constructor = Function.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) _setPrototypeOf(instance, Class.prototype);
+        return instance;
+      };
     }
 
-    return FunctionalError;
-  }(_wrapNativeSuper(Error));
-  var FunctionalUserError =
-  /*#__PURE__*/
-  function (_FunctionalError) {
-    _inheritsLoose(FunctionalUserError, _FunctionalError);
+    return _construct.apply(null, arguments);
+  }
 
-    function FunctionalUserError() {
-      return _FunctionalError.apply(this, arguments) || this;
+  function FunctionalError(msg, options) {
+    var _this = this;
+
+    if (!(this instanceof FunctionalError)) return _construct(FunctionalError, Array.prototype.slice.call(arguments));
+
+    if (typeof msg === 'object') {
+      options = msg;
+      if (msg.message) msg = msg.message;
     }
 
-    return FunctionalUserError;
-  }(FunctionalError);
-  var FPUnexpectedError =
-  /*#__PURE__*/
-  function (_FunctionalError2) {
-    _inheritsLoose(FPUnexpectedError, _FunctionalError2);
+    Error.call(this, msg);
 
-    function FPUnexpectedError() {
-      return _FunctionalError2.apply(this, arguments) || this;
+    if (typeof options === 'object') {
+      Object.getOwnPropertyNames(options).forEach(function (key) {
+        _this[key] = options[key];
+      });
     }
 
-    return FPUnexpectedError;
-  }(FunctionalError);
-  var FPInputError =
-  /*#__PURE__*/
-  function (_FunctionalError3) {
-    _inheritsLoose(FPInputError, _FunctionalError3);
+    this.name = this.constructor.name; // Capturing stack trace, excluding constructor call from it.
 
-    function FPInputError() {
-      return _FunctionalError3.apply(this, arguments) || this;
-    }
-
-    return FPInputError;
-  }(FunctionalError);
-  var FPSoftError =
-  /*#__PURE__*/
-  function (_FunctionalError4) {
-    _inheritsLoose(FPSoftError, _FunctionalError4);
-
-    function FPSoftError() {
-      return _FunctionalError4.apply(this, arguments) || this;
-    }
-
-    return FPSoftError;
-  }(FunctionalError);
-  var FPTimeout =
-  /*#__PURE__*/
-  function (_FunctionalError5) {
-    _inheritsLoose(FPTimeout, _FunctionalError5);
-
-    function FPTimeout() {
-      return _FunctionalError5.apply(this, arguments) || this;
-    }
-
-    return FPTimeout;
-  }(FunctionalError);
+    Error.captureStackTrace(this);
+  }
+  function FPInputError() {
+    if (!(this instanceof FPInputError)) return _construct(FPInputError, Array.prototype.slice.call(arguments));
+    FunctionalError.call.apply(FunctionalError, [this].concat(Array.prototype.slice.call(arguments)));
+  }
 
   var utils = {
     isPromiseLike: function isPromiseLike(p) {
@@ -782,4 +759,4 @@
 
   return FP;
 
-})));
+}));
