@@ -43,6 +43,15 @@
     return _construct.apply(null, arguments);
   }
 
+  var _require = require('util'),
+      inherits = _require.inherits;
+
+  inherits(FunctionalError, Error);
+  inherits(FunctionalUserError, FunctionalError);
+  inherits(FPUnexpectedError, FunctionalError);
+  inherits(FPInputError, FunctionalError);
+  inherits(FPSoftError, FunctionalError);
+  inherits(FPTimeout, FunctionalError);
   function FunctionalError(msg, options) {
     var _this = this;
 
@@ -65,8 +74,24 @@
 
     Error.captureStackTrace(this);
   }
+  function FunctionalUserError() {
+    if (!(this instanceof FunctionalUserError)) return _construct(FunctionalUserError, Array.prototype.slice.call(arguments));
+    FunctionalError.call.apply(FunctionalError, [this].concat(Array.prototype.slice.call(arguments)));
+  }
+  function FPUnexpectedError() {
+    if (!(this instanceof FPUnexpectedError)) return _construct(FPUnexpectedError, Array.prototype.slice.call(arguments));
+    FunctionalError.call.apply(FunctionalError, [this].concat(Array.prototype.slice.call(arguments)));
+  }
   function FPInputError() {
     if (!(this instanceof FPInputError)) return _construct(FPInputError, Array.prototype.slice.call(arguments));
+    FunctionalError.call.apply(FunctionalError, [this].concat(Array.prototype.slice.call(arguments)));
+  }
+  function FPSoftError() {
+    if (!(this instanceof FPSoftError)) return _construct(FPSoftError, Array.prototype.slice.call(arguments));
+    FunctionalError.call.apply(FunctionalError, [this].concat(Array.prototype.slice.call(arguments)));
+  }
+  function FPTimeout() {
+    if (!(this instanceof FPTimeout)) return _construct(FPTimeout, Array.prototype.slice.call(arguments));
     FunctionalError.call.apply(FunctionalError, [this].concat(Array.prototype.slice.call(arguments)));
   }
 
