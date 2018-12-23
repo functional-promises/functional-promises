@@ -1,3 +1,13 @@
+const { inherits } = require('util');
+
+inherits(FunctionalError, Error)
+
+inherits(FunctionalUserError, FunctionalError)
+inherits(FPUnexpectedError, FunctionalError)
+inherits(FPInputError, FunctionalError)
+inherits(FPSoftError, FunctionalError)
+inherits(FPTimeout, FunctionalError)
+
 export function FunctionalError(msg, options) {
   if (!(this instanceof FunctionalError)) return new FunctionalError(...arguments)
   if (typeof msg === 'object') {

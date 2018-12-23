@@ -1,6 +1,6 @@
 {
   "name": "functional-promises",
-  "version": "1.7.94",
+  "version": "1.7.95",
   "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
   "esm": "auto",
   "ava": {
@@ -38,7 +38,7 @@
     "test": "npm run build && ava --serial --verbose ",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
-    "build": "rollup -c && ./misc/compression-report.sh",
+    "build": "rollup -c",
     "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",
     "deploy": "npm run build && npm run docs-build && npm run test && npm run publish",
     "version-bump-revision": "node ./misc/package-version-manager.js 0.0.1",

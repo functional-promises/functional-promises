@@ -6,6 +6,7 @@ set -e
 
 # cd ..
 npm run docs-docker
+../misc/compression-report.sh
 
 docker run -it --rm \
     -v $PWD/docs-source:/slate \
