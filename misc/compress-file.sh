@@ -17,8 +17,8 @@ fi
 
 
 function compress {
-  gzip --force --keep --best --suffix '.gz' $input_file
-  brotli --best -kf $input_file
+  [ "" != "$(which gzip)" ] && gzip --force --keep --best --suffix '.gz' $input_file
+  [ "" != "$(which brotli)" ] && brotli --best -kf $input_file
 }
 function printSizeDiff {
    node --eval "console.log(($1 / $2.0).toFixed(2))"
@@ -56,9 +56,10 @@ function printMarkdown {
 }
 
 
-getFileSizes
 
 compress
+
+getFileSizes
 
 if [ "$output_mode" == "yaml" ]; then
   printYaml

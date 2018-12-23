@@ -1,82 +1,88 @@
 {
   "name": "functional-promises",
-  "version": "1.7.6",
-  "description": "Fluent Composition Pipeline Promises API. See Docs: https://fpromises.io/",
+  "version": "1.7.95",
+  "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
   "esm": "auto",
   "ava": {
+    "babel": {
+      "testOptions": {
+        "presets": [
+          [
+            "module:ava/stage-4",
+            {
+              "modules": true
+            }
+          ]
+        ]
+      }
+    },
     "files": [
       "tests/**/*.js",
       "!tests/data/**"
     ],
     "require": [
-      "babel-register"
-    ],
-    "babel": {
-      "presets": [
-        [
-          "env",
-          {
-            "debug": false,
-            "modules": false,
-            "useBuiltIns": true,
-            "targets": {
-              "node": "6"
-            }
-          }
-        ]
-      ]
-    }
+      "esm"
+    ]
   },
   "typings": "./index.d.ts",
-  "main": "./dist/functional-promise.min.js",
-  "module": "./src/index.js",
-  "browser": "./dist/functional-promise.min.js",
-  "unpkg": "./dist/functional-promise.min.js",
+  "main": "./index.js",
+  "module": "./dist/esm.js",
+  "browser": "./dist/umd.min.js",
+  "unpkg": "./dist/umd.min.js",
   "repository": {
     "url": "https://github.com/functional-promises/functional-promises.git"
   },
   "homepage": "https://www.fpromises.io/",
   "scripts": {
-    "start": "npm run build && webpack --watch",
+    "start": "npm run build && rollup -c --watch",
     "test": "npm run build && ava --serial --verbose ",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
-    "build": "npm run build-dev && npm run build-live",
-    "build-live": "NODE_ENV=production webpack && minify dist/functional-promise.min.js -d dist/",
-    "build-dev": "NODE_ENV=development webpack",
+    "build": "rollup -c",
     "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",
-    "deploy": "npm run version-bump-revision && npm run build && npm run docs-build && npm run test && npm run publish",
+    "deploy": "npm run build && npm run docs-build && npm run test && npm run publish",
     "version-bump-revision": "node ./misc/package-version-manager.js 0.0.1",
     "version-bump-minor": "node ./misc/package-version-manager.js 0.1.0"
   },
   "author": {
     "name": "Dan Levy",
     "email": "Dan@DanLevy.net",
-    "url": "http://www.danlevy.net/"
+    "url": "https://danlevy.net/"
   },
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
-    "ava": "^0.25.0",
-    "babel-loader": "^7.1.4",
-    "babel-minify": "^0.4.3",
-    "babel-plugin-transform-es2015-computed-properties": "^6.24.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-minify": "^0.4.3",
+    "@ava/babel-preset-stage-4": "^2.0.0",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.1",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "@babel/runtime": "^7.2.0",
+    "ava": "^1.0.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-dev-expression": "^0.2.1",
     "chalk": "^2.4.1",
-    "css-loader": "^0.28.11",
-    "debug": "^3.1.0",
-    "jsdom": "^11.10.0",
-    "rollup": "^0.59.1",
+    "css-loader": "^2.0.1",
+    "debug": "^4.1.0",
+    "eslint": "^5.7.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-react": "^7.9.1",
+    "esm": "^3.0.84",
+    "jsdom": "^13.1.0",
+    "rollup": "^0.68.0",
     "rollup-loader": "^0.3.0",
-    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-babel": "^4.1.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-size-snapshot": "^0.7.0",
+    "rollup-plugin-terser": "^3.0.0",
+    "rollup-plugin-uglify": "^6.0.0",
     "strip-loader": "^0.1.2",
-    "tape": "^4.9.0",
-    "webpack": "^3.12.0",
-    "webpack-cli": "^3.1.2",
-    "webpack-rollup-loader": "^0.7.1"
+    "tape": "^4.9.1",
+    "webpack": "^4.27.1"
   }
 }

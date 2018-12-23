@@ -1,5 +1,5 @@
 const test = require('ava')
-const FP = require('../src').default
+const FP = require('../')
 
 test('FP.thenIf(true)', t => FP.resolve(true)
   .thenIf(x => x, x => t.truthy(x), () => t.fail()))

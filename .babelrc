@@ -1,28 +1,7 @@
 {
-  "sourceMaps": "inline",
-  "retainLines": false,
-  "env": {
-    "production": {
-      "presets": ["minify"]
-    }
-  },
-  "presets": [
-    [
-      "env",
-      {
-        "debug": false,
-        "modules": "commonjs",
-        "useBuiltIns": true,
-        "targets": {
-          "chrome": "68"
-        }
-      }
-    ]
-  ],
+  "presets": [["@babel/preset-env", { "loose": true, "modules": false }], "@babel/preset-react"],
   "plugins": [
-    ["transform-es2015-computed-properties", {
-      "loose": true
-    }]
+    "babel-plugin-dev-expression",
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
   ]
-  /* "plugins": ["transform-es2015-modules-commonjs", "babel-plugin-transform-runtime"] */
 }

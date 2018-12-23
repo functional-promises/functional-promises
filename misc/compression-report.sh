@@ -9,7 +9,14 @@ curl -SslL -o /tmp/Ix.v2.min.js https://unpkg.com/ix@2/Ix.es5.min.js
 # curl -Ssl -o ./functional-promise.min.js https://unpkg.com/functional-promise@1.5.2/dist/functional-promise.min.js
 sleep 1s
 
-printf "\n" && \
-./misc/compress-file.sh ./dist/functional-promise.min.js $output_mode && \
-./misc/compress-file.sh /tmp/Rx.v5.min.js $output_mode && \
+printf "\\n"
+
+./misc/compress-file.sh ./dist/esm.min.js $output_mode
+./misc/compress-file.sh ./dist/esm.js $output_mode
+./misc/compress-file.sh ./dist/cjs.min.js $output_mode
+./misc/compress-file.sh ./dist/cjs.js $output_mode
+./misc/compress-file.sh ./dist/umd.min.js $output_mode
+./misc/compress-file.sh ./dist/umd.js $output_mode
+
+./misc/compress-file.sh /tmp/Rx.v5.min.js $output_mode
 ./misc/compress-file.sh /tmp/Ix.v2.min.js $output_mode
