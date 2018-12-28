@@ -58,7 +58,7 @@ The table above show `FP` is roughly **1/30th** the LOC (lines of code) in `R/Ix
 ## Installation
 
 ```sh
-npm install functional-promise
+npm install functional-promises
 ```
 
 ## Getting Started
@@ -66,9 +66,9 @@ npm install functional-promise
 Use one of the following:
 
 ```js
-const FP = require('functional-promise')
+const FP = require('functional-promises')
 // or:
-import FP from 'functional-promise'
+import FP from 'functional-promises'
 ```
 
 ### Quick Examples
