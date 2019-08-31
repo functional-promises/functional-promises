@@ -6,11 +6,11 @@ set -e
 
 # cd ..
 npm run docs-docker
-../misc/compression-report.sh
+# ../misc/compression-report.sh
 
 docker run -it --rm \
     -v $PWD/docs-source:/slate \
       fpromises-docs:latest
 # -v $PWD/docs:/slate/build \
-cp -rav ./docs-source/build/* ./docs/
+cp -av ./docs-source/build/* ./docs/
 # printf 'www.fpromises.io' > ./docs/CNAME
