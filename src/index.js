@@ -64,23 +64,34 @@ FP.prototype.quiet = function quiet(errorLimit = Infinity) {
 }
 FP.prototype.silent = FP.prototype.quiet
 
-FP.get = function get(obj, ...keyNames) {
-  if (Array.isArray(obj) && arguments.length === 1) return o => FP.get(o, obj)
-  if (Array.isArray(obj) && keyNames) [keyNames, obj] = [obj, keyNames]
-  keyNames = flatten(keyNames)
-  if (typeof obj === 'object') {
-    if (keyNames.length === 1) return obj[keyNames[0]]
-    return keyNames.reduce((extracted, key) => {
-      extracted[key] = obj[key]
-      return extracted
-    }, {})
+/**
+ * Helper to accumulate string keys *until an object is provided*. 
+ * Returns a partial function to accept more keys until partial 
+ */
+FP.get = function getter(...getArgs) {
+  getArgs = flatten(getArgs)
+  const keyNames = getArgs.filter(s => typeof s === 'string')
+  const objectFound = getArgs.filter(s => typeof s !== 'string')
+  console.log('keyNames', keyNames)
+  console.log('objectFound', objectFound)
+  // Return partial app / auto-curry deal here
+  if (!objectFound) { // return function to keep going
+    return (...extraArgs) => FP.get(...extraArgs, ...getArgs)
   }
-  return obj
+
+  if (keyNames.length === 1) return objectFound[keyNames[0]]
+  return keyNames.reduce((extracted, key) => {
+    extracted[key] = objectFound[key]
+    return extracted
+  }, {})
+
 }
 
 FP.prototype.get = function get(...keyNames) {
   if (this.steps) return this.addStep('get', [...arguments])
-  return this.then(FP.get(keyNames))
+  return this.then
+     ? this.then(FP.get(keyNames))
+     : FP.get(...keyNames)
 }
 
 FP.prototype.set = function set(keyName, value) {

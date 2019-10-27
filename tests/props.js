@@ -1,17 +1,24 @@
 const test = require('ava')
-const FP = require('../')
+const FP = require('../index.js')
 
-test('fp.get(...keyNames)', t => FP
+test.only('FP.get(keys) static "partial app" pattern', t => {
+  const result = FP.get('foo')
+  t.true(typeof result === 'function', 'result should be a Function')
+  t.is(result({foo: 'bar'}), 'bar', 'getter Function should return correct string')
+})
+
+test('fp.resolve(obj).get(...keyNames)', t => FP
   .resolve({foo: 'bar', baz: 'woo'})
   .get('foo', 'baz')
   .then(obj => t.is(obj.foo, 'bar'))
 )
 
-test('fp.get(...keyNames)', t => FP
+test('fp.resolve(obj).get(key, key2)', t => {
+  return FP
   .resolve({foo: 'bar', baz: 'woo'})
   .get('foo', 'baz')
   .then(obj => t.is(obj.foo, 'bar'))
-)
+})
 
 test('fp.get([keyNames])', t => FP
   .resolve({foo: 'bar', baz: 'woo'})
