@@ -64,19 +64,23 @@ FP.prototype.quiet = function quiet(errorLimit = Infinity) {
 }
 FP.prototype.silent = FP.prototype.quiet
 
+FP.get = function get(obj, ...keyNames) {
+  if (Array.isArray(obj) && arguments.length === 1) return o => FP.get(o, obj)
+  if (Array.isArray(obj) && keyNames) [keyNames, obj] = [obj, keyNames]
+  keyNames = flatten(keyNames)
+  if (typeof obj === 'object') {
+    if (keyNames.length === 1) return obj[keyNames[0]]
+    return keyNames.reduce((extracted, key) => {
+      extracted[key] = obj[key]
+      return extracted
+    }, {})
+  }
+  return obj
+}
+
 FP.prototype.get = function get(...keyNames) {
   if (this.steps) return this.addStep('get', [...arguments])
-  keyNames = flatten(keyNames)
-  return this.then((obj) => {
-    if (typeof obj === 'object') {
-      if (keyNames.length === 1) return obj[keyNames[0]]
-      return keyNames.reduce((extracted, key) => {
-        extracted[key] = obj[key]
-        return extracted
-      }, {})
-    }
-    return obj
-  })
+  return this.then(FP.get(keyNames))
 }
 
 FP.prototype.set = function set(keyName, value) {
