@@ -1,5 +1,5 @@
 const test = require('ava')
-const FP = require('../index.js')
+const FP = require('../')
 
 test.only('FP.get(keys) static "partial app" pattern', t => {
   const result = FP.get('foo')
