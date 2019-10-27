@@ -16,6 +16,7 @@ declare class FP<R> implements PromiseLike<R> {
     // addStep(name: any, args: any): any;
     // all(promises: any): any;
     catchIf<T>(condition: Error | object, fn: any): FP<T>;
+    catch(fn: Function): FP<T>;
     concurrency<T>(limit: number): FP<T>;
     delay<T>(msec: number): FP<T>;
     // map<T>(fn: (item: IterableItem<R>, index?: number, arrayLength?: number) => Resolvable<T>, options: any): FP<T>;
@@ -27,7 +28,7 @@ declare class FP<R> implements PromiseLike<R> {
     filter<T>(callback: Function): FP<T>;
     find<T>(callback: Function): FP<T>;
     findIndex<T>(callback: Function): FP<T>;
-    get<T>(keyNames: string | string[]): FP<T>;
+    get<T>(keyNames: string | string[]): FP<T> | FP<string>;
     set<T>(keyName: string, value: any): FP<T>;
     listen<T>(obj: EventSource, eventNames: string | string[]): FP<T>;
     quiet<T>(limit: number): FP<T>;
@@ -41,6 +42,7 @@ declare class FP<R> implements PromiseLike<R> {
 
     static all<T>(promises: Array<any> | object): FP<T>;
     static delay<T>(msec: number): FP<T>;
+    static get(...keyNames: string, object: Object): Object | String;
     static promisify(cb: Function): Function;
     static promisifyAll(obj: object | Array<Function>): object;
     static resolve<T>(value: Resolvable<T>): FP<T>;
