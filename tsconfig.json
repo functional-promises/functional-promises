@@ -1,12 +1,9 @@
 {
   "baseUrl": "types",
   "typeRoots": ["types"],
-  "files": [
-    "src/index.js"
-  ],
+  "files": ["src"],
   "compilerOptions": {
     "target": "es2016",
-    "allowJs": true,
     "esModuleInterop": true,
     "emitDeclarationOnly": true,
     "declaration": true,
