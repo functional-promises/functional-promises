@@ -24,7 +24,7 @@ npm install functional-promises
 
 ```javascript
 //// Import into your app:
-const FP = require('functional-promises').default
+const FP = require('functional-promises')
 //  OR:
 import FP from 'functional-promises'
 ```
