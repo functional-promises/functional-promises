@@ -64,19 +64,32 @@ FP.prototype.quiet = function quiet(errorLimit = Infinity) {
 }
 FP.prototype.silent = FP.prototype.quiet
 
+/**
+ * Helper to accumulate string keys *until an object is provided*. 
+ * Returns a partial function to accept more keys until partial 
+ */
+FP.get = function getter(...getArgs) {
+  getArgs = flatten(getArgs)
+  const keyNames = getArgs.filter(s => typeof s === 'string')
+  const objectFound = getArgs.find(s => typeof s !== 'string')
+  // Return partial app / auto-curry deal here
+  if (!objectFound) { // return function to keep going
+    return (...extraArgs) => FP.get(...extraArgs, ...getArgs)
+  }
+
+  if (keyNames.length === 1) return objectFound[keyNames[0]]
+  return keyNames.reduce((extracted, key) => {
+    extracted[key] = objectFound[key]
+    return extracted
+  }, {})
+
+}
+
 FP.prototype.get = function get(...keyNames) {
   if (this.steps) return this.addStep('get', [...arguments])
-  keyNames = flatten(keyNames)
-  return this.then((obj) => {
-    if (typeof obj === 'object') {
-      if (keyNames.length === 1) return obj[keyNames[0]]
-      return keyNames.reduce((extracted, key) => {
-        extracted[key] = obj[key]
-        return extracted
-      }, {})
-    }
-    return obj
-  })
+  return this.then
+     ? this.then(FP.get(keyNames))
+     : FP.get(...keyNames)
 }
 
 FP.prototype.set = function set(keyName, value) {
