@@ -62,6 +62,9 @@ var utils = {
   isEnumerable: function isEnumerable(list) {
     return list && Array.isArray(list) || typeof list[Symbol.iterator] === 'function';
   },
+  isObject: function isObject(o) {
+    return !!Object.prototype.toString.call(o) === '[object Object]';
+  },
   flatten: function flatten(arr) {
     if (!Array.isArray(arr)) throw new Error('Method `flatten` requires valid array parameter');
     return arr.reduce(function (results, item) {
@@ -74,12 +77,11 @@ function monads(FP) {
   return {
     chain: chain,
     chainEnd: chainEnd
-    /**
-     * Start 'recording' a chain of commands, after steps defined call `.chainEnd()`
-     * @returns FunctionalPromise
-     */
-
   };
+  /**
+   * Start 'recording' a chain of commands, after steps defined call `.chainEnd()`
+   * @returns FunctionalPromise
+   */
 
   function chain() {
     // create a placeholder/initial promise to hold the steps/chain data
@@ -216,7 +218,7 @@ function arrays (FP) {
             var total = _ref3[0],
                 item = _ref3[1];
             return next(reducer(total, item, i++));
-          }).catch(reject);
+          })["catch"](reject);
         };
 
         next(initVal);
@@ -255,7 +257,7 @@ function arrays (FP) {
 
     var setResult = function setResult(index) {
       return function (value) {
-        threadPool.delete(index);
+        threadPool["delete"](index);
         results[index] = value;
         return value;
       };
@@ -322,7 +324,7 @@ function arrays (FP) {
             return fn(val, c, args);
           }).then(function (val) {
             return setResult(c)(val);
-          }).then(checkAndRun).catch(function (err) {
+          }).then(checkAndRun)["catch"](function (err) {
             _this._FP.errors.count++;
             errors.push(err); // console.log('ERR HANDLER!', errors.length, this._FP.errors.limit)
 
@@ -608,25 +610,49 @@ FP.prototype.quiet = function quiet(errorLimit) {
 };
 
 FP.prototype.silent = FP.prototype.quiet;
+/**
+ * Helper to accumulate string keys *until an object is provided*. 
+ * Returns a partial function to accept more keys until partial 
+ */
+
+FP.get = function getter() {
+  for (var _len = arguments.length, getArgs = new Array(_len), _key = 0; _key < _len; _key++) {
+    getArgs[_key] = arguments[_key];
+  }
+
+  getArgs = flatten(getArgs);
+  var keyNames = getArgs.filter(function (s) {
+    return typeof s === 'string';
+  });
+  var objectFound = getArgs.find(function (s) {
+    return typeof s !== 'string';
+  }); // Return partial app / auto-curry deal here
+
+  if (!objectFound) {
+    // return function to keep going
+    return function () {
+      for (var _len2 = arguments.length, extraArgs = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        extraArgs[_key2] = arguments[_key2];
+      }
+
+      return FP.get.apply(FP, extraArgs.concat(getArgs));
+    };
+  }
+
+  if (keyNames.length === 1) return objectFound[keyNames[0]];
+  return keyNames.reduce(function (extracted, key) {
+    extracted[key] = objectFound[key];
+    return extracted;
+  }, {});
+};
 
 FP.prototype.get = function get() {
-  for (var _len = arguments.length, keyNames = new Array(_len), _key = 0; _key < _len; _key++) {
-    keyNames[_key] = arguments[_key];
+  for (var _len3 = arguments.length, keyNames = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+    keyNames[_key3] = arguments[_key3];
   }
 
   if (this.steps) return this.addStep('get', Array.prototype.slice.call(arguments));
-  keyNames = flatten(keyNames);
-  return this.then(function (obj) {
-    if (typeof obj === 'object') {
-      if (keyNames.length === 1) return obj[keyNames[0]];
-      return keyNames.reduce(function (extracted, key) {
-        extracted[key] = obj[key];
-        return extracted;
-      }, {});
-    }
-
-    return obj;
-  });
+  return this.then ? this.then(FP.get(keyNames)) : FP.get.apply(FP, keyNames);
 };
 
 FP.prototype.set = function set(keyName, value) {
@@ -637,11 +663,11 @@ FP.prototype.set = function set(keyName, value) {
   });
 };
 
-FP.prototype.catch = function (fn) {
+FP.prototype["catch"] = function (fn) {
   if (this.steps) return this.addStep('catch', Array.prototype.slice.call(arguments));
   if (arguments.length === 2) return this.catchIf.apply(this, arguments);
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.catch(fn)`. Must be a function. Currently: ' + typeof fn);
-  return FP.resolve(this._FP.promise.catch(function (err) {
+  return FP.resolve(this._FP.promise["catch"](function (err) {
     return fn(err);
   }));
 };
@@ -649,7 +675,7 @@ FP.prototype.catch = function (fn) {
 FP.prototype.catchIf = function catchIf(condition, fn) {
   if (this.steps) return this.addStep('catchIf', Array.prototype.slice.call(arguments));
   if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.catchIf(condition, fn)`. Must be a function. Currently: ' + typeof fn);
-  return FP.resolve(this._FP.promise.catch(function (err) {
+  return FP.resolve(this._FP.promise["catch"](function (err) {
     if (condition && err instanceof condition) return fn(err); // try re-throw, might be really slow...
 
     throw err;
@@ -672,7 +698,7 @@ FP.prototype.tap = function tap(fn) {
 
 function resolve(value) {
   return new FP(function (resolve, reject) {
-    if (value && isFunction(value.then)) return value.then(resolve).catch(reject);
+    if (value && isFunction(value.then)) return value.then(resolve)["catch"](reject);
     resolve(value);
   });
 }
@@ -681,8 +707,8 @@ function promisify(cb) {
   var _this = this;
 
   return function () {
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
+    for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+      args[_key4] = arguments[_key4];
     }
 
     return new FP(function (yah, nah) {
