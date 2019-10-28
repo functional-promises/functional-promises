@@ -1,7 +1,7 @@
 const test = require('ava')
 const FP = require('../')
 
-test.only('FP.get(keys) static "partial app" pattern', t => {
+test('FP.get(keys) static "partial app" function', t => {
   const result = FP.get('foo')
   t.true(typeof result === 'function', 'result should be a Function')
   t.is(result({foo: 'bar'}), 'bar', 'getter Function should return correct string')

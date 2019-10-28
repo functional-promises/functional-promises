@@ -72,17 +72,9 @@ FP.get = function getter(...getArgs) {
   getArgs = flatten(getArgs)
   const keyNames = getArgs.filter(s => typeof s === 'string')
   const objectFound = getArgs.find(s => typeof s !== 'string')
-  console.log('keyNames', keyNames)
-  console.log('objectFound', objectFound)
   // Return partial app / auto-curry deal here
   if (!objectFound) { // return function to keep going
-    console.warn('no objectFound, pre curry fn:', ...getArgs)
-
-    return (...extraArgs) => {
-      console.warn('calling curry fn:', ...extraArgs, ...getArgs)
-
-      return FP.get(...extraArgs, ...getArgs)
-    }
+    return (...extraArgs) => FP.get(...extraArgs, ...getArgs)
   }
 
   if (keyNames.length === 1) return objectFound[keyNames[0]]
