@@ -25,9 +25,9 @@ function printSizeDiff {
 }
 
 function getFileSizes {
-  export original_size=$(stat --format %s $input_file)
-  export brotli_size=$(stat --format %s $input_file.br)
-  export gzip_size=$(stat --format %s $input_file.gz)
+  export original_size=$(stat -f "%z" $input_file)
+  export brotli_size=$(stat -f "%z" $input_file.br)
+  export gzip_size=$(stat -f "%z" $input_file.gz)
 }
 
 function printYaml {
