@@ -40,7 +40,7 @@
     "docs-build": "./docs-source/docker-build.sh",
     "build": "rollup -c",
     "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",
-    "deploy": "npm run build && npm run docs-build && npm run test && npm run publish",
+    "deploy": "./publish.sh",
     "version-bump-revision": "node ./misc/package-version-manager.js 0.0.1",
     "version-bump-minor": "node ./misc/package-version-manager.js 0.1.0"
   },
