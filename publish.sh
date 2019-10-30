@@ -4,7 +4,7 @@ npm test
 npm run build
 npm run docs-build
 npm publish
-sed -i 's/"functional-promises"/"functional-promise"/' package.json
+sed -i 's/"functional-promises"/"functional-promise"/' ./package.json
 npm publish
-sed -i 's/"functional-promise"/"functional-promises"/' package.json
+sed -i 's/"functional-promise"/"functional-promises"/' ./package.json
 

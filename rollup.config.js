@@ -11,7 +11,7 @@ import pkg from './package.json'
 const input = 'src/index.js'
 const globalName = 'FP'
 
-console.log('PATHS:', require.main.paths)
+// console.log('PATHS:', require.main.paths)
 
 // function external(id) {
 //   const isExt = id !== 'src/index.js' && !id.startsWith('./') && !id.startsWith('/')
