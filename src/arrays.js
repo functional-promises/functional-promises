@@ -78,7 +78,7 @@ export default function(FP) {
       args = this && this._FP && this._FP.promise
     }
     let resolvedOrRejected = false
-    const threadLimit = Math.max(1, Math.min((this && this._FP && this._FP.concurrencyLimit) || 1, 4))
+    const threadLimit = Math.max(1, (this && this._FP && this._FP.concurrencyLimit || 1))
     const innerValues = this && this._FP && this._FP.promise ? this._FP.promise : Promise.resolve(args)
     let initialThread = 0
     let errors = []
