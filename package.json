@@ -1,6 +1,6 @@
 {
   "name": "functional-promises",
-  "version": "1.7.98",
+  "version": "1.7.99",
   "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
   "esm": "auto",
   "ava": {
@@ -8,7 +8,7 @@
       "testOptions": {
         "presets": [
           [
-            "module:ava/stage-4",
+            "module:@ava/babel/stage-4",
             {
               "modules": true
             }
@@ -51,38 +51,39 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@ava/babel-preset-stage-4": "^2.0.0",
-    "@babel/core": "7.6.4",
-    "@babel/plugin-proposal-class-properties": "7.5.5",
-    "@babel/plugin-transform-runtime": "7.6.2",
-    "@babel/preset-env": "7.6.3",
-    "@babel/preset-react": "7.6.3",
-    "@babel/register": "7.6.2",
-    "@babel/runtime": "7.6.3",
-    "ava": "^1.4.1",
+    "@ava/babel": "^1.0.1",
+    "@ava/babel-preset-stage-4": "^4.0.0",
+    "@babel/core": "7.10.5",
+    "@babel/plugin-proposal-class-properties": "7.10.4",
+    "@babel/plugin-transform-runtime": "7.10.5",
+    "@babel/preset-env": "7.10.4",
+    "@babel/preset-react": "7.10.4",
+    "@babel/register": "7.10.5",
+    "@babel/runtime": "7.10.5",
+    "ava": "^3.10.1",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "10.0.3",
-    "babel-jest": "^23.6.0",
+    "babel-eslint": "10.1.0",
+    "babel-jest": "^26.1.0",
     "babel-plugin-dev-expression": "0.2.2",
-    "chalk": "2.4.2",
-    "css-loader": "^2.1.1",
+    "chalk": "4.1.0",
+    "css-loader": "^3.6.0",
     "debug": "4.1.1",
-    "eslint": "^5.16.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-react": "7.16.0",
+    "eslint": "^7.5.0",
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-react": "7.20.3",
     "esm": "3.2.25",
-    "jsdom": "^13.2.0",
-    "rollup": "^0.68.2",
+    "jsdom": "^16.3.0",
+    "rollup": "^2.23.0",
     "rollup-loader": "^0.3.0",
-    "rollup-plugin-babel": "4.3.3",
-    "rollup-plugin-commonjs": "^9.3.4",
-    "rollup-plugin-node-resolve": "^4.2.4",
-    "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-size-snapshot": "0.10.0",
-    "rollup-plugin-terser": "^3.0.0",
-    "rollup-plugin-uglify": "6.0.3",
+    "rollup-plugin-babel": "4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-size-snapshot": "0.12.0",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-uglify": "^6.0.4",
     "strip-loader": "^0.1.2",
-    "tape": "4.11.0",
-    "webpack": "4.41.2"
+    "tape": "5.0.1",
+    "webpack": "4.44.0"
   }
 }

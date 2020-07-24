@@ -60,7 +60,7 @@ var utils = {
     return typeof fn === 'function';
   },
   isEnumerable: function isEnumerable(list) {
-    return list && Array.isArray(list) || typeof list[Symbol.iterator] === 'function';
+    return list && Array.isArray(list) || list && typeof list[Symbol.iterator] === 'function';
   },
   isObject: function isObject(o) {
     return !!Object.prototype.toString.call(o) === '[object Object]';
@@ -239,7 +239,7 @@ function arrays (FP) {
     }
 
     var resolvedOrRejected = false;
-    var threadLimit = Math.max(1, Math.min(this && this._FP && this._FP.concurrencyLimit || 1, 4));
+    var threadLimit = Math.max(1, this && this._FP && this._FP.concurrencyLimit || 1);
     var innerValues = this && this._FP && this._FP.promise ? this._FP.promise : Promise.resolve(args);
     var initialThread = 0;
     var errors = [];
@@ -735,12 +735,12 @@ function promisifyAll(obj) {
 function unpack() {
   var resolve,
       reject,
-      promise$$1 = new FP(function (yah, nah) {
+      promise = new FP(function (yah, nah) {
     resolve = yah;
     reject = nah;
   });
   return {
-    promise: promise$$1,
+    promise: promise,
     resolve: resolve,
     reject: reject
   };

@@ -21,7 +21,7 @@ I call this pattern a `Functional River` - your `data` is the _water_, and your 
 
 ### Advantages
 
-* Only 400 Lines of Source & 4Kb Gzipped
+* Only 400 Lines of Source & 3Kb compressed
 * Easily handle Sync, Async, Events, Promises, and Callbacks.
 * Familiar methods, including `Array.prototype.map`, `[].filter()`, `[].find()`, `[].some()`, etc.
 * Create Monads in JavaScript (so far as they contain side-effects to a sequence of instructions).
@@ -38,7 +38,7 @@ LoC #'s included because a smaller surface === fewer places bugs can hide.
 
 | Library                                                       | Main deal                  | Files     | Lines of Code  | .min.js kB
 |------------------------------                                 |-----------                 |---------: |--------------: |-------------------:
-| **Functional Promise v1.7.95**                                 | Sync & Async Chains        |         8 |           375  | 7 Kb (1.7Kb gzip)
+| **Functional Promise v1.7.99**                                | Sync & Async Chains        |         8 |           375  | 12 Kb (3Kb compressed)
 | [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1   | Promises Replacement       |        38 |         5,188  | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6              | Observables Chaining       |       458 |        12,266  | 150 Kb
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4              | \[Async\]Iterable Chaining |       521 |        12,366  | 145 Kb
