@@ -1,7 +1,7 @@
 ruby '>=2.2.0'
 source 'https://rubygems.org'
 
-gem 'rack', '2.0.8' # https://community.datocms.com/t/error-with-middelman-and-rack-lint/715/15
+gem 'rack', '2.1.4' # https://community.datocms.com/t/error-with-middelman-and-rack-lint/715/15
 # Middleman
 gem 'middleman', '~>4.2.1'
 gem 'middleman-syntax', '~> 3.0.0'
