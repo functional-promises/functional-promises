@@ -2,9 +2,9 @@ import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
 import commonjs from 'rollup-plugin-commonjs'
 import nodeResolve from 'rollup-plugin-node-resolve'
-import { sizeSnapshot } from 'rollup-plugin-size-snapshot'
+// import { sizeSnapshot } from 'rollup-plugin-size-snapshot'
 import { uglify } from 'rollup-plugin-uglify'
-import { terser } from 'rollup-plugin-terser'
+// import { terser } from 'rollup-plugin-terser'
 
 import pkg from './package.json'
 
@@ -26,7 +26,7 @@ function external(id) {
 const cjs = [
   {
     input,
-    output: { file: `dist/cjs.js`, format: 'cjs' },
+    output: { file: `dist/cjs.js`, format: 'cjs', exports: 'default' },
     external,
     plugins: [
       babel({ exclude: /node_modules/ }),
@@ -35,7 +35,7 @@ const cjs = [
   },
   {
     input,
-    output: { file: `dist/cjs.min.js`, format: 'cjs' },
+    output: { file: `dist/cjs.min.js`, format: 'cjs', exports: 'default' },
     external,
     plugins: [
       babel({ exclude: /node_modules/ }),
