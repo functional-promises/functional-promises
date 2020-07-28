@@ -4,14 +4,16 @@ import monads from './monads'
 import arrays from './arrays'
 import { listen } from './events'
 import conditional from './conditional'
-import promise from './promise'
+import { all, reject, delay, _delay } from './promise'
+import { isObject } from 'util'
 
 
 const { isFunction, flatten } = utils
 const { map, find, findIndex, filter, flatMap, reduce } = arrays(FP)
-const { all, reject, delay, _delay } = promise(FP)
 const { tapIf, thenIf, _thenIf } = conditional(FP)
 const { chain, chainEnd } = monads(FP)
+
+export type KeyedObject = { [key: string]: any }
 
 FP.prototype.all = all
 FP.prototype.map = map
@@ -33,8 +35,8 @@ FP.prototype.reject = reject
 
 FP.all = FP.prototype.all
 FP.thenIf = FP.prototype._thenIf
-FP.delay = msec => FP.resolve().delay(msec)
-FP.silent = limit => FP.resolve().silent(limit)
+FP.delay = (msec: number) => FP.resolve().delay(msec)
+FP.silent = (limit: number) => FP.resolve().silent(limit)
 
 // Monadic Methods
 FP.chain = chain
@@ -46,7 +48,7 @@ FP.promisify = promisify
 FP.promisifyAll = promisifyAll
 FP.unpack = unpack
 
-FP.prototype.addStep = function addStep(name, args) {
+FP.prototype.addStep = function addStep(name: string, args: Iterable<any>) {
   if (this.steps) this.steps.push([name, this, args])
   return this
 }
@@ -68,17 +70,18 @@ FP.prototype.silent = FP.prototype.quiet
  * Helper to accumulate string keys *until an object is provided*. 
  * Returns a partial function to accept more keys until partial 
  */
-FP.get = function getter(...getArgs) {
+FP.get = function getter(...getArgs: Array<string | any>) {
   getArgs = flatten(getArgs)
-  const keyNames = getArgs.filter(s => typeof s === 'string')
-  const objectFound = getArgs.find(s => typeof s !== 'string')
+  const keyNames = getArgs.filter(s => typeof s === 'string') as string[]
+  const objectFound = getArgs.find(isObject) as KeyedObject
+  
   // Return partial app / auto-curry deal here
   if (!objectFound) { // return function to keep going
-    return (...extraArgs) => FP.get(...extraArgs, ...getArgs)
+    return (...extraArgs: string[]) => FP.get(...extraArgs, ...getArgs)
   }
 
   if (keyNames.length === 1) return objectFound[keyNames[0]]
-  return keyNames.reduce((extracted, key) => {
+  return keyNames.reduce((extracted: KeyedObject, key: string) => {
     extracted[key] = objectFound[key]
     return extracted
   }, {})
@@ -129,19 +132,21 @@ FP.prototype.tap = function tap(fn) {
   return FP.resolve(this._FP.promise.then(value => fn(value) ? value : value))
 }
 
-function resolve(value) {
+function resolve<T>(value: T | PromiseLike<T>): FP<T> {
   return new FP((resolve, reject) => {
-    if (value && isFunction(value.then)) return value.then(resolve).catch(reject)
+    if (value && isFunction(value?.then)) return value.then(resolve).catch(reject)
     resolve(value)
   })
 }
 
-function promisify(cb) {
+function promisify<T>(this: any, cb: { call: (arg0: any, arg1: any, arg2: (err: any, res: T) => any) => any }): FP<T> {
   return (...args) => new FP((yah, nah) =>
     cb.call(this, ...args, (err, res) => err ? nah(err) : yah(res)))
 }
 
-function promisifyAll(obj) {
+export type KeyedPromises = { [x: string]: any };
+
+function promisifyAll(obj: KeyedPromises) {
   if (!obj || !Object.getPrototypeOf(obj)) { throw new Error('Invalid Argument obj in promisifyAll(obj)') }
   return Object.getOwnPropertyNames(obj)
     .filter(key => typeof obj[key] === 'function')
@@ -151,21 +156,29 @@ function promisifyAll(obj) {
     }, obj)
 }
 
-function unpack() {
-  let resolve, reject, promise = new FP((yah, nah) => { resolve = yah; reject = nah })
+function unpack<T>() {
+  let resolve, reject, promise = new FP((_resolve: (value?: T | PromiseLike<T>) => void, _reject: (reason?: any) => void) => { resolve = _resolve; reject = _reject; })
   return { promise, resolve, reject }
 }
 
+export type Executor<TResolve = any, TReject = unknown> = (resolve: (value?: TResolve | PromiseLike<TResolve>) => void, reject: (reason?: TReject) => void) => void
 
-export default function FP(resolveRejectCB) {
-  if (!(this instanceof FP)) { return new FP(resolveRejectCB) }
+export interface FP<TReturn = any> {
+  _FP: { errors: { limit: number; count: number }; promise: Promise<TReturn>; concurrencyLimit: number }
+  new(executor: Executor): FP<TReturn>;
+}
+
+export default function FP<T>(this: FP<T>, executor: Executor<T>) {
+  if (!(this instanceof FP)) { return new FP(executor); }
   if (arguments.length !== 1) throw new Error('FunctionalPromises constructor only accepts 1 callback argument')
   this._FP = {
     errors:           { limit: 0, count: 0 },
-    promise:          new Promise(resolveRejectCB),
+    promise:          new Promise(executor),
     concurrencyLimit: 4,
   }
 }
+export {FP as FunctionalPromise};
+
 // if (process && process.on) {
 //   // process.on('uncaughtException', e => console.error('FPromises: FATAL EXCEPTION: uncaughtException', e))
 //   process.on('unhandledRejection', e => console.error('FPromises: FATAL ERROR: unhandledRejection', e))

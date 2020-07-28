@@ -1,12 +1,29 @@
 {
-  "baseUrl": "types",
+  "baseUrl": ".",
   "typeRoots": ["types"],
-  "files": ["src"],
+  "files": ["src/**/*.{js,ts}"],
+  "include": ["src", "types"],
   "compilerOptions": {
-    "target": "es2016",
-    "esModuleInterop": true,
-    "emitDeclarationOnly": true,
+    "allowJs": true,
+    "baseUrl": "./",
     "declaration": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "lib": ["dom", "esnext"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "experimentalDecorators": true,
+    "rootDir": "./src",
+    "sourceMap": true,
+    "strict": true,
+    "paths": {
+      "*": ["src/*", "node_modules/*"]
+    },
     "pretty": true,
     "outDir": "dist"
   }
