@@ -1,7 +1,7 @@
 {
   "baseUrl": ".",
   "typeRoots": ["types"],
-  "files": ["src/**/*.{js,ts}"],
+  // "files": ["src/**/*.{js,ts}"],
   "include": ["src", "types"],
   "compilerOptions": {
     "allowJs": true,

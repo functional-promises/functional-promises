@@ -4,52 +4,52 @@
 interface Dictionary<T> { [key: string]: T; }
 type IterableCollection<T> = T[] | IterableIterator<T> | Dictionary<T>
 
-type CatchFilter<E> = (new (...args: any[]) => E) | ((error: E) => boolean) | (object & E);
-type IterableItem<R> = R extends Iterable<infer U> ? U : never;
-type IterableOrNever<R> = Extract<R, Iterable<any>>;
-type Resolvable<R> = R | PromiseLike<R>;
-type IterateFunction<T, R> = (item: T, index: number, arrayLength: number) => Resolvable<R>;
+// type CatchFilter<E> = (new (...args: any[]) => E) | ((error: E) => boolean) | (object & E);
+// type IterableItem<R> = R extends Iterable<infer U> ? U : never;
+// type IterableOrNever<R> = Extract<R, Iterable<any>>;
+// type Resolvable<R> = R | PromiseLike<R>;
+// type IterateFunction<T, R> = (item: T, index: number, arrayLength: number) => Resolvable<R>;
 
-declare class FP<R> implements PromiseLike<R> {
-    constructor(callback: (resolve: (thenableOrResult?: Resolvable<R>) => void, reject: (error?: any) => void, onCancel?: (callback: () => void) => void) => void);
+// declare class FP<R> implements PromiseLike<R> {
+//     constructor(callback: (resolve: (thenableOrResult?: Resolvable<R>) => void, reject: (error?: any) => void, onCancel?: (callback: () => void) => void) => void);
 
-    // addStep(name: any, args: any): any;
-    // all(promises: any): any;
-    catchIf<T>(condition: Error | object, fn: any): FP<T>;
-    catch(fn: Function): FP<T>;
-    concurrency<T>(limit: number): FP<T>;
-    delay<T>(msec: number): FP<T>;
-    // map<T>(fn: (item: IterableItem<R>, index?: number, arrayLength?: number) => Resolvable<T>, options: any): FP<T>;
-    map<U>(fn: IterateFunction<IterableItem<R>, U>): FP<R>;
+//     // addStep(name: any, args: any): any;
+//     // all(promises: any): any;
+//     catchIf<T>(condition: Error | object, fn: any): FP<T>;
+//     catch(fn: Function): FP<T>;
+//     concurrency<T>(limit: number): FP<T>;
+//     delay<T>(msec: number): FP<T>;
+//     // map<T>(fn: (item: IterableItem<R>, index?: number, arrayLength?: number) => Resolvable<T>, options: any): FP<T>;
+//     map<U>(fn: IterateFunction<IterableItem<R>, U>): FP<R>;
 
-    // reduce<T>(iterable: any, reducer: any, initVal: any): FP<T>;
-    reduce<U>(reducer: (memo: U, item: IterableItem<R>, index?: number, arrayLength?: number) => Resolvable<U>, initialValue?: U): FP<R>;
+//     // reduce<T>(iterable: any, reducer: any, initVal: any): FP<T>;
+//     reduce<U>(reducer: (memo: U, item: IterableItem<R>, index?: number, arrayLength?: number) => Resolvable<U>, initialValue?: U): FP<R>;
 
-    filter<T>(callback: Function): FP<T>;
-    find<T>(callback: Function): FP<T>;
-    findIndex<T>(callback: Function): FP<T>;
-    get<T>(keyNames: string | string[]): FP<T> | FP<string>;
-    set<T>(keyName: string, value: any): FP<T>;
-    listen<T>(obj: EventSource, eventNames: string | string[]): FP<T>;
-    quiet<T>(limit: number): FP<T>;
-    tap<T>(fn: Function): FP<T>;
-    tapIf<T>(cond: (input: any) => Resolvable<boolean>, ifTrue: (input: any) => FP<T>, ifFalse: (input: any) => FP<T>): FP<T>;
-    then<T>(fn: Function): FP<T>;
-    thenIf<T>(cond: (input: any) => Resolvable<boolean>, ifTrue: (input: any) => FP<T>, ifFalse: (input: any) => FP<T>): FP<T>;
+//     filter<T>(callback: Function): FP<T>;
+//     find<T>(callback: Function): FP<T>;
+//     findIndex<T>(callback: Function): FP<T>;
+//     get<T>(keyNames: string | string[]): FP<T> | FP<string>;
+//     set<T>(keyName: string, value: any): FP<T>;
+//     listen<T>(obj: EventSource, eventNames: string | string[]): FP<T>;
+//     quiet<T>(limit: number): FP<T>;
+//     tap<T>(fn: Function): FP<T>;
+//     tapIf<T>(cond: (input: any) => Resolvable<boolean>, ifTrue: (input: any) => FP<T>, ifFalse: (input: any) => FP<T>): FP<T>;
+//     then<T>(fn: Function): FP<T>;
+//     thenIf<T>(cond: (input: any) => Resolvable<boolean>, ifTrue: (input: any) => FP<T>, ifFalse: (input: any) => FP<T>): FP<T>;
 
-    static chain<T>(): FP<T>;
-    chainEnd<T>(): (input: any) => FP<T>;
+//     static chain<T>(): FP<T>;
+//     chainEnd<T>(): (input: any) => FP<T>;
 
-    static all<T>(promises: Array<any> | object): FP<T>;
-    static delay<T>(msec: number): FP<T>;
-    static get(...keyNames: string, object: Object): Object | String;
-    static promisify(cb: Function): Function;
-    static promisifyAll(obj: object | Array<Function>): object;
-    static resolve<T>(value: Resolvable<T>): FP<T>;
-    static reject<T>(err: typeof Error): FP<T>;
-    static unpack<T>(): {promise: PromiseLike<T>, resolve: (value: Resolvable<T>) => void, reject: Function};
+//     static all<T>(promises: Array<any> | object): FP<T>;
+//     static delay<T>(msec: number): FP<T>;
+//     static get(...keyNames: string, object: Object): Object | String;
+//     static promisify(cb: Function): Function;
+//     static promisifyAll(obj: object | Array<Function>): object;
+//     static resolve<T>(value: Resolvable<T>): FP<T>;
+//     static reject<T>(err: typeof Error): FP<T>;
+//     static unpack<T>(): {promise: PromiseLike<T>, resolve: (value: Resolvable<T>) => void, reject: Function};
 
-}
+// }
 
 // declare namespace FP {
 //     constructor(resolveRejectCB: Function, unknownArgs: any);
@@ -281,4 +281,4 @@ declare class FP<R> implements PromiseLike<R> {
 //     }
 // }
 
-export = FP
+// export = FP
