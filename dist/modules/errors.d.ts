@@ -1,10 +1,17 @@
-export function FunctionalError(msg: any, options: any, ...args: any[]): FunctionalError;
-export class FunctionalError {
-    constructor(msg: any, options: any, ...args: any[]);
-    name: any;
+export declare class FunctionalError extends Error {
+    message: string;
+    [name: string]: any;
+    constructor(message: string, options?: {
+        [name: string]: any;
+    });
 }
-export function FunctionalUserError(...args: any[]): any;
-export function FPUnexpectedError(...args: any[]): any;
-export function FPInputError(...args: any[]): any;
-export function FPSoftError(...args: any[]): any;
-export function FPTimeout(...args: any[]): any;
+export declare class FunctionalUserError extends FunctionalError {
+}
+export declare class FPUnexpectedError extends FunctionalError {
+}
+export declare class FPInputError extends FunctionalError {
+}
+export declare class FPSoftError extends FunctionalError {
+}
+export declare class FPTimeout extends FunctionalError {
+}

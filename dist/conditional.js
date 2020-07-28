@@ -1,11 +1,11 @@
-import { __spreadArrays } from "tslib";
+import { __read, __spread } from "tslib";
 import utils from './modules/utils';
 var isPromiseLike = utils.isPromiseLike;
 export default function conditional(FP) {
     return { tapIf: tapIf, thenIf: thenIf, _thenIf: _thenIf };
     function thenIf(cond, ifTrue, ifFalse) {
         if (this.steps)
-            return this.addStep('thenIf', __spreadArrays(arguments));
+            return this.addStep('thenIf', __spread(arguments));
         if (arguments.length === 1) {
             ifTrue = cond;
             cond = function (x) { return x; };
@@ -17,7 +17,7 @@ export default function conditional(FP) {
     }
     function tapIf(cond, ifTrue, ifFalse) {
         if (this.steps)
-            return this.addStep('tapIf', __spreadArrays(arguments));
+            return this.addStep('tapIf', __spread(arguments));
         if (arguments.length === 1) {
             ifTrue = cond;
             cond = function (x) { return x; };

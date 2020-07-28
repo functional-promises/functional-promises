@@ -1,3 +1,4 @@
+import { __read, __spread } from "tslib";
 import { FPInputError } from './modules/errors';
 export default function monads(FP) {
     return { chain: chain, chainEnd: chainEnd };
@@ -25,8 +26,8 @@ export default function monads(FP) {
             var stepCount = 0;
             var _a = FP.unpack(), promise = _a.promise, resolve = _a.resolve, reject = _a.reject;
             while (stepCount < _this.steps.length) {
-                var _b = _this.steps[stepCount], fnName = _b[0], args = _b[2];
-                promise = promise[fnName].apply(promise, args);
+                var _b = __read(_this.steps[stepCount], 3), fnName = _b[0], args = _b[2];
+                promise = promise[fnName].apply(promise, __spread(args));
                 stepCount++;
             }
             resolve(input);

@@ -1,4 +1,19 @@
-import { __extends } from "tslib";
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
+exports.FPTimeout = exports.FPSoftError = exports.FPInputError = exports.FPUnexpectedError = exports.FunctionalUserError = exports.FunctionalError = void 0;
 var FunctionalError = /** @class */ (function (_super) {
     __extends(FunctionalError, _super);
     function FunctionalError(message, options) {
@@ -19,7 +34,7 @@ var FunctionalError = /** @class */ (function (_super) {
     }
     return FunctionalError;
 }(Error));
-export { FunctionalError };
+exports.FunctionalError = FunctionalError;
 var FunctionalUserError = /** @class */ (function (_super) {
     __extends(FunctionalUserError, _super);
     function FunctionalUserError() {
@@ -27,7 +42,7 @@ var FunctionalUserError = /** @class */ (function (_super) {
     }
     return FunctionalUserError;
 }(FunctionalError));
-export { FunctionalUserError };
+exports.FunctionalUserError = FunctionalUserError;
 var FPUnexpectedError = /** @class */ (function (_super) {
     __extends(FPUnexpectedError, _super);
     function FPUnexpectedError() {
@@ -35,7 +50,7 @@ var FPUnexpectedError = /** @class */ (function (_super) {
     }
     return FPUnexpectedError;
 }(FunctionalError));
-export { FPUnexpectedError };
+exports.FPUnexpectedError = FPUnexpectedError;
 var FPInputError = /** @class */ (function (_super) {
     __extends(FPInputError, _super);
     function FPInputError() {
@@ -43,7 +58,7 @@ var FPInputError = /** @class */ (function (_super) {
     }
     return FPInputError;
 }(FunctionalError));
-export { FPInputError };
+exports.FPInputError = FPInputError;
 var FPSoftError = /** @class */ (function (_super) {
     __extends(FPSoftError, _super);
     function FPSoftError() {
@@ -51,7 +66,7 @@ var FPSoftError = /** @class */ (function (_super) {
     }
     return FPSoftError;
 }(FunctionalError));
-export { FPSoftError };
+exports.FPSoftError = FPSoftError;
 var FPTimeout = /** @class */ (function (_super) {
     __extends(FPTimeout, _super);
     function FPTimeout() {
@@ -59,5 +74,4 @@ var FPTimeout = /** @class */ (function (_super) {
     }
     return FPTimeout;
 }(FunctionalError));
-export { FPTimeout };
-//# sourceMappingURL=errors.js.map
+exports.FPTimeout = FPTimeout;

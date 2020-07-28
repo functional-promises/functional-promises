@@ -5,9 +5,8 @@ export var listen = function listen(obj) {
     for (var _i = 1; _i < arguments.length; _i++) {
         eventNames[_i - 1] = arguments[_i];
     }
-    if (typeof eventNames === 'string')
-        eventNames = [eventNames];
-    if (!obj[obj.addEventListener ? 'addEventListener' : 'on'])
+    var addKey = typeof obj.addEventListener !== 'undefined' ? 'addEventListener' : 'on';
+    if (!obj[addKey])
         throw new FPInputError('Valid EventEmitter required.');
     // Gets callback to attach to the event handlers
     var handler = this.chainEnd();

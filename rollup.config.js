@@ -1,15 +1,17 @@
-import babel from 'rollup-plugin-babel'
-import replace from 'rollup-plugin-replace'
-import commonjs from 'rollup-plugin-commonjs'
-import nodeResolve from 'rollup-plugin-node-resolve'
-import { sizeSnapshot } from 'rollup-plugin-size-snapshot'
-import { uglify } from 'rollup-plugin-uglify'
-import { terser } from 'rollup-plugin-terser'
+// @ts-check
+import typescript from "@rollup/plugin-typescript";
+import babel from "rollup-plugin-babel";
+import replace from "rollup-plugin-replace";
+import commonjs from "rollup-plugin-commonjs";
+import nodeResolve from "rollup-plugin-node-resolve";
+// import { sizeSnapshot } from 'rollup-plugin-size-snapshot'
+import { uglify } from "rollup-plugin-uglify";
+// import { terser } from 'rollup-plugin-terser'
 
-import pkg from './package.json'
+import pkg from "./package.json";
 
-const input = 'src/index.js'
-const globalName = 'FP'
+const input = "src/index.js";
+const globalName = "FP";
 
 // console.log('PATHS:', require.main.paths)
 
@@ -19,72 +21,72 @@ const globalName = 'FP'
 //   return isExt
 // }
 function external(id) {
-  return id in pkg.devDependencies || id.startsWith('@babel/runtime');
+  return id in pkg.devDependencies || id.startsWith("@babel/runtime");
 }
-
 
 const cjs = [
   {
     input,
-    output: { file: `dist/cjs.js`, format: 'cjs' },
+    output: { file: `dist/cjs.js`, format: "cjs" },
     external,
     plugins: [
+      typescript({ lib: ["es5", "es6", "dom"], target: "es2020" }),
       babel({ exclude: /node_modules/ }),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
+      replace({ "process.env.NODE_ENV": JSON.stringify("development") }),
     ],
   },
   {
     input,
-    output: { file: `dist/cjs.min.js`, format: 'cjs' },
+    output: { file: `dist/cjs.min.js`, format: "cjs" },
     external,
     plugins: [
+      typescript({ lib: ["es5", "es6", "dom"], target: "es2020" }),
       babel({ exclude: /node_modules/ }),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+      replace({ "process.env.NODE_ENV": JSON.stringify("production") }),
       uglify(),
     ],
   },
-]
+];
 
 const esm = [
   {
     input,
-    output: { file: `dist/esm.js`, format: 'esm' },
+    output: { file: `dist/esm.js`, format: "esm" },
     external,
     plugins: [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
-        plugins: [['@babel/transform-runtime', { useESModules: true }]],
+        plugins: [["@babel/transform-runtime", { useESModules: true }]],
       }),
       // sizeSnapshot(),
     ],
   },
   {
     input,
-    output: { file: `dist/esm.min.js`, format: 'esm' },
+    output: { file: `dist/esm.min.js`, format: "esm" },
     external,
     plugins: [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
-        plugins: [['@babel/transform-runtime', { useESModules: true }]],
+        plugins: [["@babel/transform-runtime", { useESModules: true }]],
       }),
       // sizeSnapshot(),
       // terser(),
     ],
-  }
-]
-
+  },
+];
 
 const umd = [
   {
     input,
     output: {
       file: `dist/umd.js`,
-      format: 'umd',
+      format: "umd",
       name: globalName,
       globals: {
-        [globalName]: 'FP'
+        [globalName]: "FP",
       },
     },
     // external: Object.keys(globals),
@@ -92,18 +94,17 @@ const umd = [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
-        plugins: [['@babel/transform-runtime', { useESModules: true }]],
+        plugins: [["@babel/transform-runtime", { useESModules: true }]],
       }),
       nodeResolve(),
       commonjs({
-
         include: /node_modules/,
         namedExports: {
           // './modules/errors': ['FunctionalError', 'FPInputError' ]
           // 'node_modules/react-is/index.js': ['isValidElementType'],
         },
       }),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
+      replace({ "process.env.NODE_ENV": JSON.stringify("development") }),
       // sizeSnapshot(),
     ],
   },
@@ -111,10 +112,10 @@ const umd = [
     input,
     output: {
       file: `dist/umd.min.js`,
-      format: 'umd',
+      format: "umd",
       name: globalName,
       globals: {
-        [globalName]: 'FP'
+        [globalName]: "FP",
       },
     },
     // external: Object.keys(globals),
@@ -123,7 +124,7 @@ const umd = [
         exclude: /node_modules/,
         runtimeHelpers: true,
 
-        plugins: [['@babel/transform-runtime', { useESModules: true }]],
+        plugins: [["@babel/transform-runtime", { useESModules: true }]],
       }),
       nodeResolve(),
       commonjs({
@@ -133,26 +134,26 @@ const umd = [
           // 'node_modules/react-is/index.js': ['isValidElementType'],
         },
       }),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+      replace({ "process.env.NODE_ENV": JSON.stringify("production") }),
       // sizeSnapshot(),
       uglify(),
     ],
   },
-]
+];
 
-let config
+let config;
 switch (process.env.BUILD_ENV) {
-case 'cjs':
-  config = cjs
-  break
-case 'esm':
-  config = esm
-  break
-case 'umd':
-  config = umd
-  break
-default:
-  config = cjs.concat(esm).concat(umd)
+  case "cjs":
+    config = cjs;
+    break;
+  case "esm":
+    config = esm;
+    break;
+  case "umd":
+    config = umd;
+    break;
+  default:
+    config = cjs.concat(esm).concat(umd);
 }
 
-export default config
+export default config;

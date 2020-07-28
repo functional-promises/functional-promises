@@ -1,5 +1,5 @@
 import { FPInputError } from './modules/errors'
-
+import FP from './'
 export { _reject as reject }
 
 export function all(promises: readonly any[]) {
@@ -25,10 +25,10 @@ export function _reject(this: any, err: any) {
 
 export function _delay(msec: number) {
   if (!Number.isInteger(msec)) throw new FPInputError('FP.delay(millisec) requires a numeric arg.')
-  return value => new FP(resolve => { setTimeout(() => resolve(value), msec) })
+  return (value?: any) => new FP(resolve => { setTimeout(() => resolve(value), msec) })
 }
 
-export function delay(msec: number) {
+export function delay<T>(this: FP<T>, msec: number) {
   if (this.steps) return this.addStep('delay', [...arguments])
   return this && this._FP ? FP.resolve(this.then(_delay(msec))) : _delay(msec)()
 }

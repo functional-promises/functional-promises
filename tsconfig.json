@@ -7,11 +7,14 @@
     "allowJs": true,
     "baseUrl": "./",
     "declaration": true,
+    "declarationMap": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
+    
     "importHelpers": true,
     "lib": ["dom", "esnext"],
-    "module": "ESNext",
+    "module": "AMD",
+    "target": "ES2015",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
@@ -21,6 +24,11 @@
     "rootDir": "./src",
     "sourceMap": true,
     "strict": true,
+    "strictBindCallApply": false,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "stripInternal": true,
     "paths": {
       "*": ["src/*", "node_modules/*"]
     },

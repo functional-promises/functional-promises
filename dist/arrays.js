@@ -1,4 +1,4 @@
-import { __spreadArrays } from "tslib";
+import { __read, __spread } from "tslib";
 import utils from './modules/utils';
 import { FPInputError, FunctionalError } from './modules/errors';
 var isEnumerable = utils.isEnumerable;
@@ -14,7 +14,7 @@ export default function (FP) {
     }); }
     function _find(iterable, callback) {
         if (this.steps)
-            return this.addStep('_find', __spreadArrays(arguments));
+            return this.addStep('_find', __spread(arguments));
         if (typeof iterable === 'function') {
             callback = iterable;
             iterable = this._FP.promise;
@@ -25,18 +25,18 @@ export default function (FP) {
     }
     function flatMap(iterable, callback) {
         if (this.steps)
-            return this.addStep('flatMap', __spreadArrays(arguments));
+            return this.addStep('flatMap', __spread(arguments));
         if (typeof iterable === 'function') {
             callback = iterable;
             iterable = this._FP.promise;
         }
         return FP.resolve(iterable)
             .map(callback)
-            .reduce(function (acc, arr) { return acc.concat.apply(acc, arr); }, []);
+            .reduce(function (acc, arr) { return acc.concat.apply(acc, __spread(arr)); }, []);
     }
     function filter(iterable, callback) {
         if (this.steps)
-            return this.addStep('filter', __spreadArrays(arguments));
+            return this.addStep('filter', __spread(arguments));
         if (typeof iterable === 'function') {
             callback = iterable;
             iterable = this._FP.promise;
@@ -45,7 +45,7 @@ export default function (FP) {
     }
     function reduce(iterable, reducer, initVal) {
         if (this.steps)
-            return this.addStep('reduce', __spreadArrays(arguments));
+            return this.addStep('reduce', __spread(arguments));
         if (typeof iterable === 'function') {
             initVal = reducer;
             reducer = iterable;
@@ -63,7 +63,7 @@ export default function (FP) {
                         return resolve(total);
                     Promise.all([total, current.value])
                         .then(function (_a) {
-                        var total = _a[0], item = _a[1];
+                        var _b = __read(_a, 2), total = _b[0], item = _b[1];
                         return next(reducer(total, item, i++));
                     })["catch"](reject);
                 };
@@ -75,7 +75,7 @@ export default function (FP) {
     function map(args, fn, options) {
         var _this = this;
         if (this.steps)
-            return this.addStep('map', __spreadArrays(arguments));
+            return this.addStep('map', __spread(arguments));
         if (arguments.length === 1 && this && this._FP) {
             fn = args;
             args = this && this._FP && this._FP.promise;
@@ -117,7 +117,7 @@ export default function (FP) {
                 reject(x);
             };
             innerValues.then(function (items) {
-                args = __spreadArrays(items);
+                args = __spread(items);
                 if (!isEnumerable(items))
                     return reject(new FPInputError('Invalid input data passed into FP.map()'));
                 var complete = function () {

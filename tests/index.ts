@@ -1,6 +1,6 @@
-const path = require('path')
-const test = require('ava')
-const FP = require('../')
+import path from 'path'
+import test from 'ava'
+import FP from '../index'
 
 test('FP.resolve(true)', t => {
   return FP.resolve(true)

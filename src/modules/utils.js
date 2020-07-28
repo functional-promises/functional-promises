@@ -1,3 +1,5 @@
+"use strict";
+exports.__esModule = true;
 var utils = {
     isPromiseLike: function (p) { return !!(p && typeof p.then === 'function'); },
     isFunction: function (fn) { return typeof fn === 'function'; },
@@ -9,5 +11,4 @@ var utils = {
         return arr.reduce(function (results, item) { return results.concat(Array.isArray(item) ? utils.flatten(item) : [item]); }, []);
     }
 };
-export default utils;
-//# sourceMappingURL=utils.js.map
+exports["default"] = utils;

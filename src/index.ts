@@ -12,7 +12,7 @@ const { map, find, findIndex, filter, flatMap, reduce } = arrays(FP);
 const { tapIf, thenIf, _thenIf } = conditional(FP);
 const { chain, chainEnd } = monads(FP);
 
-export type KeyedObject = { [key: string]: any };
+export type KeyedObject<TValue> = { [key: string]: TValue };
 // export type CatchFilter<E> = (new (...args: any[]) => E) | ((error: E) => boolean) | (object & E);
 export type IterableItem<R> = R extends Iterable<infer U> ? U : never;
 // export type IterableOrNever<R> = Extract<R, Iterable<any>>;
@@ -24,20 +24,45 @@ export type IterateFunction<T, R> = (
 ) => Resolvable<R>;
 
 export type EventSource = {
-  addEventListener(type: string, listener: EventListener, options?: boolean | AddEventListenerOptions): void;
+  addEventListener?(
+    type: string,
+    listener: EventListener,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  removeEventListener?(
+    type: string,
+    listener: EventListener
+  ): void;
+  once?(
+    name: string,
+    listener: EventListener
+  ): void;
+  on?(
+    name: string,
+    listener: EventListener
+  ): void;
+  off?(
+    name: string,
+    listener: EventListener
+  ): void;
 };
 export interface AddEventListenerOptions {
   once?: boolean;
   passive?: boolean;
   capture?: boolean;
-};
+}
 export interface EventListener {
   (evt: unknown): void;
-};
+}
 export default FP;
 
 declare class FP<T> {
-  constructor(callback: (resolve: (thenableOrResult?: Resolvable<T>) => void, reject: (error?: any) => void) => void)
+  constructor(
+    callback: (
+      resolve: (thenableOrResult?: Resolvable<T>) => void,
+      reject: (error?: any) => void
+    ) => void
+  );
   // new (executor: Executor): FP<T | T[]>;
   flatMap: (iterable: any, callback: any, ...args: any[]) => any;
 
@@ -46,6 +71,8 @@ declare class FP<T> {
     errors: { limit: number; count: number };
     promise: Promise<T>;
     concurrencyLimit: number;
+    destroyHandles?: Function[];
+    destroy?: Function;
   };
 
   addStep(name: any, args: any): any;
@@ -97,10 +124,10 @@ declare class FP<T> {
   static chain<T>(): FP<T>;
   chainEnd<T>(): (input: any) => FP<T>;
 
-  static all<T, TInput>(promises: Array<TInput> | KeyedObject): FP<T[]>;
+  static all<T, TInput>(promises: Array<TInput> | KeyedObject<PromiseLike<T>>): FP<T[]>;
   static delay<T>(msec: number): FP<T>;
   static get(object: Object, ...keyNames: string[]): Object | String;
-  static promisify(cb: Function): Function;
+  static promisify<T>(cb: Function): (...args: any[]) => FP<T>;
   static promisifyAll(obj: object | Array<Function>): object;
   static resolve<T>(value: Resolvable<T>): FP<T>;
   static reject<T>(err: typeof Error): FP<T>;
@@ -261,7 +288,7 @@ FP.prototype.tap = function tap<T = any>(this: FP<T>, fn) {
 
 function resolve<T>(value: T | PromiseLike<T>): FP<T> {
   return new FP((resolve, reject) => {
-    if (value && isFunction(value?.then))
+    if (value && value?.then && isFunction(value?.then))
       return value.then(resolve).catch(reject);
     resolve(value);
   });
@@ -269,7 +296,7 @@ function resolve<T>(value: T | PromiseLike<T>): FP<T> {
 
 function promisify<T>(
   this: any,
-  cb: { call: (arg0: any, arg1: any, arg2: (err: any, res: T) => any) => any }
+  cb: { call: (arg0: any, arg1: (err: any, res: T) => any) => any }
 ): FP<T> {
   return (...args) =>
     new FP<T>((yah, nah) =>
