@@ -1,7 +1,7 @@
 {
   "baseUrl": ".",
   "typeRoots": ["types"],
-  // "files": ["src/**/*.{js,ts}"],
+  "files": ["src/index.ts"],
   "include": ["src", "types"],
   "compilerOptions": {
     "allowJs": true,
@@ -10,7 +10,7 @@
     "declarationMap": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
-    
+    "checkJs": true,
     "importHelpers": true,
     "lib": ["dom", "esnext"],
     "module": "AMD",
@@ -34,5 +34,6 @@
     },
     "pretty": true,
     "outDir": "dist"
+    
   }
 }

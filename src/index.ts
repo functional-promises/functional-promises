@@ -5,9 +5,8 @@ import arrays from "./arrays";
 import { listen } from "./events";
 import conditional from "./conditional";
 import { all, reject, delay, _delay } from "./promise";
-import { isObject } from "util";
 
-const { isFunction, flatten } = utils;
+const { isFunction, isObject, flatten } = utils;
 const { map, find, findIndex, filter, flatMap, reduce } = arrays(FP);
 const { tapIf, thenIf, _thenIf } = conditional(FP);
 const { chain, chainEnd } = monads(FP);
@@ -98,7 +97,7 @@ declare class FP<T> {
   filter<T>(callback: Function): FP<T>;
   find<T>(callback: Function): FP<T>;
   findIndex<T>(callback: Function): FP<T>;
-  get<T>(keyNames: string | string[]): FP<T> | FP<string>;
+  get<T>(keyNames?: string | string[]): FP<T>;
   set<T>(keyName: string, value: any): FP<T>;
   listen<T>(obj: EventSource, eventNames: string | string[]): FP<T>;
   // listen<T>(obj: EventSource, eventNames: string | string[]): FP<T>;
@@ -115,7 +114,7 @@ declare class FP<T> {
     ifTrue: (input: any) => FP<T>,
     ifFalse: (input: any) => FP<T>
   ): FP<T>;
-  private _thenIf<T>(
+  protected _thenIf<T>(
     cond: (input: any) => Resolvable<boolean>,
     ifTrue: (input: any) => FP<T>,
     ifFalse: (input: any) => FP<T>
@@ -126,11 +125,11 @@ declare class FP<T> {
 
   static all<T, TInput>(promises: Array<TInput> | KeyedObject<PromiseLike<T>>): FP<T[]>;
   static delay<T>(msec: number): FP<T>;
-  static get(object: Object, ...keyNames: string[]): Object | String;
+  static get(object?: Object, ...keyNames: string[]): Object | String;
   static promisify<T>(cb: Function): (...args: any[]) => FP<T>;
-  static promisifyAll(obj: object | Array<Function>): object;
-  static resolve<T>(value: Resolvable<T>): FP<T>;
-  static reject<T>(err: typeof Error): FP<T>;
+  static promisifyAll(obj: KeyedObject<Function> | Array<Function>): object;
+  static resolve<T>(value?: Resolvable<T>): FP<T>;
+  static reject<T>(err?: typeof Error): FP<T>;
   static unpack<T>(): {
     promise: PromiseLike<T>;
     resolve: (value: Resolvable<T>) => void;
@@ -205,7 +204,7 @@ FP.prototype.silent = FP.prototype.quiet;
 FP.get = function getter(...getArgs: Array<string | any>) {
   getArgs = flatten(getArgs);
   const keyNames = getArgs.filter((s) => typeof s === "string") as string[];
-  const objectFound = getArgs.find(isObject) as KeyedObject;
+  const objectFound = getArgs.find(isObject) as KeyedObject<any>;
 
   // Return partial app / auto-curry deal here
   if (!objectFound) {
@@ -214,7 +213,7 @@ FP.get = function getter(...getArgs: Array<string | any>) {
   }
 
   if (keyNames.length === 1) return objectFound[keyNames[0]];
-  return keyNames.reduce((extracted: KeyedObject, key: string) => {
+  return keyNames.reduce((extracted: KeyedObject<any>, key: string) => {
     extracted[key] = objectFound[key];
     return extracted;
   }, {});
@@ -296,7 +295,7 @@ function resolve<T>(value: T | PromiseLike<T>): FP<T> {
 
 function promisify<T>(
   this: any,
-  cb: { call: (arg0: any, arg1: (err: any, res: T) => any) => any }
+  cb: { call: (...arg0: any, arg1: (err: any, res: T) => any) => any }
 ): FP<T> {
   return (...args) =>
     new FP<T>((yah, nah) =>
