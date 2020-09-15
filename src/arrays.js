@@ -104,8 +104,8 @@ export default function(FP) {
         reject(x)
       }
       innerValues.then(items => {
+        if (!isEnumerable(items)) return reject(new FPInputError(`Value must be iterable! A '${typeof items}' was passed into FP.map()`))
         args = [...items]
-        if (!isEnumerable(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'))
         const complete = () => {
           let action = null
           if (errors.length > this._FP.errors.limit) action = rejectIt

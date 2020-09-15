@@ -35,7 +35,7 @@
   "homepage": "https://www.fpromises.io/",
   "scripts": {
     "start": "npm run build && rollup -c --watch",
-    "test": "npm run build && ava --verbose ",
+    "test": "nyc --reporter=lcov --reporter=text-summary ava --verbose",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
     "build": "rollup -c",
@@ -73,6 +73,7 @@
     "eslint-plugin-react": "7.20.3",
     "esm": "3.2.25",
     "jsdom": "^16.3.0",
+    "nyc": "^15.1.0",
     "rollup": "^2.23.0",
     "rollup-loader": "^0.3.0",
     "rollup-plugin-babel": "4.4.0",

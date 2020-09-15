@@ -12,9 +12,10 @@ export function FunctionalError(msg, options) {
   if (!(this instanceof FunctionalError)) return new FunctionalError(...arguments)
   if (typeof msg === 'object') {
     options = msg
-    if ( msg.message ) msg = msg.message
+    if ( options.message ) msg = options.message
   }
   Error.call(this, msg)
+  if (typeof msg === 'string') this.message = msg
   if (typeof options === 'object') {
     Object.getOwnPropertyNames(options)
       .forEach(key => {
