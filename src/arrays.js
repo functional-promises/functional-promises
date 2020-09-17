@@ -1,5 +1,5 @@
 import utils from './modules/utils'
-import { FPInputError, FunctionalError } from './modules/errors'
+import { FPInputError, FPCollectionError, FunctionalError } from './modules/errors'
 const { isEnumerable } = utils
 
 export default function(FP) {
@@ -104,8 +104,8 @@ export default function(FP) {
         reject(x)
       }
       innerValues.then(items => {
+        if (!isEnumerable(items)) return reject(new FPCollectionError(`Value must be iterable! A '${typeof items}' was passed into FP.map()`))
         args = [...items]
-        if (!isEnumerable(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'))
         const complete = () => {
           let action = null
           if (errors.length > this._FP.errors.limit) action = rejectIt
@@ -133,10 +133,13 @@ export default function(FP) {
             .catch(err => {
               this._FP.errors.count++
               errors.push(err)
-              // console.log('ERR HANDLER!', errors.length, this._FP.errors.limit)
+              if (this._FP.errors.limit <= 0) {
+                rejectIt(err)
+                return err
+              }
               if (errors.length > this._FP.errors.limit) {
-                const fpErr = errors.length === 1 ? err : new FunctionalError(`Error Limit ${this._FP.errors.limit} Exceeded.
-                idx=${c} errCnt=${this._FP.errors.count}`, { errors, results, ctx: this })
+                let fpErr = errors.length >= 1 ? new FPCollectionError(`Error Limit ${this._FP.errors.limit} Exceeded.
+                idx=${c} errCnt=${this._FP.errors.count}`, { errors, results, ctx: this }) : err
                 Promise.resolve(setResult(c)(err)).then(() => rejectIt(fpErr))
               } else { // console.warn('Error OK:', JSON.stringify(this._FP.errors))
                 return Promise.resolve().then(() => setResult(c)(err)).then(checkAndRun)

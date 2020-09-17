@@ -5,18 +5,18 @@ MAINTAINER Dan Levy <Dan@DanLevy.net>
 
 ENV LANG=en_US.UTF-8
 RUN apk -Uuv add nodejs \
-      abuild build-base \
-      findutils \
-      grep coreutils \
-      cmake gcc  \
-      binutils
+    abuild build-base \
+    findutils \
+    grep coreutils \
+    cmake gcc  \
+    binutils
 
 COPY Gemfile* /slate/
 # VOLUME [ "/slate" ]
 WORKDIR /slate
-RUN sudo gem install bundler && gem which bundler
-
-RUN bundle install
+RUN sudo gem install bundler -v 1.17.2 && \
+    gem which bundler && \
+    bundle install
 
 # ENTRYPOINT bundler exec middleman build
 ENTRYPOINT bundle exec middleman build --verbose

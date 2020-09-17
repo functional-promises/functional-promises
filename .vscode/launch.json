@@ -4,6 +4,12 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+  {
+    "command": "yarn test",
+    "name": "Run yarn test in terminal",
+    "request": "launch",
+    "type": "node-terminal"
+  },
     {
       "type": "node",
       "request": "launch",

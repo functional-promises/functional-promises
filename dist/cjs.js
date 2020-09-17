@@ -44,9 +44,9 @@ var _require = require('util'),
 
 inherits(FunctionalError, Error);
 inherits(FunctionalUserError, FunctionalError);
+inherits(FPCollectionError, FunctionalError);
 inherits(FPUnexpectedError, FunctionalError);
 inherits(FPInputError, FunctionalError);
-inherits(FPSoftError, FunctionalError);
 inherits(FPTimeout, FunctionalError);
 function FunctionalError(msg, options) {
   var _this = this;
@@ -55,10 +55,11 @@ function FunctionalError(msg, options) {
 
   if (typeof msg === 'object') {
     options = msg;
-    if (msg.message) msg = msg.message;
+    if (options.message) msg = options.message;
   }
 
   Error.call(this, msg);
+  if (typeof msg === 'string') this.message = msg;
 
   if (typeof options === 'object') {
     Object.getOwnPropertyNames(options).forEach(function (key) {
@@ -82,8 +83,8 @@ function FPInputError() {
   if (!(this instanceof FPInputError)) return _construct(FPInputError, Array.prototype.slice.call(arguments));
   FunctionalError.call.apply(FunctionalError, [this].concat(Array.prototype.slice.call(arguments)));
 }
-function FPSoftError() {
-  if (!(this instanceof FPSoftError)) return _construct(FPSoftError, Array.prototype.slice.call(arguments));
+function FPCollectionError() {
+  if (!(this instanceof FPCollectionError)) return _construct(FPCollectionError, Array.prototype.slice.call(arguments));
   FunctionalError.call.apply(FunctionalError, [this].concat(Array.prototype.slice.call(arguments)));
 }
 function FPTimeout() {
@@ -326,8 +327,8 @@ function arrays (FP) {
       };
 
       innerValues.then(function (items) {
+        if (!isEnumerable(items)) return reject(new FPCollectionError("Value must be iterable! A '" + typeof items + "' was passed into FP.map()"));
         args = [].concat(items);
-        if (!isEnumerable(items)) return reject(new FPInputError('Invalid input data passed into FP.map()'));
 
         var complete = function complete() {
           var action = null;
@@ -365,14 +366,19 @@ function arrays (FP) {
             return setResult(c)(val);
           }).then(checkAndRun)["catch"](function (err) {
             _this._FP.errors.count++;
-            errors.push(err); // console.log('ERR HANDLER!', errors.length, this._FP.errors.limit)
+            errors.push(err);
+
+            if (_this._FP.errors.limit <= 0) {
+              rejectIt(err);
+              return err;
+            }
 
             if (errors.length > _this._FP.errors.limit) {
-              var fpErr = errors.length === 1 ? err : new FunctionalError("Error Limit " + _this._FP.errors.limit + " Exceeded.\n                idx=" + c + " errCnt=" + _this._FP.errors.count, {
+              var fpErr = errors.length >= 1 ? new FPCollectionError("Error Limit " + _this._FP.errors.limit + " Exceeded.\n                idx=" + c + " errCnt=" + _this._FP.errors.count, {
                 errors: errors,
                 results: results,
                 ctx: _this
-              });
+              }) : err;
               Promise.resolve(setResult(c)(err)).then(function () {
                 return rejectIt(fpErr);
               });

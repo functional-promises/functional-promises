@@ -3,18 +3,19 @@ const { inherits } = require('util');
 inherits(FunctionalError, Error)
 
 inherits(FunctionalUserError, FunctionalError)
+inherits(FPCollectionError, FunctionalError)
 inherits(FPUnexpectedError, FunctionalError)
 inherits(FPInputError, FunctionalError)
-inherits(FPSoftError, FunctionalError)
 inherits(FPTimeout, FunctionalError)
 
 export function FunctionalError(msg, options) {
   if (!(this instanceof FunctionalError)) return new FunctionalError(...arguments)
   if (typeof msg === 'object') {
     options = msg
-    if ( msg.message ) msg = msg.message
+    if ( options.message ) msg = options.message
   }
   Error.call(this, msg)
+  if (typeof msg === 'string') this.message = msg
   if (typeof options === 'object') {
     Object.getOwnPropertyNames(options)
       .forEach(key => {
@@ -41,8 +42,8 @@ export function FPInputError() {
   FunctionalError.call(this, ...arguments)
 }
 
-export function FPSoftError() {
-  if (!(this instanceof FPSoftError)) return new FPSoftError(...arguments)
+export function FPCollectionError() {
+  if (!(this instanceof FPCollectionError)) return new FPCollectionError(...arguments)
   FunctionalError.call(this, ...arguments)
 }
 
