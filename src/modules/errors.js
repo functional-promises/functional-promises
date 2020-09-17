@@ -3,9 +3,9 @@ const { inherits } = require('util');
 inherits(FunctionalError, Error)
 
 inherits(FunctionalUserError, FunctionalError)
+inherits(FPCollectionError, FunctionalError)
 inherits(FPUnexpectedError, FunctionalError)
 inherits(FPInputError, FunctionalError)
-inherits(FPSoftError, FunctionalError)
 inherits(FPTimeout, FunctionalError)
 
 export function FunctionalError(msg, options) {
@@ -42,8 +42,8 @@ export function FPInputError() {
   FunctionalError.call(this, ...arguments)
 }
 
-export function FPSoftError() {
-  if (!(this instanceof FPSoftError)) return new FPSoftError(...arguments)
+export function FPCollectionError() {
+  if (!(this instanceof FPCollectionError)) return new FPCollectionError(...arguments)
   FunctionalError.call(this, ...arguments)
 }
 
