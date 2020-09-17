@@ -3,10 +3,10 @@ source 'https://rubygems.org'
 
 gem 'rack', '2.1.4' # https://community.datocms.com/t/error-with-middelman-and-rack-lint/715/15
 # Middleman
-gem 'middleman', '~>4.2.1'
-gem 'middleman-syntax', '~> 3.0.0'
-gem 'middleman-autoprefixer', '~> 2.7.0'
-gem "middleman-sprockets", "~> 4.1.0"
-gem 'rouge', '~> 2.0.5'
-gem 'redcarpet', '~> 3.4.0'
-gem 'nokogiri', '~> 1.10.8'
+gem 'middleman', '4.3.6'
+gem 'middleman-syntax', '3.0.0'
+gem 'middleman-autoprefixer', '2.8.0'
+gem 'middleman-sprockets', '4.1.0'
+gem 'rouge', '2.0.5'
+gem 'redcarpet', '3.4.0'
+gem 'nokogiri', '1.10.8'
