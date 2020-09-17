@@ -1,6 +1,6 @@
 {
   "name": "functional-promises",
-  "version": "1.7.99",
+  "version": "1.8.0",
   "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
   "esm": "auto",
   "ava": {
@@ -35,10 +35,11 @@
   "repository": {
     "url": "https://github.com/functional-promises/functional-promises.git"
   },
-  "homepage": "https://www.fpromises.io/",
+  "homepage": "https://fpromises.io/",
   "scripts": {
     "start": "rollup -c --watch",
-    "test": "npm run build && nyc  --exclude-after-remap=false --reporter=lcov --reporter=text-summary ava --verbose",
+    "test": "nyc --reporter=lcov --reporter=text-summary ava --verbose",
+    "pretest": "rollup -c",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
     "build": "rollup -c",
@@ -85,11 +86,8 @@
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-size-snapshot": "0.12.0",
-    "rollup-plugin-terser": "^6.1.0",
     "rollup-plugin-uglify": "^6.0.4",
     "strip-loader": "^0.1.2",
-    "tape": "5.0.1",
     "webpack": "4.44.0"
   }
 }

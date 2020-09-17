@@ -81,8 +81,6 @@ test('FP.map handles invalid input arguments', t => {
     .map(() => t.fail('Should not be called'))
     .then(() => t.fail(`Shouldn't get here!`))
     .catch(ex => {
-      console.error(`Unexpected response: ${ex.message}`, ex)
-
       t.truthy(ex.message.includes('Value must be iterable'), `Unexpected response: ${ex.message}`)
     })
 })
