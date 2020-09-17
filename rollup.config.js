@@ -26,7 +26,7 @@ function external(id) {
 const cjs = [
   {
     input,
-    output: { file: `dist/cjs.js`, format: 'cjs', sourcemap: true, exports: 'default' },
+    output: { file: `dist/cjs.js`, format: 'cjs', sourcemap: true, exports: 'auto' },
     external,
     plugins: [
       babel({ exclude: /node_modules/ }),
@@ -35,7 +35,7 @@ const cjs = [
   },
   {
     input,
-    output: { file: `dist/cjs.min.js`, format: 'cjs', sourcemap: true, exports: 'default' },
+    output: { file: `dist/cjs.min.js`, format: 'cjs', sourcemap: true, exports: 'auto' },
     external,
     plugins: [
       babel({ exclude: /node_modules/ }),
