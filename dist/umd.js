@@ -331,7 +331,9 @@
         };
 
         innerValues.then(function (items) {
-          if (!isEnumerable(items)) return reject(new FPCollectionError("Value must be iterable! A '" + typeof items + "' was passed into FP.map()"));
+          if (!isEnumerable(items)) return reject(new FPInputError("Value must be iterable! A '" + typeof items + "' was passed into FP.map()", {
+            input: items
+          }));
           args = [].concat(items);
 
           var complete = function complete() {
@@ -516,10 +518,14 @@
     }
   }
 
-  function promise (FP) {
+  /**
+   * 
+   * @param {FP} FunctionalPromises 
+   */
+
+  function promise(FP) {
     return {
       all: all,
-      reject: reject,
       delay: delay,
       _delay: _delay
     };
@@ -542,15 +548,12 @@
         }, {});
       });
     }
+    /**
+     * 
+     * @param {Number} msec 
+     * @returns {any => FP}
+     */
 
-    function reject(err) {
-      if (err instanceof Error) {
-        if (this) this._error = err;
-        return Promise.reject(err);
-      }
-
-      throw new Error("Reject only accepts a new instance of Error!");
-    }
 
     function _delay(msec) {
       if (!Number.isInteger(msec)) throw new FPInputError('FP.delay(millisec) requires a numeric arg.');
@@ -582,7 +585,6 @@
 
   var _promise = promise(FP),
       all = _promise.all,
-      reject = _promise.reject,
       delay = _promise.delay,
       _delay = _promise._delay;
 
@@ -794,6 +796,20 @@
       resolve: resolve,
       reject: reject
     };
+  }
+  /**
+   * @param {Error} err 
+   * @returns {Promise<Error>}
+   */
+
+
+  function reject(err) {
+    if (err instanceof Error) {
+      if (this) this._error = err;
+      return Promise.reject(err);
+    }
+
+    throw new Error("Reject only accepts a new instance of Error!");
   }
 
   function FP(resolveRejectCB) {
