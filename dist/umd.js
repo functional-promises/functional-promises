@@ -370,6 +370,7 @@
               return setResult(c)(val);
             }).then(checkAndRun)["catch"](function (err) {
               _this._FP.errors.count++;
+              err._index = c;
               errors.push(err);
 
               if (_this._FP.errors.limit <= 0) {
@@ -378,11 +379,11 @@
               }
 
               if (errors.length > _this._FP.errors.limit) {
-                var fpErr = errors.length >= 1 ? new FPCollectionError("Error Limit " + _this._FP.errors.limit + " Exceeded.\n                idx=" + c + " errCnt=" + _this._FP.errors.count, {
+                var fpErr = new FPCollectionError("Error limit " + _this._FP.errors.limit + " met/exceeded with " + _this._FP.errors.count + " errors.", {
                   errors: errors,
                   results: results,
                   ctx: _this
-                }) : err;
+                });
                 Promise.resolve(setResult(c)(err)).then(function () {
                   return rejectIt(fpErr);
                 });
@@ -817,3 +818,4 @@
   return FP;
 
 })));
+//# sourceMappingURL=umd.js.map

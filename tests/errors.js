@@ -1,6 +1,6 @@
 require("regenerator-runtime/runtime")
 const test = require('ava').default
-const FP = require('../')
+const FP = require('../index.js')
 const {FunctionalError, FPInputError, FPCollectionError} = require('../src/modules/errors.js')
 /// <reference types="../index.d.ts" />
 // const FP = require('../index.d.ts')
@@ -73,91 +73,6 @@ test('FPCollectionError has custom properties', t => {
   t.plan(2)
   t.is(error.message, 'Oh noes!')
   t.is(error.custom, 42)
-})
-
-test('FP.map handles invalid input arguments', t => {
-  t.plan(1)
-  return FP.resolve({ tears: true })
-    .map(() => t.fail('Should not be called'))
-    .then(() => t.fail(`Shouldn't get here!`))
-    .catch(ex => {
-      t.truthy(ex.message.includes('Value must be iterable'), `Unexpected response: ${ex.message}`)
-    })
-})
-
-test('FP.map handles first exception correctly', t => {
-  t.plan(1)
-  const throwThings = async () => {
-    throw new Error('🔪🔪🔪🔪🔪🔪🔪')
-  }
-  return FP.resolve([1, 2, 3])
-    .map(throwThings)
-    .then(() => t.fail(`Shouldn't get here!`))
-    .catch(ex => {
-      t.truthy(ex.message.includes('🔪'), `Unexpected message: ${ex.message}`)
-    })
-})
-
-test('FP.map handles multiple exceptions', t => {
-  t.plan(1)
-  const throwThings = async () => {
-    throw new Error('🔪🔪🔪🔪🔪🔪🔪')
-  }
-  return FP.resolve([1, 2, 3])
-    .quiet(2)
-    .map(throwThings)
-    .then(() => t.fail(`Shouldn't get here!`))
-    .catch(ex => {
-      t.truthy(ex.errors.length === 3)
-    })
-})
-
-test('Can FP.quiet() Error', t => {
-  t.plan(1)
-  return FP.resolve([1, 2, 3, 4])
-    .quiet(42)
-    .map((n) => {
-      if (n === 4) {
-        return Promise.reject(new TypeError('#4 found, dummy error!'))
-      }
-      return n
-    })
-    .then((results) => {
-      t.truthy(results[3] instanceof TypeError)
-    })
-    .catch(err => {
-      console.warn(chalk.yellowBright`ERR:`, err.message)
-      t.fail('shouldnt get here')
-    })
-})
-
-test('Can FP.quiet(1) + 2 errors trigger .catch()', t => {
-  return FP.resolve([1, 2, 3, 4])
-    .quiet(1)
-    .map((n) => {
-      if (n <= 3) {
-        throw new TypeError(n + ' Found #3 or #4 found, dummy error!')
-      }
-      return n
-    })
-    .then((results) => t.fail('shouldn\'t get here'))
-    .catch(() => t.pass('overflowed .quiet() w/ errors.'))
-})
-
-test('Can FP.quiet() swallow Errors', t => {
-  return FP.resolve([1, 2, 3, 4])
-    .quiet(1)
-    .map((n) => {
-      if (n === 4) { throw new TypeError('#4 found, dummy error!') }
-      return n
-    })
-    .then((results) => {
-      t.truthy(results[3] instanceof TypeError)
-    })
-    .catch(err => {
-      console.log(chalk.cyanBright`FAILED TO QUIET ERROR:`, err)
-      t.fail('shouldnt get here')
-    })
 })
 
 test('Can .catch() thrown Errors', t => {

@@ -1,6 +1,7 @@
+require("regenerator-runtime/runtime")
 const path = require('path')
 const test = require('ava')
-const FP = require('../')
+const FP = require('../index.js')
 
 test('FP.resolve(true)', t => {
   return FP.resolve(true)

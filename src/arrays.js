@@ -104,7 +104,7 @@ export default function(FP) {
         reject(x)
       }
       innerValues.then(items => {
-        if (!isEnumerable(items)) return reject(new FPCollectionError(`Value must be iterable! A '${typeof items}' was passed into FP.map()`))
+        if (!isEnumerable(items)) return reject(new FPInputError(`Value must be iterable! A '${typeof items}' was passed into FP.map()`, {input: items}))
         args = [...items]
         const complete = () => {
           let action = null
@@ -132,14 +132,14 @@ export default function(FP) {
             .then(checkAndRun)
             .catch(err => {
               this._FP.errors.count++
+              err._index = c
               errors.push(err)
               if (this._FP.errors.limit <= 0) {
                 rejectIt(err)
                 return err
               }
               if (errors.length > this._FP.errors.limit) {
-                let fpErr = errors.length >= 1 ? new FPCollectionError(`Error Limit ${this._FP.errors.limit} Exceeded.
-                idx=${c} errCnt=${this._FP.errors.count}`, { errors, results, ctx: this }) : err
+                let fpErr = new FPCollectionError(`Error limit ${this._FP.errors.limit} met/exceeded with ${this._FP.errors.count} errors.`, { errors, results, ctx: this })
                 Promise.resolve(setResult(c)(err)).then(() => rejectIt(fpErr))
               } else { // console.warn('Error OK:', JSON.stringify(this._FP.errors))
                 return Promise.resolve().then(() => setResult(c)(err)).then(checkAndRun)

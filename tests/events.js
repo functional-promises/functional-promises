@@ -1,5 +1,5 @@
 const test = require('ava')
-const FP = require('../')
+const FP = require('../index.js')
 const jsdom = require('jsdom')
 const EventEmitter = require('events')
 
