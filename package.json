@@ -1,6 +1,6 @@
 {
   "name": "functional-promises",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
   "esm": "auto",
   "ava": {
@@ -36,7 +36,7 @@
     "url": "https://github.com/functional-promises/functional-promises.git"
   },
   "homepage": "https://fpromises.io/",
-  "files": ["dist/*"],
+  "files": ["dist/*", "./index.*", ],
   "scripts": {
     "start": "rollup -c --watch",
     "test": "nyc --reporter=lcov --reporter=text-summary ava --verbose",
