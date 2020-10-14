@@ -14,8 +14,8 @@ type IterateFunction<T, R> = (
   index: number,
   arrayLength: number
 ) => Resolvable<R>;
-type PromiseCallback<T, R> = (input: T) => R | PromiseLike<R>;
-type PredicateFunction<T> = (input: T) => Resolvable<boolean>;
+type PromiseCallback<T, R> = (input: T) => R | PromiseLike<R> | undefined | null | void; 
+type PredicateFunction<T> = (input: T) => boolean | Resolvable<boolean>;
 type CallbackHandler<T> = (input: T) => Resolvable<any> | null | undefined;
 type NodeJsCallback<T> = (error: Error | null | undefined, input: T) => Resolvable<any> | null | undefined;
 
@@ -32,9 +32,9 @@ declare class FP<R> implements PromiseLike<R> {
   // all(promises: any): any;
   catchIf<T>(
     condition: PredicateFunction<T> | object,
-    fn: PromiseCallback<T, R>
+    fn: NodeJsCallback<T>
   ): FP<R>;
-  catch<T>(fn: PromiseCallback<T, R>): FP<R>;
+  catch<T>(fn: NodeJsCallback<T>): FP<R>;
 
   concurrency<T>(limit: number): FP<T>;
   delay<T>(msec: number): FP<T>;
