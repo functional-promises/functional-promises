@@ -1,13 +1,14 @@
 {
-  "baseUrl": "/",
+  "baseUrl": ".",
   "exclude": ["dist", "tests", "misc", "docs", "docs-source", "coverage"],
+  "extensions": [".js", ".ts"],
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "es2015",
     "allowJs": true,
     "checkJs": false,
     "esModuleInterop": true,
-    "emitDeclarationOnly": true,
-    "declaration": true,
+    "declaration": false,
     "noEmit": true,
     "pretty": true,
     "outDir": "dist"
