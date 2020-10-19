@@ -568,6 +568,7 @@ function promise(FP) {
   }
 }
 
+/// <reference path="../index.d.ts" />
 var isFunction = utils.isFunction,
     flatten = utils.flatten;
 

@@ -155,3 +155,5 @@ export declare class FP<TReturn = unknown> {
     reject: NodeJsCallback<T>;
   };
 }
+
+export type FunctionalPromises<T> = FP<T>;

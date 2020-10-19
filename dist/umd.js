@@ -572,6 +572,7 @@
     }
   }
 
+  /// <reference path="../index.d.ts" />
   var isFunction = utils.isFunction,
       flatten = utils.flatten;
 
