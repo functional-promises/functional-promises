@@ -19,7 +19,7 @@ declare class FP<TReturn> {
       index?: number,
       array?: TReturn
     ) => TOutput // ThenArgRecursive<TReturn> | PromiseLike<TReturn> | Resolvable<TReturn>
-  ): FP<Array<TOutput | TReturn>>; // | FP<ThenArgRecursive<TReturn[]>>;
+  ): FP<Array<TOutput[] | TReturn[]>; // | FP<ThenArgRecursive<TReturn[]>>;
 
   //function flatMap<T, U>(array: T[], callbackfn: (value: T, index: number, array: T[]) => U[]): U[] {
   //  return Array.prototype.concat(...array.map(callbackfn));
