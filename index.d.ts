@@ -1,3 +1,5 @@
+type Values<T> = T extends unknown[] ? T[number] : T[keyof T];
+
 declare class FP<TReturn> {
   constructor(
     callback: (
@@ -9,19 +11,22 @@ declare class FP<TReturn> {
 
   concurrency<T>(limit: number): FP<TReturn>;
   delay<T>(msec: number): FP<T>;
-  map<TItem, TReturn>(
+
+  map<TItem = TReturn, TOutput = never>(
+    this: FP<TReturn>,
     fn: (
-      item: TItem,
+      item: Values<TReturn>,
       index?: number,
       array?: TItem[]
-    ) => ThenArgRecursive<TReturn> | PromiseLike<TReturn>
-  ): FP<ThenArgRecursive<TReturn>[]>;
+    ) => TOutput // ThenArgRecursive<TReturn> | PromiseLike<TReturn> | Resolvable<TReturn>
+  ): FP<TOutput[] | TReturn[]>; // | FP<ThenArgRecursive<TReturn[]>>;
+
   flatMap<TItem>(
     fn: IterateFunction<IterableItem<TItem>, TReturn>
   ): FP<TReturn>;
 
   // reduce<T>(iterable: any, reducer: any, initVal: any): FP<TReturn>;
-  reduce<TItem, TargetType>(
+  reduce<TargetType, TItem = TReturn>(
     reducer: (
       memo: TargetType,
       item: TItem,
@@ -64,7 +69,7 @@ declare class FP<TReturn> {
   ): FP<TItem | TReturn>;
 
   static chain<T>(): FP<T>;
-  chainEnd<TItem = TReturn>(): (input: TItem) => FP<TItem | TReturn>;
+  chainEnd<TItem = TReturn>(): (input: TItem | TItem[]) => FP<TItem | TReturn>;
 
   static all<T1>(this: FP<[Resolvable<T1>]>): FP<[T1]>;
   static all<TArray>(this: FP<Iterable<Resolvable<TArray>>>): FP<TArray[]>;
