@@ -17,7 +17,7 @@ declare class FP<TReturn> {
     fn: (
       item: Values<TReturn>,
       index?: number,
-      array?: TItem[]
+      array?: TReturn
     ) => TOutput // ThenArgRecursive<TReturn> | PromiseLike<TReturn> | Resolvable<TReturn>
   ): FP<TOutput[] | TReturn[]>; // | FP<ThenArgRecursive<TReturn[]>>;
 
@@ -27,11 +27,12 @@ declare class FP<TReturn> {
 
   // reduce<T>(iterable: any, reducer: any, initVal: any): FP<TReturn>;
   reduce<TargetType, TItem = TReturn>(
+    this: FP<TReturn>,
     reducer: (
       memo: TargetType,
-      item: TItem,
+      item: Values<TReturn>,
       index?: number,
-      array?: TItem[]
+      array?: TReturn
     ) => Resolvable<TargetType>,
     initialValue?: TargetType
   ): FP<TargetType>;
@@ -49,7 +50,10 @@ declare class FP<TReturn> {
     ifTrue?: PredicateFunction<ThenArgRecursive<TReturn>>,
     ifFalse?: PredicateFunction<ThenArgRecursive<TReturn>>
   ): FP<TReturn | T>;
-  then<TItem, TReturn>(fn?: CallbackHandler<TItem, TReturn>): FP<TReturn>;
+  then<TItem, TReturn>(
+    this: FP<TReturn>,
+    fn?: CallbackHandler<TItem, TReturn>
+  ): FP<TItem | TReturn>;
   thenIf<TItem = TReturn>(
     cond: PredicateFunction<ThenArgRecursive<TItem>>,
     ifTrue?: PredicateFunction<ThenArgRecursive<TItem>>,
