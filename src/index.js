@@ -1,5 +1,5 @@
 /// <reference path="../index.d.ts" />
-/// <amd-module name="FP"/>
+// <amd-module name="FP"/>
 
 import { FunctionalError } from './modules/errors'
 import utils from './modules/utils'

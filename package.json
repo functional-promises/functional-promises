@@ -52,7 +52,7 @@
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
     "build": "rollup -c",
-    "prepublish": "./misc/compression-report.sh",
+    "prepublish": "rollup -c && ./misc/compression-report.sh",
     "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",
     "deploy": "./publish.sh",
     "version-bump-revision": "node ./misc/package-version-manager.js 0.0.1",

@@ -1,7 +1,7 @@
 // require("regenerator-runtime/runtime")
 import { resolve as _resolve } from 'path'
 import test from 'ava'
-import FP from '../src/index'
+import FP from '../'
 
 test('FP.resolve(true)', t => {
   return FP.resolve(true)
@@ -63,7 +63,7 @@ test('FP.unpack() resolve', t => {
   }
   return asyncFunc()
     .then(x => t.truthy(x))
-    .catch(err => t.fail(err))
+    .catch(err => t.fail(err.message))
 })
 
 test('FP.unpack() reject', t => {
@@ -75,7 +75,7 @@ test('FP.unpack() reject', t => {
     return promise
   }
   return asyncFunc()
-    .then(err => t.fail(err))
+    .then(() => t.fail('unexpected success result'))
     .catch(err => t.truthy(err))
 })
 

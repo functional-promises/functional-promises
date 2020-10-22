@@ -1,6 +1,6 @@
 // require("regenerator-runtime/runtime");
 import test from "ava";
-import FP from "../src/index.js";
+import FP from "../";
 import {
   FunctionalError,
   FPInputError,

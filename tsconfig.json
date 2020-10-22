@@ -1,5 +1,4 @@
 {
-  "baseUrl": ".",
   "exclude": ["dist", "tests", "misc", "docs", "docs-source", "coverage"],
   "extensions": [".js", ".ts"],
   "compilerOptions": {
@@ -11,6 +10,11 @@
     "declaration": false,
     "noEmit": true,
     "pretty": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "lib": [
+      "ES5", 
+      "DOM",
+      "ES2015.Iterable"
+    ]
   }
 }
