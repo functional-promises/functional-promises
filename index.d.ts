@@ -9,18 +9,21 @@ declare class FP<TReturn> {
     ) => void
   );
 
-  concurrency<T>(limit: number): FP<TReturn>;
-  delay<T>(msec: number): FP<T>;
+  concurrency(limit: number): FP<TReturn>;
+  delay(this: FP<TReturn>, msec: number): FP<TReturn>;
 
   map<TItem = TReturn, TOutput = never>(
     this: FP<TReturn>,
     fn: (
-      item: Values<TReturn>,
+      item: Values<TReturn> | TItem,
       index?: number,
       array?: TReturn
     ) => TOutput // ThenArgRecursive<TReturn> | PromiseLike<TReturn> | Resolvable<TReturn>
-  ): FP<TOutput[] | TReturn[]>; // | FP<ThenArgRecursive<TReturn[]>>;
+  ): FP<Array<TOutput | TReturn>>; // | FP<ThenArgRecursive<TReturn[]>>;
 
+  //function flatMap<T, U>(array: T[], callbackfn: (value: T, index: number, array: T[]) => U[]): U[] {
+  //  return Array.prototype.concat(...array.map(callbackfn));
+  //}
   flatMap<TItem>(
     fn: IterateFunction<IterableItem<TItem>, TReturn>
   ): FP<TReturn>;
@@ -44,23 +47,35 @@ declare class FP<TReturn> {
   set<T>(keyName: string, value: any): FP<TReturn>;
   listen<T>(obj: EventSource, eventNames: string | string[]): FP<TReturn>;
   quiet<T>(limit?: number): FP<TReturn>;
-  tap<TItem>(fn: CallbackHandler<TReturn, TReturn>): FP<TItem>;
+  tap(this: FP<TReturn>, fn: CallbackHandler<TReturn, any>): FP<TReturn>;
   tapIf<T = TReturn>(
     cond: PredicateFunction<T>,
     ifTrue?: PredicateFunction<ThenArgRecursive<TReturn>>,
     ifFalse?: PredicateFunction<ThenArgRecursive<TReturn>>
   ): FP<TReturn | T>;
-  then<TItem, TReturn>(
+  then<TItem>(
     this: FP<TReturn>,
-    fn?: CallbackHandler<TItem, TReturn>
-  ): FP<TItem | TReturn>;
+    onFulfilled: (value: Unpacked<TReturn>) => Resolvable<ThenArgRecursive<TItem>>,
+    onRejected?: (error: any) => Resolvable<TItem>
+  ): FP<ThenArgRecursive<TItem>>; // For simpler signature help.
+  then<TResult1 = TReturn, TResult2 = never>(
+    this: FP<TReturn>,
+    onFulfilled: ((value: TReturn) => Resolvable<TResult1>) | null,
+    onRejected?: ((reason: any) => Resolvable<TResult2>) | null
+  ): FP<TResult1 | TResult2>;
+  // then<TItem, TReturn>(
+  //   this: FP<TReturn>,
+  //   fn?: CallbackHandler<TItem, TReturn>
+  // ): FP<TItem | TReturn>;
   thenIf<TItem = TReturn>(
     cond: PredicateFunction<ThenArgRecursive<TItem>>,
     ifTrue?: PredicateFunction<ThenArgRecursive<TItem>>,
     ifFalse?: PredicateFunction<ThenArgRecursive<TItem>>
   ): FP<TReturn | TItem>;
   // catch<TItem = TReturn>(fn?: CallbackHandler<TItem, TReturn>): FP<TReturn | TItem>;
-  catch<TItem = TReturn>(onReject: ((error: any) => Resolvable<TItem>) | undefined | null): FP<TItem | TReturn>;
+  catch<TItem = TReturn>(
+    onReject: ((error: any) => Resolvable<TItem>) | undefined | null
+  ): FP<TItem | TReturn>;
   catch<TItem = TReturn>(
     cond: PredicateFunction<TReturn> | object,
     ifTrue?: PredicateFunction<TItem>,
@@ -73,7 +88,9 @@ declare class FP<TReturn> {
   ): FP<TItem | TReturn>;
 
   static chain<T>(): FP<T>;
-  chainEnd<TItem = TReturn>(): (input: TItem | TItem[]) => FP<TItem | TReturn>;
+  chainEnd<TItem = TReturn>(): (
+    input: TItem | Values<TReturn>
+  ) => FP<TItem | Values<TReturn>>;
 
   static all<T1>(this: FP<[Resolvable<T1>]>): FP<[T1]>;
   static all<TArray>(this: FP<Iterable<Resolvable<TArray>>>): FP<TArray[]>;
@@ -142,6 +159,14 @@ type ThenArgRecursive<T> = T extends PromiseLike<infer U>
 
 type CatchFilter<E> = ((error: E) => boolean) | (object & E);
 
+type Unpacked<T> = T extends (infer U)[]
+  ? U
+  : T extends (...args: any[]) => infer U
+  ? U
+  : T extends Promise<infer U>
+  ? U
+  : T;
+
 declare class FunctionalError extends Error {
   constructor(message: string);
   constructor(message: string, options?: { [key: string]: any });
@@ -185,4 +210,3 @@ declare class FPTimeout extends Error {
 }
 
 export = FP;
-
