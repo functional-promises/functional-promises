@@ -1,6 +1,6 @@
 type Values<T> = T extends unknown[] ? T[number] : T[keyof T];
 
-declare class FP<TReturn> {
+declare class FP<TReturn> implements PromiseLike<TReturn> {
   constructor(
     callback: (
       resolve: (thenableOrResult?: Resolvable<TReturn>) => void,
@@ -15,18 +15,18 @@ declare class FP<TReturn> {
   map<TItem = TReturn, TOutput = never>(
     this: FP<TReturn>,
     fn: (
-      item: Values<TReturn> | TItem,
+      item: Values<TReturn>,
       index?: number,
       array?: TReturn
     ) => TOutput // ThenArgRecursive<TReturn> | PromiseLike<TReturn> | Resolvable<TReturn>
-  ): FP<Array<TOutput[] | TReturn[]>; // | FP<ThenArgRecursive<TReturn[]>>;
+  ): FP<TOutput[] | TReturn[]>; // | FP<ThenArgRecursive<TReturn[]>>;
 
   //function flatMap<T, U>(array: T[], callbackfn: (value: T, index: number, array: T[]) => U[]): U[] {
   //  return Array.prototype.concat(...array.map(callbackfn));
   //}
-  flatMap<TItem>(
-    fn: IterateFunction<IterableItem<TItem>, TReturn>
-  ): FP<TReturn>;
+  flatMap<TItem = TReturn>(
+    fn: IterateFunction<IterableItem<TItem>, Unpacked<TItem> | TReturn>
+  ): FP<Unpacked<TReturn | Array<TReturn>>>;
 
   // reduce<T>(iterable: any, reducer: any, initVal: any): FP<TReturn>;
   reduce<TargetType, TItem = TReturn>(
@@ -41,7 +41,7 @@ declare class FP<TReturn> {
   ): FP<TargetType>;
 
   filter<T>(callback: PredicateArrayCallback<T>): FP<TReturn>;
-  find<T>(callback: PredicateArrayCallback<T>): FP<TReturn>;
+  find<T>(callback: PredicateArrayCallback<T>): FP<Unpacked<TReturn>>;
   findIndex<T>(callback: PredicateArrayCallback<T>): FP<TReturn>;
   get<T>(keyNames: keyof T | keyof T[]): FP<TReturn> | FP<string>;
   set<T>(keyName: string, value: any): FP<TReturn>;
@@ -55,23 +55,26 @@ declare class FP<TReturn> {
   ): FP<TReturn | T>;
   then<TItem>(
     this: FP<TReturn>,
-    onFulfilled: (value: Unpacked<TReturn>) => Resolvable<ThenArgRecursive<TItem>>,
-    onRejected?: (error: any) => Resolvable<TItem>
-  ): FP<ThenArgRecursive<TItem>>; // For simpler signature help.
+    onFulfilled: (value?: FPType<TReturn>) => ThenArgRecursive<TItem>,
+    onRejected?: (error?: any) => Resolvable<TItem>
+  ): FP<ThenArg<TItem>>; // For simpler signature help.
   then<TResult1 = TReturn, TResult2 = never>(
     this: FP<TReturn>,
-    onFulfilled: ((value: TReturn) => Resolvable<TResult1>) | null,
+    onFulfilled: ((value: FPType<TReturn>) => Resolvable<TResult1>) | null,
     onRejected?: ((reason: any) => Resolvable<TResult2>) | null
-  ): FP<TResult1 | TResult2>;
+  ): FP<TResult1 | TResult2 | void>;
+
+  // TODO: remove this and figure out why we dont match PromiseLike<T>
+  then<TResult1 = TReturn, TResult2 = never>(onfulfilled?: ((value: TReturn) => TResult1 | FP<TResult1> | void) | undefined | null, onrejected?: ((reason: any) => TResult2 | FP<TResult2>) | undefined | null): FP<TResult1 | TResult2 | void>;
   // then<TItem, TReturn>(
   //   this: FP<TReturn>,
   //   fn?: CallbackHandler<TItem, TReturn>
   // ): FP<TItem | TReturn>;
   thenIf<TItem = TReturn>(
-    cond: PredicateFunction<ThenArgRecursive<TItem>>,
+    cond: PredicateFunction<TItem>,
     ifTrue?: PredicateFunction<ThenArgRecursive<TItem>>,
     ifFalse?: PredicateFunction<ThenArgRecursive<TItem>>
-  ): FP<TReturn | TItem>;
+  ): FP<TReturn | TItem | void> | any;
   // catch<TItem = TReturn>(fn?: CallbackHandler<TItem, TReturn>): FP<TReturn | TItem>;
   catch<TItem = TReturn>(
     onReject: ((error: any) => Resolvable<TItem>) | undefined | null
@@ -88,9 +91,9 @@ declare class FP<TReturn> {
   ): FP<TItem | TReturn>;
 
   static chain<T>(): FP<T>;
-  chainEnd<TItem = TReturn>(): (
-    input: TItem | Values<TReturn>
-  ) => FP<TItem | Values<TReturn>>;
+  chainEnd<TItem>(): (
+    input: Unpacked<TItem> | TItem
+  ) => FP<TItem | TReturn>;
 
   static all<T1>(this: FP<[Resolvable<T1>]>): FP<[T1]>;
   static all<TArray>(this: FP<Iterable<Resolvable<TArray>>>): FP<TArray[]>;
@@ -156,7 +159,7 @@ type NodeJsCallback<T> = (
 type ThenArgRecursive<T> = T extends PromiseLike<infer U>
   ? { 0: ThenArgRecursive<U>; 1: U }[T extends PromiseLike<any> ? 0 : 1]
   : T;
-
+type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
 type CatchFilter<E> = ((error: E) => boolean) | (object & E);
 
 type Unpacked<T> = T extends (infer U)[]
@@ -166,6 +169,8 @@ type Unpacked<T> = T extends (infer U)[]
   : T extends Promise<infer U>
   ? U
   : T;
+
+type FPType<T> = T extends FP<infer U> ? U : T;
 
 declare class FunctionalError extends Error {
   constructor(message: string);
