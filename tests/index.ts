@@ -1,5 +1,5 @@
 // require("regenerator-runtime/runtime")
-import { resolve as _resolve } from 'path'
+import path from 'path'
 import test from 'ava'
 import FP from '../'
 
@@ -32,7 +32,7 @@ test('FP.all(Array)', t => {
 test('FP.promisify(fn)', t => {
   const readFile = FP.promisify(require('fs').readFile);
   // now `readFile` will return a promise rather than a cb
-  return readFile(_resolve(__dirname, '../package.json'), 'utf8')
+  return readFile(path.resolve(__dirname, '../package.json'), 'utf8')
     .then(data => {
       data = typeof data === 'string' ? JSON.parse(data) : data
       t.truthy(data.name)
@@ -44,7 +44,7 @@ test('FP.promisify(fn)', t => {
 test('FP.promisifyAll(obj)', t => {
   const fs = FP.promisifyAll(require('fs'));
   // now `readFile` will return a promise rather than a cb
-  return fs.readFileAsync(_resolve(__dirname, '../package.json'), 'utf8')
+  return fs.readFileAsync(path.resolve(__dirname, '../package.json'), 'utf8')
     .then(data => {
       data = typeof data === 'string' ? JSON.parse(data) : data
       t.truthy(data.name)

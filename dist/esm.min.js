@@ -692,10 +692,10 @@ FP.prototype.catchIf = function catchIf(condition, fn) {
   }));
 };
 
-FP.prototype.then = function then(fn) {
+FP.prototype.then = function then(onFulfilled, onRejected) {
   if (this.steps) return this.addStep('then', Array.prototype.slice.call(arguments));
-  if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn);
-  return FP.resolve(this._FP.promise.then(fn));
+  if (!isFunction(onFulfilled)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof onResolved);
+  return FP.resolve(this._FP.promise.then(onFulfilled, onRejected));
 };
 
 FP.prototype.tap = function tap(fn) {

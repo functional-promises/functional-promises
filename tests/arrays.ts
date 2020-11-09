@@ -3,6 +3,10 @@ import test from 'ava'
 import FP from '../'
 import chalk from 'chalk'
 
+function flatten<T>(arr: T[]): T[] {
+return arr.reduce(
+  (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
+}
 
 test('FP.map(x * 2)', t => {
   return FP.resolve([1, 2, 3, 4, 5])

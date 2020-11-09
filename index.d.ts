@@ -57,15 +57,15 @@ declare class FP<TReturn> implements PromiseLike<TReturn> {
     this: FP<TReturn>,
     onFulfilled: (value?: FPType<TReturn>) => ThenArgRecursive<TItem>,
     onRejected?: (error?: any) => Resolvable<TItem>
-  ): FP<ThenArg<TItem>>; // For simpler signature help.
+  ): FP<ThenArgRecursive<TItem>>; // For simpler signature help.
   then<TResult1 = TReturn, TResult2 = never>(
     this: FP<TReturn>,
     onFulfilled: ((value: FPType<TReturn>) => Resolvable<TResult1>) | null,
     onRejected?: ((reason: any) => Resolvable<TResult2>) | null
-  ): FP<TResult1 | TResult2 | void>;
+  ): FP<ThenArgRecursive<TResult1 | TResult2>>;
 
   // TODO: remove this and figure out why we dont match PromiseLike<T>
-  then<TResult1 = TReturn, TResult2 = never>(onfulfilled?: ((value: TReturn) => TResult1 | FP<TResult1> | void) | undefined | null, onrejected?: ((reason: any) => TResult2 | FP<TResult2>) | undefined | null): FP<TResult1 | TResult2 | void>;
+  then<TResult1 = TReturn, TResult2 = never>(onfulfilled?: ((value: TReturn) => TResult1 | FP<TResult1> | void) | undefined | null, onrejected?: ((reason: any) => TResult2 | FP<TResult2>) | undefined | null): FP<TResult1 | TResult2>;
   // then<TItem, TReturn>(
   //   this: FP<TReturn>,
   //   fn?: CallbackHandler<TItem, TReturn>

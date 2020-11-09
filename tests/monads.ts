@@ -1,16 +1,16 @@
 require("regenerator-runtime/runtime")
-const test = require('ava')
-const FP = require('../index.js')
+import test from 'ava'
+import FP from '../'
 
-const fetch = require('./data/justsml.github')
+import fetch from './data/justsml.github'
 
 // https://github.com/functional-promises/functional-promises/issues/27
 test('Validate Multiple Chained Steps', t => {
   return FP.resolve(fetch('https://api.github.com/users/justsml'))
     .delay(1)
     .tap(res => `github user req ok? ${res.ok}`)
-    .then(res => res.json())
-    .then(data => data.avatar_url)
+    .then((res: any) => res.json())
+    .then((data: any) => data.avatar_url)
     .tap(url => t.truthy(url === 'https://avatars2.githubusercontent.com/u/397632?v=4'))
     // .tap(url => console.log('url', url))
     // NEXT LINE SHOULD WORK!!!

@@ -1,13 +1,13 @@
-const test = require('ava')
-const FP = require('../index.js')
+import test from 'ava'
+import FP from '../'
 
 test('FP.concurrency()', t => {
   const squareAndFormatDecimal = FP
-    .chain()
+    .chain<number[]>()
     .concurrency(100)
-    .map(x => x * x)
+    .map((x: number) => x * x)
     .concurrency(2)
-    .map(x => parseFloat(x).toFixed(2))
+    .map(x => parseFloat('' + x).toFixed(2))
     .chainEnd() // returns function
 
   return squareAndFormatDecimal([5, 10, 20])
@@ -16,9 +16,9 @@ test('FP.concurrency()', t => {
 
 test('FP.concurrency(Infinity)', t => {
   const squareAndFormatDecimal = FP
-    .chain()
+    .chain<number[]>()
     .concurrency(Infinity)
-    .map(x => x * x)
+    .map((x: number) => x * x)
     .chainEnd() // returns function
 
   return squareAndFormatDecimal([5, 10, 20])

@@ -31,10 +31,10 @@ const data = {
   "updated_at": "2018-01-12T17:48:42Z"
 }
 
-module.exports = function fakeFetch(url, opts) {
+export default function fakeFetch(url: string, opts?: object) {
   return {
     ok: true,
-    json: () => data
+    json: () => Promise.resolve(data)
   }
 }
 
