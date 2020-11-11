@@ -1,3 +1,6 @@
+/// <reference path="../index.d.ts" />
+// <amd-module name="FP"/>
+
 import { FunctionalError } from './modules/errors'
 import utils from './modules/utils'
 import monads from './monads'
@@ -9,7 +12,7 @@ import promise from './promise'
 
 const { isFunction, flatten } = utils
 const { map, find, findIndex, filter, flatMap, reduce } = arrays(FP)
-const { all, reject, delay, _delay } = promise(FP)
+const { all, delay, _delay } = promise(FP)
 const { tapIf, thenIf, _thenIf } = conditional(FP)
 const { chain, chainEnd } = monads(FP)
 
@@ -117,10 +120,10 @@ FP.prototype.catchIf = function catchIf(condition, fn) {
   }))
 }
 
-FP.prototype.then = function then(fn) {
+FP.prototype.then = function then(onFulfilled, onRejected) {
   if (this.steps) return this.addStep('then', [...arguments])
-  if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn)
-  return FP.resolve(this._FP.promise.then(fn))
+  if (!isFunction(onFulfilled)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof onResolved)
+  return FP.resolve(this._FP.promise.then(onFulfilled, onRejected))
 }
 
 FP.prototype.tap = function tap(fn) {
@@ -156,6 +159,17 @@ function unpack() {
   return { promise, resolve, reject }
 }
 
+/**
+ * @param {Error} err 
+ * @returns {Promise<Error>}
+ */
+function reject(err) {
+  if (err instanceof Error) {
+    if (this) this._error = err
+    return Promise.reject(err)
+  }
+  throw new Error(`Reject only accepts a new instance of Error!`)
+}
 
 export default function FP(resolveRejectCB) {
   if (!(this instanceof FP)) { return new FP(resolveRejectCB) }

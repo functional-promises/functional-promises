@@ -1,13 +1,20 @@
 {
-  "baseUrl": "types",
-  "typeRoots": ["types"],
-  "files": ["src"],
+  "exclude": ["dist", "tests", "misc", "docs", "docs-source", "coverage"],
+  "extensions": [".js", ".ts"],
   "compilerOptions": {
-    "target": "es2016",
+    "baseUrl": ".",
+    "target": "es2015",
+    "allowJs": true,
+    "checkJs": false,
     "esModuleInterop": true,
-    "emitDeclarationOnly": true,
-    "declaration": true,
+    "declaration": false,
+    "noEmit": true,
     "pretty": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "lib": [
+      "ES5", 
+      "DOM",
+      "ES2015.Iterable"
+    ]
   }
 }

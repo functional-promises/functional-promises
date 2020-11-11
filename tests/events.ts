@@ -1,7 +1,7 @@
-const test = require('ava')
-const FP = require('../')
-const jsdom = require('jsdom')
-const EventEmitter = require('events')
+import test from 'ava'
+import FP from '../src/index'
+import jsdom from 'jsdom'
+import {EventEmitter} from 'events'
 
 const getFakeWindow = (html) => {
   const { JSDOM } = jsdom
@@ -28,6 +28,7 @@ test.cb('FP.chain().listen() EventEmitter', t => {
 test.cb('FP.chain().listen() DOM', t => {
   const buttonUi = getFakeWindow(`<button id='btn'>Click me!</button>`)
   const {document, window} = buttonUi
+  // @ts-ignore
   global.window = window
   global.document = document
   const btn = document.querySelector('#btn')
@@ -44,6 +45,7 @@ test.cb('FP.chain().listen() DOM', t => {
   }
   Promise.resolve(listenChain())
     .then(({btn}) => {
+      // @ts-ignore
       btn.click()
     })
 })

@@ -1,5 +1,5 @@
-const test = require('ava')
-const FP = require('../')
+import test from 'ava'
+import FP from '../'
 
 test('FP.thenIf(true)', t => FP.resolve(true)
   .thenIf(x => x, x => t.truthy(x), () => t.fail()))

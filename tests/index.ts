@@ -1,6 +1,7 @@
-const path = require('path')
-const test = require('ava')
-const FP = require('../')
+// require("regenerator-runtime/runtime")
+import path from 'path'
+import test from 'ava'
+import FP from '../'
 
 test('FP.resolve(true)', t => {
   return FP.resolve(true)
@@ -56,23 +57,25 @@ test('FP.unpack() resolve', t => {
   const asyncFunc = () => {
     const { promise, resolve } = FP.unpack()
     Promise.resolve(true)
+      // @ts-ignore
       .then(x => resolve(x))
     return promise
   }
   return asyncFunc()
     .then(x => t.truthy(x))
-    .catch(err => t.fail(err))
+    .catch(err => t.fail(err.message))
 })
 
 test('FP.unpack() reject', t => {
   const asyncFunc = () => {
     const { promise, reject } = FP.unpack()
     Promise.resolve('Error!')
+      // @ts-ignore
       .then(x => reject(x))
     return promise
   }
   return asyncFunc()
-    .then(err => t.fail(err))
+    .then(() => t.fail('unexpected success result'))
     .catch(err => t.truthy(err))
 })
 
@@ -106,8 +109,7 @@ test('FP.delay() with .concurrency(Infinity)', t => {
   return FP.resolve([1, 2, 3, 4])
     .concurrency(Infinity)
     .map(num => {
-      return FP
-        .resolve(num)
+      return FP.resolve(num)
         .delay(50)
     })
     .then(() => {
@@ -121,8 +123,7 @@ test('FP.delay() with .concurrency(10)', t => {
   return FP.resolve([1, 2, 3, 4])
     .concurrency(10)
     .map(num => {
-      return FP
-        .resolve(num)
+      return FP.resolve(num)
         .delay(50)
     })
     .then(() => {
@@ -138,8 +139,7 @@ test('FP.delay() with .concurrency(1)', t => {
     .concurrency(1)
     // now only 1 map() callback happens at a time
     .map(num => {
-      return FP
-        .resolve(num)
+      return FP.resolve(num)
         .delay(50)
     })
     .then(() => {

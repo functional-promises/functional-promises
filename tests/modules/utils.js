@@ -1,6 +1,6 @@
 import test from 'ava'
-import utils from '../../src/modules/utils'
-import FP from '../../'
+import utils from '../../src/modules/utils.js'
+// import FP from '../../index.js'
 
 test('flatten', t => {
   t.deepEqual(utils.flatten([[1], [2, 3]]), [1, 2, 3])

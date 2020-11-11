@@ -1,8 +1,12 @@
-import { FPInputError } from './modules/errors'
+import { FPInputError } from './modules/errors.js'
 
-export default function(FP) {
+/**
+ * 
+ * @param {FP} FunctionalPromises 
+ */
+export default function promise(FP) {
 
-  return { all, reject, delay, _delay }
+  return { all, delay, _delay }
 
   function all(promises) {
     return FP.resolve(Array.isArray(promises) ? Promise.all(promises) : promiseAllObject(promises))
@@ -17,14 +21,11 @@ export default function(FP) {
     }, {}))
   }
 
-  function reject(err) {
-    if (err instanceof Error) {
-      if (this) this._error = err
-      return Promise.reject(err)
-    }
-    throw new Error(`Reject only accepts a new instance of Error!`)
-  }
-
+  /**
+   * 
+   * @param {Number} msec 
+   * @returns {any => FP}
+   */
   function _delay(msec) {
     if (!Number.isInteger(msec)) throw new FPInputError('FP.delay(millisec) requires a numeric arg.')
     return value => new FP(resolve => { setTimeout(() => resolve(value), msec) })

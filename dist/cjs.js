@@ -327,7 +327,9 @@ function arrays (FP) {
       };
 
       innerValues.then(function (items) {
-        if (!isEnumerable(items)) return reject(new FPCollectionError("Value must be iterable! A '" + typeof items + "' was passed into FP.map()"));
+        if (!isEnumerable(items)) return reject(new FPInputError("Value must be iterable! A '" + typeof items + "' was passed into FP.map()", {
+          input: items
+        }));
         args = [].concat(items);
 
         var complete = function complete() {
@@ -366,6 +368,7 @@ function arrays (FP) {
             return setResult(c)(val);
           }).then(checkAndRun)["catch"](function (err) {
             _this._FP.errors.count++;
+            err._index = c;
             errors.push(err);
 
             if (_this._FP.errors.limit <= 0) {
@@ -374,11 +377,11 @@ function arrays (FP) {
             }
 
             if (errors.length > _this._FP.errors.limit) {
-              var fpErr = errors.length >= 1 ? new FPCollectionError("Error Limit " + _this._FP.errors.limit + " Exceeded.\n                idx=" + c + " errCnt=" + _this._FP.errors.count, {
+              var fpErr = new FPCollectionError("Error limit " + _this._FP.errors.limit + " met/exceeded with " + _this._FP.errors.count + " errors.", {
                 errors: errors,
                 results: results,
                 ctx: _this
-              }) : err;
+              });
               Promise.resolve(setResult(c)(err)).then(function () {
                 return rejectIt(fpErr);
               });
@@ -511,10 +514,14 @@ function conditional(FP) {
   }
 }
 
-function promise (FP) {
+/**
+ * 
+ * @param {FP} FunctionalPromises 
+ */
+
+function promise(FP) {
   return {
     all: all,
-    reject: reject,
     delay: delay,
     _delay: _delay
   };
@@ -537,15 +544,12 @@ function promise (FP) {
       }, {});
     });
   }
+  /**
+   * 
+   * @param {Number} msec 
+   * @returns {any => FP}
+   */
 
-  function reject(err) {
-    if (err instanceof Error) {
-      if (this) this._error = err;
-      return Promise.reject(err);
-    }
-
-    throw new Error("Reject only accepts a new instance of Error!");
-  }
 
   function _delay(msec) {
     if (!Number.isInteger(msec)) throw new FPInputError('FP.delay(millisec) requires a numeric arg.');
@@ -564,6 +568,7 @@ function promise (FP) {
   }
 }
 
+/// <reference path="../index.d.ts" />
 var isFunction = utils.isFunction,
     flatten = utils.flatten;
 
@@ -577,7 +582,6 @@ var _arrays = arrays(FP),
 
 var _promise = promise(FP),
     all = _promise.all,
-    reject = _promise.reject,
     delay = _promise.delay,
     _delay = _promise._delay;
 
@@ -727,10 +731,10 @@ FP.prototype.catchIf = function catchIf(condition, fn) {
   }));
 };
 
-FP.prototype.then = function then(fn) {
+FP.prototype.then = function then(onFulfilled, onRejected) {
   if (this.steps) return this.addStep('then', Array.prototype.slice.call(arguments));
-  if (!isFunction(fn)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof fn);
-  return FP.resolve(this._FP.promise.then(fn));
+  if (!isFunction(onFulfilled)) throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof onResolved);
+  return FP.resolve(this._FP.promise.then(onFulfilled, onRejected));
 };
 
 FP.prototype.tap = function tap(fn) {
@@ -790,6 +794,20 @@ function unpack() {
     reject: reject
   };
 }
+/**
+ * @param {Error} err 
+ * @returns {Promise<Error>}
+ */
+
+
+function reject(err) {
+  if (err instanceof Error) {
+    if (this) this._error = err;
+    return Promise.reject(err);
+  }
+
+  throw new Error("Reject only accepts a new instance of Error!");
+}
 
 function FP(resolveRejectCB) {
   if (!(this instanceof FP)) {
@@ -811,3 +829,4 @@ function FP(resolveRejectCB) {
 // }
 
 module.exports = FP;
+//# sourceMappingURL=cjs.js.map
