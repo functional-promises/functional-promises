@@ -1,6 +1,6 @@
 {
   "name": "functional-promises",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
   "esm": "auto",
   "ava": {
@@ -33,7 +33,7 @@
     ]
   },
   "types": "./index.d.ts",
-  "main": "./dist/cjs.js",
+  "main": "./dist/cjs.min.js",
   "module": "./dist/umd.min.js",
   "browser": "./dist/umd.min.js",
   "unpkg": "./dist/umd.min.js",
@@ -42,8 +42,10 @@
   },
   "homepage": "https://fpromises.io/",
   "files": [
+    "*.d.ts",
     "dist/*",
-    "./index.*"
+    "index.*",
+    "README*"
   ],
   "scripts": {
     "start": "rollup -c --watch",
