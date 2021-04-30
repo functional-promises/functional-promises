@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 input_file=${1:-dist/functional-promise.min.js}
 output_mode=${2:-yaml}
 

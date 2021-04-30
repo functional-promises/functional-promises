@@ -1,6 +1,6 @@
 {
   "name": "functional-promises",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
   "esm": "auto",
   "ava": {
@@ -104,5 +104,6 @@
     "tslib": "^2.0.3",
     "typescript": "^4.0.3",
     "webpack": "4.44.0"
-  }
+  },
+  "dependencies": {}
 }

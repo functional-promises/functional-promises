@@ -17,8 +17,16 @@ export default function(FP) {
     }
 
     return FP.resolve(iterable)
-      .filter(callback)
-      .then((results) => results[0] != undefined ? { item: results[0], index: results.indexOf(results[0]) } : { item: undefined, index: -1 })
+      .reduce(async (result, item, index) => {
+        if (!result.item) {
+          if (await callback(item)) {
+            result.item = item
+            result.index = index
+          }
+        }
+        return result
+      }, {item: undefined, index: -1})
+      // .then(({item, index}) => )
   }
   
   function flatMap(iterable, callback) {
