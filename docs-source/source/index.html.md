@@ -108,7 +108,7 @@ The **compressed+minified bundle** weighs in at a humble **~3Kb**. The **non-gzi
 
 | Library                     	                                    | Main deal | Files   | Lines of Code  | .min.js kB
 |------------------------------	                                    |-----------|---------: |--------------: |-------------------:
-| **Functional Promise v1.8.1**                                   	| Sync & Async Chains | 8 |           376	 | 10 Kb / 3 Kb gzipped
+| **Functional Promise v2.0.3**                                   	| Sync & Async Chains | 8 |           376	 | 10 Kb / 3 Kb gzipped
 | [Bluebird](https://github.com/petkaantonov/bluebird) v3.5.1       | Promises Replacement |        38 |         5,188	 | 80 Kb
 | [RxJS](https://github.com/ReactiveX/RxJS) v5.5.6                 	| Observables Chaining |     458 |        12,266  | 150 Kb
 | [IxJS](https://github.com/ReactiveX/IxJS) v2.3.4                 	| \[Async\]Iterable Chaining |     521 |        12,366	 | 145 Kb

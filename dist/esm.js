@@ -1,4 +1,6 @@
 import _construct from '@babel/runtime/helpers/esm/construct';
+import _regeneratorRuntime from '@babel/runtime/regenerator';
+import _asyncToGenerator from '@babel/runtime/helpers/esm/asyncToGenerator';
 
 var _require = require('util'),
     inherits = _require.inherits;
@@ -159,15 +161,47 @@ function arrays (FP) {
       iterable = this._FP.promise;
     }
 
-    return FP.resolve(iterable).filter(callback).then(function (results) {
-      return results[0] != undefined ? {
-        item: results[0],
-        index: results.indexOf(results[0])
-      } : {
-        item: undefined,
-        index: -1
+    return FP.resolve(iterable).reduce( /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(result, item, index) {
+        return _regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (result.item) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _context.next = 3;
+                return callback(item);
+
+              case 3:
+                if (!_context.sent) {
+                  _context.next = 6;
+                  break;
+                }
+
+                result.item = item;
+                result.index = index;
+
+              case 6:
+                return _context.abrupt("return", result);
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function (_x, _x2, _x3) {
+        return _ref3.apply(this, arguments);
       };
-    });
+    }(), {
+      item: undefined,
+      index: -1
+    }); // .then(({item, index}) => )
   }
 
   function flatMap(iterable, callback) {
@@ -215,9 +249,9 @@ function arrays (FP) {
         var next = function next(total) {
           var current = iterator.next();
           if (current.done) return resolve(total);
-          Promise.all([total, current.value]).then(function (_ref3) {
-            var total = _ref3[0],
-                item = _ref3[1];
+          Promise.all([total, current.value]).then(function (_ref4) {
+            var total = _ref4[0],
+                item = _ref4[1];
             return next(reducer(total, item, i++));
           })["catch"](reject);
         };

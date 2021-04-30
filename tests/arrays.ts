@@ -85,6 +85,28 @@ test('FP.find(predicate)', t => {
     })
 })
 
+test('FP.findIndex', t => {
+  const rawData = [-99, null, undefined, NaN, 20, 40, 50, '99']
+  return FP.resolve(rawData)
+    .map(x => Number(x))  // convert to numeric [-99 99]
+    .findIndex(n => n >= 50)
+    .then(index => {
+      // @ts-ignore
+      t.is(index, 6);
+    })
+})
+
+test('FP.findIndex, no match', t => {
+  const rawData = [-99, null, undefined, NaN, 20, 40, 50, '99']
+  return FP.resolve(rawData)
+    .map(x => Number(x))  // convert to numeric [-99 99]
+    .findIndex(n => n >= 99999)
+    .then(index => {
+      // @ts-ignore
+      t.is(index, -1);
+    })
+})
+
 test('FP.map handles invalid input arguments', t => {
   t.plan(2)
   return FP.resolve(void { tears: true })
