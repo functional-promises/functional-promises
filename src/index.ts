@@ -1,4 +1,5 @@
 import { FunctionalError } from './modules/errors'
+import type { FPStatic } from './public-types'
 import utils from './modules/utils'
 import monads from './monads'
 import arrays from './arrays'
@@ -197,4 +198,4 @@ function reject(this: any, err: Error) {
   throw new Error('Reject only accepts a new instance of Error!')
 }
 
-export default FP as any
+export default FP as unknown as FPStatic
