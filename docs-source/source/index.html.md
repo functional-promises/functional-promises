@@ -72,7 +72,7 @@ FP.resolve(fetch('/profile', {method: 'GET'}))
   .then(avatarUrl => imgElement.src = avatarUrl)
 ```
 
-[![Build Status](https://travis-ci.org/functional-promises/functional-promises.svg?branch=master)](https://travis-ci.org/functional-promises/functional-promises)
+[![CI](https://github.com/functional-promises/functional-promises/actions/workflows/node.js.yml/badge.svg)](https://github.com/functional-promises/functional-promises/actions/workflows/node.js.yml)
 [![GitHub package version](https://img.shields.io/github/package-json/v/functional-promises/functional-promises.svg?style=flat)](https://github.com/functional-promises/functional-promises)
 [![GitHub stars](https://img.shields.io/github/stars/functional-promises/functional-promises.svg?label=Stars&style=flat)](https://github.com/functional-promises/functional-promises)
 
@@ -870,4 +870,3 @@ Set `threadLimit` to constrain the amount of simultaneous tasks/promises can run
 </p></blockquote>
 
 # Misc
-

@@ -5,8 +5,8 @@
   "version": "0.2.0",
   "configurations": [
   {
-    "command": "yarn test",
-    "name": "Run yarn test in terminal",
+    "command": "pnpm test",
+    "name": "Run pnpm test in terminal",
     "request": "launch",
     "type": "node-terminal"
   },
@@ -25,10 +25,10 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch via NPM",
-      "runtimeExecutable": "npm",
+      "name": "Launch via pnpm",
+      "runtimeExecutable": "pnpm",
       "runtimeArgs": [
-        "run-script",
+        "run",
         "test"
       ],
       "port": 9229
@@ -47,7 +47,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}/src/index.js"
+      "program": "${workspaceFolder}/src/index.ts"
     }
   ]
 }
