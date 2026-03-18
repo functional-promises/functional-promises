@@ -1,51 +1,43 @@
-import test from 'ava'
+import { EventEmitter } from 'node:events'
+import { expect, test } from 'vitest'
+import { JSDOM } from 'jsdom'
 import FP from '../src/index'
-import jsdom from 'jsdom'
-import {EventEmitter} from 'events'
 
-const getFakeWindow = (html) => {
-  const { JSDOM } = jsdom
+const getFakeWindow = (html: string) => {
   const dom = new JSDOM(`<!DOCTYPE html>${html}`)
-  const {window} = dom
-  return {window, dom, document: window.document}
+  const { window } = dom
+  return { window, dom, document: window.document }
 }
 
-test.cb('FP.chain().listen() EventEmitter', t => {
-  // const cleanupHandlers = []
+test('FP.chain().listen() EventEmitter', async () => {
   const eventBus = new EventEmitter()
 
-  FP.chain()
-    .then(event => {
-      t.truthy(event)
-      t.truthy(event.worked)
-      t.end()
-    })
-    .listen(eventBus, 'hit')
-  eventBus.emit('hit', {worked: true})
+  const result = await new Promise((resolve) => {
+    FP.chain()
+      .then((event: any) => resolve(event))
+      .listen(eventBus, 'hit')
+    eventBus.emit('hit', { worked: true })
+  })
+
+  expect(result).toBeTruthy()
+  expect((result as { worked: boolean }).worked).toBe(true)
 })
 
+test('FP.chain().listen() DOM', async () => {
+  const buttonUi = getFakeWindow("<button id='btn'>Click me!</button>")
+  const { document, window } = buttonUi
 
-test.cb('FP.chain().listen() DOM', t => {
-  const buttonUi = getFakeWindow(`<button id='btn'>Click me!</button>`)
-  const {document, window} = buttonUi
-  // @ts-ignore
-  global.window = window
-  global.document = document
-  const btn = document.querySelector('#btn')
+  ;(global as any).window = window
+  ;(global as any).document = document
+  const btn = document.querySelector('#btn') as HTMLButtonElement
 
-  const listenChain = () => {
-    const cleanupHandlers = []
+  const result = await new Promise((resolve) => {
     FP.chain()
-      .then(el => {
-        t.truthy(el)
-        t.end()
-      })
+      .then((el: unknown) => resolve(el))
       .listen(btn, 'click')
-    return {btn, cleanupHandlers}
-  }
-  Promise.resolve(listenChain())
-    .then(({btn}) => {
-      // @ts-ignore
-      btn.click()
-    })
+
+    btn.click()
+  })
+
+  expect(result).toBeTruthy()
 })

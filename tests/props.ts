@@ -1,58 +1,42 @@
-const test = require('ava')
-const FP = require('../index.js')
+import { expect, test } from 'vitest'
+import FP from '../src/index'
 
-test('FP.get(keys) static "partial app" function', t => {
+test('FP.get(keys) static "partial app" function', () => {
   const result = FP.get('foo')
-  t.true(typeof result === 'function', 'result should be a Function')
-  t.is(result({foo: 'bar'}), 'bar', 'getter Function should return correct string')
+  expect(typeof result).toBe('function')
+  expect(result({ foo: 'bar' })).toBe('bar')
 })
 
-test('fp.resolve(obj).get(...keyNames)', t => FP
-  .resolve({foo: 'bar', baz: 'woo'})
-  .get('foo', 'baz')
-  .then(obj => t.is(obj.foo, 'bar'))
-)
+test('fp.resolve(obj).get(...keyNames)', () =>
+  FP.resolve({ foo: 'bar', baz: 'woo' })
+    .get('foo', 'baz')
+    .then((obj: { foo: string }) => expect(obj.foo).toBe('bar')))
 
-test('fp.resolve(obj).get(key, key2)', t => {
-  return FP
-  .resolve({foo: 'bar', baz: 'woo'})
-  .get('foo', 'baz')
-  .then(obj => t.is(obj.foo, 'bar'))
+test('fp.resolve(obj).get(key, key2)', () =>
+  FP.resolve({ foo: 'bar', baz: 'woo' })
+    .get('foo', 'baz')
+    .then((obj: { foo: string }) => expect(obj.foo).toBe('bar')))
+
+test('fp.get([keyNames])', () =>
+  FP.resolve({ foo: 'bar', baz: 'woo' })
+    .get(['foo', 'baz'])
+    .then((obj: { foo: string }) => expect(obj.foo).toBe('bar')))
+
+test('fp.get(keyName)', () => FP.resolve({ foo: 'bar' }).get('foo').then((bar: string) => expect(bar).toBe('bar')))
+
+test('FP.get(keyName, obj)', () => FP.resolve({ foo: 'bar' }).get('foo').then((bar: string) => expect(bar).toBe('bar')))
+
+test('FP.get(o, k) static method', () => {
+  const result = FP.get({ foo: 'bar' }, 'foo')
+  expect(result).toBe('bar')
 })
 
-test('fp.get([keyNames])', t => FP
-  .resolve({foo: 'bar', baz: 'woo'})
-  .get(['foo', 'baz'])
-  .then(obj => t.is(obj.foo, 'bar'))
-)
-
-test('fp.get(keyName)', t => FP
-  .resolve({foo: 'bar'})
-  .get('foo')
-  .then(bar => t.is(bar, 'bar'))
-)
-
-test('FP.get(keyName, obj)', t => FP
-  .resolve({foo: 'bar'})
-  .get('foo')
-  .then(bar => t.is(bar, 'bar'))
-)
-
-test('FP.get(o, k) static method', t => {
-  const result = FP.get({foo: 'bar'}, 'foo')
-  t.is(result, 'bar')
+test('FP.get(keyNames, obj)', () => {
+  const result = FP.get('foo', { foo: 'bar' })
+  expect(result).toBe('bar')
 })
 
-test('FP.get(keyNames, obj)', t => {
-  const result = FP.get('foo', {foo: 'bar'})
-  t.is(result, 'bar')
-})
-
-test('fp.set(keyName, value)', t => FP
-  .resolve({foo: 'bar'})
-  .set('foo', 'baz')
-  .then(obj => t.is(obj.foo, 'baz'))
-)
-
-
-
+test('fp.set(keyName, value)', () =>
+  FP.resolve({ foo: 'bar' })
+    .set('foo', 'baz')
+    .then((obj: { foo: string }) => expect(obj.foo).toBe('baz')))

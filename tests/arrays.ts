@@ -1,207 +1,160 @@
-import "regenerator-runtime/runtime"
-import test from 'ava'
-import FP from '../'
-import chalk from 'chalk'
+import { expect, test } from 'vitest'
+import FP from '../src/index'
 
-function flatten<T>(arr: T[]): T[] {
-return arr.reduce(
-  (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
-}
+test('FP.map(x * 2)', () =>
+  FP.resolve([1, 2, 3, 4, 5])
+    .map((x: number) => x * 2)
+    .then((results: unknown) => expect(results).toEqual([2, 4, 6, 8, 10])))
 
-test('FP.map(x * 2)', t => {
-  return FP.resolve([1, 2, 3, 4, 5])
-    .map(x => x * 2)
-    .then(results => {
-      t.deepEqual(results, [2, 4, 6, 8, 10])
-    })
-})
+test('FP.map(x * 2).map(x * 2)', () =>
+  FP.resolve([1, 2, 3, 4, 5])
+    .map((x: number) => Number(x) * 2)
+    .map((x: number) => Number(x) * 2)
+    .then((results: unknown) => expect(results).toEqual([4, 8, 12, 16, 20])))
 
-test('FP.map(x * 2).map(x * 2)', t => {
-  return FP.resolve([1, 2, 3, 4, 5])
-    .map(x => Number(x) * 2)
-    .map(x => Number(x) * 2)
-    .then(results => {
-      // console.warn('results', results)
-      t.deepEqual(results, [4, 8, 12, 16, 20])
-    })
-})
+test('[...Promise].map(x * 4)', () =>
+  FP.resolve([FP.resolve(1), Promise.resolve(2), Promise.resolve(3), Promise.resolve(4), Promise.resolve(5)])
+    .map((x: number) => Number(x) * 4)
+    .then((results: unknown) => expect(results).toEqual([4, 8, 12, 16, 20])))
 
-test('[...Promise].map(x * 4)', t => {
-  return FP.resolve([FP.resolve(1), Promise.resolve(2), Promise.resolve(3), Promise.resolve(4), Promise.resolve(5)])
-    .map(x => Number(x) * 4)
-    .then(results => {
-      // console.warn('results', results)
-      t.deepEqual(results, [4, 8, 12, 16, 20])
-    })
-})
+test('FP.flatMap(x * 2)', () =>
+  FP.resolve([[1, 2], [3, 4]])
+    .flatMap((x: unknown) => x)
+    .then((results: unknown) => expect(results).toEqual([1, 2, 3, 4])))
 
-test('FP.flatMap(x * 2)', t => {
-  return FP.resolve([[1, 2], [3, 4]])
-    .flatMap(x => x)
-    .then(results => {
-      t.deepEqual(results, [1, 2, 3, 4])
-    })
-})
+test('[...Promise].flatMap(f(x) * 2)', () =>
+  FP.resolve([FP.resolve([1, 2]), FP.resolve([3, 4])])
+    .flatMap((x: unknown) => x)
+    .then((results: unknown) => expect(results).toEqual([1, 2, 3, 4])))
 
-test('[...Promise].flatMap(f(x) * 2)', t => {
-  return FP.resolve([FP.resolve([1, 2]), FP.resolve([3, 4])])
-    .flatMap(x => x)
-    .then(results => {
-      t.deepEqual(results, [1, 2, 3, 4])
-    })
-})
+test('FP.flatMap(f(x) * 2)', () =>
+  FP.resolve([1, 3])
+    .flatMap((x: number) => [x, x + 1])
+    .then((results: unknown) => expect(results).toEqual([1, 2, 3, 4])))
 
-test('FP.flatMap(f(x) * 2)', t => {
-  return FP.resolve([1, 3])
-    .flatMap(x => [x, x + 1])
-    .then(results => {
-      t.deepEqual(results, [1, 2, 3, 4])
-    })
-})
+test('FP.reduce(sum)', () =>
+  FP.resolve([1, 2, 3, 4, 5])
+    .reduce((total: number, n: number) => total + n, 0)
+    .then((results: unknown) => expect(results).toBe(15)))
 
-test('FP.reduce(sum)', t => {
-  return FP.resolve([1, 2, 3, 4, 5])
-    .reduce((total, n) => total + n, 0)
-    .then(results => {
-      t.is(results, 15)
-    })
-})
-
-test('FP.filter(predicate)', t => {
-  const isEven = x => x % 2 === 0
+test('FP.filter(predicate)', () => {
+  const isEven = (x: number) => x % 2 === 0
   return FP.resolve([1, 2, 3, 4, 5])
     .filter(isEven)
-    .then(results => {
-      t.deepEqual(results, [2, 4])
-    })
+    .then((results: unknown) => expect(results).toEqual([2, 4]))
 })
 
-test('FP.find(predicate)', t => {
-  const isEven = x => x % 2 === 0
+test('FP.find(predicate)', () => {
+  const isEven = (x: number) => x % 2 === 0
   return FP.resolve([1, 2, 3, 4, 5])
     .find(isEven)
-    .then(results => {
-      t.deepEqual(results, 2)
-    })
+    .then((results: unknown) => expect(results).toEqual(2))
 })
 
-test('FP.findIndex', t => {
-  const rawData = [-99, null, undefined, NaN, 20, 40, 50, '99']
+test('FP.findIndex', () => {
+  const rawData = [-99, null, undefined, Number.NaN, 20, 40, 50, '99']
   return FP.resolve(rawData)
-    .map(x => Number(x))  // convert to numeric [-99 99]
-    .findIndex(n => n >= 50)
-    .then(index => {
-      // @ts-ignore
-      t.is(index, 6);
-    })
+    .map((x: unknown) => Number(x))
+    .findIndex((n: number) => n >= 50)
+    .then((index: unknown) => expect(index).toBe(6))
 })
 
-test('FP.findIndex, no match', t => {
-  const rawData = [-99, null, undefined, NaN, 20, 40, 50, '99']
+test('FP.findIndex, no match', () => {
+  const rawData = [-99, null, undefined, Number.NaN, 20, 40, 50, '99']
   return FP.resolve(rawData)
-    .map(x => Number(x))  // convert to numeric [-99 99]
-    .findIndex(n => n >= 99999)
-    .then(index => {
-      // @ts-ignore
-      t.is(index, -1);
-    })
+    .map((x: unknown) => Number(x))
+    .findIndex((n: number) => n >= 99999)
+    .then((index: unknown) => expect(index).toBe(-1))
 })
 
-test('FP.map handles invalid input arguments', t => {
-  t.plan(2)
-  return FP.resolve(void { tears: true })
-    .map(() => t.fail('Should not be called'))
-    .then(() => t.fail(`Shouldn't get here!`))
-    .catch(ex => {
-      // console.warn(chalk.cyanBright`ERR:`, ex)
-      t.deepEqual(ex.__proto__.constructor.name, 'FPInputError')
-      t.truthy(ex.message.includes('Value must be iterable'), `Unexpected response: ${ex.message}`)
-    })
+test('FP.map handles invalid input arguments', async () => {
+  await expect(
+    FP.resolve(undefined as unknown)
+      .map(() => {
+        throw new Error('Should not be called')
+      })
+      .then(() => {
+        throw new Error("Shouldn't get here!")
+      })
+  ).rejects.toMatchObject({
+    message: expect.stringContaining('Value must be iterable'),
+    name: 'FPInputError',
+  })
 })
 
-test('FP.map handles first exception correctly', t => {
-  t.plan(2)
+test('FP.map handles first exception correctly', async () => {
   const throwThings = async () => {
     throw new Error('🔪🔪🔪🔪🔪🔪🔪')
   }
-  return FP.resolve([1, 2, 3])
-    .map(throwThings)
-    .then(() => t.fail(`Shouldn't get here!`))
-    .catch(ex => {
-      // console.log(ex)
-      // t.truthy(ex instanceof FunctionalError)
-      // console.warn(chalk.yellowBright`ERR:`, ex.__proto__.constructor.name)
-      // console.warn(chalk.yellowBright`ERR:`, Object.getOwnPropertyNames(ex.__proto__.constructor))
-      t.truthy(ex.__proto__.constructor.name === 'Error')
-      t.truthy(ex.message.includes('🔪'), `Unexpected message: ${ex.message}`)
-    })
+
+  await expect(
+    FP.resolve([1, 2, 3])
+      .map(throwThings)
+      .then(() => {
+        throw new Error("Shouldn't get here!")
+      })
+  ).rejects.toMatchObject({
+    name: 'Error',
+    message: expect.stringContaining('🔪'),
+  })
 })
 
-test('FP.map handles multiple exceptions', t => {
-  t.plan(2)
+test('FP.map handles multiple exceptions', async () => {
   const throwThings = async () => {
     throw new Error('🔪🔪🔪🔪🔪🔪🔪')
   }
-  return FP.resolve([1, 2, 3])
-    .quiet(2)
-    .map(throwThings)
-    .then(() => t.fail(`Shouldn't get here!`))
-    .catch(ex => {
-      t.truthy(ex.__proto__.constructor.name === 'FPCollectionError')
-      t.truthy(ex.errors.length === 3)
-    })
+
+  await expect(
+    FP.resolve([1, 2, 3])
+      .quiet(2)
+      .map(throwThings)
+      .then(() => {
+        throw new Error("Shouldn't get here!")
+      })
+  ).rejects.toMatchObject({
+    name: 'FPCollectionError',
+    errors: expect.any(Array),
+  })
 })
 
-test('Can FP.quiet(42) Error', t => {
-  t.plan(1)
-  return FP.resolve([1, 2, 3, 4])
+test('Can FP.quiet(42) Error', async () => {
+  const results = await FP.resolve([1, 2, 3, 4])
     .quiet(42)
-    .map((n) => {
+    .map((n: number) => {
       if (n === 4) {
         return Promise.reject(new TypeError('#4 found, dummy error!'))
       }
       return n
     })
-    .then((results) => {
-      t.truthy(results[3] instanceof TypeError)
-    })
-    .catch(ex => {
-      // console.warn(chalk.red`ERR:`, ex)
-      t.fail(`Shouldn't get here!`)
-    })
+
+  expect((results as unknown[])[3]).toBeInstanceOf(TypeError)
 })
 
-test('Can FP.quiet(1) + 2 errors trigger .catch()', t => {
-  return FP.resolve([1, 2, 3, 4])
+test('Can FP.quiet(1) + 2 errors trigger .catch()', async () => {
+  await expect(
+    FP.resolve([1, 2, 3, 4])
+      .quiet(1)
+      .map((n: number) => {
+        if (n <= 3) {
+          throw new TypeError(`${n} Found #3 or #4 found, dummy error!`)
+        }
+        return n
+      })
+  ).rejects.toMatchObject({
+    name: 'FPCollectionError',
+    errors: expect.any(Array),
+  })
+})
+
+test('Can FP.quiet() swallow Errors', async () => {
+  const results = await FP.resolve([1, 2, 3, 4])
     .quiet(1)
-    .map((n) => {
-      if (n <= 3) {
-        throw new TypeError(n + ' Found #3 or #4 found, dummy error!')
+    .map((n: number) => {
+      if (n === 4) {
+        throw new TypeError('#4 found, dummy error!')
       }
       return n
     })
-    .then(() => t.fail('shouldn\'t get here'))
-    .catch(ex => {
-      // console.warn(chalk.yellowBright`ERR:`, ex)
-      t.truthy(ex.__proto__.constructor.name === 'FPCollectionError')
-      t.truthy(ex.errors.length === 3)
-      return ex
-    })
-})
 
-test('Can FP.quiet() swallow Errors', t => {
-  return FP.resolve([1, 2, 3, 4])
-    .quiet(1)
-    .map((n) => {
-      if (n === 4) { throw new TypeError('#4 found, dummy error!') }
-      return n
-    })
-    .then((results) => {
-      t.truthy(results[3] instanceof TypeError)
-    })
-    .catch(ex => {
-      console.log(chalk.cyanBright`FAILED TO QUIET ERROR:`, ex)
-      t.fail('shouldnt get here')
-    })
+  expect((results as unknown[])[3]).toBeInstanceOf(TypeError)
 })
-

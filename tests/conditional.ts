@@ -1,12 +1,15 @@
-import test from 'ava'
-import FP from '../'
+import { expect, test } from 'vitest'
+import FP from '../src/index'
 
-test('FP.thenIf(true)', t => FP.resolve(true)
-  .thenIf(x => x, x => t.truthy(x), () => t.fail()))
+test('FP.thenIf(true)', () => FP.resolve(true)
+  .thenIf(x => x, x => expect(x).toBeTruthy(), () => {
+    throw new Error('Expected truthy branch')
+  }))
 
-test('FP.thenIf(false)', t => FP.resolve(false)
-  .thenIf(x => x, () => t.fail(), x => t.falsy(x)))
+test('FP.thenIf(false)', () => FP.resolve(false)
+  .thenIf(x => x, () => {
+    throw new Error('Expected falsey branch')
+  }, x => expect(x).toBeFalsy()))
 
-test('FP.thenIf(true) short', t => FP.resolve(true)
-  .thenIf(x => t.truthy(x)))
-
+test('FP.thenIf(true) short', () => FP.resolve(true)
+  .thenIf(x => expect(x).toBeTruthy()))

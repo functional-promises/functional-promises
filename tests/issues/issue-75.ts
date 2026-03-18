@@ -1,25 +1,18 @@
-import test from 'ava'
-import FP from '../../'
+import { expect, test } from 'vitest'
+import FP from '../../src/index'
 
-
-test('Issue #75, UnhandledRejections', t => {
+test('Issue #75, UnhandledRejections', async () => {
   const iThrowThings = async () => {
     throw new Error('🔪🔪🔪🔪🔪🔪🔪')
   }
-  
-  const brokenPromises = () => FP.resolve([{ tears: true }])
-    .map(iThrowThings)
-    .then(() => {
-      console.log('whaaaa')
-    }).catch(ex => { throw ex })
-  
-  try {
-    return brokenPromises()
-    // .then(() => t.fail())
-    .catch(() => t.pass())
 
-  } catch (ex) {
-    console.log('dumb me')
-  }
+  const brokenPromises = () =>
+    FP.resolve([{ tears: true }])
+      .map(iThrowThings)
+      .then(() => undefined)
+      .catch((ex: Error) => {
+        throw ex
+      })
+
+  await expect(brokenPromises()).rejects.toBeTruthy()
 })
-

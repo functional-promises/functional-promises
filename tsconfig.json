@@ -1,20 +1,21 @@
 {
-  "exclude": ["dist", "tests", "misc", "docs", "docs-source", "coverage"],
-  "extensions": [".js", ".ts"],
+  "exclude": ["dist", "tests", "misc", "docs", "docs-source", "coverage", "node_modules"],
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "es2015",
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "allowJs": true,
     "checkJs": false,
     "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": false,
     "declaration": false,
     "noEmit": true,
     "pretty": true,
-    "outDir": "dist",
     "lib": [
-      "ES5", 
-      "DOM",
-      "ES2015.Iterable"
+      "ES2022",
+      "DOM"
     ]
   }
 }

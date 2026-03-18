@@ -1,31 +1,24 @@
-require("regenerator-runtime/runtime")
-import test from 'ava'
-import FP from '../'
-
+import { expect, test } from 'vitest'
+import FP from '../src/index'
 import fetch from './data/justsml.github'
 
-// https://github.com/functional-promises/functional-promises/issues/27
-test('Validate Multiple Chained Steps', t => {
-  return FP.resolve(fetch('https://api.github.com/users/justsml'))
+test('Validate Multiple Chained Steps', () =>
+  FP.resolve(fetch('https://api.github.com/users/justsml'))
     .delay(1)
-    .tap(res => `github user req ok? ${res.ok}`)
-    .then((res: any) => res.json())
-    .then((data: any) => data.avatar_url)
-    .tap(url => t.truthy(url === 'https://avatars2.githubusercontent.com/u/397632?v=4'))
-    // .tap(url => console.log('url', url))
-    // NEXT LINE SHOULD WORK!!!
-})
+    .tap((res: { ok: boolean }) => `github user req ok? ${res.ok}`)
+    .then((res: { json: () => Promise<unknown> }) => res.json())
+    .then((data: { avatar_url: string }) => data.avatar_url)
+    .tap((url: string) => expect(url).toBe('https://avatars2.githubusercontent.com/u/397632?v=4')))
 
-test('Validate .chain() w/ Multiple Steps', async t => {
-  t.plan(1)
+test('Validate .chain() w/ Multiple Steps', async () => {
   const loadAvatar = FP.chain()
     .then(fetch)
     .delay(1)
-    .tap(res => `github user req ok? ${res.ok}`)
-    .then(res => res.json())
-    .then(data => data.avatar_url)
+    .tap((res: { ok: boolean }) => `github user req ok? ${res.ok}`)
+    .then((res: { json: () => Promise<unknown> }) => res.json())
+    .then((data: { avatar_url: string }) => data.avatar_url)
     .chainEnd()
 
-  const avatar = await loadAvatar(`https://api.github.com/users/justsml`)
-  t.truthy(avatar === `https://avatars2.githubusercontent.com/u/397632?v=4`)
+  const avatar = await loadAvatar('https://api.github.com/users/justsml')
+  expect(avatar).toBe('https://avatars2.githubusercontent.com/u/397632?v=4')
 })

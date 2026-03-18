@@ -144,8 +144,8 @@ FP.chain() // start a chain
 ```sh
 git clone git@github.com:functional-promises/functional-promises.git
 cd functional-promises
-npm install
-npm test
+pnpm install
+pnpm test
 ```
 
 

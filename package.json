@@ -2,57 +2,40 @@
   "name": "functional-promises",
   "version": "2.0.3",
   "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
-  "esm": "auto",
-  "ava": {
-    "babel": {
-      "testOptions": {
-        "presets": [
-          [
-            "module:@ava/babel/stage-4",
-            {
-              "modules": true
-            }
-          ]
-        ]
-      }
-    },
-    "files": [
-      "tests/**/*.{js,ts}",
-      "!tests/data/**"
-    ],
-    "require": [
-      "ts-node/register",
-      "tsconfig-paths/register"
-    ],
-    "environmentVariables": {
-      "NODE_ENV": "test"
-    },
-    "extensions": [
-      "ts",
-      "tsx"
-    ]
+  "packageManager": "pnpm@9.15.0",
+  "type": "commonjs",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.js"
+    }
   },
-  "types": "./index.d.ts",
-  "main": "./dist/cjs.js",
-  "module": "./dist/umd.min.js",
-  "browser": "./dist/umd.min.js",
-  "unpkg": "./dist/umd.min.js",
   "repository": {
     "url": "https://github.com/functional-promises/functional-promises.git"
   },
   "homepage": "https://fpromises.io/",
   "files": [
     "dist/*",
-    "./index.*"
+    "index.js"
   ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "start": "rollup -c --watch",
-    "test": "nyc --reporter=lcov --reporter=text-summary ava --verbose",
-    "pretest": "rollup -c",
+    "build:watch": "tsup --watch",
+    "build": "tsup",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
     "docs-docker": "cd docs-source && docker build -t fpromises-docs:latest .",
     "docs-build": "./docs-source/docker-build.sh",
-    "build": "rollup -c",
-    "prepublish": "rollup -c && ./misc/compression-report.sh",
+    "prepack": "pnpm run build",
     "build-pack": "prepack ./dist/bundle.js --out ./dist/bundle.prepack.js  ",
     "deploy": "./publish.sh",
     "version-bump-revision": "node ./misc/package-version-manager.js 0.0.1",
@@ -65,45 +48,15 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@ava/babel": "^1.0.1",
-    "@ava/babel-preset-stage-4": "^4.0.0",
-    "@babel/core": "7.10.5",
-    "@babel/plugin-proposal-class-properties": "7.10.4",
-    "@babel/plugin-transform-runtime": "7.10.5",
-    "@babel/preset-env": "7.10.4",
-    "@babel/preset-react": "7.10.4",
-    "@babel/register": "7.10.5",
-    "@babel/runtime": "7.10.5",
-    "@istanbuljs/nyc-config-babel": "^3.0.0",
-    "@types/node": "^14.11.8",
-    "ava": "^3.10.1",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "10.1.0",
-    "babel-jest": "^26.1.0",
-    "babel-plugin-dev-expression": "0.2.2",
-    "babel-plugin-istanbul": "^6.0.0",
-    "chalk": "4.1.0",
-    "css-loader": "^3.6.0",
-    "debug": "4.1.1",
-    "eslint": "^7.5.0",
-    "eslint-plugin-import": "2.22.0",
-    "eslint-plugin-react": "7.20.3",
-    "esm": "3.2.25",
-    "jsdom": "^16.3.0",
-    "nyc": "^15.1.0",
-    "rollup": "^2.23.0",
-    "rollup-loader": "^0.3.0",
-    "rollup-plugin-babel": "4.4.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-uglify": "^6.0.4",
-    "strip-loader": "^0.1.2",
-    "ts-node": "^9.0.0",
-    "tsconfig-paths": "^3.9.0",
-    "tslib": "^2.0.3",
-    "typescript": "^4.0.3",
-    "webpack": "4.44.0"
+    "@types/node": "^22.14.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "jsdom": "^26.0.0",
+    "pnpm": "^10.17.1",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.6",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.2",
+    "vitest": "^3.2.4"
   },
   "dependencies": {}
 }
