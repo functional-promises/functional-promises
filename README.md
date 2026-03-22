@@ -63,13 +63,103 @@ npm install functional-promises
 
 ## Getting Started
 
-Use one of the following:
+The package ships two independent entry points:
+
+| Import path                    | What you get
+|--------------------------------|-------------------------------
+| `functional-promises/async`    | v2 — promise-chain API (original)
+| `functional-promises/iterable` | v3 — lazy async-generator API (new)
+
+### v2 — Promise chains (`/async`)
 
 ```js
-const FP = require('functional-promises')
-// or:
-import FP from 'functional-promises'
+import FP from 'functional-promises/async'
+// or CommonJS:
+const FP = require('functional-promises/async')
 ```
+
+### v3 — Async iterables (`/iterable`)
+
+```js
+import { FP, map, filter, range, zip } from 'functional-promises/iterable'
+```
+
+The `FP` class is a **lazy, chainable** wrapper around any sync or async iterable.
+Nothing runs until you call a terminal method (`.collect()`, `.consume()`, `.reduce()`, etc.)
+or iterate with `for await...of`.
+
+```js
+// squares of even numbers in [0, 100), first 5 results
+const result = await FP.range(0, 100)
+  .filter(x => x % 2 === 0)
+  .map(x => x * x)
+  .take(5)
+  .collect()
+// [0, 4, 16, 36, 64]
+
+// concurrent HTTP downloads, preserving order
+const pages = await FP.from(urls)
+  .buffer(5)
+  .parallelMap(10, url => fetch(url).then(r => r.json()))
+  .collect()
+
+// event emitter → async iterable
+for await (const line of FP.fromEvents(readline, 'line', 'close')) {
+  console.log(line)
+}
+```
+
+#### `FP` factory methods
+
+| Method                                     | Description
+|--------------------------------------------|-------------------------------
+| `FP.from(iterable)`                        | Wrap any sync or async iterable
+| `FP.of(...values)`                         | Create from a list of values
+| `FP.range(start, end, step?)`              | Sync number sequence
+| `FP.repeat(value, count?)`                 | Repeat a value N times (or infinitely)
+| `FP.interval(ms, limit?)`                  | Async timer ticks
+| `FP.fromEvents(emitter, event, endEvent?)` | Node EventEmitter → async iterable
+| `FP.empty()`                               | Empty iterable
+
+#### Transform methods (return a new lazy `FP`)
+
+`.map()` `.flatMap()` `.filter()` `.tap()` `.flatten()` `.scan()` `.take()` `.takeLast()` `.takeWhile()` `.drop()` `.batch()` `.batchWithTimeout()` `.window()` `.buffer()` `.transform(concurrency, fn)` `.parallelMap(concurrency, fn)` `.throttle(limit, ms)` `.concat()` `.merge()` `.zip()` `.enumerate()` `.distinct()` `.pairwise()` `.cycle()`
+
+#### Terminal methods (return a `Promise`)
+
+`.collect()` `.consume()` `.reduce()` `.partition()` `.first()` `.last()` `.find()` `.findIndex()` `.some()` `.every()` `.count()` `.toMap()` `.toSet()`
+
+#### Standalone functions
+
+All of the above are also exported as standalone curried functions:
+
+```js
+import { map, filter, take, batch, zip, scan, distinct, retry } from 'functional-promises/iterable'
+
+// curried — great for pipeline()
+const doubleEvens = pipeline(
+  () => range(0, 20),
+  filter(x => x % 2 === 0),
+  map(x => x * 2),
+  collect,
+)
+```
+
+| Utility                            | Description
+|------------------------------------|-------------------------------
+| `range(start, end, step?)`         | Number sequence generator
+| `repeat(value, count?)`            | Repeat a value
+| `interval(ms, limit?)`             | Async timer
+| `zip(...iterables)`                | Zip N iterables into tuples
+| `enumerate(iterable)`              | `[index, value]` pairs
+| `scan(fn, initial, iterable)`      | Running accumulated value
+| `distinct(keyFn?, iterable)`       | Deduplicate
+| `window(size, iterable)`           | Sliding window
+| `pairwise(iterable)`               | Consecutive `[prev, curr]` pairs
+| `cycle(iterable)`                  | Infinite cycle
+| `partition(fn, iterable)`          | Split into `[matching, rest]`
+| `retry(times, fn)`                 | Retry an async function
+| `fromEvents(emitter, event, end?)` | EventEmitter → async iterable
 
 ### Quick Examples
 

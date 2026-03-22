@@ -1,7 +1,10 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: {
+    async: 'src/index.ts',
+    iterable: 'src/iterables.ts',
+  },
   clean: true,
   sourcemap: true,
   minify: true,

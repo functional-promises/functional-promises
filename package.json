@@ -4,15 +4,21 @@
   "description": "Fluent Functional-Composition & Pipelining API - Built with Promises. See Docs: https://fpromises.io/",
   "packageManager": "pnpm@10.32.1",
   "type": "commonjs",
-  "types": "./dist/index.d.ts",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "types": "./dist/async.d.ts",
+  "main": "./dist/async.js",
+  "module": "./dist/async.mjs",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "default": "./dist/index.js"
+    "./async": {
+      "types": "./dist/async.d.ts",
+      "require": "./dist/async.js",
+      "import": "./dist/async.mjs",
+      "default": "./dist/async.js"
+    },
+    "./iterable": {
+      "types": "./dist/iterable.d.ts",
+      "require": "./dist/iterable.js",
+      "import": "./dist/iterable.mjs",
+      "default": "./dist/iterable.js"
     }
   },
   "repository": {
