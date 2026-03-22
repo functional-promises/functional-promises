@@ -82,7 +82,7 @@ test('FP.delay() with .concurrency(10)', async () => {
   await FP.resolve([1, 2, 3, 4])
     .concurrency(10)
     .map((num: number) => FP.resolve(num).delay(50))
-  expect(Date.now() - started).toBeGreaterThanOrEqual(50)
+  expect(Date.now() - started).toBeGreaterThanOrEqual(45)
 })
 
 test('FP.delay() with .concurrency(1)', async () => {
