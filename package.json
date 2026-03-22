@@ -8,6 +8,12 @@
   "main": "./dist/async.js",
   "module": "./dist/async.mjs",
   "exports": {
+    ".": {
+      "types": "./dist/async.d.ts",
+      "require": "./dist/async.js",
+      "import": "./dist/async.mjs",
+      "default": "./dist/async.js"
+    },
     "./async": {
       "types": "./dist/async.d.ts",
       "require": "./dist/async.js",
