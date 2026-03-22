@@ -9,14 +9,17 @@
 
 ## Library Comparison
 
-| Library | Approach | Min bundle (gzip) | Zero dependencies |
-|---|---|---|---|
-| **functional-promises** v2.9.0 | Lazy async-iterable pipeline with fluent `FP` class | ~10 kB | Yes |
-| [streaming-iterables](https://github.com/reconbot/streaming-iterables) | Standalone curried async-iterable utilities | ~5 kB | Yes |
-| [RxJS](https://rxjs.dev) | Observable push-streams; rich operator library | ~40 kB | No |
-| [IxJS](https://github.com/ReactiveX/IxJS) | Pull-based iterable/async-iterable operators | ~20 kB | No |
-
-> RxJS and IxJS are excellent, mature libraries with far larger operator surfaces. `functional-promises` targets projects that want a zero-dependency, tree-shakeable async-iterable pipeline without the Observable mental model or the bundle weight.
+| Library | Approach | Min+gzip | Zero deps | npm DLs/wk |
+| --- | --- | --- | --- | --- |
+| **functional-promises** v2.9.0 | Lazy async-iterable pipeline; fluent `FP` class; built-in `parallelMap` concurrency cap | ~10 kB | Yes | — |
+| [streaming-iterables](https://github.com/reconbot/streaming-iterables) v8 | Curried async-iterable utilities; same `parallelMap`/`transform` concurrency model, no fluent class | ~3 kB | Yes | ~15k |
+| [IxJS](https://github.com/ReactiveX/IxJS) v7 | Pull-based async-iterable operators (80+); fluent chain or `pipe()`; no explicit concurrency cap | ~7 kB | No (tslib) | ~43k |
+| [RxJS](https://rxjs.dev) v7 | Push-based Observables; massive operator set; backpressure requires explicit strategies | ~18 kB | No (tslib) | ~37M |
+| [Effect](https://effect.website) v3 | Full FP framework; `Stream<A,E,R>` with fibers, DI, telemetry — bring-the-whole-runtime | ~291 kB | No | ~4M |
+s
+> **Key differentiator:** `functional-promises` and `streaming-iterables` are the only options here that are zero-dependency, pull-based, and ship explicit concurrency control (`parallelMap(n, fn)`, `buffer(n)`) out of the box. The main choice between them is API style: fluent chaining vs manual function composition with `pipeline()`.
+>
+> **On the horizon:** The TC39 [async iterator helpers proposal](https://github.com/tc39/proposal-async-iterator-helpers) is progressing through Stage 2, bringing `map`, `filter`, `take`, `flatMap`, and `reduce` natively to async iterators. Libraries like `functional-promises` and `streaming-iterables` are aligned with that future; RxJS Observables are a parallel paradigm that will remain distinct.
 
 ## Which API Should I Use?
 
@@ -1087,9 +1090,3 @@ cd functional-promises
 pnpm install
 pnpm test
 ```
-
-## Acknowledgments
-
-> Thanks to several influential projects: [RxJS](https://github.com/ReactiveX/RxJS), [IxJS](https://github.com/ReactiveX/IxJS), [Bluebird](https://github.com/petkaantonov/bluebird), [asynquence](https://github.com/getify/asynquence), [FantasyLand](https://github.com/fantasyland/fantasy-land), [Gulp](https://github.com/gulpjs/gulp), [HighlandJS](https://github.com/caolan/highland), et al.
->
-> Special thanks to [Kyle Simpson](https://github.com/getify), [Eric Elliot](https://medium.com/@_ericelliott), and [Sarah Drasner](https://sarahdrasnerdesign.com/) for their work for the OSS community, as well as their advice and encouragement.
