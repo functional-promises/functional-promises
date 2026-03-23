@@ -1,5 +1,6 @@
 import { FunctionalError } from './modules/errors'
 import type { FPStatic } from './public-types'
+import type { FPConstructor, FPInternalInstance, FPExecutor } from './internal-types'
 import utils from './modules/utils'
 import monads from './monads'
 import arrays from './arrays'
@@ -9,26 +10,28 @@ import promise from './promise'
 
 const { isFunction, flatten } = utils
 
-function FP(this: any, resolveRejectCB: (resolve: (value?: unknown) => void, reject: (error?: unknown) => void) => void) {
-  if (!(this instanceof FP)) {
-    return new (FP as any)(resolveRejectCB)
+function FP(this: FPInternalInstance | void, resolveRejectCB: FPExecutor) {
+  if (!(this instanceof (FP as unknown as new (...args: unknown[]) => unknown))) {
+    return new (FP as unknown as new (cb: FPExecutor) => FPInternalInstance)(resolveRejectCB)
   }
 
   if (arguments.length !== 1) {
     throw new Error('FunctionalPromises constructor only accepts 1 callback argument')
   }
 
-  ;(this as any)._FP = {
+  ;(this as FPInternalInstance)._FP = {
     errors: { limit: 0, count: 0 },
     promise: new Promise(resolveRejectCB),
     concurrencyLimit: 4,
   }
 }
 
-const { map, find, findIndex, filter, flatMap, reduce } = arrays(FP)
-const { all, delay, _delay } = promise(FP)
-const { tapIf, thenIf, _thenIf } = conditional(FP)
-const { chain, chainEnd } = monads(FP)
+const FPTyped = FP as unknown as FPConstructor
+
+const { map, find, findIndex, filter, flatMap, reduce } = arrays(FPTyped)
+const { all, delay, _delay } = promise(FPTyped)
+const { tapIf, thenIf, _thenIf } = conditional(FPTyped)
+const { chain, chainEnd } = monads(FPTyped)
 
 FP.prototype.all = all
 FP.prototype.map = map
@@ -45,19 +48,20 @@ FP.prototype.delay = delay
 FP.prototype._delay = _delay
 FP.prototype.reject = reject
 
-FP.all = FP.prototype.all
-FP.thenIf = FP.prototype._thenIf
-FP.delay = (msec: number) => FP.resolve().delay(msec)
-FP.silent = (limit: number) => FP.resolve().silent(limit)
+FP.prototype.all = all
+;(FP as Record<string, unknown>)['all'] = FP.prototype.all
+;(FP as Record<string, unknown>)['thenIf'] = FP.prototype._thenIf
+;(FP as Record<string, unknown>)['delay'] = (msec: number) => FPTyped.resolve().delay(msec)
+;(FP as Record<string, unknown>)['silent'] = (limit: number) => FPTyped.resolve().silent(limit)
 
-FP.chain = chain
+;(FP as Record<string, unknown>)['chain'] = chain
 FP.prototype.chainEnd = chainEnd
-FP.reject = FP.prototype.reject
-FP.resolve = resolve
+;(FP as Record<string, unknown>)['reject'] = FP.prototype.reject
+;(FP as Record<string, unknown>)['resolve'] = resolve
 
-FP.promisify = promisify
-FP.promisifyAll = promisifyAll
-FP.unpack = unpack
+;(FP as Record<string, unknown>)['promisify'] = promisify
+;(FP as Record<string, unknown>)['promisifyAll'] = promisifyAll
+;(FP as Record<string, unknown>)['unpack'] = unpack
 
 FP.prototype.addStep = function addStep(name: string, args: unknown[]) {
   if (this.steps) this.steps.push([name, this, args])
@@ -77,17 +81,17 @@ FP.prototype.quiet = function quiet(errorLimit = Infinity) {
 }
 FP.prototype.silent = FP.prototype.quiet
 
-FP.get = function getter(...getArgs: unknown[]) {
+;(FP as Record<string, unknown>)['get'] = function getter(...getArgs: unknown[]) {
   getArgs = flatten(getArgs)
   const keyNames = getArgs.filter((item) => typeof item === 'string') as string[]
   const objectFound = getArgs.find((item) => typeof item !== 'string') as Record<string, unknown> | undefined
 
   if (!objectFound) {
-    return (...extraArgs: unknown[]) => FP.get(...extraArgs, ...getArgs)
+    return (...extraArgs: unknown[]) => (FPTyped as unknown as FPStatic).get(...extraArgs, ...getArgs)
   }
 
   if (keyNames.length === 1) {
-    return objectFound[keyNames[0]]
+    return objectFound[keyNames[0]!]
   }
 
   return keyNames.reduce<Record<string, unknown>>((extracted, key) => {
@@ -98,7 +102,7 @@ FP.get = function getter(...getArgs: unknown[]) {
 
 FP.prototype.get = function get(...keyNames: unknown[]) {
   if (this.steps) return this.addStep('get', Array.from(arguments))
-  return this.then ? this.then(FP.get(keyNames)) : FP.get(...keyNames)
+  return this.then ? this.then((FPTyped as unknown as FPStatic).get(keyNames)) : (FPTyped as unknown as FPStatic).get(...keyNames)
 }
 
 FP.prototype.set = function set(keyName: string, value: unknown) {
@@ -109,27 +113,24 @@ FP.prototype.set = function set(keyName: string, value: unknown) {
   })
 }
 
-// Issue #10: the original used `arguments.length === 2` to detect the 2-arg overload, but
-// the function only declared one parameter so TypeScript couldn't see or type-check the
-// second argument. Now uses an explicit second parameter for type visibility.
 FP.prototype.catch = function catchProxy(fn: unknown, fn2?: unknown) {
   if (this.steps) return this.addStep('catch', Array.from(arguments))
   if (fn2 !== undefined) return this.catchIf(fn, fn2)
   if (!isFunction(fn)) {
     throw new FunctionalError('Invalid fn argument for `.catch(fn)`. Must be a function. Currently: ' + typeof fn)
   }
-  return FP.resolve(this._FP.promise.catch((err: Error) => (fn as (error: Error) => unknown)(err)))
+  return FPTyped.resolve(this._FP.promise.catch((err: Error) => (fn as (error: Error) => unknown)(err)))
 }
 
-FP.prototype.catchIf = function catchIf(condition: any, fn: unknown) {
+FP.prototype.catchIf = function catchIf(condition: unknown, fn: unknown) {
   if (this.steps) return this.addStep('catchIf', Array.from(arguments))
   if (!isFunction(fn)) {
     throw new FunctionalError('Invalid fn argument for `.catchIf(condition, fn)`. Must be a function. Currently: ' + typeof fn)
   }
 
-  return FP.resolve(
+  return FPTyped.resolve(
     this._FP.promise.catch((err: Error) => {
-      if (condition && err instanceof condition) {
+      if (condition && err instanceof (condition as new (...args: unknown[]) => Error)) {
         return (fn as (error: Error) => unknown)(err)
       }
       throw err
@@ -142,7 +143,7 @@ FP.prototype.then = function then(onFulfilled: unknown, onRejected?: unknown) {
   if (!isFunction(onFulfilled)) {
     throw new FunctionalError('Invalid fn argument for `.then(fn)`. Must be a function. Currently: ' + typeof onFulfilled)
   }
-  return FP.resolve(this._FP.promise.then(onFulfilled as (value: unknown) => unknown, onRejected as (error: Error) => unknown))
+  return FPTyped.resolve(this._FP.promise.then(onFulfilled as (value: unknown) => unknown, onRejected as (error: Error) => unknown))
 }
 
 FP.prototype.tap = function tap(fn: unknown) {
@@ -150,11 +151,11 @@ FP.prototype.tap = function tap(fn: unknown) {
   if (!isFunction(fn)) {
     throw new FunctionalError('Invalid fn argument for `.tap(fn)`. Must be a function. Currently: ' + typeof fn)
   }
-  return FP.resolve(this._FP.promise.then((value: unknown) => ((fn as (input: unknown) => unknown)(value), value)))
+  return FPTyped.resolve(this._FP.promise.then((value: unknown) => ((fn as (input: unknown) => unknown)(value), value)))
 }
 
 function resolve(value?: unknown) {
-  return new (FP as any)((resolveFn: (input?: unknown) => void, rejectFn: (error?: unknown) => void) => {
+  return new FPTyped((resolveFn: (input?: unknown) => void, rejectFn: (error?: unknown) => void) => {
     if (value && isFunction((value as PromiseLike<unknown>).then)) {
       return Promise.resolve(value).then(resolveFn, rejectFn)
     }
@@ -162,16 +163,13 @@ function resolve(value?: unknown) {
   })
 }
 
-// Issue #3: `cb.call(this, ...)` used the module-level `this` (undefined in ESM strict
-// mode), not a meaningful callback context. Callers that need a bound `this` should
-// pre-bind their function before passing it to promisify(), matching Node.js util.promisify.
 function promisify(cb: (...args: unknown[]) => unknown) {
   return (...args: unknown[]) =>
-    new (FP as any)((yah: (value: unknown) => void, nah: (error: unknown) => void) =>
+    new FPTyped((yah: (value: unknown) => void, nah: (error: unknown) => void) =>
       cb(...args, (err: unknown, res: unknown) => (err ? nah(err) : yah(res))))
 }
 
-function promisifyAll(obj: Record<string, any>) {
+function promisifyAll(obj: Record<string, unknown>) {
   if (!obj || !Object.getPrototypeOf(obj)) {
     throw new Error('Invalid Argument obj in promisifyAll(obj)')
   }
@@ -180,7 +178,7 @@ function promisifyAll(obj: Record<string, any>) {
     .filter((key) => typeof obj[key] === 'function')
     .reduce((target, fnName) => {
       if (!/Sync/.test(fnName) && !target[`${fnName}Async`]) {
-        target[`${fnName}Async`] = FP.promisify(target[fnName])
+        target[`${fnName}Async`] = FPTyped.promisify(target[fnName] as (...args: unknown[]) => unknown)
       }
       return target
     }, obj)
@@ -189,21 +187,17 @@ function promisifyAll(obj: Record<string, any>) {
 function unpack() {
   let resolveFn: (value: unknown) => void = () => undefined
   let rejectFn: (error: unknown) => void = () => undefined
-  const promise = new (FP as any)((yah: (value: unknown) => void, nah: (error: unknown) => void) => {
+  const fpPromise = new FPTyped((yah: (value: unknown) => void, nah: (error: unknown) => void) => {
     resolveFn = yah
     rejectFn = nah
   })
-  return { promise, resolve: resolveFn, reject: rejectFn }
+  return { promise: fpPromise, resolve: resolveFn, reject: rejectFn }
 }
 
-// Issue #21: the original threw synchronously when passed a non-Error value, which is
-// surprising for a method named `reject` — callers expect a rejected promise, not an
-// exception. Now always returns a rejected FPInstance. Non-Error values are wrapped so
-// the rejection is always an Error (consistent with the rest of the library).
-function reject(this: any, err: unknown) {
+function reject(this: FPInternalInstance | undefined, err: unknown) {
   const error = err instanceof Error ? err : new Error(String(err))
-  if (this && typeof this === 'object') this._error = error
-  return FP.resolve(Promise.reject(error))
+  if (this && typeof this === 'object' && '_error' in this) this._error = error
+  return FPTyped.resolve(Promise.reject(error))
 }
 
 export default FP as unknown as FPStatic

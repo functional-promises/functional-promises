@@ -1,11 +1,15 @@
 import utils from './modules/utils'
+import type { FPConstructor, FPInternalInstance } from './internal-types'
 
 const { isPromiseLike } = utils
 
-export default function conditional(FP: any) {
+type ConditionFn = (x: unknown) => unknown
+type BranchFn = (x: unknown) => unknown
+
+export default function conditional(FP: FPConstructor) {
   return { tapIf, thenIf, _thenIf }
 
-  function thenIf(this: any, cond: any, ifTrue?: any, ifFalse?: any) {
+  function thenIf(this: FPInternalInstance, cond: ConditionFn, ifTrue?: BranchFn, ifFalse?: BranchFn) {
     if (this.steps) return this.addStep('thenIf', Array.from(arguments))
     if (arguments.length === 1) {
       ifTrue = cond
@@ -17,7 +21,7 @@ export default function conditional(FP: any) {
     return _thenIf(cond, ifTrue, ifFalse)
   }
 
-  function tapIf(this: any, cond: any, ifTrue?: any, ifFalse?: any) {
+  function tapIf(this: FPInternalInstance, cond: ConditionFn, ifTrue?: BranchFn, ifFalse?: BranchFn) {
     if (this.steps) return this.addStep('tapIf', Array.from(arguments))
     if (arguments.length === 1) {
       ifTrue = cond
@@ -29,7 +33,7 @@ export default function conditional(FP: any) {
     return _thenIf(cond, ifTrue, ifFalse, true)
   }
 
-  function _thenIf(cond = (x: unknown) => x, ifTrue = (x: unknown) => x, ifFalse = (_x?: unknown) => null, returnValue = false) {
+  function _thenIf(cond: ConditionFn = (x: unknown) => x, ifTrue: BranchFn = (x: unknown) => x, ifFalse: BranchFn = (_x?: unknown) => null, returnValue = false) {
     return (value: unknown) =>
       FP.resolve(cond(value))
         .then((answer: unknown) => (answer ? ifTrue(value) : ifFalse(value)))

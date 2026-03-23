@@ -9,13 +9,18 @@
     "checkJs": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "strict": true,
     "declaration": false,
     "noEmit": true,
     "pretty": true,
     "lib": [
       "ES2022",
       "DOM"
-    ]
+    ],
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "noPropertyAccessFromIndexSignature": true
   }
 }

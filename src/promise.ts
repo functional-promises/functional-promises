@@ -1,6 +1,7 @@
 import { FPInputError } from './modules/errors'
+import type { FPConstructor, FPInternalInstance } from './internal-types'
 
-export default function promise(FP: any) {
+export default function promise(FP: FPConstructor) {
   return { all, delay, _delay }
 
   function all(promises: unknown) {
@@ -12,7 +13,7 @@ export default function promise(FP: any) {
     const values = keys.map((key) => obj[key])
     return Promise.all(values).then((results) =>
       results.reduce<Record<string, unknown>>((acc, value, index) => {
-        const key = keys[index]
+        const key = keys[index]!
         return Object.assign({ [key]: value }, acc)
       }, {})
     )
@@ -25,8 +26,8 @@ export default function promise(FP: any) {
     })
   }
 
-  function delay(this: any, msec: number) {
+  function delay(this: FPInternalInstance, msec: number) {
     if (this.steps) return this.addStep('delay', Array.from(arguments))
-    return this && this._FP ? FP.resolve(this.then(_delay(msec))) : _delay(msec)()
+    return this._FP ? FP.resolve(this.then(_delay(msec))) : _delay(msec)()
   }
 }

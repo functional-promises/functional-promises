@@ -1,23 +1,21 @@
 import utils from './modules/utils'
 import { FPCollectionError, FPInputError } from './modules/errors'
+import type { FPConstructor, FPInternalInstance } from './internal-types'
 
 const { isEnumerable } = utils
 
-export default function arrays(FP: any) {
+export default function arrays(FP: FPConstructor) {
   return { map, find, findIndex, filter, flatMap, reduce }
 
-  function find(this: any, callback: (value: unknown) => unknown) {
+  function find(this: FPInternalInstance, callback: (value: unknown) => unknown) {
     return _find.call(this, callback).then(({ item }: { item: unknown }) => item)
   }
 
-  function findIndex(this: any, callback: (value: unknown) => unknown) {
+  function findIndex(this: FPInternalInstance, callback: (value: unknown) => unknown) {
     return _find.call(this, callback).then(({ index }: { index: number }) => index)
   }
 
-  // Issue #22: rewritten to short-circuit on first match instead of scanning the
-  // entire collection via reduce(). The previous reduce-based implementation always
-  // iterated every item even after a match was found.
-  function _find(this: any, iterable: any, callback?: (value: unknown) => unknown) {
+  function _find(this: FPInternalInstance, iterable: unknown, callback?: (value: unknown) => unknown) {
     if (this.steps) return this.addStep('_find', Array.from(arguments))
     if (typeof iterable === 'function') {
       callback = iterable
@@ -45,7 +43,7 @@ export default function arrays(FP: any) {
     })
   }
 
-  function flatMap(this: any, iterable: any, callback?: (value: unknown) => unknown) {
+  function flatMap(this: FPInternalInstance, iterable: unknown, callback?: (value: unknown) => unknown) {
     if (this.steps) return this.addStep('flatMap', Array.from(arguments))
     if (typeof iterable === 'function') {
       callback = iterable
@@ -53,11 +51,11 @@ export default function arrays(FP: any) {
     }
 
     return FP.resolve(iterable)
-      .map(callback)
+      .map(callback as (item: unknown, index: number, array: unknown[]) => unknown)
       .reduce((acc: unknown[], arr: unknown[]) => acc.concat(...arr), [])
   }
 
-  function filter(this: any, iterable: any, callback?: (value: unknown) => unknown) {
+  function filter(this: FPInternalInstance, iterable: unknown, callback?: (value: unknown) => unknown) {
     if (this.steps) return this.addStep('filter', Array.from(arguments))
     if (typeof iterable === 'function') {
       callback = iterable
@@ -73,19 +71,18 @@ export default function arrays(FP: any) {
     )
   }
 
-  function reduce(this: any, iterable: any, reducer?: (total: unknown, item: unknown, index: number) => unknown, initVal?: unknown) {
+  function reduce(this: FPInternalInstance, iterable: unknown, reducer?: (total: unknown, item: unknown, index: number) => unknown, initVal?: unknown) {
     if (this.steps) return this.addStep('reduce', Array.from(arguments))
     if (typeof iterable === 'function') {
-      initVal = reducer
-      reducer = iterable
+      initVal = reducer as unknown
+      reducer = iterable as (total: unknown, item: unknown, index: number) => unknown
       iterable = this._FP ? this._FP.promise : this
     } else {
-      // Issue #4: FP.resolve() only accepts one argument; removed erroneous second arg `this`
       iterable = FP.resolve(iterable)
     }
 
     return new FP((resolve: (value: unknown) => void, reject: (error: unknown) => void) => {
-      return iterable.then((items: Iterable<unknown>) => {
+      return (iterable as FPInternalInstance).then((items: Iterable<unknown>) => {
         const iterator = items[Symbol.iterator]()
         let i = 0
 
@@ -103,10 +100,10 @@ export default function arrays(FP: any) {
     })
   }
 
-  function map(this: any, args: any, fn?: (item: unknown, index: number, array: unknown[]) => unknown) {
+  function map(this: FPInternalInstance, args: unknown, fn?: (item: unknown, index: number, array: unknown[]) => unknown) {
     if (this.steps) return this.addStep('map', Array.from(arguments))
     if (arguments.length === 1 && this && this._FP) {
-      fn = args
+      fn = args as (item: unknown, index: number, array: unknown[]) => unknown
       args = this._FP.promise
     }
 
@@ -114,10 +111,10 @@ export default function arrays(FP: any) {
     const threadLimit = Math.max(1, (this?._FP?.concurrencyLimit || 1) as number)
     const innerValues = this?._FP?.promise ? this._FP.promise : Promise.resolve(args)
     let initialThread = 0
-    const errors: any[] = []
+    const errors: Error[] = []
     let count = 0
     let argsList: unknown[] = []
-    const results: any[] = []
+    const results: unknown[] = []
     const threadPool = new Set<number>()
     const threadPoolFull = () => threadPool.size >= threadLimit
 
@@ -152,20 +149,11 @@ export default function arrays(FP: any) {
 
           argsList = Array.from(items as Iterable<unknown>)
 
-          // Issue #1: the original `complete()` had two bugs:
-          //   1. `? true : true` ternary always evaluated to true (discarded the promise result)
-          //   2. `isDone()` overrode `action = rejectIt` with `action = resolveIt` for error cases
-          // Now: error rejection is handled entirely in the catch block; complete() only resolves
-          // once all items have been started. A `completing` guard prevents duplicate Promise.all chains.
-          // Issue #19: removed the ambiguous error-limit check from complete()/isDone(); the catch
-          // block is the sole owner of rejection-on-error logic.
           let completing = false
           const complete = () => {
             if (resolvedOrRejected) return true
             if (!completing && count >= argsList.length) {
               completing = true
-              // Wait for all in-flight promises to settle (setResult mutates results[] to actual values),
-              // then resolve with the fully-populated results array.
               Promise.all(results).then(() => resolveIt(results))
               return true
             }
@@ -178,12 +166,9 @@ export default function arrays(FP: any) {
             return value
           }
 
-          const runItem = (c: number): any => {
+          const runItem = (c: number): unknown => {
             if (resolvedOrRejected) return null
 
-            // Issue #5: moved count++ to AFTER the thread-pool check. Previously, count was
-            // incremented before the check, so a deferred retry (setTimeout) caused count to
-            // advance past the item index, making checkAndRun skip it entirely.
             if (threadPoolFull()) {
               setTimeout(() => runItem(c), 0)
               return null
@@ -197,9 +182,9 @@ export default function arrays(FP: any) {
               .then((value) => fn?.(value, c, argsList))
               .then((value) => setResult(c)(value))
               .then(checkAndRun)
-              .catch((err: any) => {
+              .catch((err: Error) => {
                 this._FP.errors.count++
-                err._index = c
+                ;(err as Error & { _index: number })._index = c
                 errors.push(err)
 
                 if (this._FP.errors.limit <= 0) {
@@ -212,8 +197,6 @@ export default function arrays(FP: any) {
                     `Error limit ${this._FP.errors.limit} met/exceeded with ${this._FP.errors.count} errors.`,
                     { errors, results, ctx: this }
                   )
-                  // Issue #6: added .catch(rejectIt) — the previous floating promise had no error
-                  // handler, so any throw inside setResult or rejectIt became an unhandled rejection.
                   Promise.resolve(setResult(c)(err)).then(() => rejectIt(fpError)).catch(rejectIt)
                 } else {
                   return Promise.resolve().then(() => setResult(c)(err)).then(checkAndRun)
