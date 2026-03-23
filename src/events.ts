@@ -8,9 +8,19 @@ type EmitterLike = {
 }
 
 export const listen = function listen(this: any, obj: EmitterLike, ...eventNames: string[]) {
-  if (typeof eventNames === 'string') eventNames = [eventNames]
+  // Issue #2: removed dead `typeof eventNames === 'string'` check — eventNames is a rest
+  // parameter so it is always an array; the branch could never be true.
   if (!obj[(obj.addEventListener ? 'addEventListener' : 'on') as 'addEventListener' | 'on']) {
     throw new FPInputError('Valid EventEmitter required.')
+  }
+
+  // Issue #20: chainEnd() throws a confusing "No steps defined" error when called on a
+  // non-chained FP instance. Guard with a clear message so callers understand the constraint.
+  if (!this.steps || this.steps.length === 0) {
+    throw new FPInputError(
+      '.listen() must be called at the end of a .chain() pipeline. ' +
+      'Use FP.chain().then(...).listen(emitter, eventName) instead.'
+    )
   }
 
   const handler = this.chainEnd()
