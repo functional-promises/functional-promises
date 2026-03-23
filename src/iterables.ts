@@ -535,7 +535,7 @@ for await (const item of flatten([1, 2, [3, [4, 5], 6])) {
  */
 export async function* flatten<B>(iterable: AnyIterable<B | AnyIterable<B>>): AsyncIterableIterator<B> {
   for await (const maybeItr of iterable) {
-    if (maybeItr && typeof maybeItr !== 'string' && (Symbol.iterator in (maybeItr as object) || Symbol.asyncIterator in (maybeItr as object))) {
+    if (maybeItr && typeof maybeItr !== 'string' && (typeof maybeItr === 'object' || typeof maybeItr === 'function') && (Symbol.iterator in (maybeItr as object) || Symbol.asyncIterator in (maybeItr as object))) {
       yield* flatten(maybeItr as AnyIterable<B>)
     } else {
       yield maybeItr as B
@@ -1429,7 +1429,7 @@ async function* _fromStream(stream: ReadableStreamish) {
   while (true) {
     const data = stream.read()
     if (data !== null) { yield data; continue }
-    if ((stream as any)._readableState.ended) break
+    if ((stream as ReadableStreamish)._readableState?.ended) break
     await onceReadable(stream)
   }
 }
@@ -1452,7 +1452,7 @@ for await (const pokeData of pokeLog) {
  * @deprecated This method is deprecated since, node 10 is out of LTS. It may be removed in an upcoming major release.
  */
 export function fromStream<T>(stream: ReadableStreamish): AsyncIterable<T> {
-  if (typeof stream[Symbol.asyncIterator] === 'function') return stream as any
+  if (typeof stream[Symbol.asyncIterator] === 'function') return stream as unknown as AsyncIterable<T>
   return _fromStream(stream) as AsyncIterable<T>
 }
 
@@ -1508,11 +1508,11 @@ file.end() // close the stream
 // now all the pokemon are written to the file!
 ```
  */
-export function writeToStream(stream: WritableStreamish): (iterable: AnyIterable<any>) => Promise<void>
-export function writeToStream(stream: WritableStreamish, iterable: AnyIterable<any>): Promise<void>
-export function writeToStream(stream: WritableStreamish, iterable?: AnyIterable<any>) {
+export function writeToStream(stream: WritableStreamish): (iterable: AnyIterable<unknown>) => Promise<void>
+export function writeToStream(stream: WritableStreamish, iterable: AnyIterable<unknown>): Promise<void>
+export function writeToStream(stream: WritableStreamish, iterable?: AnyIterable<unknown>) {
   if (iterable === undefined) {
-    return (curriedIterable: AnyIterable<any>) => _writeToStream(stream, curriedIterable)
+    return (curriedIterable: AnyIterable<unknown>) => _writeToStream(stream, curriedIterable)
   }
   return _writeToStream(stream, iterable)
 }
@@ -1579,7 +1579,7 @@ export async function* interval(ms: number, limit?: number): AsyncGenerator<numb
 
 // --- zip ---
 
-type UnzipIterables<T extends AnyIterable<any>[]> = { [K in keyof T]: T[K] extends AnyIterable<infer U> ? U : never }
+type UnzipIterables<T extends AnyIterable<unknown>[]> = { [K in keyof T]: T[K] extends AnyIterable<infer U> ? U : never }
 
 /**
  * Zips multiple iterables together, yielding tuples of one item from each.
@@ -1591,7 +1591,7 @@ type UnzipIterables<T extends AnyIterable<any>[]> = { [K in keyof T]: T[K] exten
  * }
  * ```
  */
-export async function* zip<T extends AnyIterable<any>[]>(...iterables: T): AsyncGenerator<UnzipIterables<T>> {
+export async function* zip<T extends AnyIterable<unknown>[]>(...iterables: T): AsyncGenerator<UnzipIterables<T>> {
   const iterators = iterables.map(getIterator)
   try {
     while (true) {
@@ -1641,15 +1641,15 @@ async function* _scan<T, R>(fn: (acc: R, val: T) => R | Promise<R>, initial: R, 
  */
 export function scan<T, R>(fn: (acc: R, val: T) => R | Promise<R>, initial: R): (iterable: AnyIterable<T>) => AsyncGenerator<R>
 export function scan<T, R>(fn: (acc: R, val: T) => R | Promise<R>, initial: R, iterable: AnyIterable<T>): AsyncGenerator<R>
-export function scan<T, R>(fn: (acc: R, val: T) => R | Promise<R>, initial: R, iterable?: AnyIterable<T>): any {
+export function scan<T, R>(fn: (acc: R, val: T) => R | Promise<R>, initial: R, iterable?: AnyIterable<T>) {
   if (iterable === undefined) return (curried: AnyIterable<T>) => _scan(fn, initial, curried)
   return _scan(fn, initial, iterable)
 }
 
 // --- distinct ---
 
-async function* _distinct<T>(keyFn: (val: T) => any, iterable: AnyIterable<T>): AsyncGenerator<T> {
-  const seen = new Set<any>()
+async function* _distinct<T>(keyFn: (val: T) => unknown, iterable: AnyIterable<T>): AsyncGenerator<T> {
+  const seen = new Set<unknown>()
   for await (const val of iterable) {
     const key = keyFn(val)
     if (!seen.has(key)) { seen.add(key); yield val }
@@ -1665,9 +1665,9 @@ async function* _distinct<T>(keyFn: (val: T) => any, iterable: AnyIterable<T>): 
  * }
  * ```
  */
-export function distinct<T>(keyFn?: (val: T) => any): (iterable: AnyIterable<T>) => AsyncGenerator<T>
-export function distinct<T>(keyFn: (val: T) => any, iterable: AnyIterable<T>): AsyncGenerator<T>
-export function distinct<T>(keyFn?: (val: T) => any, iterable?: AnyIterable<T>): any {
+export function distinct<T>(keyFn?: (val: T) => unknown): (iterable: AnyIterable<T>) => AsyncGenerator<T>
+export function distinct<T>(keyFn: (val: T) => unknown, iterable: AnyIterable<T>): AsyncGenerator<T>
+export function distinct<T>(keyFn?: (val: T) => unknown, iterable?: AnyIterable<T>) {
   const fn = keyFn ?? ((v: T) => v)
   if (iterable === undefined) return (curried: AnyIterable<T>) => _distinct(fn, curried)
   return _distinct(fn, iterable)
@@ -1694,7 +1694,7 @@ async function* _window<T>(size: number, iterable: AnyIterable<T>): AsyncGenerat
  */
 export function window<T>(size: number): (iterable: AnyIterable<T>) => AsyncGenerator<T[]>
 export function window<T>(size: number, iterable: AnyIterable<T>): AsyncGenerator<T[]>
-export function window<T>(size: number, iterable?: AnyIterable<T>): any {
+export function window<T>(size: number, iterable?: AnyIterable<T>) {
   if (iterable === undefined) return (curried: AnyIterable<T>) => _window(size, curried)
   return _window(size, iterable)
 }
@@ -1760,7 +1760,7 @@ async function _partition<T>(fn: (val: T) => boolean | Promise<boolean>, iterabl
  */
 export function partition<T>(fn: (val: T) => boolean | Promise<boolean>): (iterable: AnyIterable<T>) => Promise<[T[], T[]]>
 export function partition<T>(fn: (val: T) => boolean | Promise<boolean>, iterable: AnyIterable<T>): Promise<[T[], T[]]>
-export function partition<T>(fn: (val: T) => boolean | Promise<boolean>, iterable?: AnyIterable<T>): any {
+export function partition<T>(fn: (val: T) => boolean | Promise<boolean>, iterable?: AnyIterable<T>) {
   if (iterable === undefined) return (curried: AnyIterable<T>) => _partition(fn, curried)
   return _partition(fn, iterable)
 }
@@ -1768,9 +1768,9 @@ export function partition<T>(fn: (val: T) => boolean | Promise<boolean>, iterabl
 // --- fromEvents ---
 
 export interface EventEmitterLike {
-  on(event: string, listener: (...args: any[]) => void): any
-  once(event: string, listener: (...args: any[]) => void): any
-  off(event: string, listener: (...args: any[]) => void): any
+  on(event: string, listener: (...args: unknown[]) => void): unknown
+  once(event: string, listener: (...args: unknown[]) => void): unknown
+  off(event: string, listener: (...args: unknown[]) => void): unknown
 }
 
 /**
@@ -1784,7 +1784,7 @@ export interface EventEmitterLike {
  * }
  * ```
  */
-export function fromEvents<T = any>(emitter: EventEmitterLike, event: string, endEvent = 'end'): AsyncIterable<T> {
+export function fromEvents<T = unknown>(emitter: EventEmitterLike, event: string, endEvent = 'end'): AsyncIterable<T> {
   type Item = { type: 'value'; value: T } | { type: 'end' } | { type: 'error'; error: Error }
   return {
     [Symbol.asyncIterator](): AsyncIterator<T> {
@@ -1806,15 +1806,18 @@ export function fromEvents<T = any>(emitter: EventEmitterLike, event: string, en
       const onEnd = () => { closed = true; queue.push({ type: 'end' }); dispatch(); cleanup() }
       const onError = (err: Error) => { closed = true; queue.push({ type: 'error', error: err }); dispatch(); cleanup() }
 
+      // Cast to the interface's wider `(...args: unknown[]) => void` at each call site
+      // so the internal handlers can keep their precise types.
+      type Listener = (...args: unknown[]) => void
       function cleanup() {
-        emitter.off(event, onData)
-        emitter.off(endEvent, onEnd)
-        emitter.off('error', onError)
+        emitter.off(event, onData as Listener)
+        emitter.off(endEvent, onEnd as Listener)
+        emitter.off('error', onError as Listener)
       }
 
-      emitter.on(event, onData)
-      emitter.once(endEvent, onEnd)
-      emitter.once('error', onError)
+      emitter.on(event, onData as Listener)
+      emitter.once(endEvent, onEnd as Listener)
+      emitter.once('error', onError as Listener)
 
       return {
         async next(): Promise<IteratorResult<T>> {
@@ -1900,7 +1903,7 @@ export class FP<T> implements AsyncIterable<T> {
   static interval(ms: number, limit?: number): FP<number> { return new FP(interval(ms, limit)) }
 
   /** Event emitter to async iterable — see `fromEvents()`. */
-  static fromEvents<T = any>(emitter: EventEmitterLike, event: string, endEvent?: string): FP<T> {
+  static fromEvents<T = unknown>(emitter: EventEmitterLike, event: string, endEvent?: string): FP<T> {
     return new FP(fromEvents<T>(emitter, event, endEvent))
   }
 
@@ -1931,12 +1934,12 @@ export class FP<T> implements AsyncIterable<T> {
     return new FP(filter(fn, this.#source))
   }
 
-  tap(fn: (val: T) => any): FP<T> {
+  tap(fn: (val: T) => void | Promise<void> | unknown): FP<T> {
     return new FP(tap(fn, this.#source))
   }
 
   flatten(): FP<T extends AnyIterable<infer U> ? U : T> {
-    return new FP(flatten(this.#source as AnyIterable<any>)) as any
+    return new FP(flatten(this.#source as AnyIterable<AnyIterable<T extends AnyIterable<infer U> ? U : T>>)) as unknown as FP<T extends AnyIterable<infer U> ? U : T>
   }
 
   scan<R>(fn: (acc: R, val: T) => R | Promise<R>, initial: R): FP<R> {
@@ -1989,7 +1992,7 @@ export class FP<T> implements AsyncIterable<T> {
   // --- utilities ---
 
   enumerate(): FP<[number, T]> { return new FP(enumerate(this.#source)) }
-  distinct(keyFn?: (val: T) => any): FP<T> { return new FP(distinct(keyFn ?? (v => v), this.#source)) }
+  distinct(keyFn?: (val: T) => unknown): FP<T> { return new FP(distinct(keyFn ?? (v => v), this.#source)) }
   pairwise(): FP<[T, T]> { return new FP(pairwise(this.#source)) }
   cycle(): FP<T> { return new FP(cycle(this.#source)) }
 

@@ -10,23 +10,27 @@ type AnyIterable<T> = Iterable<T> | AsyncIterable<T>;
  * A value, an array of that value, undefined, null or promises for any of them. Used in the `flatMap` and `flatTransform` functions as possible return values of the mapping function.
  */
 type FlatMapValue<B> = B | AnyIterable<B> | undefined | null | Promise<B | AnyIterable<B> | undefined | null>;
-type UnArrayAnyIterable<A extends AnyIterable<any>[]> = A extends AnyIterable<infer T>[] ? T : never;
-type NullOrFunction = null | ((anything?: any) => void);
-type UnwrapAnyIterable<M extends AnyIterable<any>> = M extends Iterable<infer T> ? Iterable<T> : M extends AsyncIterable<infer B> ? AsyncIterable<B> : never;
-type UnwrapAnyIterableArray<M extends AnyIterable<any>> = M extends Iterable<infer T> ? Generator<T[]> : M extends AsyncIterable<infer B> ? AsyncGenerator<B[]> : never;
+type UnArrayAnyIterable<A extends AnyIterable<unknown>[]> = A extends AnyIterable<infer T>[] ? T : never;
+type ErrorCallback = null | ((err: unknown) => void);
+type NotifyCallback = null | (() => void);
+type UnwrapAnyIterable<M extends AnyIterable<unknown>> = M extends Iterable<infer T> ? Iterable<T> : M extends AsyncIterable<infer B> ? AsyncIterable<B> : never;
+type UnwrapAnyIterableArray<M extends AnyIterable<unknown>> = M extends Iterable<infer T> ? Generator<T[]> : M extends AsyncIterable<infer B> ? AsyncGenerator<B[]> : never;
 interface ReadableStreamish {
-    once: any;
-    read: any;
-    [Symbol.asyncIterator]?: () => AsyncIterator<any>;
+    once(event: string, handler: () => void): void;
+    read(): unknown;
+    _readableState?: {
+        ended: boolean;
+    };
+    [Symbol.asyncIterator]?: () => AsyncIterator<unknown>;
 }
 interface WritableStreamish {
-    once: any;
-    write: any;
-    removeListener: any;
+    once(event: string, handler: (...args: unknown[]) => void): void;
+    write(chunk: unknown): boolean;
+    removeListener(event: string, handler: (...args: unknown[]) => void): void;
 }
 interface TimeConfig {
-    progress?: (delta: [number, number], total: [number, number]) => any;
-    total?: (time: [number, number]) => any;
+    progress?: (delta: [number, number], total: [number, number]) => void;
+    total?: (time: [number, number]) => void;
 }
 interface IDeferred<T> {
     promise: Promise<T>;
@@ -121,8 +125,8 @@ for await (const hero of concat(getPokemon(2), getTransformers(2))) {
 // bumblebee <- end of transformers
 ```
  */
-declare function concat<I extends Iterable<any>[]>(...iterables: I): Iterable<UnArrayAnyIterable<I>>;
-declare function concat<I extends AnyIterable<any>[]>(...iterables: I): AsyncIterable<UnArrayAnyIterable<I>>;
+declare function concat<I extends Iterable<unknown>[]>(...iterables: I): Iterable<UnArrayAnyIterable<I>>;
+declare function concat<I extends AnyIterable<unknown>[]>(...iterables: I): AsyncIterable<UnArrayAnyIterable<I>>;
 /**
  * A promise that resolves after the function drains the iterable of all data. Useful for processing a pipeline of data. Errors from the source `iterable` are raised immediately.
 
@@ -335,7 +339,7 @@ declare function flatTransform<T, R>(concurrency: number, func: (data: T) => Fla
 /**
  * Combine multiple iterators into a single iterable. Reads one item off each iterable in order repeatedly until they are all exhausted. If you care less about order and want them faster see `parallelMerge()`.
  */
-declare function merge<I extends AnyIterable<any>[]>(...iterables: I): AsyncGenerator<UnArrayAnyIterable<I>>;
+declare function merge<I extends AnyIterable<unknown>[]>(...iterables: I): AsyncGenerator<UnArrayAnyIterable<I>>;
 /**
  *Combine multiple iterators into a single iterable. Reads one item off of every iterable and yields them as they resolve. This is useful for pulling items out of a collection of iterables as soon as they're available. Errors `iterables` are raised immediately.
 
@@ -357,7 +361,7 @@ for await (const hero of heros) {
 // jazz
 ```
  */
-declare function parallelMerge<I extends AnyIterable<any>[]>(...iterables: I): AsyncGenerator<UnArrayAnyIterable<I>>;
+declare function parallelMerge<I extends AnyIterable<unknown>[]>(...iterables: I): AsyncGenerator<UnArrayAnyIterable<I>>;
 /**
  * Map a function or async function over all the values of an iterable, maintaining the order of the results. Runs up to `concurrency` async operations at once. If you don't care about order see [`transform()`](#transform). Errors from the source `iterable` are raised after all transformed values are yielded. Errors from `func` are raised after all previously transformed values are yielded.
 
@@ -461,8 +465,8 @@ declare function takeWhile<T>(predicate: (data: T) => boolean | Promise<boolean>
 /**
  * Returns a new iterator that yields the data it consumes, passing the data through to a function. If you provide an async function, the iterator will wait for the promise to resolve before yielding the value. This is useful for logging, or processing information and passing it along.
  */
-declare function tap<T>(func: (data: T) => any): (iterable: AnyIterable<T>) => AsyncGenerator<T>;
-declare function tap<T>(func: (data: T) => any, iterable: AnyIterable<T>): AsyncGenerator<T>;
+declare function tap<T>(func: (data: T) => void | Promise<void> | unknown): (iterable: AnyIterable<T>) => AsyncGenerator<T>;
+declare function tap<T>(func: (data: T) => void | Promise<void> | unknown, iterable: AnyIterable<T>): AsyncGenerator<T>;
 /**
  * Throttles `iterable` at a rate of `limit` per `interval` without discarding data. Useful for throttling rate limited APIs.
 
@@ -539,8 +543,8 @@ file.end() // close the stream
 // now all the pokemon are written to the file!
 ```
  */
-declare function writeToStream(stream: WritableStreamish): (iterable: AnyIterable<any>) => Promise<void>;
-declare function writeToStream(stream: WritableStreamish, iterable: AnyIterable<any>): Promise<void>;
+declare function writeToStream(stream: WritableStreamish): (iterable: AnyIterable<unknown>) => Promise<void>;
+declare function writeToStream(stream: WritableStreamish, iterable: AnyIterable<unknown>): Promise<void>;
 /**
  * Creates a sync generator that yields numbers from `start` (inclusive) to `end` (exclusive) by `step`.
  *
@@ -569,7 +573,7 @@ declare function repeat<T>(value: T, count?: number): Generator<T>;
  * ```
  */
 declare function interval(ms: number, limit?: number): AsyncGenerator<number>;
-type UnzipIterables<T extends AnyIterable<any>[]> = {
+type UnzipIterables<T extends AnyIterable<unknown>[]> = {
     [K in keyof T]: T[K] extends AnyIterable<infer U> ? U : never;
 };
 /**
@@ -582,7 +586,7 @@ type UnzipIterables<T extends AnyIterable<any>[]> = {
  * }
  * ```
  */
-declare function zip<T extends AnyIterable<any>[]>(...iterables: T): AsyncGenerator<UnzipIterables<T>>;
+declare function zip<T extends AnyIterable<unknown>[]>(...iterables: T): AsyncGenerator<UnzipIterables<T>>;
 /**
  * Yields `[index, value]` pairs for each item in the iterable.
  *
@@ -613,8 +617,8 @@ declare function scan<T, R>(fn: (acc: R, val: T) => R | Promise<R>, initial: R, 
  * }
  * ```
  */
-declare function distinct<T>(keyFn?: (val: T) => any): (iterable: AnyIterable<T>) => AsyncGenerator<T>;
-declare function distinct<T>(keyFn: (val: T) => any, iterable: AnyIterable<T>): AsyncGenerator<T>;
+declare function distinct<T>(keyFn?: (val: T) => unknown): (iterable: AnyIterable<T>) => AsyncGenerator<T>;
+declare function distinct<T>(keyFn: (val: T) => unknown, iterable: AnyIterable<T>): AsyncGenerator<T>;
 /**
  * Yields sliding windows of `size` items over the iterable.
  *
@@ -657,9 +661,9 @@ declare function cycle<T>(iterable: AnyIterable<T>): AsyncGenerator<T>;
 declare function partition<T>(fn: (val: T) => boolean | Promise<boolean>): (iterable: AnyIterable<T>) => Promise<[T[], T[]]>;
 declare function partition<T>(fn: (val: T) => boolean | Promise<boolean>, iterable: AnyIterable<T>): Promise<[T[], T[]]>;
 interface EventEmitterLike {
-    on(event: string, listener: (...args: any[]) => void): any;
-    once(event: string, listener: (...args: any[]) => void): any;
-    off(event: string, listener: (...args: any[]) => void): any;
+    on(event: string, listener: (...args: unknown[]) => void): unknown;
+    once(event: string, listener: (...args: unknown[]) => void): unknown;
+    off(event: string, listener: (...args: unknown[]) => void): unknown;
 }
 /**
  * Creates an async iterable from a Node.js-style event emitter. Yields values emitted by `event`.
@@ -672,7 +676,7 @@ interface EventEmitterLike {
  * }
  * ```
  */
-declare function fromEvents<T = any>(emitter: EventEmitterLike, event: string, endEvent?: string): AsyncIterable<T>;
+declare function fromEvents<T = unknown>(emitter: EventEmitterLike, event: string, endEvent?: string): AsyncIterable<T>;
 /**
  * Retries an async function up to `times` total attempts. Throws the last error if all fail.
  *
@@ -708,7 +712,7 @@ declare class FP<T> implements AsyncIterable<T> {
     /** Async timer ticks — see `interval()`. */
     static interval(ms: number, limit?: number): FP<number>;
     /** Event emitter to async iterable — see `fromEvents()`. */
-    static fromEvents<T = any>(emitter: EventEmitterLike, event: string, endEvent?: string): FP<T>;
+    static fromEvents<T = unknown>(emitter: EventEmitterLike, event: string, endEvent?: string): FP<T>;
     /** An empty iterable. */
     static empty<T = never>(): FP<T>;
     [Symbol.asyncIterator](): AsyncIterator<T>;
@@ -716,7 +720,7 @@ declare class FP<T> implements AsyncIterable<T> {
     flatMap<R>(fn: (val: T) => FlatMapValue<R>): FP<NonNullable<R>>;
     filter<S extends T>(fn: (val: T) => val is S): FP<S>;
     filter(fn: (val: T) => boolean | Promise<boolean>): FP<T>;
-    tap(fn: (val: T) => any): FP<T>;
+    tap(fn: (val: T) => void | Promise<void> | unknown): FP<T>;
     flatten(): FP<T extends AnyIterable<infer U> ? U : T>;
     scan<R>(fn: (acc: R, val: T) => R | Promise<R>, initial: R): FP<R>;
     take(count: number): FP<T>;
@@ -734,7 +738,7 @@ declare class FP<T> implements AsyncIterable<T> {
     merge(...others: AnyIterable<T>[]): FP<T>;
     zip<U>(other: AnyIterable<U>): FP<[T, U]>;
     enumerate(): FP<[number, T]>;
-    distinct(keyFn?: (val: T) => any): FP<T>;
+    distinct(keyFn?: (val: T) => unknown): FP<T>;
     pairwise(): FP<[T, T]>;
     cycle(): FP<T>;
     /** Collect all values into an array. */
@@ -765,4 +769,4 @@ declare class FP<T> implements AsyncIterable<T> {
     toSet(): Promise<Set<T>>;
 }
 
-export { type AnyIterable, type EventEmitterLike, FP, type FlatMapValue, type IDeferred, type Iterableish, type NullOrFunction, type ReadableStreamish, type TimeConfig, type UnArrayAnyIterable, type UnwrapAnyIterable, type UnwrapAnyIterableArray, type WritableStreamish, batch, batchWithTimeout, buffer, collect, concat, consume, cycle, distinct, drop, enumerate, filter, flatMap, flatTransform, flatten, fromEvents, fromStream, getIterator, interval, map, merge, pairwise, parallelFlatMap, parallelMap, parallelMerge, partition, pipeline, range, reduce, repeat, retry, scan, take, takeLast, takeWhile, tap, throttle, time, transform, window, writeToStream, zip };
+export { type AnyIterable, type ErrorCallback, type EventEmitterLike, FP, type FlatMapValue, type IDeferred, type Iterableish, type NotifyCallback, type ReadableStreamish, type TimeConfig, type UnArrayAnyIterable, type UnwrapAnyIterable, type UnwrapAnyIterableArray, type WritableStreamish, batch, batchWithTimeout, buffer, collect, concat, consume, cycle, distinct, drop, enumerate, filter, flatMap, flatTransform, flatten, fromEvents, fromStream, getIterator, interval, map, merge, pairwise, parallelFlatMap, parallelMap, parallelMerge, partition, pipeline, range, reduce, repeat, retry, scan, take, takeLast, takeWhile, tap, throttle, time, transform, window, writeToStream, zip };

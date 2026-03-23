@@ -4,7 +4,7 @@ type Resolvable<R> = R | PromiseLike<R> | FPInstance<R>;
 type ThenArgRecursive<T> = T extends PromiseLike<infer U> ? ThenArgRecursive<U> : T;
 type PredicateFunction<T> = (input: T) => boolean | null | undefined | void | Resolvable<boolean>;
 type PredicateArrayCallback<T> = ((item: T, index?: number, array?: T[]) => boolean | Resolvable<boolean>) | null | undefined;
-type CallbackHandler<ValueType, TReturn = any> = (input: ValueType) => Resolvable<TReturn> | null | undefined | void;
+type CallbackHandler<ValueType, TReturn = unknown> = (input: ValueType) => Resolvable<TReturn> | null | undefined | void;
 interface FPInstance<TReturn> extends PromiseLike<TReturn> {
     concurrency(limit: number): FPInstance<TReturn>;
     quiet(limit?: number): FPInstance<TReturn>;
@@ -16,39 +16,44 @@ interface FPInstance<TReturn> extends PromiseLike<TReturn> {
     filter<T>(callback: PredicateArrayCallback<T>): FPInstance<TReturn>;
     find<T>(callback: PredicateArrayCallback<T>): FPInstance<unknown>;
     findIndex<T>(callback: PredicateArrayCallback<T>): FPInstance<number>;
-    get(...keyNames: string[]): FPInstance<any>;
-    set(keyName: string, value: any): FPInstance<TReturn>;
-    listen(obj: any, ...eventNames: string[]): FPInstance<TReturn>;
-    tap(fn: CallbackHandler<TReturn, any>): FPInstance<TReturn>;
+    get<K extends string>(...keyNames: K[]): FPInstance<TReturn extends Record<K, infer V> ? V : unknown>;
+    set<V>(keyName: string, value: V): FPInstance<TReturn>;
+    listen(obj: EventTargetLike, ...eventNames: string[]): FPInstance<TReturn>;
+    tap(fn: CallbackHandler<TReturn>): FPInstance<TReturn>;
     tapIf<T = TReturn>(cond: PredicateFunction<T>, ifTrue?: PredicateFunction<ThenArgRecursive<TReturn>>, ifFalse?: PredicateFunction<ThenArgRecursive<TReturn>>): FPInstance<TReturn | T>;
     thenIf<TItem = TReturn>(cond: PredicateFunction<TItem>, ifTrue?: PredicateFunction<ThenArgRecursive<TItem>>, ifFalse?: PredicateFunction<ThenArgRecursive<TItem>>): FPInstance<TReturn | TItem | void>;
-    catch<TItem = TReturn>(onReject: ((error: any) => Resolvable<TItem>) | undefined | null): FPInstance<TItem | TReturn>;
+    catch<TItem = TReturn>(onReject: ((error: Error) => Resolvable<TItem>) | undefined | null): FPInstance<TItem | TReturn>;
     catch<TItem = TReturn>(cond: PredicateFunction<TReturn> | object, ifTrue: PredicateFunction<TItem>): FPInstance<TItem | TReturn>;
     catchIf<TItem = TReturn>(cond: PredicateFunction<ThenArgRecursive<TReturn>> | object, ifTrue?: PredicateFunction<TItem>): FPInstance<TItem | TReturn>;
     chainEnd<TItem>(): (input: TItem) => FPInstance<TItem | TReturn>;
 }
+interface EventTargetLike {
+    on?: (eventName: string, handler: (...args: unknown[]) => void) => void;
+    off?: (eventName: string, handler: (...args: unknown[]) => void) => void;
+    addEventListener?: (eventName: string, handler: (...args: unknown[]) => void) => void;
+    removeEventListener?: (eventName: string, handler: (...args: unknown[]) => void) => void;
+}
 interface UnpackedPromise<T> {
     promise: FPInstance<T>;
     resolve: (value: Resolvable<T>) => void;
-    /** Raw promise reject callback — call to reject the unpacked promise. */
     reject: (error: unknown) => void;
 }
 interface FPStatic {
-    <TReturn>(callback: (resolve: (thenableOrResult?: Resolvable<TReturn>) => void, reject: (error?: any) => void) => void): FPInstance<TReturn>;
-    new <TReturn>(callback: (resolve: (thenableOrResult?: Resolvable<TReturn>) => void, reject: (error?: any) => void) => void): FPInstance<TReturn>;
-    all<T>(promises: Record<string, T | Resolvable<T> | any>): FPInstance<T>;
-    all<T>(promises: Array<T | any>): FPInstance<T>;
+    <TReturn>(callback: (resolve: (thenableOrResult?: Resolvable<TReturn>) => void, reject: (error?: unknown) => void) => void): FPInstance<TReturn>;
+    new <TReturn>(callback: (resolve: (thenableOrResult?: Resolvable<TReturn>) => void, reject: (error?: unknown) => void) => void): FPInstance<TReturn>;
+    all<T>(promises: Record<string, T | Resolvable<T>>): FPInstance<T>;
+    all<T>(promises: Array<T | Resolvable<T>>): FPInstance<T>;
     delay<T>(msec: number): FPInstance<T>;
-    get(...args: any[]): any;
-    promisify<T>(cb: CallbackHandler<T>): (...args: any[]) => FPInstance<T>;
-    promisifyAll<T extends object>(target: T): T;
+    get<K extends string>(...args: K[]): <T extends Record<K, unknown>>(obj: T) => T[K];
+    get<K extends string, T extends Record<K, unknown>>(...args: [...K[], T]): T[K];
+    promisify<T>(cb: (...args: [...unknown[], (err: unknown, res: T) => void]) => void): (...args: unknown[]) => FPInstance<T>;
+    promisifyAll<T extends Record<string, unknown>>(target: T): T;
     resolve<T>(value?: Resolvable<T>): FPInstance<T>;
-    /** Returns a rejected FPInstance. Always returns a promise — never throws synchronously. */
     reject(err: unknown): FPInstance<never>;
     unpack<T>(): UnpackedPromise<T>;
     chain<T>(): FPInstance<T>;
-    thenIf: (...args: any[]) => any;
-    silent: (limit?: number) => FPInstance<any>;
+    thenIf(cond?: (x: unknown) => unknown, ifTrue?: (x: unknown) => unknown, ifFalse?: (x: unknown) => unknown): (value: unknown) => FPInstance<unknown>;
+    silent: (limit?: number) => FPInstance<unknown>;
 }
 
 declare const _default: FPStatic;
