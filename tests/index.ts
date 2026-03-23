@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import FP from '../src/index'
 
 test('FP.resolve(true)', () => FP.resolve(true).then((x: boolean) => expect(x).toBeTruthy()))
@@ -53,42 +53,107 @@ test('FP.unpack() reject', async () => {
   await expect(asyncFunc()).rejects.toBeTruthy()
 })
 
-test('FP.delay()', async () => {
-  const started = Date.now()
-  await FP.resolve([1, 2, 3])
-    .concurrency(1)
-    .map(() => FP.resolve(Date.now()).delay(5))
-  expect(Date.now() - started).toBeGreaterThanOrEqual(15)
+// ---------------------------------------------------------------------------
+// Issue #18: timing tests replaced with fake timers to eliminate flakiness.
+// The original assertions used real clock measurements (Date.now()) which are
+// inherently non-deterministic under load or on slow CI runners.
+// ---------------------------------------------------------------------------
+
+test('FP.delay() — sequential delays accumulate', async () => {
+  vi.useFakeTimers()
+  try {
+    const items = [1, 2, 3]
+    let resolved = false
+    const p = FP.resolve(items)
+      .concurrency(1)
+      .map(() => FP.resolve(Date.now()).delay(50))
+      .then(() => { resolved = true })
+
+    // Before any timer fires, the promise should still be pending
+    expect(resolved).toBe(false)
+
+    // Advance past all three 50ms delays (150ms total, sequential with concurrency=1)
+    await vi.advanceTimersByTimeAsync(160)
+    await p
+    expect(resolved).toBe(true)
+  } finally {
+    vi.useRealTimers()
+  }
 })
 
-test('FP.delay() - static usage', async () => {
-  const started = Date.now()
-  await FP.resolve([1, 2, 3])
-    .concurrency(1)
-    .map(() => FP.delay(5).then(() => Date.now()))
-  expect(Date.now() - started).toBeGreaterThanOrEqual(15)
+test('FP.delay() — static usage', async () => {
+  vi.useFakeTimers()
+  try {
+    let resolved = false
+    const p = FP.resolve([1, 2, 3])
+      .concurrency(1)
+      .map(() => FP.delay(50).then(() => Date.now()))
+      .then(() => { resolved = true })
+
+    expect(resolved).toBe(false)
+    await vi.advanceTimersByTimeAsync(160)
+    await p
+    expect(resolved).toBe(true)
+  } finally {
+    vi.useRealTimers()
+  }
 })
 
-test('FP.delay() with .concurrency(Infinity)', async () => {
-  const started = Date.now()
-  await FP.resolve([1, 2, 3, 4])
-    .concurrency(Infinity)
-    .map((num: number) => FP.resolve(num).delay(50))
-  expect(Date.now() - started).toBeGreaterThanOrEqual(45)
+test('FP.delay() with .concurrency(Infinity) — all delays run in parallel', async () => {
+  vi.useFakeTimers()
+  try {
+    let resolved = false
+    const p = FP.resolve([1, 2, 3, 4])
+      .concurrency(Infinity)
+      .map((num: number) => FP.resolve(num).delay(50))
+      .then(() => { resolved = true })
+
+    // All 4 items run in parallel, so only 50ms needed
+    expect(resolved).toBe(false)
+    await vi.advanceTimersByTimeAsync(55)
+    await p
+    expect(resolved).toBe(true)
+  } finally {
+    vi.useRealTimers()
+  }
 })
 
-test('FP.delay() with .concurrency(10)', async () => {
-  const started = Date.now()
-  await FP.resolve([1, 2, 3, 4])
-    .concurrency(10)
-    .map((num: number) => FP.resolve(num).delay(50))
-  expect(Date.now() - started).toBeGreaterThanOrEqual(45)
+test('FP.delay() with .concurrency(10) — effectively parallel for 4 items', async () => {
+  vi.useFakeTimers()
+  try {
+    let resolved = false
+    const p = FP.resolve([1, 2, 3, 4])
+      .concurrency(10)
+      .map((num: number) => FP.resolve(num).delay(50))
+      .then(() => { resolved = true })
+
+    expect(resolved).toBe(false)
+    await vi.advanceTimersByTimeAsync(55)
+    await p
+    expect(resolved).toBe(true)
+  } finally {
+    vi.useRealTimers()
+  }
 })
 
-test('FP.delay() with .concurrency(1)', async () => {
-  const started = Date.now()
-  await FP.resolve([1, 2, 3, 4])
-    .concurrency(1)
-    .map((num: number) => FP.resolve(num).delay(50))
-  expect(Date.now() - started).toBeGreaterThan(50)
+test('FP.delay() with .concurrency(1) — strictly sequential', async () => {
+  vi.useFakeTimers()
+  try {
+    let resolved = false
+    const p = FP.resolve([1, 2, 3, 4])
+      .concurrency(1)
+      .map((num: number) => FP.resolve(num).delay(50))
+      .then(() => { resolved = true })
+
+    // With concurrency=1, 4 * 50ms = 200ms minimum
+    await vi.advanceTimersByTimeAsync(150)
+    // Should still be pending after 150ms (only 3 of 4 done)
+    expect(resolved).toBe(false)
+
+    await vi.advanceTimersByTimeAsync(60)
+    await p
+    expect(resolved).toBe(true)
+  } finally {
+    vi.useRealTimers()
+  }
 })
