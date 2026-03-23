@@ -23,14 +23,15 @@ interface FPInstance<TReturn> extends PromiseLike<TReturn> {
     tapIf<T = TReturn>(cond: PredicateFunction<T>, ifTrue?: PredicateFunction<ThenArgRecursive<TReturn>>, ifFalse?: PredicateFunction<ThenArgRecursive<TReturn>>): FPInstance<TReturn | T>;
     thenIf<TItem = TReturn>(cond: PredicateFunction<TItem>, ifTrue?: PredicateFunction<ThenArgRecursive<TItem>>, ifFalse?: PredicateFunction<ThenArgRecursive<TItem>>): FPInstance<TReturn | TItem | void>;
     catch<TItem = TReturn>(onReject: ((error: any) => Resolvable<TItem>) | undefined | null): FPInstance<TItem | TReturn>;
-    catch<TItem = TReturn>(cond: PredicateFunction<TReturn> | object, ifTrue?: PredicateFunction<TItem>, ifFalse?: PredicateFunction<TItem>): FPInstance<TItem | TReturn>;
+    catch<TItem = TReturn>(cond: PredicateFunction<TReturn> | object, ifTrue: PredicateFunction<TItem>): FPInstance<TItem | TReturn>;
     catchIf<TItem = TReturn>(cond: PredicateFunction<ThenArgRecursive<TReturn>> | object, ifTrue?: PredicateFunction<TItem>): FPInstance<TItem | TReturn>;
     chainEnd<TItem>(): (input: TItem) => FPInstance<TItem | TReturn>;
 }
 interface UnpackedPromise<T> {
     promise: FPInstance<T>;
     resolve: (value: Resolvable<T>) => void;
-    reject: (error: Error | null | undefined | T, input?: T) => Resolvable<any> | null | undefined;
+    /** Raw promise reject callback — call to reject the unpacked promise. */
+    reject: (error: unknown) => void;
 }
 interface FPStatic {
     <TReturn>(callback: (resolve: (thenableOrResult?: Resolvable<TReturn>) => void, reject: (error?: any) => void) => void): FPInstance<TReturn>;
@@ -42,11 +43,12 @@ interface FPStatic {
     promisify<T>(cb: CallbackHandler<T>): (...args: any[]) => FPInstance<T>;
     promisifyAll<T extends object>(target: T): T;
     resolve<T>(value?: Resolvable<T>): FPInstance<T>;
-    reject<T>(err: T): FPInstance<T>;
+    /** Returns a rejected FPInstance. Always returns a promise — never throws synchronously. */
+    reject(err: unknown): FPInstance<never>;
     unpack<T>(): UnpackedPromise<T>;
     chain<T>(): FPInstance<T>;
     thenIf: (...args: any[]) => any;
-    silent: (limit: number) => FPInstance<any>;
+    silent: (limit?: number) => FPInstance<any>;
 }
 
 declare const _default: FPStatic;
