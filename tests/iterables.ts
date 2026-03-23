@@ -1,3 +1,5 @@
+import { EventEmitter } from 'node:events'
+import { Readable, Writable } from 'node:stream'
 import { expect, test, vi } from 'vitest'
 import {
   // streaming-iterables core
@@ -9,6 +11,9 @@ import {
   range, repeat, interval, zip, enumerate,
   scan, distinct, window, pairwise, cycle,
   partition, retry,
+  // stream helpers (issue #16 — previously untested)
+  batchWithTimeout, throttle, time, fromEvents, fromStream, writeToStream,
+  flatTransform, parallelFlatMap, parallelMerge,
   // FP class
   FP,
 } from '../src/iterables'
@@ -539,4 +544,177 @@ test('FP.parallelMap: preserves order', async () => {
 
 test('FP.buffer: passes values through', async () => {
   expect(await FP.of(1, 2, 3).buffer(2).collect()).toEqual([1, 2, 3])
+})
+
+// ---------------------------------------------------------------------------
+// Issue #16: previously-untested iterable functions
+// ---------------------------------------------------------------------------
+
+// --- batchWithTimeout ---
+test('batchWithTimeout: flushes full batch immediately', async () => {
+  vi.useFakeTimers()
+  const gen = batchWithTimeout(3, 100, [1, 2, 3, 4, 5])
+  const p = collect(gen)
+  await vi.runAllTimersAsync()
+  const result = await p
+  expect(result).toEqual([[1, 2, 3], [4, 5]])
+  vi.useRealTimers()
+})
+
+test('batchWithTimeout: flushes partial batch on timeout', async () => {
+  vi.useFakeTimers()
+  async function* slowItems() {
+    yield 1
+    yield 2
+    await new Promise(r => setTimeout(r, 200)) // pause > timeout
+    yield 3
+  }
+  const p = collect(batchWithTimeout(10, 50, slowItems()))
+  await vi.runAllTimersAsync()
+  const result = await p
+  // First two items should flush after the 50ms timeout, then [3] at the end
+  expect(result).toEqual([[1, 2], [3]])
+  vi.useRealTimers()
+})
+
+// --- throttle ---
+test('throttle: passes all values through in order', async () => {
+  vi.useFakeTimers()
+  const p = collect(throttle(2, 100, [1, 2, 3, 4, 5]))
+  await vi.runAllTimersAsync()
+  const result = await p
+  expect(result).toEqual([1, 2, 3, 4, 5])
+  vi.useRealTimers()
+})
+
+// --- time ---
+test('time: passes values through unchanged', async () => {
+  const result = await collect(time({}, [10, 20, 30]))
+  expect(result).toEqual([10, 20, 30])
+})
+
+test('time: calls progress callback for each item', async () => {
+  const deltas: Array<[number, number]> = []
+  await collect(time({ progress: (delta) => deltas.push(delta) }, [1, 2, 3]))
+  // _syncTime calls progress once per itr.next() call, including the final done:true
+  // iteration, so for 3 items it fires at least 3 times (and at most 4).
+  expect(deltas.length).toBeGreaterThanOrEqual(3)
+  // hrtime tuples are [seconds, nanoseconds]
+  for (const d of deltas) {
+    expect(d).toHaveLength(2)
+    expect(typeof d[0]).toBe('number')
+    expect(typeof d[1]).toBe('number')
+  }
+})
+
+test('time: calls total callback on completion', async () => {
+  let totalTime: [number, number] | null = null
+  await collect(time({ total: (t) => { totalTime = t } }, [1, 2, 3]))
+  expect(totalTime).not.toBeNull()
+  expect((totalTime as unknown as [number, number])).toHaveLength(2)
+})
+
+// --- fromEvents ---
+test('fromEvents: collects values from EventEmitter', async () => {
+  const emitter = new EventEmitter()
+  const iterable = fromEvents<number>(emitter, 'data')
+
+  setTimeout(() => {
+    emitter.emit('data', 1)
+    emitter.emit('data', 2)
+    emitter.emit('data', 3)
+    emitter.emit('end')
+  }, 0)
+
+  expect(await collect(take(3, iterable))).toEqual([1, 2, 3])
+})
+
+test('fromEvents: stops on custom end event', async () => {
+  const emitter = new EventEmitter()
+  const iterable = fromEvents<string>(emitter, 'msg', 'done')
+
+  setTimeout(() => {
+    emitter.emit('msg', 'hello')
+    emitter.emit('done')
+  }, 0)
+
+  const result = await collect(iterable)
+  expect(result).toEqual(['hello'])
+})
+
+// --- fromStream ---
+test('fromStream: reads a Node.js Readable stream', async () => {
+  const readable = Readable.from(['chunk1', 'chunk2', 'chunk3'])
+  const result = await collect(fromStream<string>(readable))
+  expect(result).toEqual(['chunk1', 'chunk2', 'chunk3'])
+})
+
+// --- writeToStream ---
+test('writeToStream: writes iterable to a Writable stream', async () => {
+  const written: string[] = []
+  const writable = new Writable({
+    write(chunk, _encoding, cb) {
+      written.push(chunk.toString())
+      cb()
+    },
+  })
+  await writeToStream(writable, ['a', 'b', 'c'])
+  expect(written).toEqual(['a', 'b', 'c'])
+})
+
+test('writeToStream: curried form', async () => {
+  const written: string[] = []
+  const writable = new Writable({
+    write(chunk, _encoding, cb) { written.push(chunk.toString()); cb() },
+  })
+  const writer = writeToStream(writable)
+  await writer(['x', 'y'])
+  expect(written).toEqual(['x', 'y'])
+})
+
+// --- flatTransform ---
+test('flatTransform: concurrent flat-map by resolution order', async () => {
+  const result = await collect(flatTransform(2, async (x: number) => [x, x * 10], [1, 2, 3]))
+  expect(result.sort((a, b) => a - b)).toEqual([1, 2, 3, 10, 20, 30])
+})
+
+// --- parallelFlatMap ---
+test('parallelFlatMap: order-preserving concurrent flat-map', async () => {
+  const result = await collect(parallelFlatMap(2, async (x: number) => [x, x * 10], [1, 2, 3]))
+  expect(result).toEqual([1, 10, 2, 20, 3, 30])
+})
+
+// --- parallelMerge ---
+test('parallelMerge: yields values as they resolve across all iterables', async () => {
+  async function* slow() { yield await Promise.resolve(1); yield await Promise.resolve(3) }
+  async function* fast() { yield await Promise.resolve(2); yield await Promise.resolve(4) }
+  const result = await collect(parallelMerge(slow(), fast()))
+  // Order is first-ready-first-out so just check all values present
+  expect(result.sort()).toEqual([1, 2, 3, 4])
+})
+
+// --- FP.batchWithTimeout (fluent) ---
+test('FP.batchWithTimeout: flushes on size and timeout', async () => {
+  vi.useFakeTimers()
+  const p = FP.of(1, 2, 3, 4, 5).batchWithTimeout(3, 100).collect()
+  await vi.runAllTimersAsync()
+  const result = await p
+  expect(result).toEqual([[1, 2, 3], [4, 5]])
+  vi.useRealTimers()
+})
+
+// --- FP.throttle (fluent) ---
+test('FP.throttle: passes all values through', async () => {
+  vi.useFakeTimers()
+  const p = FP.of(1, 2, 3).throttle(2, 100).collect()
+  await vi.runAllTimersAsync()
+  const result = await p
+  expect(result).toEqual([1, 2, 3])
+  vi.useRealTimers()
+})
+
+// --- FP.merge (fluent) ---
+test('FP.merge: interleaves round-robin', async () => {
+  const result = await FP.of(1, 3).merge([2, 4]).collect()
+  expect(result).toEqual([1, 2, 3, 4])
 })
