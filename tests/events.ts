@@ -41,3 +41,57 @@ test('FP.chain().listen() DOM', async () => {
 
   expect(result).toBeTruthy()
 })
+
+// ---------------------------------------------------------------------------
+// Issue #17: event listener cleanup / destroy() was never tested
+// ---------------------------------------------------------------------------
+
+test('listen() destroy() removes EventEmitter listener', async () => {
+  const eventBus = new EventEmitter()
+  let callCount = 0
+
+  const fp = FP.chain()
+    .then(() => { callCount++ })
+    .listen(eventBus, 'ping')
+
+  // Listener is active — first emit should trigger it
+  eventBus.emit('ping')
+  await new Promise(r => setTimeout(r, 10))
+  expect(callCount).toBe(1)
+
+  // Destroy removes all registered listeners
+  fp._FP.destroy()
+
+  // Subsequent emit should NOT trigger the handler
+  eventBus.emit('ping')
+  await new Promise(r => setTimeout(r, 10))
+  expect(callCount).toBe(1) // unchanged
+})
+
+test('listen() destroy() removes multiple event listeners', async () => {
+  const eventBus = new EventEmitter()
+  const seen: string[] = []
+
+  const fp = FP.chain()
+    .then((eventName: unknown) => { seen.push(eventName as string) })
+    .listen(eventBus, 'a', 'b')
+
+  eventBus.emit('a', 'a')
+  eventBus.emit('b', 'b')
+  await new Promise(r => setTimeout(r, 10))
+  expect(seen).toEqual(['a', 'b'])
+
+  fp._FP.destroy()
+
+  eventBus.emit('a', 'a')
+  eventBus.emit('b', 'b')
+  await new Promise(r => setTimeout(r, 10))
+  expect(seen).toHaveLength(2) // no new entries
+})
+
+test('listen() without chain() throws descriptive error', () => {
+  const eventBus = new EventEmitter()
+  expect(() => FP.resolve(1).listen(eventBus, 'ping')).toThrow(
+    /must be called at the end of a .chain\(\) pipeline/
+  )
+})
