@@ -14,35 +14,37 @@ export type AnyIterable<T> = Iterable<T> | AsyncIterable<T>
  * A value, an array of that value, undefined, null or promises for any of them. Used in the `flatMap` and `flatTransform` functions as possible return values of the mapping function.
  */
 export type FlatMapValue<B> = B | AnyIterable<B> | undefined | null | Promise<B | AnyIterable<B> | undefined | null>
-export type UnArrayAnyIterable<A extends AnyIterable<any>[]> = A extends AnyIterable<infer T>[] ? T : never
-export type NullOrFunction = null | ((anything?: any) => void)
-export type UnwrapAnyIterable<M extends AnyIterable<any>> = M extends Iterable<infer T>
+export type UnArrayAnyIterable<A extends AnyIterable<unknown>[]> = A extends AnyIterable<infer T>[] ? T : never
+export type ErrorCallback = null | ((err: unknown) => void)
+export type NotifyCallback = null | (() => void)
+export type UnwrapAnyIterable<M extends AnyIterable<unknown>> = M extends Iterable<infer T>
   ? Iterable<T>
   : M extends AsyncIterable<infer B>
     ? AsyncIterable<B>
     : never
 
-export type UnwrapAnyIterableArray<M extends AnyIterable<any>> = M extends Iterable<infer T>
+export type UnwrapAnyIterableArray<M extends AnyIterable<unknown>> = M extends Iterable<infer T>
   ? Generator<T[]>
   : M extends AsyncIterable<infer B>
     ? AsyncGenerator<B[]>
     : never
 
 export interface ReadableStreamish {
-  once: any
-  read: any
-  [Symbol.asyncIterator]?: () => AsyncIterator<any>
+  once(event: string, handler: () => void): void
+  read(): unknown
+  _readableState?: { ended: boolean }
+  [Symbol.asyncIterator]?: () => AsyncIterator<unknown>
 }
 
 export interface WritableStreamish {
-  once: any
-  write: any
-  removeListener: any
+  once(event: string, handler: (...args: unknown[]) => void): void
+  write(chunk: unknown): boolean
+  removeListener(event: string, handler: (...args: unknown[]) => void): void
 }
 
 export interface TimeConfig {
-  progress?: (delta: [number, number], total: [number, number]) => any
-  total?: (time: [number, number]) => any
+  progress?: (delta: [number, number], total: [number, number]) => void
+  total?: (time: [number, number]) => void
 }
 
 export interface IDeferred<T> {
@@ -64,7 +66,7 @@ function defer<T>(): IDeferred<T> {
 }
 
 function isAsyncIterable<T>(iterable: AnyIterable<T>): iterable is AsyncIterable<T> {
-  return iterable != null && Symbol.asyncIterator in (iterable as any)
+  return iterable != null && Symbol.asyncIterator in (iterable as object)
 }
 
 /**
@@ -136,7 +138,7 @@ for await (const pokemons of batch(10, getPokemon())) {
  */
 export function batch(size: number): <T, M extends AnyIterable<T>>(curriedIterable: M) => UnwrapAnyIterableArray<M>
 export function batch<T, M extends AnyIterable<T>>(size: number, iterable: M): UnwrapAnyIterableArray<M>
-export function batch<T>(size: number, iterable?: AnyIterable<T>): any {
+export function batch<T>(size: number, iterable?: AnyIterable<T>): UnwrapAnyIterableArray<AnyIterable<T>> | (<U, M extends AnyIterable<U>>(curriedIterable: M) => UnwrapAnyIterableArray<M>) {
   if (size < 1) {
     throw new RangeError('batch size must be at least 1')
   }
@@ -165,7 +167,7 @@ const createTimer = (duration: number): [Promise<typeof TIMEOUT>, () => void] =>
 
 async function* _batchWithTimeout<T>(size: number, timeout: number, iterable: AsyncIterable<T>) {
   const iterator = iterable[Symbol.asyncIterator]()
-  let pendingData: Promise<IteratorResult<T, any>> | undefined
+  let pendingData: Promise<IteratorResult<T, unknown>> | undefined
   let batchData: T[] = []
   let timer: Promise<typeof TIMEOUT> | undefined
   let clearTimer: (() => void) | undefined
@@ -220,7 +222,7 @@ for await (const pokemons of batchWithTimeout(10, 100, getPokemon())) {
  */
 export function batchWithTimeout(size: number, timeout: number): <T, M extends AnyIterable<T>>(curriedIterable: M) => UnwrapAnyIterableArray<M>
 export function batchWithTimeout<T, M extends AnyIterable<T>>(size: number, timeout: number, iterable: M): UnwrapAnyIterableArray<M>
-export function batchWithTimeout<T>(size: number, timeout: number, iterable?: AnyIterable<T>): any {
+export function batchWithTimeout<T>(size: number, timeout: number, iterable?: AnyIterable<T>): UnwrapAnyIterableArray<AnyIterable<T>> | (<U, M extends AnyIterable<U>>(curriedIterable: M) => UnwrapAnyIterableArray<M>) {
   if (iterable === undefined) {
     return <U, M extends AnyIterable<U>>(curriedIterable: M) => batchWithTimeout(size, timeout, curriedIterable)
   }
@@ -337,7 +339,7 @@ for await (const monster of buffer(10, getPokemon())) {
  */
 export function buffer(size: number): <T, M extends AnyIterable<T>>(curriedIterable: M) => UnwrapAnyIterable<M>
 export function buffer<T, M extends AnyIterable<T>>(size: number, iterable: M): UnwrapAnyIterable<M>
-export function buffer<T>(size: number, iterable?: AnyIterable<T>): any {
+export function buffer<T>(size: number, iterable?: AnyIterable<T>): UnwrapAnyIterable<AnyIterable<T>> | AnyIterable<T> | (<U, M extends AnyIterable<U>>(curriedIterable: M) => UnwrapAnyIterable<M>) {
   if (iterable === undefined) {
     return <U, M extends AnyIterable<U>>(curriedIterable: M) => buffer(size, curriedIterable)
   }
@@ -374,12 +376,12 @@ export function collect<T>(iterable: AnyIterable<T>): T[] | Promise<T[]> {
 
 // --- concat ---
 
-async function* _concat<I extends AnyIterable<any>[]>(iterables: I): AsyncIterable<UnArrayAnyIterable<I>> {
-  for await (const iterable of iterables) yield* iterable
+async function* _concat<I extends AnyIterable<unknown>[]>(iterables: I): AsyncIterable<UnArrayAnyIterable<I>> {
+  for await (const iterable of iterables) yield* iterable as AsyncIterable<UnArrayAnyIterable<I>>
 }
 
-function* _syncConcat<I extends Iterable<any>[]>(iterables: I): Iterable<UnArrayAnyIterable<I>> {
-  for (const iterable of iterables) yield* iterable
+function* _syncConcat<I extends Iterable<unknown>[]>(iterables: I): Iterable<UnArrayAnyIterable<I>> {
+  for (const iterable of iterables) yield* iterable as Iterable<UnArrayAnyIterable<I>>
 }
 
 /**
@@ -399,12 +401,12 @@ for await (const hero of concat(getPokemon(2), getTransformers(2))) {
 // bumblebee <- end of transformers
 ```
  */
-export function concat<I extends Iterable<any>[]>(...iterables: I): Iterable<UnArrayAnyIterable<I>>
-export function concat<I extends AnyIterable<any>[]>(...iterables: I): AsyncIterable<UnArrayAnyIterable<I>>
-export function concat(...iterables: AnyIterable<any>[]): AnyIterable<any> {
+export function concat<I extends Iterable<unknown>[]>(...iterables: I): Iterable<UnArrayAnyIterable<I>>
+export function concat<I extends AnyIterable<unknown>[]>(...iterables: I): AsyncIterable<UnArrayAnyIterable<I>>
+export function concat(...iterables: AnyIterable<unknown>[]): AnyIterable<unknown> {
   const hasAnyAsync = iterables.find(itr => isAsyncIterable(itr))
   if (hasAnyAsync) return _concat(iterables)
-  return _syncConcat(iterables as Iterable<any>[])
+  return _syncConcat(iterables as Iterable<unknown>[])
 }
 
 // --- consume ---
@@ -466,7 +468,7 @@ const allButFirstFive = await collect(drop(5, getPokemon()))
  */
 export function drop(count: number): <T, M extends AnyIterable<T>>(curriedIterable: M) => UnwrapAnyIterable<M>
 export function drop<T, M extends AnyIterable<T>>(count: number, iterable: M): UnwrapAnyIterable<M>
-export function drop<T>(count: number, iterable?: AnyIterable<T>): any {
+export function drop<T>(count: number, iterable?: AnyIterable<T>): UnwrapAnyIterable<AnyIterable<T>> | (<U, M extends AnyIterable<U>>(curriedIterable: M) => UnwrapAnyIterable<M>) {
   if (iterable === undefined) {
     return <U, M extends AnyIterable<U>>(curriedIterable: M) => drop(count, curriedIterable)
   }
@@ -533,7 +535,7 @@ for await (const item of flatten([1, 2, [3, [4, 5], 6])) {
  */
 export async function* flatten<B>(iterable: AnyIterable<B | AnyIterable<B>>): AsyncIterableIterator<B> {
   for await (const maybeItr of iterable) {
-    if (maybeItr && typeof maybeItr !== 'string' && ((maybeItr as any)[Symbol.iterator] || (maybeItr as any)[Symbol.asyncIterator])) {
+    if (maybeItr && typeof maybeItr !== 'string' && (Symbol.iterator in (maybeItr as object) || Symbol.asyncIterator in (maybeItr as object))) {
       yield* flatten(maybeItr as AnyIterable<B>)
     } else {
       yield maybeItr as B
@@ -610,7 +612,11 @@ export function flatMap<T, B>(func: (data: T) => FlatMapValue<B>, iterable?: Any
   if (iterable === undefined) {
     return (curriedIterable: AnyIterable<T>) => flatMap(func, curriedIterable) as AsyncGenerator<NonNullable<B>>
   }
-  return filter<B>(i => i !== undefined && i !== null, flatten(map<any, any>(func, iterable))) as AsyncGenerator<NonNullable<B>>
+  const mapped = flatten(map<T, B | AnyIterable<B> | undefined | null>(func, iterable))
+  return filter(
+    (i: unknown): boolean => i !== undefined && i !== null,
+    mapped as unknown as AnyIterable<NonNullable<B>>
+  ) as AsyncGenerator<NonNullable<B>>
 }
 
 // --- transform ---
@@ -717,7 +723,7 @@ export function transform(concurrency: number): {
 }
 export function transform<T, R>(concurrency: number, func: (data: T) => R | Promise<R>): (iterable: AnyIterable<T>) => AsyncIterableIterator<R>
 export function transform<T, R>(concurrency: number, func: (data: T) => R | Promise<R>, iterable: AnyIterable<T>): AsyncIterableIterator<R>
-export function transform<T, R>(concurrency: number, func?: (data: T) => R | Promise<R>, iterable?: AnyIterable<T>): any {
+export function transform<T, R>(concurrency: number, func?: (data: T) => R | Promise<R>, iterable?: AnyIterable<T>) {
   if (func === undefined) {
     return <A, B>(curriedFunc: (data: A) => B | Promise<B>, curriedIterable?: AnyIterable<A>) =>
       curriedIterable
@@ -776,8 +782,8 @@ function _flatTransform<T, R>(
   async function mapAndQueue(itrValue: T) {
     try {
       const value = await func(itrValue)
-      if (value && (value as any)[Symbol.asyncIterator]) {
-        for await (const asyncVal of value as any) resultQueue.push(asyncVal)
+      if (value && Symbol.asyncIterator in (value as object)) {
+        for await (const asyncVal of value as unknown as AsyncIterable<R>) resultQueue.push(asyncVal)
       } else {
         resultQueue.push(value)
       }
@@ -883,7 +889,7 @@ export function flatTransform(concurrency: number): {
 }
 export function flatTransform<T, R>(concurrency: number, func: (data: T) => FlatMapValue<R>): (iterable: AnyIterable<T>) => AsyncGenerator<R>
 export function flatTransform<T, R>(concurrency: number, func: (data: T) => FlatMapValue<R>, iterable: AnyIterable<T>): AsyncGenerator<R>
-export function flatTransform<T, R>(concurrency: number, func?: (data: T) => FlatMapValue<R>, iterable?: AnyIterable<T>): any {
+export function flatTransform<T, R>(concurrency: number, func?: (data: T) => FlatMapValue<R>, iterable?: AnyIterable<T>) {
   if (func === undefined) {
     return <A, B>(curriedFunc: (data: A) => FlatMapValue<B>, curriedIterable?: AnyIterable<A>) =>
       curriedIterable
@@ -893,7 +899,10 @@ export function flatTransform<T, R>(concurrency: number, func?: (data: T) => Fla
   if (iterable === undefined) {
     return (curriedIterable: AnyIterable<T>) => flatTransform<T, R>(concurrency, func, curriedIterable)
   }
-  return filter<R>(i => i !== undefined && i !== null, flatten(_flatTransform<any, any>(concurrency, func, iterable)))
+  return filter(
+    (i: unknown): boolean => i !== undefined && i !== null,
+    flatten(_flatTransform(concurrency, func as (data: T) => unknown, iterable) as unknown as AnyIterable<unknown>) as unknown as AnyIterable<R>
+  ) as unknown as AsyncGenerator<R>
 }
 
 // --- merge ---
@@ -903,8 +912,8 @@ type AnyIterator<T> = Iterator<T> | AsyncIterator<T>
 /**
  * Combine multiple iterators into a single iterable. Reads one item off each iterable in order repeatedly until they are all exhausted. If you care less about order and want them faster see `parallelMerge()`.
  */
-export async function* merge<I extends AnyIterable<any>[]>(...iterables: I): AsyncGenerator<UnArrayAnyIterable<I>> {
-  const sources = new Set<AnyIterator<UnArrayAnyIterable<I>>>(iterables.map(i => getIterator(i)))
+export async function* merge<I extends AnyIterable<unknown>[]>(...iterables: I): AsyncGenerator<UnArrayAnyIterable<I>> {
+  const sources = new Set(iterables.map(i => getIterator(i) as AnyIterator<UnArrayAnyIterable<I>>))
   try {
     while (sources.size > 0) {
       for (const iterator of Array.from(sources)) {
@@ -946,19 +955,19 @@ for await (const hero of heros) {
 // jazz
 ```
  */
-export async function* parallelMerge<I extends AnyIterable<any>[]>(...iterables: I): AsyncGenerator<UnArrayAnyIterable<I>> {
+export async function* parallelMerge<I extends AnyIterable<unknown>[]>(...iterables: I): AsyncGenerator<UnArrayAnyIterable<I>> {
   type T = UnArrayAnyIterable<I>
   type Itr = AnyIterator<T>
-  const inputs: Itr[] = iterables.map(i => getIterator(i))
+  const inputs: Itr[] = iterables.map(i => getIterator(i) as Itr)
   const activeInputs = new Set<Itr>(inputs)
   const concurrentWork = new Set<Promise<void>>()
   const values = new Map<Itr, T>()
   let lastError: Error | null = null
-  let errCb: NullOrFunction = null
-  let valueCb: NullOrFunction = null
+  let errCb: ErrorCallback = null
+  let valueCb: NotifyCallback = null
 
-  const notifyError = (err: Error) => { lastError = err; if (errCb) errCb(err) }
-  const notifyDone = (_value: void) => { if (valueCb) valueCb(_value) }
+  const notifyError = (err: unknown) => { lastError = err as Error; if (errCb) errCb(err) }
+  const notifyDone = () => { if (valueCb) valueCb() }
   const waitForQueue = (): Promise<void> =>
     new Promise((resolve, reject) => {
       if (lastError) reject(lastError)
@@ -1037,7 +1046,7 @@ export function parallelMap(concurrency: number): {
 }
 export function parallelMap<T, R>(concurrency: number, func: (data: T) => R | Promise<R>): (iterable: AnyIterable<T>) => AsyncIterableIterator<R>
 export function parallelMap<T, R>(concurrency: number, func: (data: T) => R | Promise<R>, iterable: AnyIterable<T>): AsyncIterableIterator<R>
-export function parallelMap<T, R>(concurrency: number, func?: (data: T) => R | Promise<R>, iterable?: AnyIterable<T>): any {
+export function parallelMap<T, R>(concurrency: number, func?: (data: T) => R | Promise<R>, iterable?: AnyIterable<T>) {
   if (func === undefined) {
     return <A, B>(curriedFunc: (data: A) => B | Promise<B>, curriedIterable?: AnyIterable<A>) =>
       curriedIterable
@@ -1059,7 +1068,7 @@ export function parallelFlatMap(concurrency: number): {
 }
 export function parallelFlatMap<T, R>(concurrency: number, func: (data: T) => R | Promise<R>): (iterable: AnyIterable<T>) => AsyncGenerator<R>
 export function parallelFlatMap<T, R>(concurrency: number, func: (data: T) => R | Promise<R>, iterable: AnyIterable<T>): AsyncGenerator<R>
-export function parallelFlatMap<T, R>(concurrency: number, func?: (data: T) => R | Promise<R>, iterable?: AnyIterable<T>): any {
+export function parallelFlatMap<T, R>(concurrency: number, func?: (data: T) => R | Promise<R>, iterable?: AnyIterable<T>) {
   if (func === undefined) {
     return <A, B>(curriedFunc: (data: A) => B | Promise<B>, curriedIterable?: AnyIterable<A>) =>
       curriedIterable
@@ -1069,7 +1078,10 @@ export function parallelFlatMap<T, R>(concurrency: number, func?: (data: T) => R
   if (iterable === undefined) {
     return (curriedIterable: AnyIterable<T>) => parallelFlatMap<T, R>(concurrency, func, curriedIterable)
   }
-  return filter(i => i !== undefined && i !== null, flatten(parallelMap(concurrency, func, iterable) as AsyncIterable<any>))
+  return filter(
+    (i: unknown): boolean => i !== undefined && i !== null,
+    flatten(parallelMap(concurrency, func, iterable) as unknown as AnyIterable<unknown>) as unknown as AnyIterable<R>
+  ) as unknown as AsyncGenerator<R>
 }
 
 // --- pipeline ---
@@ -1099,9 +1111,9 @@ export function pipeline<T0, T1, T2, T3, T4, T5, T6>(a0: () => T0, a1: (a: T0) =
 export function pipeline<T0, T1, T2, T3, T4, T5, T6, T7>(a0: () => T0, a1: (a: T0) => T1, a2: (a: T1) => T2, a3: (a: T2) => T3, a4: (a: T3) => T4, a5: (a: T4) => T5, a6: (a: T5) => T6, a7: (a: T6) => T7): T7
 export function pipeline<T0, T1, T2, T3, T4, T5, T6, T7, T8>(a0: () => T0, a1: (a: T0) => T1, a2: (a: T1) => T2, a3: (a: T2) => T3, a4: (a: T3) => T4, a5: (a: T4) => T5, a6: (a: T5) => T6, a7: (a: T6) => T7, a8: (a: T7) => T8): T8
 export function pipeline<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(a0: () => T0, a1: (a: T0) => T1, a2: (a: T1) => T2, a3: (a: T2) => T3, a4: (a: T3) => T4, a5: (a: T4) => T5, a6: (a: T5) => T6, a7: (a: T6) => T7, a8: (a: T7) => T8, a9: (a: T8) => T9): T9
-export function pipeline(firstFn: (...args: any[]) => any, ...fns: Array<(a: any) => any>): any {
+export function pipeline(firstFn: (...args: never[]) => unknown, ...fns: Array<(a: never) => unknown>): unknown {
   let previousFn = firstFn()
-  for (const func of fns) previousFn = func(previousFn)
+  for (const func of fns) previousFn = (func as (a: unknown) => unknown)(previousFn)
   return previousFn
 }
 
@@ -1124,7 +1136,7 @@ export function reduce<T, B>(func: (acc: B, value: T) => B): {
 }
 export function reduce<T, B>(func: (acc: B, value: T) => B, start: B): (iterable: AnyIterable<T>) => Promise<B>
 export function reduce<T, B>(func: (acc: B, value: T) => B, start: B, iterable: AnyIterable<T>): Promise<B>
-export function reduce<T, B>(func: (acc: B, value: T) => B, start?: B, iterable?: AnyIterable<T>): any {
+export function reduce<T, B>(func: (acc: B, value: T) => B, start?: B, iterable?: AnyIterable<T>) {
   if (start === undefined) {
     return (curriedStart: B, curriedIterable?: AnyIterable<T>) =>
       curriedIterable ? _reduce(func, curriedStart, curriedIterable) : reduce(func, curriedStart)
@@ -1170,7 +1182,7 @@ const topFive = await collect(take(5, getPokemon()))
  */
 export function take(count: number): <T, M extends AnyIterable<T>>(curriedIterable: M) => UnwrapAnyIterable<M>
 export function take<T, M extends AnyIterable<T>>(count: number, iterable: M): UnwrapAnyIterable<M>
-export function take<T>(count: number, iterable?: AnyIterable<T>): any {
+export function take<T>(count: number, iterable?: AnyIterable<T>): UnwrapAnyIterable<AnyIterable<T>> | (<U, M extends AnyIterable<U>>(curriedIterable: M) => UnwrapAnyIterable<M>) {
   if (iterable === undefined) {
     return <U, M extends AnyIterable<U>>(curriedIterable: M) => take(count, curriedIterable)
   }
@@ -1211,7 +1223,7 @@ const bottomFive = await collect(takeLast(5, getPokemon()))
  */
 export function takeLast(count: number): <T, M extends AnyIterable<T>>(curriedIterable: M) => UnwrapAnyIterable<M>
 export function takeLast<T, M extends AnyIterable<T>>(count: number, iterable: M): UnwrapAnyIterable<M>
-export function takeLast<T>(count: number, iterable?: AnyIterable<T>): any {
+export function takeLast<T>(count: number, iterable?: AnyIterable<T>): UnwrapAnyIterable<AnyIterable<T>> | (<U, M extends AnyIterable<U>>(curriedIterable: M) => UnwrapAnyIterable<M>) {
   if (iterable === undefined) {
     return <U, M extends AnyIterable<U>>(curriedIterable: M) => takeLast(count, curriedIterable)
   }
@@ -1258,7 +1270,7 @@ export function takeWhile<T>(predicate: (data: T) => boolean | Promise<boolean>,
 
 // --- tap ---
 
-async function* _asyncTap<T>(func: (data: T) => any, iterable: AnyIterable<T>) {
+async function* _asyncTap<T>(func: (data: T) => void | Promise<void> | unknown, iterable: AnyIterable<T>) {
   for await (const val of iterable) {
     await func(val)
     yield val
@@ -1268,9 +1280,9 @@ async function* _asyncTap<T>(func: (data: T) => any, iterable: AnyIterable<T>) {
 /**
  * Returns a new iterator that yields the data it consumes, passing the data through to a function. If you provide an async function, the iterator will wait for the promise to resolve before yielding the value. This is useful for logging, or processing information and passing it along.
  */
-export function tap<T>(func: (data: T) => any): (iterable: AnyIterable<T>) => AsyncGenerator<T>
-export function tap<T>(func: (data: T) => any, iterable: AnyIterable<T>): AsyncGenerator<T>
-export function tap<T>(func: (data: T) => any, iterable?: AnyIterable<T>) {
+export function tap<T>(func: (data: T) => void | Promise<void> | unknown): (iterable: AnyIterable<T>) => AsyncGenerator<T>
+export function tap<T>(func: (data: T) => void | Promise<void> | unknown, iterable: AnyIterable<T>): AsyncGenerator<T>
+export function tap<T>(func: (data: T) => void | Promise<void> | unknown, iterable?: AnyIterable<T>) {
   if (iterable === undefined) {
     return (curriedIterable: AnyIterable<T>) => _asyncTap(func, curriedIterable)
   }
@@ -1397,7 +1409,7 @@ for await (page of timer(download(urls))) {
  */
 export function time(config?: TimeConfig): <T, M extends AnyIterable<T>>(curriedIterable: M) => UnwrapAnyIterable<M>
 export function time<T, M extends AnyIterable<T>>(config: TimeConfig, iterable: M): UnwrapAnyIterable<M>
-export function time<T>(config: TimeConfig = {}, iterable?: AnyIterable<T>): any {
+export function time<T>(config: TimeConfig = {}, iterable?: AnyIterable<T>): UnwrapAnyIterable<AnyIterable<T>> | (<U, M extends AnyIterable<U>>(curriedIterable: M) => UnwrapAnyIterable<M>) {
   if (iterable === undefined) {
     return <U, M extends AnyIterable<U>>(curriedIterable: M) => time(config, curriedIterable)
   }
@@ -1446,12 +1458,12 @@ export function fromStream<T>(stream: ReadableStreamish): AsyncIterable<T> {
 
 // --- writeToStream ---
 
-async function _writeToStream(stream: WritableStreamish, iterable: AnyIterable<any>): Promise<void> {
+async function _writeToStream(stream: WritableStreamish, iterable: AnyIterable<unknown>): Promise<void> {
   let lastError: Error | null = null
-  let errCb: NullOrFunction = null
-  let drainCb: NullOrFunction = null
+  let errCb: ErrorCallback = null
+  let drainCb: NotifyCallback = null
 
-  const notifyError = (err: Error) => { lastError = err; if (errCb) errCb(err) }
+  const notifyError = (err: unknown) => { lastError = err as Error; if (errCb) errCb(err) }
   const notifyDrain = () => { if (drainCb) drainCb() }
   const cleanup = () => {
     stream.removeListener('error', notifyError)

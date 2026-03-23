@@ -10,6 +10,8 @@ import promise from './promise'
 
 const { isFunction, flatten } = utils
 
+// FP is a constructor function (not a class). The `this` type is `FPInternalInstance`
+// when called with `new`, or `void` when called without.
 function FP(this: FPInternalInstance | void, resolveRejectCB: FPExecutor) {
   if (!(this instanceof (FP as unknown as new (...args: unknown[]) => unknown))) {
     return new (FP as unknown as new (cb: FPExecutor) => FPInternalInstance)(resolveRejectCB)
@@ -26,6 +28,7 @@ function FP(this: FPInternalInstance | void, resolveRejectCB: FPExecutor) {
   }
 }
 
+// Internal alias with the full constructor interface, used by all sub-modules.
 const FPTyped = FP as unknown as FPConstructor
 
 const { map, find, findIndex, filter, flatMap, reduce } = arrays(FPTyped)
@@ -48,20 +51,22 @@ FP.prototype.delay = delay
 FP.prototype._delay = _delay
 FP.prototype.reject = reject
 
-FP.prototype.all = all
-;(FP as Record<string, unknown>)['all'] = FP.prototype.all
-;(FP as Record<string, unknown>)['thenIf'] = FP.prototype._thenIf
-;(FP as Record<string, unknown>)['delay'] = (msec: number) => FPTyped.resolve().delay(msec)
-;(FP as Record<string, unknown>)['silent'] = (limit: number) => FPTyped.resolve().silent(limit)
+// Static methods — assigned via `as unknown as` to avoid the double-assertion
+// error on the bare function type which has no index signature.
+const FPStatics = FP as unknown as Record<string, unknown>
 
-;(FP as Record<string, unknown>)['chain'] = chain
+FPStatics['all'] = FP.prototype.all
+FPStatics['thenIf'] = FP.prototype._thenIf
+FPStatics['delay'] = (msec: number) => FPTyped.resolve().delay(msec)
+FPStatics['silent'] = (limit: number) => FPTyped.resolve().silent(limit)
+FPStatics['chain'] = chain
+FPStatics['reject'] = FP.prototype.reject
+FPStatics['resolve'] = resolve
+FPStatics['promisify'] = promisify
+FPStatics['promisifyAll'] = promisifyAll
+FPStatics['unpack'] = unpack
+
 FP.prototype.chainEnd = chainEnd
-;(FP as Record<string, unknown>)['reject'] = FP.prototype.reject
-;(FP as Record<string, unknown>)['resolve'] = resolve
-
-;(FP as Record<string, unknown>)['promisify'] = promisify
-;(FP as Record<string, unknown>)['promisifyAll'] = promisifyAll
-;(FP as Record<string, unknown>)['unpack'] = unpack
 
 FP.prototype.addStep = function addStep(name: string, args: unknown[]) {
   if (this.steps) this.steps.push([name, this, args])
@@ -81,13 +86,16 @@ FP.prototype.quiet = function quiet(errorLimit = Infinity) {
 }
 FP.prototype.silent = FP.prototype.quiet
 
-;(FP as Record<string, unknown>)['get'] = function getter(...getArgs: unknown[]) {
+// FP.get — curried property getter.
+// Accepts key name strings + optional object. If the object is omitted the
+// returned function captures the keys and awaits the object on the next call.
+function getter(...getArgs: unknown[]): unknown {
   getArgs = flatten(getArgs)
   const keyNames = getArgs.filter((item) => typeof item === 'string') as string[]
   const objectFound = getArgs.find((item) => typeof item !== 'string') as Record<string, unknown> | undefined
 
   if (!objectFound) {
-    return (...extraArgs: unknown[]) => (FPTyped as unknown as FPStatic).get(...extraArgs, ...getArgs)
+    return (...extraArgs: unknown[]) => getter(...extraArgs, ...getArgs)
   }
 
   if (keyNames.length === 1) {
@@ -100,15 +108,17 @@ FP.prototype.silent = FP.prototype.quiet
   }, {})
 }
 
+FPStatics['get'] = getter
+
 FP.prototype.get = function get(...keyNames: unknown[]) {
   if (this.steps) return this.addStep('get', Array.from(arguments))
-  return this.then ? this.then((FPTyped as unknown as FPStatic).get(keyNames)) : (FPTyped as unknown as FPStatic).get(...keyNames)
+  return this.then ? this.then(getter(keyNames) as (v: unknown) => unknown) : getter(...keyNames)
 }
 
 FP.prototype.set = function set(keyName: string, value: unknown) {
   if (this.steps) return this.addStep('set', Array.from(arguments))
-  return this.then((obj: Record<string, unknown>) => {
-    if (typeof obj === 'object' && obj !== null) obj[keyName] = value
+  return this.then((obj: unknown) => {
+    if (typeof obj === 'object' && obj !== null) (obj as Record<string, unknown>)[keyName] = value
     return obj
   })
 }

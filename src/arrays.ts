@@ -8,25 +8,25 @@ export default function arrays(FP: FPConstructor) {
   return { map, find, findIndex, filter, flatMap, reduce }
 
   function find(this: FPInternalInstance, callback: (value: unknown) => unknown) {
-    return _find.call(this, callback).then(({ item }: { item: unknown }) => item)
+    return _find.call(this, callback).then((result: unknown) => (result as { item: unknown }).item)
   }
 
   function findIndex(this: FPInternalInstance, callback: (value: unknown) => unknown) {
-    return _find.call(this, callback).then(({ index }: { index: number }) => index)
+    return _find.call(this, callback).then((result: unknown) => (result as { index: number }).index)
   }
 
   function _find(this: FPInternalInstance, iterable: unknown, callback?: (value: unknown) => unknown) {
     if (this.steps) return this.addStep('_find', Array.from(arguments))
     if (typeof iterable === 'function') {
-      callback = iterable
+      callback = iterable as (value: unknown) => unknown
       iterable = this._FP.promise
     }
 
     return new FP((resolve: (value: unknown) => void, reject: (error: unknown) => void) => {
       Promise.resolve(iterable)
-        .then(async (items: Iterable<unknown>) => {
+        .then(async (items: unknown) => {
           let index = 0
-          for (const item of items) {
+          for (const item of items as Iterable<unknown>) {
             try {
               const value = await Promise.resolve(item)
               if (callback && (await callback(value))) {
@@ -46,19 +46,19 @@ export default function arrays(FP: FPConstructor) {
   function flatMap(this: FPInternalInstance, iterable: unknown, callback?: (value: unknown) => unknown) {
     if (this.steps) return this.addStep('flatMap', Array.from(arguments))
     if (typeof iterable === 'function') {
-      callback = iterable
+      callback = iterable as (value: unknown) => unknown
       iterable = this._FP.promise
     }
 
     return FP.resolve(iterable)
       .map(callback as (item: unknown, index: number, array: unknown[]) => unknown)
-      .reduce((acc: unknown[], arr: unknown[]) => acc.concat(...arr), [])
+      .reduce((acc: unknown, arr: unknown) => (acc as unknown[]).concat(...(arr as unknown[])), [])
   }
 
   function filter(this: FPInternalInstance, iterable: unknown, callback?: (value: unknown) => unknown) {
     if (this.steps) return this.addStep('filter', Array.from(arguments))
     if (typeof iterable === 'function') {
-      callback = iterable
+      callback = iterable as (value: unknown) => unknown
       iterable = this._FP.promise
     }
 
@@ -82,8 +82,8 @@ export default function arrays(FP: FPConstructor) {
     }
 
     return new FP((resolve: (value: unknown) => void, reject: (error: unknown) => void) => {
-      return (iterable as FPInternalInstance).then((items: Iterable<unknown>) => {
-        const iterator = items[Symbol.iterator]()
+      return (iterable as FPInternalInstance).then((items: unknown) => {
+        const iterator = (items as Iterable<unknown>)[Symbol.iterator]()
         let i = 0
 
         const next = (total: unknown) => {
@@ -102,7 +102,7 @@ export default function arrays(FP: FPConstructor) {
 
   function map(this: FPInternalInstance, args: unknown, fn?: (item: unknown, index: number, array: unknown[]) => unknown) {
     if (this.steps) return this.addStep('map', Array.from(arguments))
-    if (arguments.length === 1 && this && this._FP) {
+    if (arguments.length === 1 && this._FP) {
       fn = args as (item: unknown, index: number, array: unknown[]) => unknown
       args = this._FP.promise
     }
