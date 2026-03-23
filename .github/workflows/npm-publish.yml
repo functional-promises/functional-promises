@@ -5,7 +5,7 @@ name: Publish Package
 
 on:
   release:
-    types: [released]
+    types: [released, prereleased]
 
 jobs:
   build:
@@ -36,7 +36,12 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm publish --no-git-checks
+      - run: |
+          if [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
+            pnpm publish --no-git-checks --tag next
+          else
+            pnpm publish --no-git-checks
+          fi
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
