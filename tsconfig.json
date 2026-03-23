@@ -9,7 +9,7 @@
     "checkJs": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "declaration": false,
     "noEmit": true,
     "pretty": true,

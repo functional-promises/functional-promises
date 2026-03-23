@@ -67,8 +67,8 @@ export default function arrays(FP: any) {
     return reduce.call(
       this,
       iterable,
-      (acc: unknown[], item: unknown) =>
-        Promise.resolve(callback?.(item)).then((result) => (result ? acc.concat([item]) : acc)),
+      (acc: unknown, item: unknown) =>
+        Promise.resolve(callback?.(item)).then((result) => (result ? (acc as unknown[]).concat([item]) : acc)),
       []
     )
   }
