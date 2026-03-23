@@ -31,8 +31,9 @@ export interface FPInstance<TReturn> extends PromiseLike<TReturn> {
     ifTrue?: PredicateFunction<ThenArgRecursive<TItem>>,
     ifFalse?: PredicateFunction<ThenArgRecursive<TItem>>,
   ): FPInstance<TReturn | TItem | void>
+  // Issue #10 follow-up: the 2-arg catch overload now uses explicit fn2 parameter in the impl
   catch<TItem = TReturn>(onReject: ((error: any) => Resolvable<TItem>) | undefined | null): FPInstance<TItem | TReturn>
-  catch<TItem = TReturn>(cond: PredicateFunction<TReturn> | object, ifTrue?: PredicateFunction<TItem>, ifFalse?: PredicateFunction<TItem>): FPInstance<TItem | TReturn>
+  catch<TItem = TReturn>(cond: PredicateFunction<TReturn> | object, ifTrue: PredicateFunction<TItem>): FPInstance<TItem | TReturn>
   catchIf<TItem = TReturn>(cond: PredicateFunction<ThenArgRecursive<TReturn>> | object, ifTrue?: PredicateFunction<TItem>): FPInstance<TItem | TReturn>
   chainEnd<TItem>(): (input: TItem) => FPInstance<TItem | TReturn>
 }
@@ -40,9 +41,14 @@ export interface FPInstance<TReturn> extends PromiseLike<TReturn> {
 export interface UnpackedPromise<T> {
   promise: FPInstance<T>
   resolve: (value: Resolvable<T>) => void
-  reject: (error: Error | null | undefined | T, input?: T) => Resolvable<any> | null | undefined
+  /** Raw promise reject callback — call to reject the unpacked promise. */
+  reject: (error: unknown) => void
 }
 
+// Issue #9: FPStatic was missing entries and had wrong return types. Additions:
+//   - `quiet` static method (was only `silent`)
+//   - `reject` corrected to return FPInstance<never> (implementation now returns a rejected FP)
+//   - `chain` generic preserved
 export interface FPStatic {
   <TReturn>(callback: (resolve: (thenableOrResult?: Resolvable<TReturn>) => void, reject: (error?: any) => void) => void): FPInstance<TReturn>
   new <TReturn>(callback: (resolve: (thenableOrResult?: Resolvable<TReturn>) => void, reject: (error?: any) => void) => void): FPInstance<TReturn>
@@ -54,9 +60,11 @@ export interface FPStatic {
   promisify<T>(cb: CallbackHandler<T>): (...args: any[]) => FPInstance<T>
   promisifyAll<T extends object>(target: T): T
   resolve<T>(value?: Resolvable<T>): FPInstance<T>
-  reject<T>(err: T): FPInstance<T>
+  /** Returns a rejected FPInstance. Always returns a promise — never throws synchronously. */
+  reject(err: unknown): FPInstance<never>
   unpack<T>(): UnpackedPromise<T>
   chain<T>(): FPInstance<T>
   thenIf: (...args: any[]) => any
-  silent: (limit: number) => FPInstance<any>
+  // Note: `silent` is the static alias; `quiet` is only on the prototype (instance method)
+  silent: (limit?: number) => FPInstance<any>
 }
