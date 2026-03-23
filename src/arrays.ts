@@ -14,6 +14,9 @@ export default function arrays(FP: any) {
     return _find.call(this, callback).then(({ index }: { index: number }) => index)
   }
 
+  // Issue #22: rewritten to short-circuit on first match instead of scanning the
+  // entire collection via reduce(). The previous reduce-based implementation always
+  // iterated every item even after a match was found.
   function _find(this: any, iterable: any, callback?: (value: unknown) => unknown) {
     if (this.steps) return this.addStep('_find', Array.from(arguments))
     if (typeof iterable === 'function') {
@@ -21,16 +24,25 @@ export default function arrays(FP: any) {
       iterable = this._FP.promise
     }
 
-    return FP.resolve(iterable).reduce(
-      async (result: { item: unknown; index: number }, item: unknown, index: number) => {
-        if (!result.item && callback && (await callback(item))) {
-          result.item = item
-          result.index = index
-        }
-        return result
-      },
-      { item: undefined, index: -1 }
-    )
+    return new FP((resolve: (value: unknown) => void, reject: (error: unknown) => void) => {
+      Promise.resolve(iterable)
+        .then(async (items: Iterable<unknown>) => {
+          let index = 0
+          for (const item of items) {
+            try {
+              const value = await Promise.resolve(item)
+              if (callback && (await callback(value))) {
+                return resolve({ item: value, index })
+              }
+              index++
+            } catch (err) {
+              return reject(err)
+            }
+          }
+          resolve({ item: undefined, index: -1 })
+        })
+        .catch(reject)
+    })
   }
 
   function flatMap(this: any, iterable: any, callback?: (value: unknown) => unknown) {
@@ -68,7 +80,8 @@ export default function arrays(FP: any) {
       reducer = iterable
       iterable = this._FP ? this._FP.promise : this
     } else {
-      iterable = FP.resolve(iterable, this)
+      // Issue #4: FP.resolve() only accepts one argument; removed erroneous second arg `this`
+      iterable = FP.resolve(iterable)
     }
 
     return new FP((resolve: (value: unknown) => void, reject: (error: unknown) => void) => {
@@ -107,7 +120,6 @@ export default function arrays(FP: any) {
     const results: any[] = []
     const threadPool = new Set<number>()
     const threadPoolFull = () => threadPool.size >= threadLimit
-    const isDone = () => errors.length > this._FP.errors.limit || count >= argsList.length || resolvedOrRejected
 
     const setResult = (index: number) => (value: unknown) => {
       threadPool.delete(index)
@@ -140,14 +152,24 @@ export default function arrays(FP: any) {
 
           argsList = Array.from(items as Iterable<unknown>)
 
+          // Issue #1: the original `complete()` had two bugs:
+          //   1. `? true : true` ternary always evaluated to true (discarded the promise result)
+          //   2. `isDone()` overrode `action = rejectIt` with `action = resolveIt` for error cases
+          // Now: error rejection is handled entirely in the catch block; complete() only resolves
+          // once all items have been started. A `completing` guard prevents duplicate Promise.all chains.
+          // Issue #19: removed the ambiguous error-limit check from complete()/isDone(); the catch
+          // block is the sole owner of rejection-on-error logic.
+          let completing = false
           const complete = () => {
-            let action: ((value: unknown) => unknown) | null = null
-            if (errors.length > this._FP.errors.limit) action = rejectIt
-            if (isDone()) action = resolveIt
-            if (action) {
-              return Promise.all(results).then(() => action(results)) ? true : true
+            if (resolvedOrRejected) return true
+            if (!completing && count >= argsList.length) {
+              completing = true
+              // Wait for all in-flight promises to settle (setResult mutates results[] to actual values),
+              // then resolve with the fully-populated results array.
+              Promise.all(results).then(() => resolveIt(results))
+              return true
             }
-            return false
+            return completing
           }
 
           const checkAndRun = (value: unknown) => {
@@ -157,17 +179,18 @@ export default function arrays(FP: any) {
           }
 
           const runItem = (c: number): any => {
-            if (resolvedOrRejected) {
-              return null
-            }
-            count++
+            if (resolvedOrRejected) return null
 
+            // Issue #5: moved count++ to AFTER the thread-pool check. Previously, count was
+            // incremented before the check, so a deferred retry (setTimeout) caused count to
+            // advance past the item index, making checkAndRun skip it entirely.
             if (threadPoolFull()) {
               setTimeout(() => runItem(c), 0)
               return null
             }
 
             if (results[c]) return results[c]
+            count++
             threadPool.add(c)
 
             results[c] = Promise.resolve(argsList[c])
@@ -189,7 +212,9 @@ export default function arrays(FP: any) {
                     `Error limit ${this._FP.errors.limit} met/exceeded with ${this._FP.errors.count} errors.`,
                     { errors, results, ctx: this }
                   )
-                  Promise.resolve(setResult(c)(err)).then(() => rejectIt(fpError))
+                  // Issue #6: added .catch(rejectIt) — the previous floating promise had no error
+                  // handler, so any throw inside setResult or rejectIt became an unhandled rejection.
+                  Promise.resolve(setResult(c)(err)).then(() => rejectIt(fpError)).catch(rejectIt)
                 } else {
                   return Promise.resolve().then(() => setResult(c)(err)).then(checkAndRun)
                 }
