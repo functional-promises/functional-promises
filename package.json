@@ -9,22 +9,34 @@
   "module": "./dist/async.mjs",
   "exports": {
     ".": {
-      "types": "./dist/async.d.ts",
-      "require": "./dist/async.js",
-      "import": "./dist/async.mjs",
-      "default": "./dist/async.js"
+      "import": {
+        "types": "./dist/async.d.mts",
+        "default": "./dist/async.mjs"
+      },
+      "require": {
+        "types": "./dist/async.d.ts",
+        "default": "./dist/async.js"
+      }
     },
     "./async": {
-      "types": "./dist/async.d.ts",
-      "require": "./dist/async.js",
-      "import": "./dist/async.mjs",
-      "default": "./dist/async.js"
+      "import": {
+        "types": "./dist/async.d.mts",
+        "default": "./dist/async.mjs"
+      },
+      "require": {
+        "types": "./dist/async.d.ts",
+        "default": "./dist/async.js"
+      }
     },
     "./iterable": {
-      "types": "./dist/iterable.d.ts",
-      "require": "./dist/iterable.js",
-      "import": "./dist/iterable.mjs",
-      "default": "./dist/iterable.js"
+      "import": {
+        "types": "./dist/iterable.d.mts",
+        "default": "./dist/iterable.mjs"
+      },
+      "require": {
+        "types": "./dist/iterable.d.ts",
+        "default": "./dist/iterable.js"
+      }
     }
   },
   "repository": {
