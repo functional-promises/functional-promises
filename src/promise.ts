@@ -4,8 +4,20 @@ import type { FPConstructor, FPInternalInstance } from './internal-types'
 export default function promise(FP: FPConstructor) {
   return { all, delay, _delay }
 
-  function all(promises: unknown) {
-    return FP.resolve(Array.isArray(promises) ? Promise.all(promises) : promiseAllObject(promises as Record<string, unknown>))
+  function all(this: FPInternalInstance | void, promises?: unknown) {
+    if (promises === undefined && this && (this as FPInternalInstance)._FP) {
+      const self = this as FPInternalInstance
+      return self.then((items: unknown) =>
+        Array.isArray(items)
+          ? FP.resolve(Promise.all(items as Promise<unknown>[]))
+          : FP.resolve(promiseAllObject(items as Record<string, unknown>))
+      )
+    }
+    return FP.resolve(
+      Array.isArray(promises)
+        ? Promise.all(promises as Promise<unknown>[])
+        : promiseAllObject(promises as Record<string, unknown>)
+    )
   }
 
   function promiseAllObject(obj: Record<string, unknown>) {
