@@ -54,8 +54,8 @@ export interface FPStatic {
   <TReturn>(callback: (resolve: (thenableOrResult?: Resolvable<TReturn>) => void, reject: (error?: unknown) => void) => void): FPInstance<TReturn>
   new <TReturn>(callback: (resolve: (thenableOrResult?: Resolvable<TReturn>) => void, reject: (error?: unknown) => void) => void): FPInstance<TReturn>
 
-  all<T>(promises: Record<string, T | Resolvable<T>>): FPInstance<T>
-  all<T>(promises: Array<T | Resolvable<T>>): FPInstance<T>
+  all<T>(promises: Record<string, T | Resolvable<T>>): FPInstance<Record<string, T>>
+  all<T>(promises: Array<T | Resolvable<T>>): FPInstance<T[]>
   delay<T>(msec: number): FPInstance<T>
   get<K extends string>(...args: K[]): <T extends Record<K, unknown>>(obj: T) => T[K]
   get<K extends string, T extends Record<K, unknown>>(...args: [...K[], T]): T[K]
