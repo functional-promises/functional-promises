@@ -173,9 +173,7 @@ test('FP.map() with falsy mapped values (0, false, null)', () =>
     })
     .then((results: unknown) => expect(results).toEqual([0, false, null, 4])))
 
-// NOTE: FP.map() on an empty array currently hangs (never resolves) due to the
-// thread-pool logic only calling complete() from within runItem. Skipped until fixed.
-test.skip('FP.map() on empty array', () =>
+test('FP.map() on empty array', () =>
   FP.resolve([])
     .map((x: unknown) => x)
     .then((results: unknown) => expect(results).toEqual([])))
