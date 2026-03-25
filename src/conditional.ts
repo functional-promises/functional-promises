@@ -33,7 +33,7 @@ export default function conditional(FP: FPConstructor) {
     return _thenIf(cond, ifTrue, ifFalse, true)
   }
 
-  function _thenIf(cond: ConditionFn = (x: unknown) => x, ifTrue: BranchFn = (x: unknown) => x, ifFalse: BranchFn = (_x?: unknown) => null, returnValue = false) {
+  function _thenIf(cond: ConditionFn = (x: unknown) => x, ifTrue: BranchFn = (x: unknown) => x, ifFalse: BranchFn = (x: unknown) => x, returnValue = false) {
     return (value: unknown) =>
       FP.resolve(cond(value))
         .then((answer: unknown) => (answer ? ifTrue(value) : ifFalse(value)))
