@@ -1646,16 +1646,26 @@ export function scan<T, R>(fn: (acc: R, val: T) => R | Promise<R>, initial: R, i
 
 // --- distinct ---
 
-async function* _distinct<T>(keyFn: (val: T) => unknown, iterable: AnyIterable<T>): AsyncGenerator<T> {
+async function* _distinct<T>(keyFn: (val: T) => unknown, iterable: AnyIterable<T>, maxSize: number): AsyncGenerator<T> {
   const seen = new Set<unknown>()
   for await (const val of iterable) {
     const key = keyFn(val)
-    if (!seen.has(key)) { seen.add(key); yield val }
+    if (!seen.has(key)) {
+      seen.add(key)
+      // evict oldest entry when capacity is reached
+      if (seen.size > maxSize) {
+        const oldest = seen.values().next().value
+        seen.delete(oldest)
+      }
+      yield val
+    }
   }
 }
 
 /**
  * Yields only unique values. An optional `keyFn` computes the identity key (defaults to identity).
+ * An optional `maxSize` caps the size of the internal seen-set to prevent unbounded memory growth
+ * on infinite or very long streams (default: `Infinity`).
  *
  * ```ts
  * for await (const val of distinct([1, 2, 2, 3, 1])) {
@@ -1663,12 +1673,12 @@ async function* _distinct<T>(keyFn: (val: T) => unknown, iterable: AnyIterable<T
  * }
  * ```
  */
-export function distinct<T>(keyFn?: (val: T) => unknown): (iterable: AnyIterable<T>) => AsyncGenerator<T>
-export function distinct<T>(keyFn: (val: T) => unknown, iterable: AnyIterable<T>): AsyncGenerator<T>
-export function distinct<T>(keyFn?: (val: T) => unknown, iterable?: AnyIterable<T>) {
+export function distinct<T>(keyFn?: (val: T) => unknown, maxSize?: number): (iterable: AnyIterable<T>) => AsyncGenerator<T>
+export function distinct<T>(keyFn: (val: T) => unknown, iterable: AnyIterable<T>, maxSize?: number): AsyncGenerator<T>
+export function distinct<T>(keyFn?: (val: T) => unknown, iterable?: AnyIterable<T>, maxSize = Infinity) {
   const fn = keyFn ?? ((v: T) => v)
-  if (iterable === undefined) return (curried: AnyIterable<T>) => _distinct(fn, curried)
-  return _distinct(fn, iterable)
+  if (iterable === undefined) return (curried: AnyIterable<T>) => _distinct(fn, curried, maxSize)
+  return _distinct(fn, iterable, maxSize)
 }
 
 // --- window ---
@@ -1875,6 +1885,8 @@ export async function retry<T>(times: number, fn: () => T | Promise<T>): Promise
  *   .collect()
  * // [0, 4, 16, 36, 64]
  * ```
+ *
+ * @alias Pipeline
  */
 export class FP<T> implements AsyncIterable<T> {
   readonly #source: AnyIterable<T>
@@ -1990,7 +2002,7 @@ export class FP<T> implements AsyncIterable<T> {
   // --- utilities ---
 
   enumerate(): FP<[number, T]> { return new FP(enumerate(this.#source)) }
-  distinct(keyFn?: (val: T) => unknown): FP<T> { return new FP(distinct(keyFn ?? (v => v), this.#source)) }
+  distinct(keyFn?: (val: T) => unknown, maxSize?: number): FP<T> { return new FP(distinct(keyFn ?? (v => v), this.#source, maxSize)) }
   pairwise(): FP<[T, T]> { return new FP(pairwise(this.#source)) }
   cycle(): FP<T> { return new FP(cycle(this.#source)) }
 
@@ -2071,3 +2083,6 @@ export class FP<T> implements AsyncIterable<T> {
     const s = new Set<T>(); for await (const val of this) s.add(val); return s
   }
 }
+
+/** Alias for {@link FP} — use when importing alongside the V2 `FP` constructor. */
+export { FP as Pipeline }
