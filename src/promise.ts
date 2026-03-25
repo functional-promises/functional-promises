@@ -14,7 +14,8 @@ export default function promise(FP: FPConstructor) {
     return Promise.all(values).then((results) =>
       results.reduce<Record<string, unknown>>((acc, value, index) => {
         const key = keys[index]!
-        return Object.assign({ [key]: value }, acc)
+        acc[key] = value
+        return acc
       }, {})
     )
   }
