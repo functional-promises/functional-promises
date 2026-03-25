@@ -56,7 +56,7 @@ export interface FPStatic {
 
   all<T>(promises: Record<string, T | Resolvable<T>>): FPInstance<Record<string, T>>
   all<T>(promises: Array<T | Resolvable<T>>): FPInstance<T[]>
-  delay<T>(msec: number): FPInstance<T>
+  delay(msec: number): FPInstance<undefined>
   get<K extends string>(...args: K[]): <T extends Record<K, unknown>>(obj: T) => T[K]
   get<K extends string, T extends Record<K, unknown>>(...args: [...K[], T]): T[K]
   promisify<T>(cb: (...args: [...unknown[], (err: unknown, res: T) => void]) => void): (...args: unknown[]) => FPInstance<T>
