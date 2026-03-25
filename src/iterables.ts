@@ -1433,21 +1433,19 @@ async function* _fromStream(stream: ReadableStreamish) {
 }
 
 /**
- * Wraps the stream in an async iterator or returns the stream if it already is an async iterator.
-
-*note*: Since Node 10, streams already async iterators. This function may be used to ensure compatibility with older versions of Node.
-
-```ts
-import { fromStream } from 'streaming-iterables'
-import { createReadStream } from 'fs'
-
-const pokeLog = fromStream(createReadStream('./pokedex-operating-system.log'))
-
-for await (const pokeData of pokeLog) {
-  console.log(pokeData) // Buffer(...)
-}
-```
- * @deprecated This method is deprecated since, node 10 is out of LTS. It may be removed in an upcoming major release.
+ * @deprecated Since Node 10, readable streams implement `AsyncIterable` natively.
+ * This helper is unnecessary on Node 20+ (this package's minimum target) and will
+ * be removed in a future major release. Use the stream directly in a `for await...of`
+ * loop instead.
+ *
+ * Wraps the stream in an async iterator or returns the stream if it already implements
+ * `AsyncIterable`.
+ *
+ * @example
+ * // Instead of:
+ * for await (const chunk of fromStream(readable)) { ... }
+ * // Use directly:
+ * for await (const chunk of readable) { ... }
  */
 export function fromStream<T>(stream: ReadableStreamish): AsyncIterable<T> {
   if (typeof stream[Symbol.asyncIterator] === 'function') return stream as unknown as AsyncIterable<T>
