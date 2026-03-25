@@ -7,9 +7,9 @@ test('Issue #75, UnhandledRejections', async () => {
   }
 
   const brokenPromises = () =>
-    FP.resolve([{ tears: true }])
+    (FP.resolve([{ tears: true }])
       .map(iThrowThings)
-      .then(() => undefined)
+      .then(() => undefined) as any)
       .catch((ex: Error) => {
         throw ex
       })

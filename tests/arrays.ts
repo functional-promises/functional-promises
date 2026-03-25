@@ -14,7 +14,7 @@ test('FP.map(x * 2).map(x * 2)', () =>
 
 test('[...Promise].map(x * 4)', () =>
   FP.resolve([FP.resolve(1), Promise.resolve(2), Promise.resolve(3), Promise.resolve(4), Promise.resolve(5)])
-    .map((x: number) => Number(x) * 4)
+    .map((x: unknown) => Number(x) * 4)
     .then((results: unknown) => expect(results).toEqual([4, 8, 12, 16, 20])))
 
 test('FP.flatMap(x * 2)', () =>

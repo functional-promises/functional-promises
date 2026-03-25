@@ -19,7 +19,7 @@ test('fp.resolve(obj).get(key, key2)', () =>
 
 test('fp.get([keyNames])', () =>
   FP.resolve({ foo: 'bar', baz: 'woo' })
-    .get(['foo', 'baz'])
+    .get(...(['foo', 'baz'] as [string, string]))
     .then((obj: { foo: string }) => expect(obj.foo).toBe('bar')))
 
 test('fp.get(keyName)', () => FP.resolve({ foo: 'bar' }).get('foo').then((bar: string) => expect(bar).toBe('bar')))

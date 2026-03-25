@@ -13,8 +13,8 @@ test('FP.chain().listen() EventEmitter', async () => {
   const eventBus = new EventEmitter()
 
   const result = await new Promise((resolve) => {
-    FP.chain()
-      .then((event: any) => resolve(event))
+    ;(FP.chain()
+      .then((event: any) => resolve(event)) as any)
       .listen(eventBus, 'hit')
     eventBus.emit('hit', { worked: true })
   })
@@ -32,8 +32,8 @@ test('FP.chain().listen() DOM', async () => {
   const btn = document.querySelector('#btn') as HTMLButtonElement
 
   const result = await new Promise((resolve) => {
-    FP.chain()
-      .then((el: unknown) => resolve(el))
+    ;(FP.chain()
+      .then((el: unknown) => resolve(el)) as any)
       .listen(btn, 'click')
 
     btn.click()

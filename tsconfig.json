@@ -1,5 +1,5 @@
 {
-  "exclude": ["dist", "tests", "misc", "docs", "docs-source", "coverage", "node_modules"],
+  "exclude": ["dist", "misc", "docs", "docs-source", "coverage", "node_modules"],
   "compilerOptions": {
     "baseUrl": ".",
     "target": "ES2022",

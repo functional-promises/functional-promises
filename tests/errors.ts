@@ -67,18 +67,18 @@ test('Can .catch() thrown Errors', async () => {
   await (FP.resolve()
     .then(() => {
       throw new TypeError('Single toss')
-    })
+    }) as any)
     .catch((err: Error) => {
       expect(err.message).toBe('Single toss')
-    }) as any)
+    })
 })
 
 test('Can override .catch() results', async () => {
   const data = await (FP.resolve()
     .then(() => {
       throw new TypeError('Single toss')
-    })
-    .catch((err: Error) => ({ message: 'temp error, plz try again', _err: err })) as any)
+    }) as any)
+    .catch((err: Error) => ({ message: 'temp error, plz try again', _err: err }))
   expect((data as any).message).toBe('temp error, plz try again')
 })
 
@@ -86,13 +86,13 @@ test('Does .catchIf(filterType, fn) filtering by TypeError', async () => {
   await (FP.resolve()
     .then(() => {
       throw new Error('Oh noes')
-    })
+    }) as any)
     .catchIf(TypeError, () => {
       throw new Error('arg too specific for .catch(type)')
     })
     .catch((err: Error) => {
       expect(err.message).toBe('Oh noes')
-    }) as any)
+    })
 })
 
 test('Can override .catch() w/ .chain()', async () => {

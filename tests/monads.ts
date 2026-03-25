@@ -3,16 +3,16 @@ import FP from '../src/index'
 import fetch from './data/justsml.github'
 
 test('Validate Multiple Chained Steps', () =>
-  FP.resolve(fetch('https://api.github.com/users/justsml'))
+  (FP.resolve(fetch('https://api.github.com/users/justsml'))
     .delay(1)
     .tap((res: { ok: boolean }) => `github user req ok? ${res.ok}`)
     .then((res: { json: () => Promise<unknown> }) => res.json())
-    .then((data: { avatar_url: string }) => data.avatar_url)
+    .then((data: { avatar_url: string }) => data.avatar_url) as any)
     .tap((url: string) => expect(url).toBe('https://avatars2.githubusercontent.com/u/397632?v=4')))
 
 test('Validate .chain() w/ Multiple Steps', async () => {
-  const loadAvatar = FP.chain()
-    .then(fetch)
+  const loadAvatar = (FP.chain()
+    .then(fetch) as any)
     .delay(1)
     .tap((res: { ok: boolean }) => `github user req ok? ${res.ok}`)
     .then((res: { json: () => Promise<unknown> }) => res.json())

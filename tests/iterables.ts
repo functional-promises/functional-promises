@@ -21,7 +21,7 @@ import {
 // ---------------------------------------------------------------------------
 // helpers
 // ---------------------------------------------------------------------------
-async function toArray<T>(it: AsyncIterable<T>): Promise<T[]> {
+async function toArray<T>(it: AsyncIterable<T> | Iterable<T>): Promise<T[]> {
   const out: T[] = []
   for await (const v of it) out.push(v)
   return out
