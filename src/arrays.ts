@@ -50,9 +50,13 @@ export default function arrays(FP: FPConstructor) {
       iterable = this._FP.promise
     }
 
-    return FP.resolve(iterable)
-      .map(callback as (item: unknown, index: number, array: unknown[]) => unknown)
-      .reduce((acc: unknown, arr: unknown) => (acc as unknown[]).concat(...(arr as unknown[])), [])
+    // Use map.call(this) to inherit concurrency settings from the parent instance
+    const mapped = map.call(this, callback as (item: unknown, index: number, array: unknown[]) => unknown)
+    return reduce.call(
+      mapped,
+      (acc: unknown, arr: unknown) => (acc as unknown[]).concat(...(arr as unknown[])),
+      [] as unknown as (total: unknown, item: unknown, index: number) => unknown
+    )
   }
 
   function filter(this: FPInternalInstance, iterable: unknown, callback?: (value: unknown) => unknown) {
@@ -110,13 +114,11 @@ export default function arrays(FP: FPConstructor) {
     let resolvedOrRejected = false
     const threadLimit = Math.max(1, (this?._FP?.concurrencyLimit || 1) as number)
     const innerValues = this?._FP?.promise ? this._FP.promise : Promise.resolve(args)
-    let initialThread = 0
     const errors: Error[] = []
-    let count = 0
     let argsList: unknown[] = []
     const results: unknown[] = []
     const threadPool = new Set<number>()
-    const threadPoolFull = () => threadPool.size >= threadLimit
+    const started = new Set<number>() // tracks indices that have been submitted
 
     const setResult = (index: number) => (value: unknown) => {
       threadPool.delete(index)
@@ -152,7 +154,7 @@ export default function arrays(FP: FPConstructor) {
           let completing = false
           const complete = () => {
             if (resolvedOrRejected) return true
-            if (!completing && count >= argsList.length) {
+            if (!completing && started.size >= argsList.length && threadPool.size === 0) {
               completing = true
               Promise.all(results).then(() => resolveIt(results))
               return true
@@ -162,20 +164,18 @@ export default function arrays(FP: FPConstructor) {
 
           const checkAndRun = (value: unknown) => {
             if (resolvedOrRejected) return
-            if (!complete() && !results[count]) runItem(count)
+            if (!complete()) {
+              const next = started.size
+              if (next < argsList.length) runItem(next)
+            }
             return value
           }
 
-          const runItem = (c: number): unknown => {
-            if (resolvedOrRejected) return null
+          const runItem = (c: number): void => {
+            if (resolvedOrRejected) return
+            if (started.has(c)) return // already submitted
 
-            if (threadPoolFull()) {
-              setTimeout(() => runItem(c), 0)
-              return null
-            }
-
-            if (results[c]) return results[c]
-            count++
+            started.add(c)
             threadPool.add(c)
 
             results[c] = Promise.resolve(argsList[c])
@@ -202,12 +202,10 @@ export default function arrays(FP: FPConstructor) {
                   return Promise.resolve().then(() => setResult(c)(err)).then(checkAndRun)
                 }
               })
-
-            return results[c]
           }
 
-          while (initialThread < threadLimit && initialThread < argsList.length) {
-            runItem(initialThread++)
+          for (let i = 0; i < Math.min(threadLimit, argsList.length); i++) {
+            runItem(i)
           }
         })
       })
