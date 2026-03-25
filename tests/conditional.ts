@@ -76,3 +76,26 @@ test('tapIf: single-argument form treats arg as ifTrue handler', async () => {
   expect(called).toBe(true)
   expect(result).toBe(99)
 })
+
+// ---------------------------------------------------------------------------
+// Issue 17: catchIf with function predicates
+// ---------------------------------------------------------------------------
+
+test('FP.catchIf with function predicate — matches', async () => {
+  const result = await FP.resolve(Promise.reject(new TypeError('bad type')))
+    .catchIf((err: Error) => err.message.includes('bad'), () => 'recovered')
+  expect(result).toBe('recovered')
+})
+
+test('FP.catchIf with function predicate — does not match, rethrows', async () => {
+  await expect(
+    FP.resolve(Promise.reject(new TypeError('bad type')))
+      .catchIf((err: Error) => err.message.includes('NOPE'), () => 'should not reach')
+  ).rejects.toBeInstanceOf(TypeError)
+})
+
+test('FP.catchIf with Error class still works', async () => {
+  const result = await FP.resolve(Promise.reject(new TypeError('type error')))
+    .catchIf(TypeError, (err: Error) => err.message)
+  expect(result).toBe('type error')
+})

@@ -158,3 +158,48 @@ test('Can FP.quiet() swallow Errors', async () => {
 
   expect((results as unknown[])[3]).toBeInstanceOf(TypeError)
 })
+
+// ---------------------------------------------------------------------------
+// Issue 17: map() falsy values, quiet() boundaries, concurrency order
+// ---------------------------------------------------------------------------
+
+test('FP.map() with falsy mapped values (0, false, null)', () =>
+  FP.resolve([1, 2, 3, 4])
+    .map((n: number) => {
+      if (n === 1) return 0
+      if (n === 2) return false
+      if (n === 3) return null
+      return n
+    })
+    .then((results: unknown) => expect(results).toEqual([0, false, null, 4])))
+
+test('FP.map() on empty array', () =>
+  FP.resolve([])
+    .map((x: unknown) => x)
+    .then((results: unknown) => expect(results).toEqual([])))
+
+test('FP.quiet(1) with exactly 1 error does not reject', async () => {
+  const results = await FP.resolve([1, 2, 3])
+    .quiet(1)
+    .map((n: number) => {
+      if (n === 1) throw new Error('one error')
+      return n * 2
+    })
+  expect((results as unknown[])[0]).toBeInstanceOf(Error)
+  expect((results as unknown[])[1]).toBe(4)
+  expect((results as unknown[])[2]).toBe(6)
+})
+
+test('FP.quiet(1) with 2 errors rejects with FPCollectionError', async () => {
+  await expect(
+    FP.resolve([1, 2, 3])
+      .quiet(1)
+      .map((n: number) => { if (n <= 2) throw new Error(`error ${n}`); return n })
+  ).rejects.toMatchObject({ name: 'FPCollectionError' })
+})
+
+test('FP.map() with concurrency(1) preserves order', () =>
+  FP.resolve([3, 1, 2])
+    .concurrency(1)
+    .map((n: number) => n * 10)
+    .then((results: unknown) => expect(results).toEqual([30, 10, 20])))
