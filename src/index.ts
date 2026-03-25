@@ -140,7 +140,12 @@ FP.prototype.catchIf = function catchIf(condition: unknown, fn: unknown) {
 
   return FPTyped.resolve(
     this._FP.promise.catch((err: Error) => {
-      if (condition && err instanceof (condition as new (...args: unknown[]) => Error)) {
+      const isErrorClass = isFunction(condition) &&
+        (condition === Error || (condition as Function).prototype instanceof Error)
+      const matches = isFunction(condition) && !isErrorClass
+        ? (condition as (error: Error) => boolean)(err)
+        : condition && err instanceof (condition as new (...args: unknown[]) => Error)
+      if (matches) {
         return (fn as (error: Error) => unknown)(err)
       }
       throw err
