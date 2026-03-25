@@ -1344,28 +1344,26 @@ export function throttle<T>(limit: number, interval: number, iterable?: AnyItera
 
 // --- time ---
 
-function addTime(a: [number, number], b: [number, number]): [number, number] {
-  let seconds = a[0] + b[0]
-  let nanoseconds = a[1] + b[1]
-  if (nanoseconds >= 1000000000) {
-    const remainder = nanoseconds % 1000000000
-    seconds += (nanoseconds - remainder) / 1000000000
-    nanoseconds = remainder
-  }
-  return [seconds, nanoseconds]
+function nsToHrTime(ns: bigint): [number, number] {
+  const n = Number(ns)
+  return [Math.floor(n / 1_000_000_000), n % 1_000_000_000]
+}
+
+function addBigIntTime(a: bigint, b: bigint): bigint {
+  return a + b
 }
 
 async function* _asyncTime<T>(config: TimeConfig, iterable: AsyncIterable<T>) {
   const itr = iterable[Symbol.asyncIterator]()
-  let total: [number, number] = [0, 0]
+  let totalNs = BigInt(0)
   while (true) {
-    const start = process.hrtime()
+    const start = process.hrtime.bigint()
     const { value, done } = await itr.next()
-    const delta = process.hrtime(start)
-    total = addTime(total, delta)
-    if (config.progress) config.progress(delta, total)
+    const deltaNs = process.hrtime.bigint() - start
+    totalNs = addBigIntTime(totalNs, deltaNs)
+    if (config.progress) config.progress(nsToHrTime(deltaNs), nsToHrTime(totalNs))
     if (done) {
-      if (config.total) config.total(total)
+      if (config.total) config.total(nsToHrTime(totalNs))
       return value
     }
     yield value
@@ -1374,15 +1372,15 @@ async function* _asyncTime<T>(config: TimeConfig, iterable: AsyncIterable<T>) {
 
 function* _syncTime<T>(config: TimeConfig, iterable: Iterable<T>) {
   const itr = iterable[Symbol.iterator]()
-  let total: [number, number] = [0, 0]
+  let totalNs = BigInt(0)
   while (true) {
-    const start = process.hrtime()
+    const start = process.hrtime.bigint()
     const { value, done } = itr.next()
-    const delta = process.hrtime(start)
-    total = addTime(total, delta)
-    if (config.progress) config.progress(delta, total)
+    const deltaNs = process.hrtime.bigint() - start
+    totalNs = addBigIntTime(totalNs, deltaNs)
+    if (config.progress) config.progress(nsToHrTime(deltaNs), nsToHrTime(totalNs))
     if (done) {
-      if (config.total) config.total(total)
+      if (config.total) config.total(nsToHrTime(totalNs))
       return value
     }
     yield value
