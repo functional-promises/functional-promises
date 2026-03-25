@@ -44,8 +44,7 @@
   },
   "homepage": "https://fpromises.io/",
   "files": [
-    "dist/*",
-    "index.js"
+    "dist/*"
   ],
   "sideEffects": false,
   "engines": {
