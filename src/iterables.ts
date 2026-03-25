@@ -1740,10 +1740,19 @@ export async function* pairwise<T>(iterable: AnyIterable<T>): AsyncGenerator<[T,
  * ```
  */
 export async function* cycle<T>(iterable: AnyIterable<T>): AsyncGenerator<T> {
-  const buf: T[] = []
-  for await (const val of iterable) { buf.push(val); yield val }
-  if (buf.length === 0) return
-  while (true) { for (const val of buf) yield val }
+  if (!isAsyncIterable(iterable)) {
+    // Sync iterables can be re-iterated without buffering
+    let hasItems = false
+    for (const val of iterable as Iterable<T>) { hasItems = true; yield val }
+    if (!hasItems) return
+    while (true) for (const val of iterable as Iterable<T>) yield val
+  } else {
+    // Async iterables must be buffered (can only be read once)
+    const buf: T[] = []
+    for await (const val of iterable) { buf.push(val); yield val }
+    if (buf.length === 0) return
+    while (true) { for (const val of buf) yield val }
+  }
 }
 
 // --- partition ---
