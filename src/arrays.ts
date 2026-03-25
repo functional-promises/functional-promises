@@ -204,6 +204,11 @@ export default function arrays(FP: FPConstructor) {
               })
           }
 
+          if (argsList.length === 0) {
+            resolveIt([])
+            return
+          }
+
           for (let i = 0; i < Math.min(threadLimit, argsList.length); i++) {
             runItem(i)
           }
