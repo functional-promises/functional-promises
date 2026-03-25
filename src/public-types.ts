@@ -19,6 +19,7 @@ export interface FPInstance<TReturn> extends PromiseLike<TReturn> {
   findIndex<T>(callback: PredicateArrayCallback<T>): FPInstance<number>
   get<K extends string>(...keyNames: K[]): FPInstance<TReturn extends Record<K, infer V> ? V : unknown>
   set<V>(keyName: string, value: V): FPInstance<TReturn>
+  /** @throws {Error} Must be called at the end of a `.chain()` pipeline. */
   listen(obj: EventTargetLike, ...eventNames: string[]): FPInstance<TReturn>
   tap(fn: CallbackHandler<TReturn>): FPInstance<TReturn>
   tapIf<T = TReturn>(

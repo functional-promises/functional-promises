@@ -11,6 +11,20 @@ type EmitterLike = {
 type SubscribeMethod = 'addEventListener' | 'on'
 type UnsubscribeMethod = 'removeEventListener' | 'off'
 
+/**
+ * Attaches the current chain as an event handler on `obj`.
+ *
+ * **Must** be called at the end of a `.chain()` pipeline — calling it outside
+ * a chain throws at runtime. Use `FP.chain().then(...).listen(emitter, event)`.
+ *
+ * @throws {FPInputError} If called outside a `.chain()` context (i.e. no steps defined).
+ *
+ * @example
+ * const off = FP.chain()
+ *   .then(handler)
+ *   .listen(emitter, 'data')
+ * // call off._FP.destroy() to remove listeners
+ */
 export const listen = function listen(this: FPInternalInstance, obj: EmitterLike, ...eventNames: string[]) {
   const subscribeKey: SubscribeMethod = obj.addEventListener ? 'addEventListener' : 'on'
   const unsubscribeKey: UnsubscribeMethod = obj.removeEventListener ? 'removeEventListener' : 'off'
